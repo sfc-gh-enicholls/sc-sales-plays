@@ -4,235 +4,478 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="snowflake-source" content="cortex-agent-authored" />
-  <title>Supply Chain Sales Plays</title>
+  <title>Supply Chain Sales Plays — Snowflake</title>
   <style>
-    :root {
-      --sf-blue: #29B5E8;
-      --sf-navy: #11567F;
-      --bg: #f8fafc;
-      --card: #ffffff;
-      --text: #1e293b;
-      --subtle: #64748b;
-      --border: #e2e8f0;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      padding: 32px 24px 64px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f1f5f9;
+      color: #1e293b;
     }
-    header {
-      max-width: 900px;
-      margin: 0 auto 40px;
+
+    /* ═══ SITE HEADER ═══ */
+    .site-header {
+      background: linear-gradient(150deg, #0d1f3c 0%, #0e2d5e 45%, #1166a0 80%, #29B5E8 100%);
+      padding: 60px 24px 72px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Diagonal cut bottom edge */
+    .site-header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 48px;
+      background: linear-gradient(to bottom right, transparent 49.9%, #f1f5f9 50%);
+    }
+    /* Radial glow */
+    .site-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 70% 40%, rgba(41,181,232,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .sf-mark {
+      display: inline-block;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .site-header h1 {
+      font-size: clamp(24px, 4vw, 34px);
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.025em;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .site-header p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.62);
+      max-width: 400px;
+      margin: 0 auto;
+      line-height: 1.55;
+      position: relative;
+    }
+
+    /* ═══ MAIN CONTENT ═══ */
+    main {
+      max-width: 1020px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* ═══ INDUSTRY BLOCK ═══ */
+    .industry { margin-bottom: 44px; }
+
+    .industry-banner {
+      border-radius: 14px 14px 0 0;
+      padding: 28px 32px;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 24px;
+      position: relative;
+      overflow: hidden;
+      min-height: 110px;
     }
-    .logo-bar {
-      width: 4px;
-      height: 40px;
-      background: var(--sf-blue);
-      border-radius: 2px;
+    /* Decorative blobs */
+    .industry-banner::before {
+      content: '';
+      position: absolute;
+      right: -60px; top: -60px;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.07);
+      pointer-events: none;
+    }
+    .industry-banner::after {
+      content: '';
+      position: absolute;
+      right: 100px; bottom: -80px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      pointer-events: none;
+    }
+
+    .band-icon {
       flex-shrink: 0;
+      width: 68px; height: 68px;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
     }
-    header h1 {
-      font-size: 22px;
+    .band-copy { position: relative; z-index: 1; }
+    .band-copy h2 {
+      font-size: 21px;
       font-weight: 700;
-      color: var(--sf-navy);
+      color: #fff;
+      letter-spacing: -0.015em;
+      margin-bottom: 5px;
     }
-    header p {
+    .band-copy p {
       font-size: 13px;
-      color: var(--subtle);
-      margin-top: 2px;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.5;
+      max-width: 520px;
     }
-    .section {
-      max-width: 900px;
-      margin: 0 auto 40px;
-    }
-    .section-title {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--subtle);
-      margin-bottom: 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-    }
-    .grid {
+
+    /* Theme gradients */
+    .theme-blue  { background: linear-gradient(135deg, #075985 0%, #0ea5e9 100%); }
+    .theme-amber { background: linear-gradient(135deg, #92400e 0%, #f59e0b 100%); }
+    .theme-green { background: linear-gradient(135deg, #14532d 0%, #16a34a 100%); }
+    .theme-slate { background: linear-gradient(135deg, #1e293b 0%, #475569 100%); }
+    .theme-rose  { background: linear-gradient(135deg, #881337 0%, #f43f5e 100%); }
+
+    /* ═══ CARD GRID ═══ */
+    .card-grid {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      border-radius: 0 0 14px 14px;
+      padding: 20px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
       gap: 12px;
     }
+
     .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px 16px;
-      text-decoration: none;
-      color: var(--text);
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      transition: border-color 0.15s, box-shadow 0.15s;
+      text-decoration: none;
+      color: #1e293b;
+      border: 1px solid #e8edf4;
+      border-radius: 10px;
+      padding: 14px 15px 16px;
+      background: #f8fafc;
+      transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease, background 0.14s ease;
     }
     .card:hover {
-      border-color: var(--sf-blue);
-      box-shadow: 0 2px 8px rgba(41, 181, 232, 0.15);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+      border-color: #c8d5e8;
+      background: #fff;
     }
-    .card-label {
-      font-size: 11px;
-      font-weight: 600;
+
+    .type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 700;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--sf-blue);
+      padding: 3px 8px;
+      border-radius: 99px;
+      margin-bottom: 10px;
+      width: fit-content;
     }
-    .card-title {
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 1.3;
+    .badge-reference { background: #fef3c7; color: #78350f; }
+    .badge-present   { background: #dbeafe; color: #1e40af; }
+    .badge-homepage  { background: #dcfce7; color: #14532d; }
+    .badge-icp       { background: #f3e8ff; color: #581c87; }
+    .badge-sdr       { background: #ffedd5; color: #7c2d12; }
+    .badge-fmd       { background: #cffafe; color: #164e63; }
+    .badge-metrics   { background: #d1fae5; color: #064e3b; }
+
+    .card-name {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.35;
+      color: #0f172a;
     }
-    .card-icon {
-      font-size: 18px;
-      margin-bottom: 4px;
+    .card-desc {
+      font-size: 11.5px;
+      color: #94a3b8;
+      margin-top: 5px;
+      line-height: 1.45;
+    }
+    .start-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #0369a1;
+      background: #e0f2fe;
+      border-radius: 99px;
+      padding: 3px 8px;
+      margin-top: 10px;
+      width: fit-content;
+      letter-spacing: 0.03em;
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="logo-bar"></div>
-    <div>
-      <h1>Supply Chain Sales Plays</h1>
-      <p>Field enablement assets — Emily Nicholls, Snowflake Supply Chain GTM</p>
+  <header class="site-header">
+    <!-- Snowflake mark: 3 arms = 6-pointed asterisk -->
+    <div class="sf-mark">
+      <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Arms -->
+        <line x1="27" y1="4"  x2="27" y2="50" stroke="white" stroke-width="4" stroke-linecap="round"/>
+        <line x1="46" y1="16" x2="8"  y2="38" stroke="white" stroke-width="4" stroke-linecap="round"/>
+        <line x1="8"  y1="16" x2="46" y2="38" stroke="white" stroke-width="4" stroke-linecap="round"/>
+        <!-- Crossbars: vertical arm -->
+        <line x1="20" y1="15" x2="34" y2="15" stroke="white" stroke-width="2.8" stroke-linecap="round"/>
+        <line x1="20" y1="39" x2="34" y2="39" stroke="white" stroke-width="2.8" stroke-linecap="round"/>
+        <!-- Crossbars: upper-right→lower-left arm (8,16)→(46,38) -->
+        <line x1="16" y1="19" x2="22" y2="30" stroke="white" stroke-width="2.8" stroke-linecap="round"/>
+        <line x1="32" y1="24" x2="38" y2="35" stroke="white" stroke-width="2.8" stroke-linecap="round"/>
+        <!-- Crossbars: upper-left→lower-right arm (46,16)→(8,38) -->
+        <line x1="38" y1="19" x2="32" y2="30" stroke="white" stroke-width="2.8" stroke-linecap="round"/>
+        <line x1="22" y1="24" x2="16" y2="35" stroke="white" stroke-width="2.8" stroke-linecap="round"/>
+        <!-- Center -->
+        <circle cx="27" cy="27" r="4" fill="white"/>
+      </svg>
     </div>
+    <h1>Supply Chain Sales Plays</h1>
+    <p>Field enablement assets &amp; industry plays &mdash; Snowflake Supply Chain GTM</p>
   </header>
 
-  <div class="section">
-    <div class="section-title">Field Enablement</div>
-    <div class="grid">
-      <a class="card" href="sc-field-enablement-REFERENCE.html">
-        <div class="card-icon">📖</div>
-        <div class="card-label">Reference — Start here!</div>
-        <div class="card-title">SC Field Enablement Reference</div>
-      </a>
-      <a class="card" href="sc-field-enablement-PRESENT-v2.html">
-        <div class="card-icon">🎯</div>
-        <div class="card-label">Presentation</div>
-        <div class="card-title">SC Field Enablement</div>
-      </a>
-    </div>
-  </div>
+  <main>
 
-  <div class="section">
-    <div class="section-title">CPG</div>
-    <div class="grid">
-      <a class="card" href="CPG%20Homepage.html">
-        <div class="card-icon">🏠</div>
-        <div class="card-label">Homepage</div>
-        <div class="card-title">CPG Homepage</div>
-      </a>
-      <a class="card" href="CPG%20ICP.html">
-        <div class="card-icon">🎯</div>
-        <div class="card-label">ICP</div>
-        <div class="card-title">CPG Ideal Customer Profile</div>
-      </a>
-      <a class="card" href="CPG%20SDR%20Cheat%20Sheet.html">
-        <div class="card-icon">📋</div>
-        <div class="card-label">SDR</div>
-        <div class="card-title">CPG SDR Cheat Sheet</div>
-      </a>
-      <a class="card" href="CPG%20FMD.html">
-        <div class="card-icon">📊</div>
-        <div class="card-label">FMD</div>
-        <div class="card-title">CPG First Meeting Deck</div>
-      </a>
-      <a class="card" href="CPG%20metrics%20that%20matter.html">
-        <div class="card-icon">📈</div>
-        <div class="card-label">Metrics</div>
-        <div class="card-title">CPG Metrics That Matter</div>
-      </a>
+    <!-- ── FIELD ENABLEMENT ────────────────────────────────────── -->
+    <div class="industry">
+      <div class="industry-banner theme-blue">
+        <div class="band-icon">
+          <!-- Compass -->
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <circle cx="18" cy="18" r="15" stroke="white" stroke-width="2" stroke-opacity="0.5"/>
+            <circle cx="18" cy="18" r="2.8" fill="white"/>
+            <!-- North needle -->
+            <polygon points="18,4 15.5,18 18,16.5 20.5,18" fill="white"/>
+            <!-- South needle -->
+            <polygon points="18,32 15.5,18 18,19.5 20.5,18" fill="white" opacity="0.35"/>
+            <!-- Tick marks -->
+            <line x1="18" y1="3"  x2="18" y2="6"  stroke="white" stroke-width="2" stroke-linecap="round" stroke-opacity="0.45"/>
+            <line x1="18" y1="30" x2="18" y2="33" stroke="white" stroke-width="2" stroke-linecap="round" stroke-opacity="0.45"/>
+            <line x1="3"  y1="18" x2="6"  y2="18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-opacity="0.45"/>
+            <line x1="30" y1="18" x2="33" y2="18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-opacity="0.45"/>
+          </svg>
+        </div>
+        <div class="band-copy">
+          <h2>Field Enablement</h2>
+          <p>The full supply chain narrative, positioning, and personas. Start with the reference guide before using any vertical play.</p>
+        </div>
+      </div>
+      <div class="card-grid">
+        <a class="card" href="sc-field-enablement-REFERENCE.html">
+          <span class="type-badge badge-reference">📖 Reference</span>
+          <div class="card-name">SC Field Enablement Reference</div>
+          <div class="card-desc">Full narrative, positioning &amp; personas</div>
+          <span class="start-pill">★ Start here</span>
+        </a>
+        <a class="card" href="sc-field-enablement-PRESENT-v2.html">
+          <span class="type-badge badge-present">🎯 Presentation</span>
+          <div class="card-name">SC Field Enablement</div>
+          <div class="card-desc">Customer-facing deck</div>
+        </a>
+      </div>
     </div>
-  </div>
 
-  <div class="section">
-    <div class="section-title">Grocery Retail</div>
-    <div class="grid">
-      <a class="card" href="Grocery%20Retail%20Homepage.html">
-        <div class="card-icon">🏠</div>
-        <div class="card-label">Homepage</div>
-        <div class="card-title">Grocery Retail Homepage</div>
-      </a>
-      <a class="card" href="Grocery%20Retail%20ICP.html">
-        <div class="card-icon">🎯</div>
-        <div class="card-label">ICP</div>
-        <div class="card-title">Grocery Retail ICP</div>
-      </a>
-      <a class="card" href="Grocery%20Retail%20SDR%20Cheat%20Sheet.html">
-        <div class="card-icon">📋</div>
-        <div class="card-label">SDR</div>
-        <div class="card-title">Grocery Retail SDR Cheat Sheet</div>
-      </a>
-      <a class="card" href="Grocery%20Retail%20FMD.html">
-        <div class="card-icon">📊</div>
-        <div class="card-label">FMD</div>
-        <div class="card-title">Grocery Retail First Meeting Deck</div>
-      </a>
-      <a class="card" href="Grocery%20Retail%20metrics%20that%20matter.html">
-        <div class="card-icon">📈</div>
-        <div class="card-label">Metrics</div>
-        <div class="card-title">Grocery Retail Metrics That Matter</div>
-      </a>
+    <!-- ── CPG ─────────────────────────────────────────────────── -->
+    <div class="industry">
+      <div class="industry-banner theme-amber">
+        <div class="band-icon">
+          <!-- Product shelves -->
+          <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+            <line x1="4" y1="28" x2="34" y2="28" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            <line x1="4" y1="17" x2="34" y2="17" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            <!-- Lower shelf products -->
+            <rect x="6"  y="20" width="5" height="8" rx="1.5" fill="white" opacity="0.9"/>
+            <rect x="14" y="21" width="4" height="7" rx="1.5" fill="white" opacity="0.7"/>
+            <rect x="21" y="20" width="5" height="8" rx="1.5" fill="white" opacity="0.9"/>
+            <rect x="29" y="22" width="4" height="6" rx="1.5" fill="white" opacity="0.6"/>
+            <!-- Upper shelf products -->
+            <rect x="6"  y="9"  width="6" height="8" rx="1.5" fill="white" opacity="0.8"/>
+            <rect x="15" y="8"  width="7" height="9" rx="1.5" fill="white" opacity="0.95"/>
+            <rect x="25" y="10" width="5" height="7" rx="1.5" fill="white" opacity="0.7"/>
+          </svg>
+        </div>
+        <div class="band-copy">
+          <h2>Consumer Packaged Goods</h2>
+          <p>Demand sensing, supplier collaboration, and on-shelf availability plays for CPG manufacturers.</p>
+        </div>
+      </div>
+      <div class="card-grid">
+        <a class="card" href="CPG%20Homepage.html">
+          <span class="type-badge badge-homepage">🏠 Homepage</span>
+          <div class="card-name">CPG Homepage</div>
+          <div class="card-desc">Industry overview &amp; narrative</div>
+        </a>
+        <a class="card" href="CPG%20ICP.html">
+          <span class="type-badge badge-icp">🎯 ICP</span>
+          <div class="card-name">Ideal Customer Profile</div>
+          <div class="card-desc">Who to target and why</div>
+        </a>
+        <a class="card" href="CPG%20SDR%20Cheat%20Sheet.html">
+          <span class="type-badge badge-sdr">📋 SDR</span>
+          <div class="card-name">SDR Cheat Sheet</div>
+          <div class="card-desc">Talk tracks &amp; objections</div>
+        </a>
+        <a class="card" href="CPG%20FMD.html">
+          <span class="type-badge badge-fmd">📊 FMD</span>
+          <div class="card-name">First Meeting Deck</div>
+          <div class="card-desc">Customer-ready opening deck</div>
+        </a>
+        <a class="card" href="CPG%20metrics%20that%20matter.html">
+          <span class="type-badge badge-metrics">📈 Metrics</span>
+          <div class="card-name">Metrics That Matter</div>
+          <div class="card-desc">KPIs &amp; business outcomes</div>
+        </a>
+      </div>
     </div>
-  </div>
 
-  <div class="section">
-    <div class="section-title">Discrete Manufacturing</div>
-    <div class="grid">
-      <a class="card" href="Discreet%20Mfg%20Homepage.html">
-        <div class="card-icon">🏠</div>
-        <div class="card-label">Homepage</div>
-        <div class="card-title">Discrete Mfg Homepage</div>
-      </a>
-      <a class="card" href="Discreet%20Mfg%20ICP.html">
-        <div class="card-icon">🎯</div>
-        <div class="card-label">ICP</div>
-        <div class="card-title">Discrete Mfg ICP</div>
-      </a>
-      <a class="card" href="Discreet%20Mfg%20SDR%20Cheat%20Sheet.html">
-        <div class="card-icon">📋</div>
-        <div class="card-label">SDR</div>
-        <div class="card-title">Discrete Mfg SDR Cheat Sheet</div>
-      </a>
-      <a class="card" href="Discreet%20Mfg%20FMD.html">
-        <div class="card-icon">📊</div>
-        <div class="card-label">FMD</div>
-        <div class="card-title">Discrete Mfg First Meeting Deck</div>
-      </a>
-      <a class="card" href="Discreet%20Mfg%20metrics%20that%20matter.html">
-        <div class="card-icon">📈</div>
-        <div class="card-label">Metrics</div>
-        <div class="card-title">Discrete Mfg Metrics That Matter</div>
-      </a>
+    <!-- ── GROCERY RETAIL ──────────────────────────────────────── -->
+    <div class="industry">
+      <div class="industry-banner theme-green">
+        <div class="band-icon">
+          <!-- Shopping cart + leaf -->
+          <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+            <path d="M5 9 L8 10 L12 22 L29 22 L33 12 L12 12" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="15" cy="27" r="2.8" stroke="white" stroke-width="2" fill="none"/>
+            <circle cx="26" cy="27" r="2.8" stroke="white" stroke-width="2" fill="none"/>
+            <!-- Leaf top-right -->
+            <path d="M28 5 C31 4 35 7 33 13 C31 9 28 8 28 5Z" fill="white" opacity="0.85"/>
+            <line x1="28" y1="5" x2="33" y2="13" stroke="white" stroke-width="1.3" stroke-linecap="round" opacity="0.55"/>
+          </svg>
+        </div>
+        <div class="band-copy">
+          <h2>Grocery Retail</h2>
+          <p>Inventory optimisation, supplier analytics, and fresh waste reduction plays for grocery and food retailers.</p>
+        </div>
+      </div>
+      <div class="card-grid">
+        <a class="card" href="Grocery%20Retail%20Homepage.html">
+          <span class="type-badge badge-homepage">🏠 Homepage</span>
+          <div class="card-name">Grocery Retail Homepage</div>
+          <div class="card-desc">Industry overview &amp; narrative</div>
+        </a>
+        <a class="card" href="Grocery%20Retail%20ICP.html">
+          <span class="type-badge badge-icp">🎯 ICP</span>
+          <div class="card-name">Ideal Customer Profile</div>
+          <div class="card-desc">Who to target and why</div>
+        </a>
+        <a class="card" href="Grocery%20Retail%20SDR%20Cheat%20Sheet.html">
+          <span class="type-badge badge-sdr">📋 SDR</span>
+          <div class="card-name">SDR Cheat Sheet</div>
+          <div class="card-desc">Talk tracks &amp; objections</div>
+        </a>
+        <a class="card" href="Grocery%20Retail%20FMD.html">
+          <span class="type-badge badge-fmd">📊 FMD</span>
+          <div class="card-name">First Meeting Deck</div>
+          <div class="card-desc">Customer-ready opening deck</div>
+        </a>
+        <a class="card" href="Grocery%20Retail%20metrics%20that%20matter.html">
+          <span class="type-badge badge-metrics">📈 Metrics</span>
+          <div class="card-name">Metrics That Matter</div>
+          <div class="card-desc">KPIs &amp; business outcomes</div>
+        </a>
+      </div>
     </div>
-  </div>
 
-  <div class="section">
-    <div class="section-title">Fashion Retail</div>
-    <div class="grid">
-      <a class="card" href="Fashion%20Retail%20Homepage.html">
-        <div class="card-icon">🏠</div>
-        <div class="card-label">Homepage</div>
-        <div class="card-title">Fashion Retail Homepage</div>
-      </a>
-      <a class="card" href="Fashion%20Retail%20FMD.html">
-        <div class="card-icon">📊</div>
-        <div class="card-label">FMD</div>
-        <div class="card-title">Fashion Retail First Meeting Deck</div>
-      </a>
+    <!-- ── DISCRETE MANUFACTURING ──────────────────────────────── -->
+    <div class="industry">
+      <div class="industry-banner theme-slate">
+        <div class="band-icon">
+          <!-- Interlocking gears -->
+          <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+            <!-- Large gear -->
+            <circle cx="15" cy="21" r="7" stroke="white" stroke-width="2" fill="none"/>
+            <circle cx="15" cy="21" r="2.5" fill="white" opacity="0.6"/>
+            <!-- Gear teeth large -->
+            <rect x="13" y="11" width="4" height="3.5" rx="1" fill="white" opacity="0.8"/>
+            <rect x="13" y="27.5" width="4" height="3.5" rx="1" fill="white" opacity="0.8"/>
+            <rect x="5"  y="19" width="3.5" height="4" rx="1" fill="white" opacity="0.8"/>
+            <rect x="21.5" y="19" width="3.5" height="4" rx="1" fill="white" opacity="0.8"/>
+            <rect x="7.5"  y="13" width="3" height="3" rx="1" transform="rotate(45 9 14)" fill="white" opacity="0.6"/>
+            <rect x="19"   y="13" width="3" height="3" rx="1" transform="rotate(45 20 14)" fill="white" opacity="0.6"/>
+            <rect x="7.5"  y="24" width="3" height="3" rx="1" transform="rotate(45 9 25)" fill="white" opacity="0.6"/>
+            <rect x="19"   y="24" width="3" height="3" rx="1" transform="rotate(45 20 25)" fill="white" opacity="0.6"/>
+            <!-- Small gear -->
+            <circle cx="28" cy="13" r="5" stroke="white" stroke-width="1.8" fill="none" opacity="0.7"/>
+            <circle cx="28" cy="13" r="2" fill="white" opacity="0.45"/>
+            <rect x="26.2" y="6.5" width="3.6" height="3" rx="1" fill="white" opacity="0.6"/>
+            <rect x="26.2" y="17.5" width="3.6" height="3" rx="1" fill="white" opacity="0.6"/>
+            <rect x="21.5" y="11.2" width="3" height="3.6" rx="1" fill="white" opacity="0.6"/>
+            <rect x="32.5" y="11.2" width="3" height="3.6" rx="1" fill="white" opacity="0.6"/>
+          </svg>
+        </div>
+        <div class="band-copy">
+          <h2>Discrete Manufacturing</h2>
+          <p>Supply chain visibility, production planning, and MRO analytics plays for industrial and precision manufacturers.</p>
+        </div>
+      </div>
+      <div class="card-grid">
+        <a class="card" href="Discreet%20Mfg%20Homepage.html">
+          <span class="type-badge badge-homepage">🏠 Homepage</span>
+          <div class="card-name">Discrete Mfg Homepage</div>
+          <div class="card-desc">Industry overview &amp; narrative</div>
+        </a>
+        <a class="card" href="Discreet%20Mfg%20ICP.html">
+          <span class="type-badge badge-icp">🎯 ICP</span>
+          <div class="card-name">Ideal Customer Profile</div>
+          <div class="card-desc">Who to target and why</div>
+        </a>
+        <a class="card" href="Discreet%20Mfg%20SDR%20Cheat%20Sheet.html">
+          <span class="type-badge badge-sdr">📋 SDR</span>
+          <div class="card-name">SDR Cheat Sheet</div>
+          <div class="card-desc">Talk tracks &amp; objections</div>
+        </a>
+        <a class="card" href="Discreet%20Mfg%20FMD.html">
+          <span class="type-badge badge-fmd">📊 FMD</span>
+          <div class="card-name">First Meeting Deck</div>
+          <div class="card-desc">Customer-ready opening deck</div>
+        </a>
+        <a class="card" href="Discreet%20Mfg%20metrics%20that%20matter.html">
+          <span class="type-badge badge-metrics">📈 Metrics</span>
+          <div class="card-name">Metrics That Matter</div>
+          <div class="card-desc">KPIs &amp; business outcomes</div>
+        </a>
+      </div>
     </div>
-  </div>
+
+    <!-- ── FASHION RETAIL ──────────────────────────────────────── -->
+    <div class="industry">
+      <div class="industry-banner theme-rose">
+        <div class="band-icon">
+          <!-- Clothing hanger + garment -->
+          <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+            <!-- Hook -->
+            <path d="M19 7 C19 4 22 3 24 5 C26 7 24 9 19 9" stroke="white" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <!-- Hanger triangle -->
+            <path d="M19 9 L4 24 L34 24 Z" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <!-- Shirt body -->
+            <path d="M6 25.5 L6 34 L32 34 L32 25.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255,255,255,0.12)"/>
+            <!-- Neckline -->
+            <path d="M16 25.5 C16 27.5 19 28.5 19 28.5 C19 28.5 22 27.5 22 25.5" stroke="white" stroke-width="1.5" fill="none"/>
+          </svg>
+        </div>
+        <div class="band-copy">
+          <h2>Fashion Retail</h2>
+          <p>Trend forecasting, size &amp; assortment optimisation, and returns analytics plays for apparel and fashion retailers.</p>
+        </div>
+      </div>
+      <div class="card-grid">
+        <a class="card" href="Fashion%20Retail%20Homepage.html">
+          <span class="type-badge badge-homepage">🏠 Homepage</span>
+          <div class="card-name">Fashion Retail Homepage</div>
+          <div class="card-desc">Industry overview &amp; narrative</div>
+        </a>
+        <a class="card" href="Fashion%20Retail%20FMD.html">
+          <span class="type-badge badge-fmd">📊 FMD</span>
+          <div class="card-name">First Meeting Deck</div>
+          <div class="card-desc">Customer-ready opening deck</div>
+        </a>
+      </div>
+    </div>
+
+  </main>
 
 </body>
 </html>
