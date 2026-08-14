@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snowflake Discrete Manufacturing ICP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sf-blue: #249EDC;
+  --sf-mid: #11567F;
+  --sf-deep: #042130;
+  --sf-ice: #F6F9FA;
+  --sf-star: #71D3DC;
+  --sf-orange: #FF9F36;
+  --sf-white: #FFFFFF;
+  --text-dark: #111827;
+  --text-gray: #4B5568;
+  --text-light: #6B7280;
+  --border-card: rgba(204,204,204,0.5);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', sans-serif; background: #FFFFFF; }
+.deck { width: 100vw; height: 100vh; position: relative; }
+.slide { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1); overflow: hidden; }
+.slide.active { opacity: 1; pointer-events: all; }
+.slide-bg { position: absolute; inset: 0; z-index: 0; }
+.bg-dark-cinematic { background: #FFFFFF; }
+.bg-aurora { background: var(--sf-ice); }
+.bg-bold-blue { background: var(--sf-mid); }
+.slide-content { position: relative; z-index: 10; width: 88%; max-width: 1200px; padding: 2.5rem 2rem; }
+h3.label { font-size: clamp(0.65rem, 1vw, 0.8rem); font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sf-blue); margin-bottom: 0.8rem; }
+h3.label.purple { color: var(--sf-mid); }
+h1 { font-size: clamp(2.4rem, 5vw, 4.5rem); font-weight: 900; line-height: 1.05; color: var(--text-dark); letter-spacing: -0.02em; margin-bottom: 0.6rem; }
+h2 { font-size: clamp(1.5rem, 2.8vw, 2.5rem); font-weight: 800; line-height: 1.1; color: var(--text-dark); letter-spacing: -0.01em; margin-bottom: 0.6rem; }
+.slide.dark-slide h1, .slide.dark-slide h2 { color: #FFFFFF; }
+.slide.dark-slide p { color: rgba(255,255,255,0.85); }
+.slide.dark-slide .label { color: rgba(255,255,255,0.7); }
+.highlight { color: var(--sf-blue); }
+.highlight-purple { color: var(--sf-mid); }
+.divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--sf-blue), var(--sf-star)); margin: 0.9rem 0; border-radius: 2px; }
+.divider-purple { width: 60px; height: 3px; background: linear-gradient(90deg, var(--sf-mid), var(--sf-blue)); margin: 0.9rem 0; border-radius: 2px; }
+p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.6; color: var(--text-gray); max-width: 750px; margin-bottom: 0.4rem; }
+.card { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 12px; padding: 1.2rem 1.4rem; height: 100%; box-sizing: border-box; }
+.card.blue-border { border-color: rgba(36,158,220,0.4); }
+.card.purple-border { border-color: rgba(17,86,127,0.4); }
+.card.teal-border { border-color: rgba(113,211,220,0.5); }
+.card.green-border { border-color: rgba(34,197,94,0.35); }
+.card-title { font-size: 0.82rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.45rem; letter-spacing: 0.03em; }
+.card-title.blue { color: var(--sf-blue); }
+.card-title.purple { color: var(--sf-mid); }
+.card-title.teal { color: #0d9488; }
+.card p { font-size: 0.82rem; margin: 0 0 0.3rem 0; max-width: 100%; color: var(--text-gray); }
+.pill { display: inline-block; background: rgba(36,158,220,0.1); border: 1px solid rgba(36,158,220,0.3); border-radius: 999px; padding: 0.25rem 0.75rem; font-size: 0.72rem; font-weight: 600; color: var(--sf-blue); letter-spacing: 0.05em; text-transform: uppercase; margin: 0.15rem; }
+.pill.purple { background: rgba(17,86,127,0.08); border-color: rgba(17,86,127,0.3); color: var(--sf-mid); }
+.pill.teal { background: rgba(113,211,220,0.12); border-color: rgba(113,211,220,0.4); color: #0d9488; }
+.pill.green { background: rgba(34,197,94,0.08); border-color: rgba(34,197,94,0.35); color: #166534; }
+.pill.red { background: rgba(220,38,38,0.07); border-color: rgba(220,38,38,0.3); color: #DC2626; }
+.kpi-item { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.32rem 0; border-bottom: 1px solid rgba(204,204,204,0.3); }
+.kpi-item:last-child { border-bottom: none; }
+.kpi-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sf-blue); flex-shrink: 0; margin-top: 0.35rem; }
+.kpi-dot.purple { background: var(--sf-mid); }
+.kpi-text { font-size: 0.78rem; color: var(--text-gray); line-height: 1.4; }
+.kpi-text strong { color: var(--text-dark); font-weight: 700; }
+.role-badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 1rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.role-badge.economic { background: rgba(17,86,127,0.1); border: 1px solid rgba(17,86,127,0.35); color: var(--sf-mid); }
+.role-badge.technical { background: rgba(36,158,220,0.1); border: 1px solid rgba(36,158,220,0.35); color: var(--sf-blue); }
+.role-badge.champion { background: rgba(113,211,220,0.12); border: 1px solid rgba(113,211,220,0.4); color: #0d9488; }
+
+.slide-number { position: absolute; bottom: 1.5rem; right: 1.8rem; font-size: 0.72rem; color: var(--text-light); font-weight: 500; letter-spacing: 0.08em; z-index: 20; }
+.internal-badge { position: absolute; top: 1rem; right: 1.8rem; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); background: rgba(220,38,38,0.06); border: 1px solid rgba(220,38,38,0.2); border-radius: 4px; padding: 0.15rem 0.55rem; z-index: 20; }
+.snowflake-logo { position: absolute; bottom: 1.2rem; right: 5.5rem; z-index: 20; opacity: 0.85; display: flex; align-items: center; height: 32px; }
+.progress-bar-wrap { position: fixed; top: 0; left: 0; width: 100%; height: 3px; z-index: 100; background: rgba(0,0,0,0.06); }
+.progress-bar { height: 100%; background: linear-gradient(90deg, var(--sf-mid), var(--sf-blue)); transition: width 0.5s ease; }
+.controls { position: fixed; bottom: 2.2rem; left: 50%; transform: translateX(-50%); display: flex; gap: 0.8rem; z-index: 100; align-items: center; }
+.controls button { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 999px; padding: 0.5rem 1.3rem; color: var(--text-gray); font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; letter-spacing: 0.04em; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.controls button:hover { background: var(--sf-ice); border-color: var(--sf-blue); color: var(--sf-mid); }
+.controls select { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 999px; padding: 0.5rem 1.1rem; color: var(--text-gray); font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; letter-spacing: 0.04em; box-shadow: 0 1px 3px rgba(0,0,0,0.06); outline: none; }
+</style>
+</head>
+<body>
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<div class="deck" id="deck">
+
+  <!-- SLIDE 01: TITLE -->
+  <div class="slide dark-slide" id="slide-1">
+    <div class="slide-bg" style="background:url(https://images.unsplash.com/photo-1581093196868-c6c66e5a25c9?w=1920&q=80) center 40%/cover no-repeat;"></div>
+    <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,rgba(4,33,48,0.88) 0%,rgba(17,86,127,0.80) 50%,rgba(4,33,48,0.92) 100%);"></div>
+    <div class="slide-content" style="text-align:center;display:flex;flex-direction:column;align-items:center;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="32" style="display:block;opacity:0.95;filter:brightness(0) invert(1);margin-bottom:2.5rem;">
+      <h3 class="label" style="text-align:center;letter-spacing:0.25em;color:rgba(255,255,255,0.7);">SNOWFLAKE &middot; DISCRETE MANUFACTURING</h3>
+      <h1 style="text-align:center;max-width:900px;color:rgba(113,211,220,1);font-size:clamp(2rem,5vw,4rem);margin-bottom:0.2rem;">IDEAL CUSTOMER</h1>
+      <h1 style="text-align:center;max-width:900px;color:#FFFFFF;font-size:clamp(2.5rem,6vw,5rem);">PROFILE</h1>
+      <div style="width:60px;height:3px;background:linear-gradient(90deg,#249EDC,#71D3DC);margin:1.2rem auto;border-radius:2px;"></div>
+      <p style="text-align:center;max-width:620px;font-size:1.05rem;color:rgba(255,255,255,0.8);">Who buys, who influences, and what moves them &mdash; for Discrete Manufacturing</p>
+      <div style="margin-top:1.5rem;display:inline-flex;align-items:center;gap:0.5rem;background:rgba(220,38,38,0.15);border:1px solid rgba(220,38,38,0.4);border-radius:6px;padding:0.35rem 1rem;">
+        <span style="font-size:0.72rem;font-weight:700;color:rgba(255,100,100,0.9);letter-spacing:0.1em;text-transform:uppercase;">Internal Use Only &mdash; Not For Customer Distribution</span>
+      </div>
+    </div>
+    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;filter:brightness(0) invert(1);"></div>
+    <div class="slide-number">01 / 09</div>
+  </div>
+
+  <!-- SLIDE 02: ICP OVERVIEW -->
+  <div class="slide" id="slide-2">
+    <div class="slide-bg bg-aurora"></div>
+    <div class="internal-badge">Internal Only</div>
+    <div class="slide-content" style="padding-top:1.5rem;padding-bottom:1.5rem;">
+      <h3 class="label purple">IDEAL CUSTOMER PROFILE</h3>
+      <h2><span class="highlight-purple">Influence Map</span> &amp; Buying Signals</h2>
+      <div class="divider-purple"></div>
+      <!-- Definition strip -->
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:1rem;margin-top:0.5rem;margin-bottom:0.8rem;background:linear-gradient(90deg,rgba(17,86,127,0.06),rgba(36,158,220,0.04));border:1px solid rgba(17,86,127,0.18);border-radius:12px;padding:0.85rem 1.2rem;align-items:start;">
+        <div>
+          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.35rem;">What is Discrete Manufacturing?</div>
+          <p style="font-size:0.8rem;color:var(--text-gray);margin:0;max-width:100%;line-height:1.55;">The production of distinct, countable, individually identifiable units assembled from a Bill of Materials. Unlike process manufacturing (chemicals, food), discrete manufacturers build serialised or lot-tracked products — think an engine, a circuit board, or a CT scanner — where each unit can be tracked, reworked, or recalled individually. Supply chains are BOM-driven, multi-tier, and highly sensitive to component availability and engineering change.</p>
+        </div>
+        <div>
+          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.4rem;">Representative Companies</div>
+          <div style="display:flex;flex-direction:column;gap:0.3rem;">
+            <div style="display:flex;align-items:baseline;gap:0.5rem;"><span style="font-size:0.65rem;font-weight:700;color:var(--sf-mid);min-width:5.5rem;">Automotive</span><span style="font-size:0.72rem;color:var(--text-gray);">Toyota &middot; BMW &middot; Stellantis &middot; Aptiv &middot; BorgWarner</span></div>
+            <div style="display:flex;align-items:baseline;gap:0.5rem;"><span style="font-size:0.65rem;font-weight:700;color:var(--sf-mid);min-width:5.5rem;">Aerospace</span><span style="font-size:0.72rem;color:var(--text-gray);">Boeing &middot; Airbus &middot; RTX &middot; Lockheed Martin</span></div>
+            <div style="display:flex;align-items:baseline;gap:0.5rem;"><span style="font-size:0.65rem;font-weight:700;color:var(--sf-mid);min-width:5.5rem;">Industrial</span><span style="font-size:0.72rem;color:var(--text-gray);">ABB &middot; Honeywell &middot; Schneider Electric &middot; Caterpillar &middot; Eaton</span></div>
+            <div style="display:flex;align-items:baseline;gap:0.5rem;"><span style="font-size:0.65rem;font-weight:700;color:var(--sf-mid);min-width:5.5rem;">Medical Devices</span><span style="font-size:0.72rem;color:var(--text-gray);">Medtronic &middot; Stryker &middot; BD &middot; Zimmer Biomet</span></div>
+            <div style="display:flex;align-items:baseline;gap:0.5rem;"><span style="font-size:0.65rem;font-weight:700;color:var(--sf-mid);min-width:5.5rem;">Electronics</span><span style="font-size:0.72rem;color:var(--text-gray);">Dell &middot; HP &middot; Flex &middot; Jabil &middot; TE Connectivity</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:0rem;">
+
+        <!-- COL 1: Influence Map -->
+        <div>
+          <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.5rem;">Influence Map</div>
+          <!-- Economic Buyers -->
+          <div style="background:rgba(17,86,127,0.06);border:1.5px solid rgba(17,86,127,0.25);border-radius:10px;padding:0.65rem 0.8rem;margin-bottom:0.4rem;">
+            <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.4rem;">Economic Buyers &mdash; Own the Decision</div>
+            <div style="display:flex;flex-direction:column;gap:0.3rem;">
+              <div style="display:flex;align-items:center;justify-content:space-between;background:#FFFFFF;border-radius:7px;padding:0.4rem 0.65rem;border:1px solid rgba(17,86,127,0.2);">
+                <span style="font-size:0.77rem;font-weight:700;color:var(--sf-mid);">CSCO / SVP Supply Chain</span>
+                <span style="font-size:0.6rem;color:var(--sf-mid);font-weight:600;">Primary</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;background:#FFFFFF;border-radius:7px;padding:0.4rem 0.65rem;border:1px solid rgba(17,86,127,0.2);">
+                <span style="font-size:0.77rem;font-weight:700;color:var(--sf-mid);">VP Manufacturing / SVP Ops</span>
+                <span style="font-size:0.6rem;color:var(--sf-mid);font-weight:600;">Primary</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;background:#FFFFFF;border-radius:7px;padding:0.4rem 0.65rem;border:1px solid rgba(17,86,127,0.2);">
+                <span style="font-size:0.77rem;font-weight:700;color:var(--sf-mid);">CIO / CDO / VP Data</span>
+                <span style="font-size:0.6rem;color:var(--sf-mid);font-weight:600;">Primary</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;background:#FFFFFF;border-radius:7px;padding:0.4rem 0.65rem;border:1px solid rgba(17,86,127,0.2);">
+                <span style="font-size:0.77rem;font-weight:700;color:var(--sf-mid);">CPO / VP Procurement</span>
+                <span style="font-size:0.6rem;color:var(--sf-mid);font-weight:600;">Secondary</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(17,86,127,0.04);border-radius:7px;padding:0.4rem 0.65rem;border:1px dashed rgba(17,86,127,0.3);">
+                <div>
+                  <span style="font-size:0.77rem;font-weight:700;color:var(--sf-mid);">CFO</span>
+                  <span style="font-size:0.68rem;color:var(--text-light);margin-left:0.4rem;">SC is the largest cost centre &mdash; owns business case &amp; working capital</span>
+                </div>
+                <span style="font-size:0.6rem;color:var(--sf-mid);font-weight:600;">Sponsor</span>
+              </div>
+            </div>
+          </div>
+          <!-- Technical Evaluators -->
+          <div style="background:rgba(36,158,220,0.05);border:1.5px solid rgba(36,158,220,0.25);border-radius:10px;padding:0.65rem 0.8rem;margin-bottom:0.4rem;">
+            <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.4rem;">Technical Evaluators &mdash; Validate the Solution</div>
+            <div style="display:flex;flex-direction:column;gap:0.3rem;">
+              <div style="display:flex;align-items:center;justify-content:space-between;background:#FFFFFF;border-radius:7px;padding:0.4rem 0.65rem;border:1px solid rgba(36,158,220,0.2);">
+                <span style="font-size:0.77rem;font-weight:700;color:var(--sf-blue);">Head of Supply Planning</span>
+                <span style="font-size:0.6rem;color:var(--sf-blue);font-weight:600;">Evaluator</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;background:#FFFFFF;border-radius:7px;padding:0.4rem 0.65rem;border:1px solid rgba(36,158,220,0.2);">
+                <span style="font-size:0.77rem;font-weight:700;color:var(--sf-blue);">Head of Production Planning</span>
+                <span style="font-size:0.6rem;color:var(--sf-blue);font-weight:600;">Evaluator</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;background:#FFFFFF;border-radius:7px;padding:0.4rem 0.65rem;border:1px solid rgba(36,158,220,0.2);">
+                <span style="font-size:0.77rem;font-weight:700;color:var(--sf-blue);">Enterprise Architect / IT Lead</span>
+                <span style="font-size:0.6rem;color:var(--sf-blue);font-weight:600;">Evaluator</span>
+              </div>
+            </div>
+          </div>
+          <!-- Champions -->
+          <div style="background:rgba(113,211,220,0.06);border:1.5px solid rgba(113,211,220,0.35);border-radius:10px;padding:0.65rem 0.8rem;">
+            <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#0d9488;margin-bottom:0.4rem;">Champions &mdash; Drive Internal Advocacy</div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
+              <span class="pill teal" style="font-size:0.65rem;">Digital Transformation Lead</span>
+              <span class="pill teal" style="font-size:0.65rem;">Mfg Data &amp; Analytics Lead</span>
+              <span class="pill teal" style="font-size:0.65rem;">Supply Planning Process COE</span>
+              <span class="pill teal" style="font-size:0.65rem;">Head of Production Planning</span>
+              <span class="pill teal" style="font-size:0.65rem;">VP Quality (Medical / Aerospace)</span>
+              <span class="pill teal" style="font-size:0.65rem;">Digital Factory / Industry 4.0 Lead</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- COL 3: Key Pain Points + Relevance Signal -->
+        <div>
+          <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.5rem;">Key Pain Points to Address</div>
+          <div style="display:flex;flex-direction:column;gap:0.35rem;">
+            <div style="display:flex;align-items:flex-start;gap:0.5rem;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.18);border-radius:8px;padding:0.55rem 0.7rem;">
+              <div style="width:7px;height:7px;border-radius:50%;background:#DC2626;flex-shrink:0;margin-top:0.28rem;"></div>
+              <p style="font-size:0.77rem;margin:0;max-width:100%;color:var(--text-gray);">Planning, execution, and quality systems (ERP, APS, MES, PLM, QMS, SCADA, historians) running in silos &mdash; every decision starts with reconciliation</p>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:0.5rem;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.18);border-radius:8px;padding:0.55rem 0.7rem;">
+              <div style="width:7px;height:7px;border-radius:50%;background:#DC2626;flex-shrink:0;margin-top:0.28rem;"></div>
+              <p style="font-size:0.77rem;margin:0;max-width:100%;color:var(--text-gray);">Component shortages discovered when the line stops, not 6–8 weeks earlier</p>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:0.5rem;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.18);border-radius:8px;padding:0.55rem 0.7rem;">
+              <div style="width:7px;height:7px;border-radius:50%;background:#DC2626;flex-shrink:0;margin-top:0.28rem;"></div>
+              <p style="font-size:0.77rem;margin:0;max-width:100%;color:var(--text-gray);">AI pilots fail in production &mdash; fragmented, ungoverned manufacturing data is the root cause</p>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:0.5rem;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.18);border-radius:8px;padding:0.55rem 0.7rem;">
+              <div style="width:7px;height:7px;border-radius:50%;background:#DC2626;flex-shrink:0;margin-top:0.28rem;"></div>
+              <p style="font-size:0.77rem;margin:0;max-width:100%;color:var(--text-gray);">ECO propagation takes 18+ hours of manual re-entry across disconnected systems</p>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:0.5rem;background:rgba(36,158,220,0.05);border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.55rem 0.7rem;">
+              <div style="width:7px;height:7px;border-radius:50%;background:var(--sf-blue);flex-shrink:0;margin-top:0.28rem;"></div>
+              <p style="font-size:0.77rem;margin:0;max-width:100%;color:var(--text-gray);"><strong style="color:var(--sf-blue);">Positive signal:</strong> Active data / AI transformation initiative, funded digital program, or recent hire of CDO/VP Analytics</p>
+            </div>
+          </div>
+          <!-- Process Maturity Signal -->
+          <div style="margin-top:0.6rem;background:linear-gradient(135deg,rgba(113,211,220,0.06),rgba(36,158,220,0.04));border:1.5px solid rgba(113,211,220,0.3);border-radius:10px;padding:0.6rem 0.8rem;">
+            <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#0d9488;margin-bottom:0.35rem;">Process Maturity &mdash; Readiness Signals</div>
+            <div style="display:flex;flex-direction:column;gap:0.22rem;">
+              <div style="display:flex;align-items:center;gap:0.4rem;"><span style="font-size:0.7rem;">&#9745;</span><span style="font-size:0.7rem;color:var(--text-gray);">Multi-plant or multi-site (complexity forces cross-system decisions)</span></div>
+              <div style="display:flex;align-items:center;gap:0.4rem;"><span style="font-size:0.7rem;">&#9745;</span><span style="font-size:0.7rem;color:var(--text-gray);">Existing S&amp;OP / IBP cadence (they know planning is broken, not starting from zero)</span></div>
+              <div style="display:flex;align-items:center;gap:0.4rem;"><span style="font-size:0.7rem;">&#9745;</span><span style="font-size:0.7rem;color:var(--text-gray);">ERP modernisation in progress or planned (SAP S/4, Oracle Cloud &mdash; data is moving)</span></div>
+              <div style="display:flex;align-items:center;gap:0.4rem;"><span style="font-size:0.7rem;">&#9745;</span><span style="font-size:0.7rem;color:var(--text-gray);">Revenue &gt;$500M with global supply network (enough pain to fund transformation)</span></div>
+              <div style="display:flex;align-items:center;gap:0.4rem;"><span style="font-size:0.7rem;">&#9744;</span><span style="font-size:0.7rem;color:var(--text-light);font-style:italic;">Single-site, no formal S&amp;OP, or pre-ERP &rarr; likely too early for this play</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+    <div class="slide-number">02 / 09</div>
+  </div>
+
+  <!-- SLIDE 03: CSCO -->
+  <div class="slide" id="slide-3">
+    <div class="slide-bg bg-dark-cinematic"></div>
+    <div class="internal-badge">Internal Only</div>
+    <div class="slide-content" style="padding-top:1.5rem;padding-bottom:1.5rem;">
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
+        <span class="role-badge economic">Economic Buyer</span>
+        <h3 class="label purple" style="margin:0;">PERSONA 01</h3>
+      </div>
+      <h2>Chief Supply Chain Officer <span class="highlight-purple">/ SVP Supply Chain</span></h2>
+      <div class="divider-purple"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.9rem;margin-top:0.6rem;">
+
+        <!-- Business Context + What They Care About -->
+        <div style="display:flex;flex-direction:column;gap:0.4rem;">
+          <div class="card purple-border" style="padding:0.9rem 1rem;">
+            <div class="card-title purple">Business Context</div>
+            <p style="font-size:0.78rem;">Owns end-to-end supply chain across 5–20 manufacturing sites. Answers to the CEO for cost, service, resilience trade-offs. Permanent disruption — component shortages, geopolitical risk, demand volatility — is the new normal. Legacy systems cannot provide the real-time signal needed to stay ahead.</p>
+          </div>
+          <div class="card purple-border" style="padding:0.9rem 1rem;">
+            <div class="card-title purple">What They Care About</div>
+            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Supply chain resilience — absorb disruptions without halting production</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Reducing working capital tied up in excess component inventory</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">End-to-end visibility from tier-2 supplier to customer delivery</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Making AI investments pay off — many manufacturing AI pilots have failed</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Breaking silos between S&OP, manufacturing, and procurement</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- How They're Measured -->
+        <div style="display:flex;flex-direction:column;gap:0.4rem;">
+          <div class="card blue-border" style="padding:0.9rem 1rem;">
+            <div class="card-title blue">How They're Measured</div>
+            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>OTIF</strong> — On Time In Full delivery performance</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Perfect Order Rate</strong> — complete, accurate, on time</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Inventory Turns</strong> — working capital efficiency</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>SC Cost as % Revenue</strong> — overall efficiency</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Cash-to-Cash Cycle Time</strong> — capital velocity</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Schedule Attainment</strong> — manufacturing reliability</div></div>
+            </div>
+          </div>
+          <div class="card teal-border" style="padding:0.9rem 1rem;">
+            <div class="card-title teal">Potential Titles</div>
+            <p style="font-size:0.78rem;">Chief Supply Chain Officer · SVP / VP Supply Chain · VP Operations &amp; Supply Chain · Chief Operations Officer</p>
+            <div style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid rgba(204,204,204,0.4);">
+              <div style="font-size:0.68rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">Key Collaborators</div>
+              <p style="font-size:0.74rem;color:var(--text-gray);">CFO · CEO · CIO · VP Manufacturing · Head of Procurement</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Snowflake Relevance -->
+        <div>
+          <div class="card" style="padding:0.9rem 1rem;border-color:rgba(36,158,220,0.35);background:linear-gradient(160deg,rgba(36,158,220,0.04),rgba(17,86,127,0.02));height:100%;">
+            <div class="card-title blue">Why Snowflake Wins Here</div>
+            <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.3rem;">
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Unified Data Foundation</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">Connects ERP, MES, PLM, SCADA, and supplier feeds into one governed platform — no reconciliation, one version of truth across every team.</p>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Proactive Risk Intelligence</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">Cortex AI continuously scores component risk across all 5 rings of signal — internal ops, tier-1/2/3 suppliers, commodity markets, and macro data. Early warning weeks before line impact.</p>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">AI That Works in Production</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">Governed semantic layer means AI models reason over trusted, defined data — not raw, ungoverned exports. This is why &lt;1 in 5 AI pilots reach production without Snowflake.</p>
+              </div>
+              <div style="background:linear-gradient(90deg,rgba(36,158,220,0.1),rgba(113,211,220,0.06));border:1px solid rgba(36,158,220,0.25);border-radius:8px;padding:0.45rem 0.65rem;">
+                <p style="font-size:0.75rem;font-weight:700;color:var(--sf-mid);margin:0;max-width:100%;">ABB: $200M+ annual inventory savings after consolidating 40 ERPs on Snowflake</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+    <div class="slide-number">03 / 09</div>
+  </div>
+
+  <!-- SLIDE 04: VP MANUFACTURING -->
+  <div class="slide" id="slide-4">
+    <div class="slide-bg bg-aurora"></div>
+    <div class="internal-badge">Internal Only</div>
+    <div class="slide-content" style="padding-top:1.5rem;padding-bottom:1.5rem;">
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
+        <span class="role-badge economic">Economic Buyer</span>
+        <h3 class="label" style="margin:0;">PERSONA 02</h3>
+      </div>
+      <h2>VP Manufacturing <span class="highlight">/ Head of Operations</span></h2>
+      <div class="divider"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.9rem;margin-top:0.6rem;">
+
+        <div style="display:flex;flex-direction:column;gap:0.4rem;">
+          <div class="card blue-border" style="padding:0.9rem 1rem;">
+            <div class="card-title blue">Business Context</div>
+            <p style="font-size:0.78rem;">Owns production P&amp;L and attainment across all sites. Responsible for OEE, quality, capacity, and safety. The plan is always wrong because it was built on stale data from disconnected systems. Line stoppages from component shortages are the biggest financial exposure. ECOs create cascading re-planning work across MES and ERP.</p>
+          </div>
+          <div class="card blue-border" style="padding:0.9rem 1rem;">
+            <div class="card-title blue">What They Care About</div>
+            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Zero unplanned line stoppages — the highest-cost event in manufacturing</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">OEE and yield maximization across all production lines</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Reducing scrap rates and defects — quality as a cost driver</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Accurate capacity planning — right equipment loaded at the right time</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Fast reaction to component shortages before they stop the line</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:0.4rem;">
+          <div class="card purple-border" style="padding:0.9rem 1rem;">
+            <div class="card-title purple">How They're Measured</div>
+            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>OEE</strong> — Overall Equipment Effectiveness</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Schedule / Production Attainment</strong></div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>First Pass Yield &amp; Scrap Rate</strong></div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Unplanned Downtime %</strong></div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Manufacturing Cost Variance</strong></div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>TRIR</strong> — Total Recordable Incident Rate (Safety)</div></div>
+            </div>
+          </div>
+          <div class="card teal-border" style="padding:0.9rem 1rem;">
+            <div class="card-title teal">Potential Titles</div>
+            <p style="font-size:0.78rem;">VP Manufacturing · SVP Operations · Head of Manufacturing · Chief Operating Officer · VP Global Operations</p>
+            <div style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid rgba(204,204,204,0.4);">
+              <div style="font-size:0.68rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">Key Collaborators</div>
+              <p style="font-size:0.74rem;color:var(--text-gray);">CSCO · Head of Supply Planning · Chief Procurement Officer · Plant General Managers</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card" style="padding:0.9rem 1rem;border-color:rgba(36,158,220,0.35);background:linear-gradient(160deg,rgba(36,158,220,0.04),rgba(17,86,127,0.02));height:100%;">
+            <div class="card-title blue">Why Snowflake Wins Here</div>
+            <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.3rem;">
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Live Production Intelligence</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">MES, SCADA, and IoT data unified on Snowflake. Cortex AI detects quality anomalies and OEE degradation patterns before they become line stoppages.</p>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Plain-Language Queries</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">Cortex Analyst: "Which components are below reorder for next week's build schedule?" — answered in 2.4 seconds from live ERP, MES, and supplier data. No SQL. No analyst wait.</p>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Closed-Loop Execution</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">One approval triggers ERP purchase order, MES schedule reschedule, and QMS update simultaneously — in under 2 seconds. Decision cycle from 18 hours to seconds.</p>
+              </div>
+              <div style="background:linear-gradient(90deg,rgba(36,158,220,0.1),rgba(113,211,220,0.06));border:1px solid rgba(36,158,220,0.25);border-radius:8px;padding:0.45rem 0.65rem;">
+                <p style="font-size:0.75rem;font-weight:700;color:var(--sf-mid);margin:0;max-width:100%;">Honeywell: global inventory tracked hourly across 55,000 suppliers on Snowflake</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+    <div class="slide-number">04 / 09</div>
+  </div>
+
+  <!-- SLIDE 05: CIO / CDO -->
+  <div class="slide" id="slide-5">
+    <div class="slide-bg bg-dark-cinematic"></div>
+    <div class="internal-badge">Internal Only</div>
+    <div class="slide-content" style="padding-top:1.5rem;padding-bottom:1.5rem;">
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
+        <span class="role-badge economic">Economic Buyer</span>
+        <h3 class="label purple" style="margin:0;">PERSONA 03</h3>
+      </div>
+      <h2>CIO / CDO <span class="highlight-purple">/ VP Data &amp; Analytics</span></h2>
+      <div class="divider-purple"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.9rem;margin-top:0.6rem;">
+
+        <div style="display:flex;flex-direction:column;gap:0.4rem;">
+          <div class="card purple-border" style="padding:0.9rem 1rem;">
+            <div class="card-title purple">Business Context</div>
+            <p style="font-size:0.78rem;">Under pressure to deliver AI value from manufacturing data. The current stack (SAP + MES + PLM + SCADA) creates silos that block any unified analytics. Previous data lake efforts produced expensive, unmanaged repositories with no trusted KPIs. Business units demand self-service but can't agree on metric definitions. AI PoCs fail to reach production.</p>
+          </div>
+          <div class="card purple-border" style="padding:0.9rem 1rem;">
+            <div class="card-title purple">What They Care About</div>
+            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Eliminating data silos without ripping out existing production systems</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Enabling trusted, governed AI — not just PoCs that die at pilot</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Reducing time-to-insight for manufacturing and supply chain decisions</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Security, compliance, and data governance at enterprise scale</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Reducing total cost — fewer platforms, less custom integration</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:0.4rem;">
+          <div class="card blue-border" style="padding:0.9rem 1rem;">
+            <div class="card-title blue">How They're Measured</div>
+            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>AI/ML use cases in production</strong> (not just PoC count)</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Data platform consolidation</strong> &amp; cost reduction</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Time-to-insight</strong> for business requests</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Data governance score</strong> / audit readiness</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>System uptime</strong> and SLA compliance</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Business unit satisfaction</strong> with self-service analytics</div></div>
+            </div>
+          </div>
+          <div class="card teal-border" style="padding:0.9rem 1rem;">
+            <div class="card-title teal">Potential Titles</div>
+            <p style="font-size:0.78rem;">CIO · CDO · VP Data &amp; Analytics · VP Digital Transformation · Chief Digital Officer · Head of Enterprise Architecture</p>
+            <div style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid rgba(204,204,204,0.4);">
+              <div style="font-size:0.68rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">Key Collaborators</div>
+              <p style="font-size:0.74rem;color:var(--text-gray);">CSCO · VP Manufacturing · CFO · Enterprise Architect · Data Engineering Lead</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card" style="padding:0.9rem 1rem;border-color:rgba(36,158,220,0.35);background:linear-gradient(160deg,rgba(36,158,220,0.04),rgba(17,86,127,0.02));height:100%;">
+            <div class="card-title blue">Why Snowflake Wins Here</div>
+            <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.3rem;">
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">IT&rsquo;s New Role: Governing AI Agents, Not Maintaining Pipelines</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">IT stops building ETL and starts governing the AI agents that run the supply chain. Modern systems connect live; legacy systems ingest via managed Snowpipe pipelines — no custom integrations for IT to maintain. The team moves from data plumber to agentic orchestrator.</p>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Governed Semantic Layer</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">OEE, yield, scrap rate, and cycle time defined once in the semantic layer. Every AI model, BI tool, and team reads from the same governed truth — this is why Snowflake AI reaches production.</p>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Built-in AI + Governance</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">Cortex AI, Cortex Analyst, and Snowflake Governance (RBAC, masking, lineage) are native — no separate AI infrastructure. Replaces a fragmented stack of 3–5 tools.</p>
+              </div>
+              <div style="background:linear-gradient(90deg,rgba(36,158,220,0.1),rgba(113,211,220,0.06));border:1px solid rgba(36,158,220,0.25);border-radius:8px;padding:0.45rem 0.65rem;">
+                <p style="font-size:0.75rem;font-weight:700;color:var(--sf-mid);margin:0;max-width:100%;">Schneider Electric: 290+ smart factories unified — Gartner #1 Supply Chain 4 years running</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+    <div class="slide-number">05 / 09</div>
+  </div>
+
+  <!-- SLIDE 06: CPO -->
+  <div class="slide" id="slide-6">
+    <div class="slide-bg bg-aurora"></div>
+    <div class="internal-badge">Internal Only</div>
+    <div class="slide-content" style="padding-top:1.5rem;padding-bottom:1.5rem;">
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
+        <span class="role-badge economic">Economic Buyer</span>
+        <h3 class="label" style="margin:0;">PERSONA 04</h3>
+      </div>
+      <h2>Chief Procurement Officer <span class="highlight">/ VP Procurement</span></h2>
+      <div class="divider"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.9rem;margin-top:0.6rem;">
+
+        <div style="display:flex;flex-direction:column;gap:0.4rem;">
+          <div class="card blue-border" style="padding:0.9rem 1rem;">
+            <div class="card-title blue">Business Context</div>
+            <p style="font-size:0.78rem;">Owns supplier relationships, strategic sourcing, and procurement budget. The component shortage era has fundamentally reframed the CPO role from cost optimisation to supply resilience. Needs real-time visibility into tier-2/3 supplier capacity and sole-source risk — but supplier data currently lives in fragmented EDI feeds, emails, and spreadsheets. Always learning about shortages too late.</p>
+          </div>
+          <div class="card blue-border" style="padding:0.9rem 1rem;">
+            <div class="card-title blue">What They Care About</div>
+            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Sole-source and single-source component risk &mdash; knowing 6&ndash;8 weeks before line impact</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Real-time supplier OTIF, capacity signals, and financial health across tier-1/2/3</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Reducing emergency sourcing cycle times when shortages hit</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Demand signal sharing with strategic suppliers to reduce bullwhip effect</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Sustainability and ESG compliance across the supplier base</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:0.4rem;">
+          <div class="card purple-border" style="padding:0.9rem 1rem;">
+            <div class="card-title purple">How They're Measured</div>
+            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Supplier OTIF %</strong> &mdash; on-time in-full delivery performance</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Procurement Cost Savings</strong> / cost avoidance</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Supplier Risk Incidents Averted</strong></div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Emergency Sourcing Cycle Time</strong></div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Working Capital Impact</strong> of procurement decisions</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>ESG / Ethical Sourcing Compliance Rate</strong></div></div>
+            </div>
+          </div>
+          <div class="card teal-border" style="padding:0.9rem 1rem;">
+            <div class="card-title teal">Potential Titles</div>
+            <p style="font-size:0.78rem;">Chief Procurement Officer &middot; VP Procurement &middot; SVP Supply &amp; Procurement &middot; Head of Strategic Sourcing &middot; Chief Sourcing Officer</p>
+            <div style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid rgba(204,204,204,0.4);">
+              <div style="font-size:0.68rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">Key Collaborators</div>
+              <p style="font-size:0.74rem;color:var(--text-gray);">CSCO &middot; VP Manufacturing &middot; CFO &middot; Head of Supply Planning</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card" style="padding:0.9rem 1rem;border-color:rgba(36,158,220,0.35);background:linear-gradient(160deg,rgba(36,158,220,0.04),rgba(17,86,127,0.02));height:100%;">
+            <div class="card-title blue">Why Snowflake Wins Here</div>
+            <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.3rem;">
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Live Supplier Intelligence</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">Snowflake Marketplace delivers live supplier financial health, commodity pricing, port congestion, and geopolitical risk feeds &mdash; no custom integrations. 3,600+ datasets available immediately.</p>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Proactive Risk Scoring</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">Cortex AI automatically scores sole-source and single-source component risk across the entire tier-1/2/3 supplier network &mdash; surfacing critical risks 6&ndash;8 weeks before they impact production schedules.</p>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Direct Supplier Data Sharing</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">Zero-copy data sharing with strategic suppliers: share demand forecasts and receive real-time capacity signals without moving data. Reduces lead time mismatches and emergency sourcing by closing the information gap.</p>
+              </div>
+              <div style="background:linear-gradient(90deg,rgba(36,158,220,0.1),rgba(113,211,220,0.06));border:1px solid rgba(36,158,220,0.25);border-radius:8px;padding:0.45rem 0.65rem;">
+                <p style="font-size:0.75rem;font-weight:700;color:var(--sf-mid);margin:0;max-width:100%;">ABB: 55,000 suppliers matched to demand in near real-time &mdash; $200M+ annual inventory savings</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+    <div class="slide-number">06 / 09</div>
+  </div>
+
+  <!-- SLIDE 07: HEAD OF SUPPLY PLANNING -->
+  <div class="slide" id="slide-7">
+    <div class="slide-bg bg-aurora"></div>
+    <div class="internal-badge">Internal Only</div>
+    <div class="slide-content" style="padding-top:1.5rem;padding-bottom:1.5rem;">
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
+        <span class="role-badge technical">Technical Evaluator</span>
+        <h3 class="label" style="margin:0;">PERSONA 05</h3>
+      </div>
+      <h2>Head of Supply Planning <span class="highlight">/ VP Supply Planning</span></h2>
+      <div class="divider"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.9rem;margin-top:0.6rem;">
+
+        <div style="display:flex;flex-direction:column;gap:0.4rem;">
+          <div class="card blue-border" style="padding:0.9rem 1rem;">
+            <div class="card-title blue">Business Context</div>
+            <p style="font-size:0.78rem;">Leads the team building and executing supply plans across all sites and product lines. Owns the process from S&OP through execution. Spends most of the week reconciling ERP vs MES vs supplier system discrepancies before any actual planning can happen. Component shortage exceptions are found too late — after they become line stoppages.</p>
+          </div>
+          <div class="card blue-border" style="padding:0.9rem 1rem;">
+            <div class="card-title blue">What They Care About</div>
+            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Component availability visibility for the next 8–12 weeks of production</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Eliminating manual reconciliation across ERP, MES, and supplier systems</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Faster exception management — resolve supply gaps before line impact</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Better collaboration with procurement on constrained capacity scenarios</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Reliable supplier OTIF data — not last-month's EDI extract</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:0.4rem;">
+          <div class="card purple-border" style="padding:0.9rem 1rem;">
+            <div class="card-title purple">How They're Measured</div>
+            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Production Plan Adherence</strong></div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Component Availability Rate</strong></div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Inventory Days on Hand</strong> (avoiding both shortage and excess)</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>SLA Fulfillment</strong> — service levels met</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Lead Time Reduction</strong> — response to supply events</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Week of Supply / Working Capital</strong></div></div>
+            </div>
+          </div>
+          <div class="card teal-border" style="padding:0.9rem 1rem;">
+            <div class="card-title teal">Potential Titles</div>
+            <p style="font-size:0.78rem;">Head of Supply Planning · VP Supply Planning · Director of Supply Planning · Global Planning Lead · Head of S&OP</p>
+            <div style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid rgba(204,204,204,0.4);">
+              <div style="font-size:0.68rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">Key Collaborators</div>
+              <p style="font-size:0.74rem;color:var(--text-gray);">VP Manufacturing · CSCO · Head of Demand Planning · Chief Procurement Officer</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card" style="padding:0.9rem 1rem;border-color:rgba(36,158,220,0.35);background:linear-gradient(160deg,rgba(36,158,220,0.04),rgba(17,86,127,0.02));height:100%;">
+            <div class="card-title blue">Why Snowflake Wins Here</div>
+            <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.3rem;">
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Unified Live Inventory View</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">Component inventory from ERP, MES, and supplier feeds unified in one query — no reconciliation before the planning conversation starts. Live data, not last night's batch.</p>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">AI Exception Management</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">Cortex AI generates supply exception alerts with financial impact ranked by priority — planners manage exceptions, not spreadsheets. Strategic time freed up from tactical data work.</p>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Natural-Language Queries</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">Cortex Analyst: planners ask supply questions in plain language, get answers from live data instantly. No SQL, no ticket to IT, no analyst intermediary — every shift is a planning moment.</p>
+              </div>
+              <div style="background:linear-gradient(90deg,rgba(36,158,220,0.1),rgba(113,211,220,0.06));border:1px solid rgba(36,158,220,0.25);border-radius:8px;padding:0.45rem 0.65rem;">
+                <p style="font-size:0.75rem;font-weight:700;color:var(--sf-mid);margin:0;max-width:100%;">Snowflake Marketplace: 3,600+ live datasets including supplier capacity feeds and commodity signals</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+    <div class="slide-number">07 / 09</div>
+  </div>
+
+  <!-- SLIDE 08: HEAD OF PRODUCTION PLANNING -->
+  <!-- SLIDE 08: HEAD OF DEMAND PLANNING / S&OP -->
+  <div class="slide" id="slide-8">
+    <div class="slide-bg bg-aurora"></div>
+    <div class="internal-badge">Internal Only</div>
+    <div class="slide-content" style="padding-top:1.5rem;padding-bottom:1.5rem;">
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
+        <span class="role-badge technical">Technical Evaluator</span>
+        <h3 class="label" style="margin:0;">PERSONA 07</h3>
+      </div>
+      <h2>Head of Demand Planning <span class="highlight">/ S&amp;OP Lead</span></h2>
+      <div class="divider"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.9rem;margin-top:0.6rem;">
+
+        <div style="display:flex;flex-direction:column;gap:0.4rem;">
+          <div class="card blue-border" style="padding:0.9rem 1rem;">
+            <div class="card-title blue">Business Context</div>
+            <p style="font-size:0.78rem;">Owns the demand signal and the S&amp;OP / IBP process. Responsible for translating order book data, historical patterns, and market signals into a demand plan that drives supply and production schedules. Their primary frustration: no shared platform means demand, supply, and finance numbers never reconcile &mdash; every S&amp;OP cycle starts with a data argument before any decisions are made.</p>
+          </div>
+          <div class="card blue-border" style="padding:0.9rem 1rem;">
+            <div class="card-title blue">What They Care About</div>
+            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">One number everyone agrees on &mdash; end the demand vs supply vs finance reconciliation in S&amp;OP</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Faster response to demand signals &mdash; market changes visible in hours, not next week&rsquo;s batch</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Accurate forecasting for high-mix, volatile SKUs: aftermarket parts, configured products, seasonal demand</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Tighter collaboration with supply and manufacturing on constrained capacity scenarios</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Less time building the S&amp;OP pack &mdash; more time making decisions in the meeting</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:0.4rem;">
+          <div class="card purple-border" style="padding:0.9rem 1rem;">
+            <div class="card-title purple">How They&rsquo;re Measured</div>
+            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Forecast Accuracy</strong> (MAPE / WMAPE) at product &amp; site level</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Forecast Bias</strong> &mdash; systematic over / under prediction</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>S&amp;OP Cadence Adherence</strong> &mdash; on-time, data-ready meetings</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Planning Cycle Time Reduction</strong></div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Demand Plan Adoption Rate</strong> &mdash; how often supply acts on the plan</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Customer Fill Rate</strong> / service level outcome</div></div>
+            </div>
+          </div>
+          <div class="card teal-border" style="padding:0.9rem 1rem;">
+            <div class="card-title teal">Potential Titles</div>
+            <p style="font-size:0.78rem;">Head of Demand Planning &middot; VP Demand Planning &middot; Director S&amp;OP &middot; Head of IBP &middot; S&amp;OP Process Lead &middot; Global Planning Lead</p>
+            <div style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid rgba(204,204,204,0.4);">
+              <div style="font-size:0.68rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">Key Collaborators</div>
+              <p style="font-size:0.74rem;color:var(--text-gray);">CSCO &middot; Head of Supply Planning &middot; VP Manufacturing &middot; CFO &middot; Commercial / Sales</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card" style="padding:0.9rem 1rem;border-color:rgba(36,158,220,0.35);background:linear-gradient(160deg,rgba(36,158,220,0.04),rgba(17,86,127,0.02));height:100%;">
+            <div class="card-title blue">Why Snowflake Wins Here</div>
+            <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.3rem;">
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">The One-Number Solution</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">Snowflake&rsquo;s governed semantic layer defines demand, supply, and financial metrics once. Every function reads from the same truth &mdash; the S&amp;OP data argument disappears before the meeting starts.</p>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">AI-Driven Demand Sensing</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">Cortex AI incorporates order book, historical sell-through, and external signals (economic indicators, commodity prices, market data from Snowflake Marketplace) to generate forecasts that retrain continuously &mdash; not quarterly.</p>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Self-Service S&amp;OP Analytics</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">Cortex Analyst: &ldquo;Show me the demand gap for next quarter by product family&rdquo; &mdash; answered from live data in seconds. No SQL, no IT ticket. S&amp;OP pack prep time cut dramatically, meeting time spent on decisions not data.</p>
+              </div>
+              <div style="background:linear-gradient(90deg,rgba(36,158,220,0.1),rgba(113,211,220,0.06));border:1px solid rgba(36,158,220,0.25);border-radius:8px;padding:0.45rem 0.65rem;">
+                <p style="font-size:0.75rem;font-weight:700;color:var(--sf-mid);margin:0;max-width:100%;">Honeywell: unified supply &amp; demand across 3.5M SKUs &mdash; inventory matched in near real-time, every hour</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+    <div class="slide-number">08 / 09</div>
+  </div>
+
+  <!-- SLIDE 09: HEAD OF PRODUCTION PLANNING -->
+  <div class="slide" id="slide-9">
+    <div class="slide-bg bg-dark-cinematic"></div>
+    <div class="internal-badge">Internal Only</div>
+    <div class="slide-content" style="padding-top:1.5rem;padding-bottom:1.5rem;">
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
+        <span class="role-badge champion">Champion</span>
+        <h3 class="label purple" style="margin:0;">PERSONA 06</h3>
+      </div>
+      <h2>Head of Production Planning <span class="highlight-purple">/ Manufacturing Engineering</span></h2>
+      <div class="divider-purple"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.9rem;margin-top:0.6rem;">
+
+        <div style="display:flex;flex-direction:column;gap:0.4rem;">
+          <div class="card purple-border" style="padding:0.9rem 1rem;">
+            <div class="card-title purple">Business Context</div>
+            <p style="font-size:0.78rem;">Owns day-to-day production schedule management and BOM accuracy. Responsible for ECO propagation into MES and procurement — a process that currently takes 18+ hours of manual re-entry. Spends significant time reconciling MES vs ERP vs PLM version discrepancies. The data quality gatekeeper between engineering and manufacturing.</p>
+          </div>
+          <div class="card purple-border" style="padding:0.9rem 1rem;">
+            <div class="card-title purple">What They Care About</div>
+            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Accurate, real-time production schedules reflecting actual component availability</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Fast ECO impact analysis — "what does this change affect?" answered instantly</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Eliminating MES vs ERP vs PLM BOM discrepancies that delay production</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Quality data governance — knowing which BOM version is current and authoritative</div></div>
+              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Self-service queries — getting data without submitting IT tickets</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:0.4rem;">
+          <div class="card blue-border" style="padding:0.9rem 1rem;">
+            <div class="card-title blue">How They're Measured</div>
+            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Schedule Attainment</strong> — production vs plan</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>BOM Accuracy Rate</strong> — version control compliance</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>ECO Implementation Cycle Time</strong></div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>WIP Turn Rate</strong> — work-in-progress velocity</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Unplanned Downtime</strong> — caused by data errors</div></div>
+              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Capacity Utilization</strong> across all production lines</div></div>
+            </div>
+          </div>
+          <div class="card teal-border" style="padding:0.9rem 1rem;">
+            <div class="card-title teal">Potential Titles</div>
+            <p style="font-size:0.78rem;">Head of Production Planning · Director of Manufacturing Engineering · Sr Manager Production Control · Head of MES Operations · Plant Planning Manager</p>
+            <div style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid rgba(204,204,204,0.4);">
+              <div style="font-size:0.68rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">Key Collaborators</div>
+              <p style="font-size:0.74rem;color:var(--text-gray);">VP Manufacturing · Head of Supply Planning · Engineering · IT / ERP Team</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card" style="padding:0.9rem 1rem;border-color:rgba(36,158,220,0.35);background:linear-gradient(160deg,rgba(36,158,220,0.04),rgba(17,86,127,0.02));height:100%;">
+            <div class="card-title blue">Why Snowflake Wins Here</div>
+            <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.3rem;">
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Single BOM Truth</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">Live PLM BOM data alongside MES production data on Snowflake — one authoritative version, always current. Zero BOM version confusion between engineering and manufacturing floor.</p>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">AI-Powered ECO Impact</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">Cortex AI answers "what does this engineering change affect?" instantly — every downstream BOM, schedule, and procurement impact surfaced in seconds. The 18-hour manual ECO process becomes a single query.</p>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
+                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Self-Service for Engineers</div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;">Cortex Analyst enables production engineers and planners to query manufacturing data in plain language — no SQL, no IT ticket, no waiting. The data gatekeeper becomes a data enabler.</p>
+              </div>
+              <div style="background:linear-gradient(90deg,rgba(36,158,220,0.1),rgba(113,211,220,0.06));border:1px solid rgba(36,158,220,0.25);border-radius:8px;padding:0.45rem 0.65rem;">
+                <p style="font-size:0.75rem;font-weight:700;color:var(--sf-mid);margin:0;max-width:100%;">Governed semantic layer: OEE, yield, scrap, cycle time defined once — trusted by engineering and production alike</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+    <div class="slide-number">09 / 09</div>
+  </div>
+
+</div>
+
+<div class="controls">
+  <button onclick="prevSlide()">&#8592; Prev</button>
+  <select id="slideSelect" onchange="goTo(parseInt(this.value)-1)">
+    <option value="1">01 &mdash; Title</option>
+    <option value="2">02 &mdash; ICP Overview</option>
+    <option value="3">03 &mdash; CSCO</option>
+    <option value="4">04 &mdash; VP Manufacturing</option>
+    <option value="5">05 &mdash; CIO / CDO</option>
+    <option value="6">06 &mdash; CPO / VP Procurement</option>
+    <option value="7">07 &mdash; Head of Supply Planning</option>
+    <option value="8">08 &mdash; Head of Demand Planning / S&amp;OP</option>
+    <option value="9">09 &mdash; Head of Production Planning</option>
+  </select>
+  <button onclick="nextSlide()">Next &#8594;</button>
+</div>
+<script>
+const TOTAL = 9;
+let current = 0;
+function goTo(index) {
+  document.querySelectorAll('.slide').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('slide-' + (index+1)).classList.add('active');
+  document.getElementById('progressBar').style.width = ((index+1)/TOTAL*100) + '%';
+  document.getElementById('slideSelect').value = index + 1;
+  current = index;
+}
+function nextSlide() { if (current < TOTAL - 1) goTo(current + 1); }
+function prevSlide() { if (current > 0) goTo(current - 1); }
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+});
+goTo(0);
+</script>
+</body>
+</html>

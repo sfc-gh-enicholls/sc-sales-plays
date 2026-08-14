@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snowflake Discrete Manufacturing — Metrics That Matter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sf-blue: #249EDC;
+  --sf-mid: #11567F;
+  --sf-deep: #042130;
+  --sf-ice: #F6F9FA;
+  --sf-star: #71D3DC;
+  --sf-orange: #FF9F36;
+  --sf-white: #FFFFFF;
+  --text-dark: #111827;
+  --text-gray: #4B5568;
+  --text-light: #6B7280;
+  --border-card: rgba(204,204,204,0.5);
+  --green: #16a34a;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', sans-serif; background: #FFFFFF; }
+.deck { width: 100vw; height: 100vh; position: relative; }
+.slide { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1); overflow: hidden; }
+.slide.active { opacity: 1; pointer-events: all; }
+.slide-bg { position: absolute; inset: 0; z-index: 0; }
+.bg-white { background: #FFFFFF; }
+.bg-ice { background: var(--sf-ice); }
+.bg-mid { background: var(--sf-mid); }
+.slide-content { position: relative; z-index: 10; width: 88%; max-width: 1200px; padding: 2.2rem 2rem; }
+h3.label { font-size: clamp(0.65rem, 1vw, 0.8rem); font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sf-blue); margin-bottom: 0.7rem; }
+h3.label.purple { color: var(--sf-mid); }
+h3.label.white { color: rgba(255,255,255,0.7); }
+h1 { font-size: clamp(2.4rem, 5vw, 4.5rem); font-weight: 900; line-height: 1.05; color: var(--text-dark); letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.5rem, 2.8vw, 2.5rem); font-weight: 800; line-height: 1.1; color: var(--text-dark); letter-spacing: -0.01em; margin-bottom: 0.5rem; }
+.slide.dark-slide h1, .slide.dark-slide h2 { color: #FFFFFF; }
+.slide.dark-slide p { color: rgba(255,255,255,0.85); }
+.highlight { color: var(--sf-blue); }
+.highlight-purple { color: var(--sf-mid); }
+.highlight-green { color: var(--green); }
+.divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--sf-blue), var(--sf-star)); margin: 0.75rem 0 0.9rem 0; border-radius: 2px; }
+.divider-purple { width: 60px; height: 3px; background: linear-gradient(90deg, var(--sf-mid), var(--sf-blue)); margin: 0.75rem 0 0.9rem 0; border-radius: 2px; }
+p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.6; color: var(--text-gray); max-width: 750px; margin-bottom: 0.4rem; }
+/* Metric card */
+.metric-card { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 12px; padding: 1rem 1.1rem; display: flex; flex-direction: column; }
+.metric-card.blue { border-color: rgba(36,158,220,0.4); }
+.metric-card.purple { border-color: rgba(17,86,127,0.35); }
+.metric-card.green { border-color: rgba(22,163,74,0.35); }
+.metric-card.teal { border-color: rgba(113,211,220,0.45); }
+.metric-name { font-size: 1rem; font-weight: 900; color: var(--sf-mid); letter-spacing: -0.01em; margin-bottom: 0.1rem; }
+.metric-full { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-light); margin-bottom: 0.45rem; }
+.metric-body { font-size: 0.78rem; color: var(--text-gray); line-height: 1.5; margin-bottom: 0.5rem; flex: 1; }
+.metric-snowflake { display: flex; align-items: flex-start; gap: 0.4rem; background: linear-gradient(90deg,rgba(36,158,220,0.07),rgba(113,211,220,0.04)); border: 1px solid rgba(36,158,220,0.2); border-radius: 7px; padding: 0.42rem 0.6rem; margin-top: auto; }
+.metric-snowflake p { font-size: 0.72rem; color: var(--sf-mid); font-weight: 500; margin: 0; max-width: 100%; }
+.metric-snowflake svg { flex-shrink: 0; margin-top: 0.05rem; }
+.benchmark { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.2rem 0.55rem; border-radius: 999px; margin-bottom: 0.4rem; }
+.benchmark.avg { background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.4); color: #92400E; }
+.benchmark.target { background: rgba(22,163,74,0.08); border: 1px solid rgba(22,163,74,0.3); color: var(--green); }
+/* Positioning card */
+.pos-card { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 12px; padding: 1.1rem 1.3rem; }
+.pos-card.blue { border-color: rgba(36,158,220,0.4); }
+.pos-card.purple { border-color: rgba(17,86,127,0.35); }
+.pos-card p { font-size: 0.84rem; max-width: 100%; margin: 0; }
+/* Framework grid */
+.framework-cell { background: #FFFFFF; border-radius: 12px; padding: 1rem 1.1rem; border: 1.5px solid rgba(204,204,204,0.5); }
+/* Pill */
+.pill { display: inline-block; background: rgba(36,158,220,0.1); border: 1px solid rgba(36,158,220,0.3); border-radius: 999px; padding: 0.25rem 0.75rem; font-size: 0.72rem; font-weight: 600; color: var(--sf-blue); letter-spacing: 0.05em; text-transform: uppercase; margin: 0.15rem; }
+.pill.purple { background: rgba(17,86,127,0.08); border-color: rgba(17,86,127,0.3); color: var(--sf-mid); }
+.pill.green { background: rgba(22,163,74,0.08); border-color: rgba(22,163,74,0.3); color: var(--green); }
+/* Proof bar */
+.proof-bar { background: linear-gradient(90deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05)); border: 1px solid rgba(36,158,220,0.25); border-radius: 10px; padding: 0.65rem 1.2rem; }
+.proof-bar p { font-size: 0.79rem; color: var(--text-gray); margin: 0; max-width: 100%; }
+/* Nav */
+.slide-number { position: absolute; bottom: 1.5rem; right: 1.8rem; font-size: 0.72rem; color: var(--text-light); font-weight: 500; letter-spacing: 0.08em; z-index: 20; }
+.slide.dark-slide .slide-number { color: rgba(255,255,255,0.4); }
+.snowflake-logo { position: absolute; bottom: 1.2rem; right: 5.5rem; z-index: 20; opacity: 0.85; display: flex; align-items: center; height: 32px; }
+.progress-bar-wrap { position: fixed; top: 0; left: 0; width: 100%; height: 3px; z-index: 100; background: rgba(0,0,0,0.06); }
+.progress-bar { height: 100%; background: linear-gradient(90deg, var(--sf-mid), var(--sf-blue)); transition: width 0.5s ease; }
+.controls { position: fixed; bottom: 2.2rem; left: 50%; transform: translateX(-50%); display: flex; gap: 0.8rem; z-index: 100; align-items: center; }
+.controls button { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 999px; padding: 0.5rem 1.3rem; color: var(--text-gray); font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.controls button:hover { background: var(--sf-ice); border-color: var(--sf-blue); color: var(--sf-mid); }
+.controls select { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 999px; padding: 0.5rem 1.1rem; color: var(--text-gray); font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; outline: none; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+</style>
+</head>
+<body>
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<div class="deck" id="deck">
+
+  <!-- SLIDE 01: TITLE -->
+  <div class="slide dark-slide" id="slide-1">
+    <div class="slide-bg" style="background:url(https://images.unsplash.com/photo-1581093196868-c6c66e5a25c9?w=1920&q=80) center 40%/cover no-repeat;"></div>
+    <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,rgba(4,33,48,0.88) 0%,rgba(17,86,127,0.80) 50%,rgba(4,33,48,0.92) 100%);"></div>
+    <div class="slide-content" style="text-align:center;display:flex;flex-direction:column;align-items:center;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="32" style="display:block;opacity:0.95;filter:brightness(0) invert(1);margin-bottom:2.5rem;">
+      <h3 class="label white" style="text-align:center;letter-spacing:0.25em;">SNOWFLAKE &middot; DISCRETE MANUFACTURING</h3>
+      <h1 style="text-align:center;max-width:900px;color:rgba(113,211,220,1);font-size:clamp(2rem,5vw,4rem);margin-bottom:0.3rem;">METRICS</h1>
+      <h1 style="text-align:center;max-width:900px;color:#FFFFFF;font-size:clamp(2.5rem,6vw,4.5rem);">THAT MATTER</h1>
+      <div style="width:60px;height:3px;background:linear-gradient(90deg,#249EDC,#71D3DC);margin:1.2rem auto;border-radius:2px;"></div>
+      <p style="text-align:center;max-width:660px;font-size:1.05rem;color:rgba(255,255,255,0.8);">Connecting Snowflake capabilities to the KPIs that move boards, CFOs, and supply chain leaders in discrete manufacturing</p>
+    </div>
+    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;filter:brightness(0) invert(1);"></div>
+    <div class="slide-number">01 / 08</div>
+  </div>
+
+  <!-- SLIDE 02: THE BUSINESS IMPERATIVE -->
+  <div class="slide" id="slide-2">
+    <div class="slide-bg bg-white"></div>
+    <div class="slide-content" style="padding-top:2rem;padding-bottom:2rem;">
+      <h3 class="label purple">WHY NOW</h3>
+      <h2>The Business Imperative for <span class="highlight-purple">Discrete Manufacturers</span></h2>
+      <div class="divider-purple"></div>
+      <div style="display:grid;grid-template-columns:1.15fr 1fr;gap:1.2rem;margin-top:0.5rem;align-items:start;">
+
+        <!-- Left: Problem + shift -->
+        <div style="display:flex;flex-direction:column;gap:0.7rem;">
+          <div class="pos-card purple" style="padding:1rem 1.2rem;">
+            <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.5rem;">The Problem</div>
+            <p style="font-size:0.85rem;max-width:100%;">Today&rsquo;s discrete manufacturers face permanent volatility — component shortages, geopolitical risk, demand swings — but their data infrastructure is built for stability. ERP, MES, PLM, SCADA, and QMS run in silos. Every decision starts with reconciliation. Supply chain costs represent <strong style="color:var(--sf-mid);">50–70% of revenue</strong> for most discrete manufacturers, yet decisions are made on data that is hours or days old.</p>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;">
+            <div style="background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.2);border-radius:10px;padding:0.75rem 0.9rem;">
+              <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#DC2626;margin-bottom:0.35rem;">Without Snowflake</div>
+              <div style="display:flex;flex-direction:column;gap:0.22rem;">
+                <div style="display:flex;gap:0.4rem;font-size:0.76rem;color:var(--text-gray);align-items:flex-start;"><span style="color:#DC2626;font-weight:700;flex-shrink:0;">✕</span> 5 systems, 5 truths — reconciliation before every decision</div>
+                <div style="display:flex;gap:0.4rem;font-size:0.76rem;color:var(--text-gray);align-items:flex-start;"><span style="color:#DC2626;font-weight:700;flex-shrink:0;">✕</span> Component shortages found when the line stops</div>
+                <div style="display:flex;gap:0.4rem;font-size:0.76rem;color:var(--text-gray);align-items:flex-start;"><span style="color:#DC2626;font-weight:700;flex-shrink:0;">✕</span> AI pilots fail — ungoverned data is the root cause</div>
+                <div style="display:flex;gap:0.4rem;font-size:0.76rem;color:var(--text-gray);align-items:flex-start;"><span style="color:#DC2626;font-weight:700;flex-shrink:0;">✕</span> 18-hour decision cycles across ERP, MES, procurement</div>
+              </div>
+            </div>
+            <div style="background:rgba(36,158,220,0.04);border:1px solid rgba(36,158,220,0.25);border-radius:10px;padding:0.75rem 0.9rem;">
+              <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.35rem;">With Snowflake</div>
+              <div style="display:flex;flex-direction:column;gap:0.22rem;">
+                <div style="display:flex;gap:0.4rem;font-size:0.76rem;color:var(--text-gray);align-items:flex-start;"><span style="color:var(--sf-blue);font-weight:700;flex-shrink:0;">✓</span> Unified data platform — one semantic layer, one truth</div>
+                <div style="display:flex;gap:0.4rem;font-size:0.76rem;color:var(--text-gray);align-items:flex-start;"><span style="color:var(--sf-blue);font-weight:700;flex-shrink:0;">✓</span> Proactive risk signals 6–8 weeks before line impact</div>
+                <div style="display:flex;gap:0.4rem;font-size:0.76rem;color:var(--text-gray);align-items:flex-start;"><span style="color:var(--sf-blue);font-weight:700;flex-shrink:0;">✓</span> AI that reasons on governed data — reaches production</div>
+                <div style="display:flex;gap:0.4rem;font-size:0.76rem;color:var(--text-gray);align-items:flex-start;"><span style="color:var(--sf-blue);font-weight:700;flex-shrink:0;">✓</span> Closed-loop execution in seconds — 18h to &lt;2s</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Snowflake positioning -->
+        <div style="display:flex;flex-direction:column;gap:0.7rem;">
+          <div class="pos-card blue" style="padding:1rem 1.2rem;">
+            <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.5rem;">The Snowflake Platform for Discrete Manufacturing</div>
+            <p style="font-size:0.84rem;max-width:100%;margin-bottom:0.6rem;">The AI Data Cloud is the only platform that unifies ERP, MES, PLM, SCADA, and supplier data into a governed, AI-ready foundation — without moving data or replacing existing systems. It transforms supply chain planning from reactive reconciliation to proactive, closed-loop intelligence.</p>
+            <div style="display:flex;flex-direction:column;gap:0.3rem;">
+              <div style="display:flex;gap:0.6rem;align-items:flex-start;">
+                <span class="pill purple" style="font-size:0.63rem;white-space:nowrap;">Unify &amp; Govern</span>
+                <span style="font-size:0.76rem;color:var(--text-gray);">Zero-copy integration across all manufacturing systems</span>
+              </div>
+              <div style="display:flex;gap:0.6rem;align-items:flex-start;">
+                <span class="pill" style="font-size:0.63rem;white-space:nowrap;">Reason &amp; Predict</span>
+                <span style="font-size:0.76rem;color:var(--text-gray);">Cortex AI detects risk, optimises schedules, improves forecasts</span>
+              </div>
+              <div style="display:flex;gap:0.6rem;align-items:flex-start;">
+                <span class="pill green" style="font-size:0.63rem;white-space:nowrap;">Decide &amp; Execute</span>
+                <span style="font-size:0.76rem;color:var(--text-gray);">One approval triggers ERP, MES, QMS in parallel in &lt;2s</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;">
+            <div style="text-align:center;background:rgba(36,158,220,0.06);border-radius:10px;padding:0.6rem 0.4rem;">
+              <div style="font-size:1.4rem;font-weight:900;color:var(--sf-blue);line-height:1;">354%</div>
+              <div style="font-size:0.6rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.04em;line-height:1.3;margin-top:0.15rem;">ROI over 3 years</div>
+              <div style="font-size:0.58rem;color:var(--text-light);margin-top:0.1rem;">Forrester TEI 2024</div>
+            </div>
+            <div style="text-align:center;background:rgba(36,158,220,0.06);border-radius:10px;padding:0.6rem 0.4rem;">
+              <div style="font-size:1.4rem;font-weight:900;color:var(--sf-blue);line-height:1;">$200M+</div>
+              <div style="font-size:0.6rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.04em;line-height:1.3;margin-top:0.15rem;">Annual inventory savings</div>
+              <div style="font-size:0.58rem;color:var(--text-light);margin-top:0.1rem;">ABB</div>
+            </div>
+            <div style="text-align:center;background:rgba(36,158,220,0.06);border-radius:10px;padding:0.6rem 0.4rem;">
+              <div style="font-size:1.4rem;font-weight:900;color:var(--sf-blue);line-height:1;">&lt;6mo</div>
+              <div style="font-size:0.6rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.04em;line-height:1.3;margin-top:0.15rem;">Average payback period</div>
+              <div style="font-size:0.58rem;color:var(--text-light);margin-top:0.1rem;">Forrester TEI 2024</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+    <div class="slide-number">02 / 08</div>
+  </div>
+
+  <!-- SLIDE 03: VALUE FRAMEWORK OVERVIEW -->
+  <div class="slide" id="slide-3">
+    <div class="slide-bg bg-ice"></div>
+    <div class="slide-content" style="padding-top:1.8rem;padding-bottom:1.8rem;">
+      <h3 class="label">THE VALUE FRAMEWORK</h3>
+      <h2>Five Value Categories. <span class="highlight">One Connected Platform.</span></h2>
+      <div class="divider"></div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0.7rem;margin-top:0.7rem;">
+
+        <!-- Category 1: Service & Delivery -->
+        <div class="framework-cell" style="border-color:rgba(17,86,127,0.35);background:linear-gradient(160deg,rgba(17,86,127,0.06),rgba(17,86,127,0.01));">
+          <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.3rem;">01</div>
+          <div style="font-size:0.88rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.5rem;line-height:1.2;">Service &amp; Delivery</div>
+          <div style="display:flex;flex-direction:column;gap:0.25rem;">
+            <div style="font-size:0.72rem;color:var(--text-gray);">OTIF</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">Perfect Order Rate</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">Order Fill Rate</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">Supplier OTIF</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">Customer Lead Time</div>
+          </div>
+          <div style="margin-top:0.6rem;padding-top:0.5rem;border-top:1px solid rgba(17,86,127,0.12);">
+            <div style="font-size:0.65rem;color:var(--sf-mid);font-weight:600;">&#8594; Slide 04</div>
+          </div>
+        </div>
+
+        <!-- Category 2: Inventory & Working Capital -->
+        <div class="framework-cell" style="border-color:rgba(36,158,220,0.4);background:linear-gradient(160deg,rgba(36,158,220,0.06),rgba(36,158,220,0.01));">
+          <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.3rem;">02</div>
+          <div style="font-size:0.88rem;font-weight:800;color:var(--sf-blue);margin-bottom:0.5rem;line-height:1.2;">Inventory &amp; Working Capital</div>
+          <div style="display:flex;flex-direction:column;gap:0.25rem;">
+            <div style="font-size:0.72rem;color:var(--text-gray);">Inventory Turns</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">Days Inventory Outstanding</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">Safety Stock Level</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">E&amp;O Inventory %</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">Cash-to-Cash Cycle</div>
+          </div>
+          <div style="margin-top:0.6rem;padding-top:0.5rem;border-top:1px solid rgba(36,158,220,0.12);">
+            <div style="font-size:0.65rem;color:var(--sf-blue);font-weight:600;">&#8594; Slide 05</div>
+          </div>
+        </div>
+
+        <!-- Category 3: Production & Manufacturing -->
+        <div class="framework-cell" style="border-color:rgba(113,211,220,0.45);background:linear-gradient(160deg,rgba(113,211,220,0.08),rgba(113,211,220,0.01));">
+          <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#0d9488;margin-bottom:0.3rem;">03</div>
+          <div style="font-size:0.88rem;font-weight:800;color:#0d9488;margin-bottom:0.5rem;line-height:1.2;">Production &amp; Manufacturing</div>
+          <div style="display:flex;flex-direction:column;gap:0.25rem;">
+            <div style="font-size:0.72rem;color:var(--text-gray);">OEE</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">Schedule Attainment</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">First Pass Yield</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">Scrap Rate</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">Unplanned Downtime</div>
+          </div>
+          <div style="margin-top:0.6rem;padding-top:0.5rem;border-top:1px solid rgba(113,211,220,0.2);">
+            <div style="font-size:0.65rem;color:#0d9488;font-weight:600;">&#8594; Slide 06</div>
+          </div>
+        </div>
+
+        <!-- Category 4: Planning & Decision Speed -->
+        <div class="framework-cell" style="border-color:rgba(22,163,74,0.35);background:linear-gradient(160deg,rgba(22,163,74,0.06),rgba(22,163,74,0.01));">
+          <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--green);margin-bottom:0.3rem;">04</div>
+          <div style="font-size:0.88rem;font-weight:800;color:var(--green);margin-bottom:0.5rem;line-height:1.2;">Planning &amp; Decision Speed</div>
+          <div style="display:flex;flex-direction:column;gap:0.25rem;">
+            <div style="font-size:0.72rem;color:var(--text-gray);">Forecast Accuracy (MAPE)</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">Planning Cycle Time</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">S&amp;OP Cycle Time</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">Decision Cycle Time</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">Exception Resolution Time</div>
+          </div>
+          <div style="margin-top:0.6rem;padding-top:0.5rem;border-top:1px solid rgba(22,163,74,0.12);">
+            <div style="font-size:0.65rem;color:var(--green);font-weight:600;">&#8594; Slide 07</div>
+          </div>
+        </div>
+
+        <!-- Category 5: Financial Impact -->
+        <div class="framework-cell" style="border-color:rgba(255,159,54,0.4);background:linear-gradient(160deg,rgba(255,159,54,0.06),rgba(255,159,54,0.01));">
+          <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#B45309;margin-bottom:0.3rem;">05</div>
+          <div style="font-size:0.88rem;font-weight:800;color:#B45309;margin-bottom:0.5rem;line-height:1.2;">Financial Impact</div>
+          <div style="display:flex;flex-direction:column;gap:0.25rem;">
+            <div style="font-size:0.72rem;color:var(--text-gray);">SC Cost as % Revenue</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">Gross Margin</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">EBITDA Impact</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">Cash-to-Cash Cycle</div>
+            <div style="font-size:0.72rem;color:var(--text-gray);">ROI / Shareholder Return</div>
+          </div>
+          <div style="margin-top:0.6rem;padding-top:0.5rem;border-top:1px solid rgba(255,159,54,0.15);">
+            <div style="font-size:0.65rem;color:#B45309;font-weight:600;">&#8594; Slide 08</div>
+          </div>
+        </div>
+
+      </div>
+      <!-- Snowflake enablement row -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.7rem;">
+        <div style="background:rgba(17,86,127,0.06);border:1px solid rgba(17,86,127,0.2);border-radius:10px;padding:0.6rem 0.9rem;text-align:center;">
+          <div style="font-size:0.65rem;font-weight:700;color:var(--sf-mid);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">Data Foundation</div>
+          <div style="font-size:0.72rem;color:var(--text-gray);">Unified ERP &middot; MES &middot; PLM &middot; SCADA &middot; QMS &middot; Supplier feeds — one semantic layer</div>
+        </div>
+        <div style="background:rgba(36,158,220,0.06);border:1px solid rgba(36,158,220,0.2);border-radius:10px;padding:0.6rem 0.9rem;text-align:center;">
+          <div style="font-size:0.65rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">AI Intelligence</div>
+          <div style="font-size:0.72rem;color:var(--text-gray);">Cortex AI &middot; Cortex Analyst &middot; Snowflake Marketplace (3,600+ live datasets)</div>
+        </div>
+        <div style="background:rgba(22,163,74,0.06);border:1px solid rgba(22,163,74,0.2);border-radius:10px;padding:0.6rem 0.9rem;text-align:center;">
+          <div style="font-size:0.65rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">Closed-Loop Execution</div>
+          <div style="font-size:0.72rem;color:var(--text-gray);">One approval triggers ERP &middot; MES &middot; QMS &middot; Procurement simultaneously in &lt;2 seconds</div>
+        </div>
+      </div>
+    </div>
+    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+    <div class="slide-number">03 / 08</div>
+  </div>
+
+  <!-- SLIDE 04: SERVICE & DELIVERY -->
+  <div class="slide" id="slide-4">
+    <div class="slide-bg bg-white"></div>
+    <div class="slide-content" style="padding-top:1.8rem;padding-bottom:1.5rem;">
+      <h3 class="label purple">CATEGORY 01</h3>
+      <h2>Service &amp; <span class="highlight-purple">Delivery Performance</span></h2>
+      <div class="divider-purple"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;margin-top:0.6rem;">
+
+        <div class="metric-card purple">
+          <div class="metric-name">OTIF</div>
+          <div class="metric-full">On Time In Full Delivery</div>
+          <span class="benchmark avg">Industry avg: 75–85%</span><span class="benchmark target" style="margin-left:0.3rem;">Target: 95%+</span>
+          <p class="metric-body">The primary customer service KPI. Every percentage point gap represents lost revenue, customer penalty clauses, or both. For discrete manufacturers with contractual delivery commitments (automotive, aerospace), OTIF failure directly impacts revenue.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Snowflake unifies ERP, WMS, and supplier delivery feeds in real time. Cortex Analyst enables "what is OTIF for Plant NE this week?" in seconds — answered from live data, not last night&rsquo;s batch.</p></div>
+        </div>
+
+        <div class="metric-card purple">
+          <div class="metric-name">Perfect Order Rate</div>
+          <div class="metric-full">Complete · On Time · Correct · Undamaged</div>
+          <span class="benchmark avg">Industry avg: 80–90%</span>
+          <p class="metric-body">Composite measure of order completeness, delivery timing, documentation accuracy, and product condition. A single failure in any dimension counts as an imperfect order. Drives customer satisfaction and repeat business in complex B2B discrete manufacturing supply chains.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Unified data layer correlates QMS quality records, ERP shipment data, and logistics events to automatically calculate perfect order rate across all dimensions — no manual cross-system reconciliation.</p></div>
+        </div>
+
+        <div class="metric-card purple">
+          <div class="metric-name">Order Fill Rate</div>
+          <div class="metric-full">Orders Shipped Complete from Available Stock</div>
+          <span class="benchmark target">Target: 98%+ (MTS)</span>
+          <p class="metric-body">% of customer orders fulfilled completely from available inventory at first request. Critical for make-to-stock products. Partial fills increase logistics costs and damage customer relationships. Low fill rates are almost always a symptom of poor component availability visibility.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>AI demand sensing on Snowflake improves component availability positioning, reducing stockouts that cause partial fills. Cortex AI early-warns on shortages 6–8 weeks before they impact fill rate.</p></div>
+        </div>
+
+        <div class="metric-card blue">
+          <div class="metric-name">Supplier OTIF</div>
+          <div class="metric-full">Supplier On Time In Full Component Delivery</div>
+          <span class="benchmark avg">Industry avg: 70–85%</span><span class="benchmark target" style="margin-left:0.3rem;">Target: 95%+</span>
+          <p class="metric-body">Your OTIF to customers is only as good as your suppliers&rsquo; OTIF to you. For discrete manufacturers with complex BOMs and sole-source components, a single supplier miss can stop a production line. Most companies track this weekly from EDI data — often 24–48 hours stale.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Snowflake&rsquo;s zero-copy supplier data sharing brings live supplier delivery signals into the platform. Cortex AI scores supplier risk continuously — not just from EDI, but from 3,600+ Marketplace signals including carrier and port congestion data.</p></div>
+        </div>
+
+        <div class="metric-card blue">
+          <div class="metric-name">Customer Lead Time</div>
+          <div class="metric-full">Order Placement to Delivery</div>
+          <span class="benchmark avg">Varies by sub-industry</span>
+          <p class="metric-body">Time from customer order placement to delivery. A competitive differentiator especially in high-mix, configure-to-order environments. Lead time reduction drives revenue growth through improved win rates. Requires accurate, real-time visibility into component availability and production capacity.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Cortex Analyst provides instant visibility into available-to-promise (ATP) quantities across all sites — enabling faster, more confident lead time commitments without analyst intermediaries.</p></div>
+        </div>
+
+        <div class="metric-card blue">
+          <div class="metric-name">Forecast Bias</div>
+          <div class="metric-full">Systematic Over / Under Prediction</div>
+          <span class="benchmark avg">Target: ±5% at product family</span>
+          <p class="metric-body">Persistent forecast bias (consistently over or under) distorts inventory positioning and production scheduling across the entire supply chain. High bias is a compounding problem — each planning cycle amplifies the error. Root cause is almost always stale data inputs to the forecasting model.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Cortex AI retrains demand models on live order book, shipment, and market signals — automatically detecting and correcting systematic bias faster than any monthly planning cycle can.</p></div>
+        </div>
+
+      </div>
+      <div class="proof-bar" style="margin-top:0.8rem;"><p><strong style="color:var(--sf-mid);">Honeywell:</strong> tracks 3.5M SKUs against demand in near real-time — inventory matched to demand every hour across 55,000 suppliers, eliminating the data delays that cause OTIF failure &nbsp;&middot;&nbsp; <strong style="color:var(--sf-mid);">ABB:</strong> eliminated month-long data reconciliation cycles across 40 ERPs</p></div>
+    </div>
+    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+    <div class="slide-number">04 / 08</div>
+  </div>
+
+  <!-- SLIDE 05: INVENTORY & WORKING CAPITAL -->
+  <div class="slide" id="slide-5">
+    <div class="slide-bg bg-ice"></div>
+    <div class="slide-content" style="padding-top:1.8rem;padding-bottom:1.5rem;">
+      <h3 class="label">CATEGORY 02</h3>
+      <h2>Inventory &amp; <span class="highlight">Working Capital</span></h2>
+      <div class="divider"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;margin-top:0.6rem;">
+
+        <div class="metric-card blue">
+          <div class="metric-name">Inventory Turns</div>
+          <div class="metric-full">Cost of Goods Sold ÷ Average Inventory Value</div>
+          <span class="benchmark avg">Automotive: 8–15x · Industrial: 4–8x · A&amp;D: 2–4x</span>
+          <p class="metric-body">Higher turns = less capital tied up in stock, less obsolescence risk, lower carrying costs. Industry benchmarks vary significantly by sub-vertical. Turns improvement of 1x on a $500M inventory base frees ~$60M in working capital. The lever is better demand/supply matching, which requires unified, real-time data.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>ABB improved turns significantly after consolidating 40 ERPs — real-time supply/demand matching across 3.5M SKUs eliminated the excess buffer built to cover data latency.</p></div>
+        </div>
+
+        <div class="metric-card blue">
+          <div class="metric-name">Days Inventory Outstanding</div>
+          <div class="metric-full">Average Inventory ÷ (COGS ÷ 365)</div>
+          <span class="benchmark avg">Industry avg: 45–90 days</span><span class="benchmark target" style="margin-left:0.3rem;">Target: reduce 15–20%</span>
+          <p class="metric-body">Direct measure of how long capital is tied up in inventory. Every 10-day reduction in DIO on a $1B revenue manufacturer frees ~$27M in working capital. DIO is inflated by safety stock held to cover data uncertainty — when you trust your data, you need less buffer.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Cortex AI-driven demand sensing and live supplier visibility reduces the uncertainty that forces excess inventory holding. Governed semantic layer means finance, supply, and operations agree on the same inventory number — no padding for reconciliation uncertainty.</p></div>
+        </div>
+
+        <div class="metric-card blue">
+          <div class="metric-name">Safety Stock Level</div>
+          <div class="metric-full">Buffer Inventory Held Against Uncertainty</div>
+          <span class="benchmark avg">Target: right-sized, not minimised</span>
+          <p class="metric-body">Safety stock is rational insurance against demand and supply variability — the problem is when it&rsquo;s sized to cover data uncertainty rather than genuine business risk. Most discrete manufacturers carry 15–30% more safety stock than necessary because they don&rsquo;t trust their supply signals or demand forecasts.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Snowflake Marketplace live supplier signals + Cortex AI continuous risk scoring enables right-sizing safety stock by actual supplier risk — not as a blanket hedge against data lag. Hold less where risk is low, more where sole-source exposure is real.</p></div>
+        </div>
+
+        <div class="metric-card purple">
+          <div class="metric-name">E&amp;O Inventory %</div>
+          <div class="metric-full">Excess &amp; Obsolete Inventory as % of Total</div>
+          <span class="benchmark avg">Best-in-class: &lt;2% · Industry avg: 5–10%</span>
+          <p class="metric-body">Excess and obsolete inventory represents sunk capital and future write-off risk. In discrete manufacturing, E&amp;O is driven by demand forecast errors, engineering changes that obsolete components, and poor visibility into aging stock. An average $1B manufacturer writes off $10–50M annually in E&amp;O.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Cortex AI detects aging inventory and near-obsolescence risk from ECO data in PLM before write-offs materialise. Unified BOM and inventory visibility across all sites enables inter-site transfers to consume at-risk stock.</p></div>
+        </div>
+
+        <div class="metric-card purple">
+          <div class="metric-name">Cash-to-Cash Cycle Time</div>
+          <div class="metric-full">DIO + DSO &minus; DPO (days)</div>
+          <span class="benchmark avg">Industry avg: 45–90 days</span><span class="benchmark target" style="margin-left:0.3rem;">Target: reduce 10–20%</span>
+          <p class="metric-body">The CFO&rsquo;s primary supply chain metric. Measures how efficiently the business converts cash into revenue and back. Every 10-day improvement on a $2B business frees ~$55M in cash. Driven by inventory reduction (DIO), faster collections (DSO), and better payment terms (DPO) — all enabled by supply chain data clarity.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Snowflake connects supply chain and financial data in one platform — enabling real-time cash-to-cash tracking and scenario modelling for working capital optimisation decisions.</p></div>
+        </div>
+
+        <div class="metric-card purple">
+          <div class="metric-name">Inventory Carrying Cost</div>
+          <div class="metric-full">25–35% of Annual Inventory Value</div>
+          <span class="benchmark avg">Carrying cost rate: 25–35%/yr</span>
+          <p class="metric-body">The true cost of holding inventory: capital cost + storage + handling + insurance + obsolescence risk. A manufacturer with $500M in average inventory pays $125–175M per year just to hold it. Even a 10% inventory reduction saves $12–17M annually in carrying costs — before counting the freed working capital.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Better demand/supply matching through unified Snowflake data and Cortex AI directly reduces average inventory held — and with it, carrying costs. ABB: $200M+ annual savings includes significant carrying cost reduction.</p></div>
+        </div>
+
+      </div>
+      <div class="proof-bar" style="margin-top:0.8rem;"><p><strong style="color:var(--sf-mid);">ABB:</strong> $200M+ annual inventory savings &amp; $900M revenue growth influenced after consolidating 40 ERPs on Snowflake &nbsp;&middot;&nbsp; <strong style="color:var(--sf-mid);">Forrester TEI:</strong> Average 25% reduction in inventory carrying costs across Snowflake supply chain deployments</p></div>
+    </div>
+    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+    <div class="slide-number">05 / 08</div>
+  </div>
+
+  <!-- SLIDE 06: PRODUCTION & MANUFACTURING -->
+  <div class="slide" id="slide-6">
+    <div class="slide-bg bg-white"></div>
+    <div class="slide-content" style="padding-top:1.8rem;padding-bottom:1.5rem;">
+      <h3 class="label purple">CATEGORY 03</h3>
+      <h2>Production &amp; <span class="highlight-purple">Manufacturing Excellence</span></h2>
+      <div class="divider-purple"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;margin-top:0.6rem;">
+
+        <div class="metric-card purple">
+          <div class="metric-name">OEE</div>
+          <div class="metric-full">Overall Equipment Effectiveness</div>
+          <span class="benchmark avg">Industry avg: 65% · World-class: 85%+</span>
+          <p class="metric-body">The composite production efficiency metric: Availability × Performance × Quality. A 1% OEE improvement on a 100-unit/hr line running 8,000 hrs/year adds 8,000 units of capacity without capital expenditure. Most discrete manufacturers leave 15–20% OEE on the table due to undetected degradation and poor quality data.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Cortex AI detects OEE degradation patterns in SCADA and MES data before they cause downtime. Schneider Electric: real-time OEE insights across 290+ smart factories — enabling proactive maintenance that keeps OEE at world-class levels.</p></div>
+        </div>
+
+        <div class="metric-card purple">
+          <div class="metric-name">Schedule Attainment</div>
+          <div class="metric-full">Actual Production vs Plan (%)</div>
+          <span class="benchmark avg">Industry avg: 80–85% · Target: 95%+</span>
+          <p class="metric-body">The direct measure of whether manufacturing is executing to the plan. Low schedule attainment drives premium freight, customer penalties, and expedite costs. Root cause is almost always upstream — stale component availability data causing a plan that couldn&rsquo;t be executed as written.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Live component availability from Snowflake feeds into production planning — schedules built on real data. Cortex AI flags component shortages before the schedule is locked, not after the line stops. Planning cycle time reduced from days to shifts.</p></div>
+        </div>
+
+        <div class="metric-card teal">
+          <div class="metric-name">First Pass Yield</div>
+          <div class="metric-full">Units Passing Quality Inspection First Time</div>
+          <span class="benchmark avg">Best-in-class: 99%+ · Automotive target: 99.5%+</span>
+          <p class="metric-body">% of units completing the manufacturing process without any rework or scrap. Every unit that fails first pass costs 2–4× the original manufacturing cost to remediate. FPY degradation is an early signal of process drift, component quality issues, or operator error — and it compounds quickly if not caught early.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Cortex AI connects QMS quality records with MES production data and supplier lot information to detect the root cause of FPY degradation in minutes — before it becomes a quality escape or recall event.</p></div>
+        </div>
+
+        <div class="metric-card teal">
+          <div class="metric-name">Scrap Rate</div>
+          <div class="metric-full">Defective Units as % of Total Production</div>
+          <span class="benchmark avg">Target: &lt;2% · Automotive: &lt;0.5%</span>
+          <p class="metric-body">Direct cost of quality failures. Scrap costs include material, labour, overhead, and lost capacity — often 3–5% of revenue in high-mix discrete manufacturing. Scrap rate spikes are usually linked to specific component batches, process parameter drift, or tooling degradation — all detectable earlier with connected data.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Unified QMS, MES, and supplier lot data on Snowflake enables automatic correlation of scrap events with incoming component batches, tooling data, and process parameters. AI anomaly detection triggers before scrap accumulates.</p></div>
+        </div>
+
+        <div class="metric-card teal">
+          <div class="metric-name">Unplanned Downtime</div>
+          <div class="metric-full">% of Scheduled Production Time Lost</div>
+          <span class="benchmark avg">Target: &lt;2% of scheduled time</span>
+          <p class="metric-body">The most expensive manufacturing event. A single hour of unplanned downtime on a high-volume line can cost $10,000–$100,000+ depending on the product. Unplanned downtime from component shortages is particularly costly because it was preventable — the signal existed, just not in a form anyone could act on in time.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Cortex AI monitors live SCADA and MES streams for anomaly patterns predictive of equipment failure. Component shortage signals from unified supply data prevent line stoppages weeks before they would have materialised.</p></div>
+        </div>
+
+        <div class="metric-card teal">
+          <div class="metric-name">Capacity Utilisation</div>
+          <div class="metric-full">Actual Output vs Maximum Rated Capacity</div>
+          <span class="benchmark avg">Target: 80–85% (sustainable)</span>
+          <p class="metric-body">Running too low wastes capital investment. Running too high creates quality risk, burnout, and no room for demand surges. The sweet spot is 80–85% sustainable utilisation, which requires accurate demand forecasting, constrained scheduling, and real-time capacity visibility across all production lines simultaneously.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Snowflake unifies MES capacity data, production schedules, and demand plans in one query. Cortex AI enables scenario modelling for capacity allocation decisions across all sites — supporting load balancing without manual spreadsheet gymnastics.</p></div>
+        </div>
+
+      </div>
+      <div class="proof-bar" style="margin-top:0.8rem;"><p><strong style="color:var(--sf-mid);">Schneider Electric:</strong> real-time OEE and quality insights across 290+ global smart factories &mdash; Gartner #1 Supply Chain 4 consecutive years &nbsp;&middot;&nbsp; <strong style="color:var(--sf-mid);">Honeywell:</strong> live production inventory tracked every hour across all global sites</p></div>
+    </div>
+    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+    <div class="slide-number">06 / 08</div>
+  </div>
+
+  <!-- SLIDE 07: PLANNING & DECISION SPEED -->
+  <div class="slide" id="slide-7">
+    <div class="slide-bg bg-ice"></div>
+    <div class="slide-content" style="padding-top:1.8rem;padding-bottom:1.5rem;">
+      <h3 class="label">CATEGORY 04</h3>
+      <h2>Planning Speed &amp; <span class="highlight">Decision Intelligence</span></h2>
+      <div class="divider"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;margin-top:0.6rem;">
+
+        <div class="metric-card blue">
+          <div class="metric-name">Forecast Accuracy</div>
+          <div class="metric-full">Mean Absolute Percentage Error (MAPE)</div>
+          <span class="benchmark avg">Product level: avg 25–35% MAPE</span><span class="benchmark target" style="margin-left:0.3rem;">Target: &lt;15%</span>
+          <p class="metric-body">The foundation metric for everything downstream. A 10-point MAPE improvement on a $1B manufacturer reduces excess inventory, emergency freight, and lost sales by tens of millions. Most discrete manufacturers&rsquo; AI forecasting pilots fail because the training data is fragmented and ungoverned — not because the algorithm is wrong.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Cortex AI demand models retrain continuously on live signals — order book, shipment history, external market data from Snowflake Marketplace. Forecast accuracy compounds over time; the gap vs. competitors widens every cycle.</p></div>
+        </div>
+
+        <div class="metric-card blue">
+          <div class="metric-name">Decision Cycle Time</div>
+          <div class="metric-full">Signal Detection to Executed Response</div>
+          <span class="benchmark avg">Without Snowflake: 18+ hours</span><span class="benchmark target" style="margin-left:0.3rem;">With Snowflake: &lt;2 seconds</span>
+          <p class="metric-body">The most dramatic metric in the Snowflake supply chain story. Current state: a supply risk signal is detected → analyst manually cross-checks ERP + MES → enters changes across 3 systems → reconciles. 18 hours of latency where the problem compounds. With closed-loop execution, this is seconds.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Cortex AI detects risk → AI agent surfaces recommendation with financial impact → one approval triggers ERP purchase order, MES reschedule, and QMS traceability update simultaneously. Manual entries: 3 → 0. Time: 18 hours → &lt;2 seconds.</p></div>
+        </div>
+
+        <div class="metric-card blue">
+          <div class="metric-name">Planning Cycle Time</div>
+          <div class="metric-full">Time to Produce an Executable Supply Plan</div>
+          <span class="benchmark avg">Without Snowflake: 24–72 hours</span><span class="benchmark target" style="margin-left:0.3rem;">Target: hours → shifts</span>
+          <p class="metric-body">How long it takes from "we need a plan" to "we have a plan we trust." Most discrete manufacturers spend 60–70% of planning time on data reconciliation — normalising ERP vs MES vs PLM vs supplier data before any actual planning thinking happens. This is pure waste that Snowflake eliminates.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Zero data reconciliation — all systems are live and unified. Planners start from trusted data, not from building it. Planning cycle time compresses from days to shifts; S&amp;OP meetings become decision forums, not data validation sessions.</p></div>
+        </div>
+
+        <div class="metric-card purple">
+          <div class="metric-name">S&amp;OP Cycle Time</div>
+          <div class="metric-full">Monthly S&amp;OP Pack Prep to Decision</div>
+          <span class="benchmark avg">Typical prep time: 3–7 days of data assembly</span>
+          <p class="metric-body">In most discrete manufacturers, the S&OP meeting is the most expensive data reconciliation exercise in the business. Finance, supply, and commercial all arrive with different numbers from different systems. The first half of the meeting is spent agreeing on the facts rather than making decisions. The root cause: no shared data platform.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Snowflake&rsquo;s governed semantic layer ensures every function reads from the same defined KPIs. Cortex Analyst generates S&amp;OP pack data on demand — "show me the demand gap for next quarter by product family" answered in seconds, not after days of data assembly.</p></div>
+        </div>
+
+        <div class="metric-card purple">
+          <div class="metric-name">Exception Resolution Time</div>
+          <div class="metric-full">Supply Exception Detected to Resolved</div>
+          <span class="benchmark avg">Typical: 24–48 hours manual</span><span class="benchmark target" style="margin-left:0.3rem;">Target: &lt;2 hours AI-assisted</span>
+          <p class="metric-body">Supply exceptions (shortages, quality holds, supplier failures) require rapid triage and response. In fragmented systems, resolution requires 3–4 people coordinating across multiple interfaces. Every hour of delay multiplies the downstream impact. AI-assisted exception management fundamentally changes this economics.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Cortex AI generates exception alerts ranked by financial impact with recommended resolution — planners manage by exception rather than by spreadsheet. Resolution is one-click, not three-system data re-entry.</p></div>
+        </div>
+
+        <div class="metric-card purple">
+          <div class="metric-name">Time-to-Insight</div>
+          <div class="metric-full">Question Asked to Trusted Answer</div>
+          <span class="benchmark avg">Without Snowflake: days (via IT ticket)</span><span class="benchmark target" style="margin-left:0.3rem;">With Cortex Analyst: seconds</span>
+          <p class="metric-body">How long does it take for a VP Manufacturing or Supply Planning Director to get an answer to a supply chain question from their data? In most discrete manufacturers, the answer is: submit a ticket, wait 3–5 business days, receive a report that&rsquo;s already stale. This is the everyday experience that Cortex Analyst eliminates.</p>
+          <div class="metric-snowflake"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p>Cortex Analyst: "Which components are below reorder point for next week&rsquo;s build plan?" answered in 2.4 seconds from live unified data. No SQL. No analyst intermediary. Every shift is a planning moment — not just the weekly review meeting.</p></div>
+        </div>
+
+      </div>
+      <div class="proof-bar" style="margin-top:0.8rem;"><p><strong style="color:var(--sf-mid);">Decision cycle:</strong> 18 hours &#x2192; seconds &nbsp;&middot;&nbsp; <strong style="color:var(--sf-mid);">Manual entries:</strong> 3 &#x2192; 0 &nbsp;&middot;&nbsp; <strong style="color:var(--sf-mid);">Planning cycle time:</strong> days &#x2192; shifts &nbsp;&middot;&nbsp; <strong style="color:var(--sf-mid);">Cortex Analyst response:</strong> 2.4 seconds vs 3–5 day IT ticket</p></div>
+    </div>
+    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+    <div class="slide-number">07 / 08</div>
+  </div>
+
+  <!-- SLIDE 08: FINANCIAL IMPACT -->
+  <div class="slide" id="slide-8">
+    <div class="slide-bg bg-white"></div>
+    <div class="slide-content" style="padding-top:1.8rem;padding-bottom:1.5rem;">
+      <h3 class="label purple">CATEGORY 05 &middot; THE CFO VIEW</h3>
+      <h2>Financial <span class="highlight-purple">Impact</span></h2>
+      <div class="divider-purple"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:0.6rem;align-items:start;">
+
+        <!-- Left: KPI metrics grid -->
+        <div style="display:flex;flex-direction:column;gap:0.7rem;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;">
+            <div class="metric-card purple" style="padding:0.85rem 1rem;">
+              <div class="metric-name" style="font-size:0.9rem;">SC Cost as % Revenue</div>
+              <div class="metric-full">Total SC Cost ÷ Net Revenue</div>
+              <span class="benchmark avg">Industry: 8–15%</span>
+              <p class="metric-body" style="font-size:0.75rem;">The CFO&rsquo;s primary supply chain efficiency KPI. A 1-point improvement on $2B revenue = $20M annual saving. Driven by inventory reduction, logistics efficiency, and planning cost elimination.</p>
+              <div class="metric-snowflake"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p style="font-size:0.69rem;">Unified data eliminates duplicate reconciliation cost and reduces the expedite premium — typically 10–15% of logistics spend.</p></div>
+            </div>
+            <div class="metric-card purple" style="padding:0.85rem 1rem;">
+              <div class="metric-name" style="font-size:0.9rem;">Gross Margin</div>
+              <div class="metric-full">Revenue − COGS ÷ Revenue</div>
+              <span class="benchmark avg">Varies: 20–50% by sub-industry</span>
+              <p class="metric-body" style="font-size:0.75rem;">Improved forecast accuracy reduces markdown and promotion spend. Scrap reduction directly improves COGS. Fewer premium freight events reduce logistics costs. All flow directly to gross margin.</p>
+              <div class="metric-snowflake"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p style="font-size:0.69rem;">Snowflake customers report 1–3 point gross margin improvement from combined inventory, quality, and logistics efficiencies.</p></div>
+            </div>
+            <div class="metric-card blue" style="padding:0.85rem 1rem;">
+              <div class="metric-name" style="font-size:0.9rem;">EBITDA Impact</div>
+              <div class="metric-full">Operating Profit Before D&amp;A</div>
+              <span class="benchmark avg">SC efficiency = direct EBITDA lever</span>
+              <p class="metric-body" style="font-size:0.75rem;">Supply chain transformation is one of the highest-leverage EBITDA improvement programmes available to a discrete manufacturer. Every dollar saved in inventory carrying cost, every premium freight avoided, every planned downtime converted from unplanned flows to EBITDA.</p>
+              <div class="metric-snowflake"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p style="font-size:0.69rem;">Forrester TEI: $17.4M net present value over 3 years from Snowflake supply chain deployments (composite organisation, 2024 study).</p></div>
+            </div>
+            <div class="metric-card blue" style="padding:0.85rem 1rem;">
+              <div class="metric-name" style="font-size:0.9rem;">Working Capital</div>
+              <div class="metric-full">Current Assets − Current Liabilities</div>
+              <span class="benchmark avg">Target: free 10–20%</span>
+              <p class="metric-body" style="font-size:0.75rem;">Supply chain data quality is the primary lever for working capital in discrete manufacturing. Better demand/supply matching reduces inventory; faster exception resolution reduces emergency procurement premium; real supplier visibility reduces safety stock needed.</p>
+              <div class="metric-snowflake"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><p style="font-size:0.69rem;">ABB freed hundreds of millions in working capital after consolidating 40 ERPs — real-time matching across 55,000 suppliers eliminated excess buffer inventory.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: ROI summary + customer proof -->
+        <div style="display:flex;flex-direction:column;gap:0.7rem;">
+          <!-- Forrester ROI callout -->
+          <div style="background:linear-gradient(135deg,rgba(17,86,127,0.08),rgba(36,158,220,0.06));border:1.5px solid rgba(17,86,127,0.3);border-radius:14px;padding:1.2rem 1.4rem;">
+            <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.6rem;">Forrester Total Economic Impact — Snowflake (2024)</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;margin-bottom:0.8rem;">
+              <div style="text-align:center;">
+                <div style="font-size:2rem;font-weight:900;color:var(--sf-blue);line-height:1;">354%</div>
+                <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.04em;margin-top:0.15rem;">ROI over 3 years</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="font-size:2rem;font-weight:900;color:var(--sf-blue);line-height:1;">&lt;6mo</div>
+                <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.04em;margin-top:0.15rem;">Payback period</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="font-size:2rem;font-weight:900;color:var(--sf-blue);line-height:1;">$17.4M</div>
+                <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.04em;margin-top:0.15rem;">3-year NPV</div>
+              </div>
+            </div>
+            <p style="font-size:0.76rem;color:var(--text-gray);margin:0;max-width:100%;">Based on a composite organisation of Snowflake supply chain customers. Benefits include: productivity gains from unified data, reduction in data management costs, elimination of point solution licensing, and supply chain performance improvements.</p>
+          </div>
+          <!-- McKinsey industry average -->
+          <div style="display:flex;align-items:center;gap:0.9rem;background:rgba(36,158,220,0.06);border:1px solid rgba(36,158,220,0.2);border-radius:10px;padding:0.65rem 1rem;">
+            <div style="font-size:1.8rem;font-weight:900;color:var(--sf-blue);line-height:1;white-space:nowrap;">$18M</div>
+            <div><p style="font-size:0.78rem;color:var(--text-dark);font-weight:600;margin:0 0 0.05rem;max-width:100%;">Average annual savings from supply chain visibility improvements</p><p style="font-size:0.65rem;color:var(--text-light);margin:0;max-width:100%;">McKinsey &amp; Company &mdash; industry average across discrete manufacturers</p></div>
+          </div>
+          <!-- Named customer outcomes -->
+          <div style="display:flex;flex-direction:column;gap:0.5rem;">
+            <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.3);border-radius:10px;padding:0.7rem 1rem;display:flex;gap:1rem;align-items:center;">
+              <div style="min-width:3.5rem;text-align:center;">
+                <div style="font-size:0.9rem;font-weight:900;color:var(--sf-mid);">ABB</div>
+              </div>
+              <div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;"><strong style="color:var(--sf-blue);">$200M+ annual inventory savings</strong> &middot; $900M revenue growth influenced &middot; 40 ERPs consolidated on Snowflake &middot; 3.5M parts matched in near real-time</p>
+              </div>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.3);border-radius:10px;padding:0.7rem 1rem;display:flex;gap:1rem;align-items:center;">
+              <div style="min-width:3.5rem;text-align:center;">
+                <div style="font-size:0.75rem;font-weight:900;color:var(--sf-mid);">Honeywell</div>
+              </div>
+              <div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;"><strong style="color:var(--sf-blue);">33 data warehouses → 1</strong> &middot; Hourly global inventory refresh across 55,000 suppliers &middot; Semiconductor shortage and inflation-driven over-purchasing avoided</p>
+              </div>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.3);border-radius:10px;padding:0.7rem 1rem;display:flex;gap:1rem;align-items:center;">
+              <div style="min-width:3.5rem;text-align:center;">
+                <div style="font-size:0.7rem;font-weight:900;color:var(--sf-mid);">Schneider Electric</div>
+              </div>
+              <div>
+                <p style="font-size:0.76rem;margin:0;max-width:100%;"><strong style="color:var(--sf-blue);">290+ smart factories unified</strong> &middot; Real-time OEE &amp; quality insights &middot; Gartner #1 Supply Chain 4 consecutive years &middot; &ldquo;Data islands → connected manufacturing&rdquo;</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+    <div class="slide-number">08 / 08</div>
+  </div>
+
+</div>
+
+<div class="controls">
+  <button onclick="prevSlide()">&#8592; Prev</button>
+  <select id="slideSelect" onchange="goTo(parseInt(this.value)-1)">
+    <option value="1">01 &mdash; Title</option>
+    <option value="2">02 &mdash; Business Imperative</option>
+    <option value="3">03 &mdash; Value Framework</option>
+    <option value="4">04 &mdash; Service &amp; Delivery</option>
+    <option value="5">05 &mdash; Inventory &amp; Working Capital</option>
+    <option value="6">06 &mdash; Production &amp; Manufacturing</option>
+    <option value="7">07 &mdash; Planning &amp; Decision Speed</option>
+    <option value="8">08 &mdash; Financial Impact</option>
+  </select>
+  <button onclick="nextSlide()">Next &#8594;</button>
+</div>
+<script>
+const TOTAL = 8;
+let current = 0;
+function goTo(index) {
+  document.querySelectorAll('.slide').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('slide-' + (index+1)).classList.add('active');
+  document.getElementById('progressBar').style.width = ((index+1)/TOTAL*100) + '%';
+  document.getElementById('slideSelect').value = index + 1;
+  current = index;
+}
+function nextSlide() { if (current < TOTAL - 1) goTo(current + 1); }
+function prevSlide() { if (current > 0) goTo(current - 1); }
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+});
+goTo(0);
+</script>
+</body>
+</html>

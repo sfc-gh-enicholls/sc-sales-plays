@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grocery Retail — The Profitable Basket</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sf-blue: #249EDC;
+  --sf-mid: #11567F;
+  --sf-deep: #042130;
+  --sf-ice: #F6F9FA;
+  --sf-star: #71D3DC;
+  --sf-white: #FFFFFF;
+  --text-dark: #111827;
+  --text-gray: #4B5568;
+  --text-light: #6B7280;
+  --border: rgba(204,204,204,0.5);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color: var(--text-dark); min-height: 100vh; }
+.site-header { background: linear-gradient(135deg, var(--sf-deep) 0%, var(--sf-mid) 60%, rgba(36,158,220,0.85) 100%); padding: 2.5rem 3rem 3rem; position: relative; overflow: hidden; }
+.site-header::after { content: ''; position: absolute; inset: 0; background: url(https://images.unsplash.com/photo-1542838132-92c53300491e?w=1920&q=60) center 40%/cover no-repeat; opacity: 0.1; z-index: 0; }
+.header-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; }
+.header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+.internal-tag { background: rgba(220,38,38,0.2); border: 1px solid rgba(220,38,38,0.4); border-radius: 5px; padding: 0.3rem 0.8rem; font-size: 0.62rem; font-weight: 700; color: rgba(255,120,120,0.9); letter-spacing: 0.1em; text-transform: uppercase; }
+.play-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(113,211,220,0.8); margin-bottom: 0.5rem; }
+.play-title { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; color: #FFFFFF; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+.play-title span { color: var(--sf-star); }
+.play-subtitle { font-size: 1rem; color: rgba(255,255,255,0.7); font-weight: 300; max-width: 650px; line-height: 1.6; }
+.purpose-section { max-width: 1200px; margin: 0 auto; padding: 2.5rem 3rem; }
+.section-heading { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sf-mid); margin-bottom: 0.6rem; }
+.purpose-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 2rem; align-items: start; }
+.purpose-body { font-size: 0.92rem; color: var(--text-gray); line-height: 1.7; margin-bottom: 1rem; }
+.purpose-body strong { color: var(--text-dark); font-weight: 700; }
+.stat-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+.stat-pill { display: flex; align-items: center; gap: 0.4rem; background: #FFFFFF; border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 0.9rem; }
+.stat-num { font-size: 1.2rem; font-weight: 900; color: var(--sf-blue); line-height: 1; }
+.stat-desc { font-size: 0.68rem; color: var(--text-gray); line-height: 1.3; max-width: 120px; }
+.glance-box { background: linear-gradient(160deg, rgba(17,86,127,0.07), rgba(36,158,220,0.04)); border: 1.5px solid rgba(17,86,127,0.2); border-radius: 14px; padding: 1.4rem 1.6rem; }
+.glance-title { font-size: 0.75rem; font-weight: 800; color: var(--sf-mid); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1rem; }
+.glance-row { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.45rem 0; border-bottom: 1px solid rgba(204,204,204,0.3); }
+.glance-row:last-child { border-bottom: none; }
+.glance-label { font-size: 0.65rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.08em; width: 5.8rem; min-width: 5.8rem; flex-shrink: 0; margin-top: 0.05rem; }
+.glance-value { font-size: 0.78rem; color: var(--text-gray); line-height: 1.45; }
+.glance-value strong { color: var(--text-dark); }
+.assets-section { max-width: 1200px; margin: 0 auto; padding: 0 3rem 3rem; }
+.assets-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+.asset-card { background: #FFFFFF; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: box-shadow 0.2s, transform 0.2s; }
+.asset-card:hover { box-shadow: 0 8px 30px rgba(17,86,127,0.12); transform: translateY(-2px); }
+.asset-card.placeholder { opacity: 0.7; }
+.asset-card-top { padding: 1.4rem 1.5rem 0; }
+.asset-audience { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.22rem 0.65rem; border-radius: 999px; margin-bottom: 0.9rem; }
+.audience-ae { background: rgba(17,86,127,0.08); border: 1px solid rgba(17,86,127,0.25); color: var(--sf-mid); }
+.audience-sdr { background: rgba(36,158,220,0.1); border: 1px solid rgba(36,158,220,0.3); color: var(--sf-blue); }
+.audience-all { background: rgba(113,211,220,0.1); border: 1px solid rgba(113,211,220,0.35); color: #0d7490; }
+.audience-soon { background: rgba(107,114,128,0.1); border: 1px solid rgba(107,114,128,0.25); color: var(--text-light); }
+.asset-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 0.9rem; flex-shrink: 0; }
+.icon-purple { background: linear-gradient(135deg, rgba(17,86,127,0.15), rgba(36,158,220,0.08)); }
+.icon-blue { background: linear-gradient(135deg, rgba(36,158,220,0.15), rgba(113,211,220,0.08)); }
+.icon-teal { background: linear-gradient(135deg, rgba(113,211,220,0.2), rgba(36,158,220,0.08)); }
+.icon-green { background: linear-gradient(135deg, rgba(22,163,74,0.15), rgba(113,211,220,0.08)); }
+.icon-gray { background: rgba(107,114,128,0.08); }
+.asset-name { font-size: 1rem; font-weight: 800; color: var(--text-dark); letter-spacing: -0.01em; margin-bottom: 0.3rem; line-height: 1.2; }
+.asset-type { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-light); margin-bottom: 0.7rem; }
+.asset-desc { font-size: 0.8rem; color: var(--text-gray); line-height: 1.6; margin-bottom: 0; }
+.asset-card-meta { padding: 1rem 1.5rem; flex: 1; display: flex; flex-direction: column; justify-content: flex-end; }
+.asset-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 1rem; margin-top: 0.7rem; }
+.asset-tag { font-size: 0.62rem; background: var(--sf-ice); border: 1px solid var(--border); border-radius: 4px; padding: 0.15rem 0.5rem; color: var(--text-light); font-weight: 600; }
+.asset-card-footer { padding: 0 1.5rem 1.4rem; }
+.open-btn { display: flex; align-items: center; justify-content: space-between; width: 100%; background: var(--sf-mid); border: none; border-radius: 8px; padding: 0.65rem 1rem; color: #FFFFFF; font-size: 0.78rem; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; letter-spacing: 0.04em; text-decoration: none; transition: background 0.2s; }
+.open-btn:hover { background: var(--sf-blue); }
+.open-btn.blue-btn { background: var(--sf-blue); }
+.open-btn.blue-btn:hover { background: var(--sf-mid); }
+.open-btn.teal-btn { background: #0d9488; }
+.open-btn.teal-btn:hover { background: var(--sf-mid); }
+.open-btn.green-btn { background: #16a34a; }
+.open-btn.green-btn:hover { background: var(--sf-mid); }
+.open-btn.gray-btn { background: var(--text-light); cursor: default; }
+.open-btn.gray-btn:hover { background: var(--text-light); }
+.open-btn svg { flex-shrink: 0; }
+.section-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); max-width: 1200px; margin: 0 auto 2.5rem; }
+.site-footer { background: var(--sf-deep); padding: 1.5rem 3rem; }
+.site-footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+.site-footer p { font-size: 0.68rem; color: rgba(255,255,255,0.35); }
+.narrative-strip { max-width: 1200px; margin: 0 auto 0; padding: 0 3rem 2rem; }
+.narrative-inner { display: flex; align-items: center; gap: 1rem; background: linear-gradient(90deg, rgba(17,86,127,0.07), rgba(36,158,220,0.04)); border: 1px solid rgba(17,86,127,0.18); border-radius: 12px; padding: 0.85rem 1.4rem; }
+.narrative-inner p { font-size: 0.8rem; color: var(--text-gray); margin: 0; max-width: 100%; }
+.narrative-inner strong { color: var(--sf-mid); }
+.narrative-pill { flex-shrink: 0; background: rgba(17,86,127,0.08); border: 1px solid rgba(17,86,127,0.2); border-radius: 999px; padding: 0.25rem 0.75rem; font-size: 0.68rem; font-weight: 700; color: var(--sf-mid); white-space: nowrap; }
+@media (max-width: 900px) { .assets-grid { grid-template-columns: 1fr 1fr; } .purpose-grid { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .assets-grid { grid-template-columns: 1fr; } .purpose-section, .assets-section, .narrative-strip { padding-left: 1.5rem; padding-right: 1.5rem; } .site-header { padding: 2rem 1.5rem; } }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.9;filter:brightness(0) invert(1);" alt="Snowflake">
+      </div>
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <div class="play-label" style="margin:0;">Sales Play &middot; Grocery Retail</div>
+        <span class="internal-tag">Internal Use Only</span>
+      </div>
+    </div>
+    <h1 class="play-title">The Profitable <span>Basket</span></h1>
+    <p class="play-subtitle">Help grocery supply chain leaders turn fragmented EPOS, cold chain, and supplier data into a single AI-ready foundation &mdash; cutting fresh waste, improving demand forecasting, and building the adaptive supply chain that protects margin.</p>
+  </div>
+</header>
+
+<!-- ── PURPOSE ── -->
+<section class="purpose-section">
+  <p class="section-heading">About This Play</p>
+  <div class="purpose-grid">
+
+    <!-- Left: description + stats -->
+    <div>
+      <p class="purpose-body">
+        Grocery operates on a 2&ndash;5% trading margin, and the biggest single drag on that margin is supply chain. Fresh waste driven by demand forecast errors, replenishment calibrated to last week&rsquo;s averages, and OOS events that play out in real time &mdash; none of these can be fixed without unified, AI-ready data across EPOS, cold chain, and suppliers.
+      </p>
+      <p class="purpose-body">
+        Snowflake solves this by becoming the <strong>intelligence layer on top of every system the customer already has</strong> &mdash; zero-copy, no rip and replace. The primary play is <strong>supply chain: AI demand forecasting, fresh waste reduction, and adaptive supplier collaboration</strong>. The same data foundation also unlocks loyalty personalisation and commercial intelligence, extending the platform value over time.
+      </p>
+      <div class="stat-row">
+        <div class="stat-pill">
+          <span class="stat-num">354%</span>
+          <span class="stat-desc">ROI over 3 years &middot; Forrester TEI 2024</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-num">25%+</span>
+          <span class="stat-desc">Reduction in demand forecast error &middot; Cortex AI demand sensing</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-num">&lt;6mo</span>
+          <span class="stat-desc">Average payback &middot; Forrester TEI 2024</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Play at a Glance -->
+    <div class="glance-box">
+      <div class="glance-title">Play at a Glance</div>
+
+      <div class="glance-row">
+        <span class="glance-label">Target</span>
+        <span class="glance-value">Grocery retailers with <strong>£500M+ turnover</strong>, loyalty programmes, fresh food categories, and digital transformation on the agenda</span>
+      </div>
+      <div class="glance-row">
+        <span class="glance-label">Formats</span>
+        <span class="glance-value">Full-line supermarket &middot; Hypermarket &middot; Convenience &middot; Online grocery &middot; Wholesale club</span>
+      </div>
+      <div class="glance-row">
+        <span class="glance-label">Themes</span>
+        <span class="glance-value">Fresh waste &middot; AI demand forecasting &middot; Loyalty &amp; personalisation &middot; Retail media monetisation &middot; Private label &middot; Omnichannel &middot; Adaptive supply chain</span>
+      </div>
+      <div class="glance-row">
+        <span class="glance-label">Buyers</span>
+        <span class="glance-value"><strong>Primary:</strong> CSCO &middot; COO &middot; Head of Supply Chain &middot; Head of Fresh &middot; <strong>Secondary:</strong> CMO &middot; CCO &middot; CIO/CDO</span>
+      </div>
+      <div class="glance-row">
+        <span class="glance-label">Core Pain</span>
+        <span class="glance-value">Fresh waste costing margin. Loyalty data siloed from buying and personalisation. No privacy-safe mechanism for retail media. AI stuck in pilot on unstructured data.</span>
+      </div>
+      <div class="glance-row">
+        <span class="glance-label">Our Angle</span>
+        <span class="glance-value">Protect &middot; Grow &middot; Monetise the basket. Intelligence layer on top &mdash; no rip and replace. Every margin point, one governed platform.</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── NARRATIVE STRIP ── -->
+<div class="narrative-strip">
+  <div class="narrative-inner">
+    <span class="narrative-pill">Narrative Arc</span>
+    <p><strong>Protect the Basket</strong> (AI demand forecasting, fresh waste reduction, adaptive supply chain) &rarr; <strong>Grow the Basket</strong> (loyalty, personalisation, private label, non-food assortment) &rarr; <strong>Monetise the Basket</strong> (retail media on first-party data). One governed platform. No silos. Every margin point connected.</p>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ── ASSETS ── -->
+<section class="assets-section">
+  <p class="section-heading">Play Assets</p>
+  <div class="assets-grid">
+
+    <!-- Card 1: FMD -->
+    <div class="asset-card">
+      <div class="asset-card-top">
+        <span class="asset-audience audience-ae">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          For Account Executives
+        </span>
+        <div class="asset-icon icon-purple">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#11567F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="asset-name">First Meeting Deck</div>
+        <div class="asset-type">20-Slide Presentation &middot; Interactive</div>
+        <p class="asset-desc">The go-to deck for your first meeting with a COO, CMO, or CCO in grocery retail. Covers the grocery margin imperative, six forces, the agentic shift on fresh demand, three capabilities (Protect · Grow · Monetise) with live demo mockups, customer proof (Albertsons, Kraft Heinz, Leading European Grocer), and three on-ramps. AE customisation prompts in the appendix.</p>
+      </div>
+      <div class="asset-card-meta">
+        <div class="asset-tags">
+          <span class="asset-tag">First Meeting</span>
+          <span class="asset-tag">COO</span>
+          <span class="asset-tag">CMO</span>
+          <span class="asset-tag">CCO</span>
+          <span class="asset-tag">CIO / CDO</span>
+        </div>
+      </div>
+      <div class="asset-card-footer">
+        <a href="Grocery Retail FMD.html" class="open-btn">
+          Open Deck
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Card 2: ICP -->
+    <div class="asset-card">
+      <div class="asset-card-top">
+        <span class="asset-audience audience-ae">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          For Account Executives
+        </span>
+        <div class="asset-icon icon-blue">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#249EDC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="asset-name">Ideal Customer Profile</div>
+        <div class="asset-type">8-Slide Reference &middot; Internal Only</div>
+        <p class="asset-desc">Persona guide covering the 6 key buyers and influencers in grocery retail — COO, CMO/Chief Customer Officer, Chief Commercial Officer, CIO/CDO, Head of Fresh/Supply Chain, and Category Director. Each slide shows business context, what they care about, how they're measured, and exactly why Snowflake wins with them across Protect, Grow, and Monetise.</p>
+      </div>
+      <div class="asset-card-meta">
+        <div class="asset-tags">
+          <span class="asset-tag">Qualification</span>
+          <span class="asset-tag">Persona Research</span>
+          <span class="asset-tag">Discovery Prep</span>
+          <span class="asset-tag">Internal Only</span>
+        </div>
+      </div>
+      <div class="asset-card-footer">
+        <a href="Grocery Retail ICP.html" class="open-btn">
+          Open ICP
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Card 3: Metrics -->
+    <div class="asset-card">
+      <div class="asset-card-top">
+        <span class="asset-audience audience-all">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          For AEs &amp; SEs
+        </span>
+        <div class="asset-icon icon-teal">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d7490" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <div class="asset-name">Metrics That Matter</div>
+        <div class="asset-type">8-Slide Reference &middot; Business Case</div>
+        <p class="asset-desc">Maps Snowflake capabilities to the KPIs that move boards and CFOs in grocery retail. Covers 24 metrics across five categories: Fresh &amp; Availability, Loyalty &amp; Customer Intelligence, Inventory &amp; Waste, Retail Media &amp; Commercial, and Financial Impact. Use in discovery and business case reviews to connect data investment to margin outcomes.</p>
+      </div>
+      <div class="asset-card-meta">
+        <div class="asset-tags">
+          <span class="asset-tag">Business Case</span>
+          <span class="asset-tag">CFO Conversation</span>
+          <span class="asset-tag">Discovery</span>
+          <span class="asset-tag">KPIs</span>
+        </div>
+      </div>
+      <div class="asset-card-footer">
+        <a href="Grocery Retail metrics that matter.html" class="open-btn blue-btn">
+          Open Metrics
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Card 4: SDR Cheat Sheet -->
+    <div class="asset-card">
+      <div class="asset-card-top">
+        <span class="asset-audience audience-sdr">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.77-.77a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          For SDRs
+        </span>
+        <div class="asset-icon icon-purple">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#11567F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div class="asset-name">SDR Cheat Sheet</div>
+        <div class="asset-type">Single-Page Reference &middot; Print-Ready</div>
+        <p class="asset-desc">Quick reference for prospecting and discovery calls in grocery retail. Covers ICP green signals and red flags, trigger events, 30-second pitches by persona (COO, CMO, CCO/retail media, CIO), grocery-specific discovery questions, pain signals to listen for, and objection handling including competitive situations.</p>
+      </div>
+      <div class="asset-card-meta">
+        <div class="asset-tags">
+          <span class="asset-tag">Prospecting</span>
+          <span class="asset-tag">Cold Outreach</span>
+          <span class="asset-tag">Discovery</span>
+          <span class="asset-tag">Objections</span>
+          <span class="asset-tag">Internal Only</span>
+        </div>
+      </div>
+      <div class="asset-card-footer">
+        <a href="Grocery Retail SDR Cheat Sheet.html" class="open-btn teal-btn">
+          Open Cheat Sheet
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Card 6: Conceptual Demo (placeholder) -->
+    <div class="asset-card placeholder">
+      <div class="asset-card-top">
+        <span class="asset-audience audience-soon">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Coming Soon
+        </span>
+        <div class="asset-icon icon-gray">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        </div>
+        <div class="asset-name">Conceptual Demo</div>
+        <div class="asset-type">Interactive Demo &middot; Placeholder</div>
+        <p class="asset-desc">An end-to-end conceptual demo showing a grocery retailer on Snowflake — from fragmented fresh and loyalty data to unified platform, AI demand forecasting, Cortex Analyst personalisation queries, and retail media clean room activation. Coming soon.</p>
+      </div>
+      <div class="asset-card-meta">
+        <div class="asset-tags">
+          <span class="asset-tag">Demo</span>
+          <span class="asset-tag">Technical</span>
+          <span class="asset-tag">End-to-End</span>
+          <span class="asset-tag">In Development</span>
+        </div>
+      </div>
+      <div class="asset-card-footer">
+        <button class="open-btn gray-btn" disabled>
+          Coming Soon
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p>Grocery Retail &mdash; The Profitable Basket Play &middot; Internal Use Only &middot; &copy; 2026 Snowflake Inc. All Rights Reserved</p>
+  </div>
+</footer>
+
+</body>
+</html>

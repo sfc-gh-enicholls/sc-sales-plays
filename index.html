@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="snowflake-source" content="cortex-agent-authored" />
+  <title>Supply Chain Sales Plays</title>
+  <style>
+    :root {
+      --sf-blue: #29B5E8;
+      --sf-navy: #11567F;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --subtle: #64748b;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 32px 24px 64px;
+    }
+    header {
+      max-width: 900px;
+      margin: 0 auto 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .logo-bar {
+      width: 4px;
+      height: 40px;
+      background: var(--sf-blue);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--sf-navy);
+    }
+    header p {
+      font-size: 13px;
+      color: var(--subtle);
+      margin-top: 2px;
+    }
+    .section {
+      max-width: 900px;
+      margin: 0 auto 40px;
+    }
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--subtle);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .card:hover {
+      border-color: var(--sf-blue);
+      box-shadow: 0 2px 8px rgba(41, 181, 232, 0.15);
+    }
+    .card-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--sf-blue);
+    }
+    .card-title {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+    .card-icon {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-bar"></div>
+    <div>
+      <h1>Supply Chain Sales Plays</h1>
+      <p>Field enablement assets — Emily Nicholls, Snowflake Supply Chain GTM</p>
+    </div>
+  </header>
+
+  <div class="section">
+    <div class="section-title">Field Enablement</div>
+    <div class="grid">
+      <a class="card" href="sc-field-enablement-PRESENT-v2.html">
+        <div class="card-icon">🎯</div>
+        <div class="card-label">Presentation</div>
+        <div class="card-title">SC Field Enablement v2</div>
+      </a>
+      <a class="card" href="sc-field-enablement-PRESENT.html">
+        <div class="card-icon">🎯</div>
+        <div class="card-label">Presentation</div>
+        <div class="card-title">SC Field Enablement</div>
+      </a>
+      <a class="card" href="sc-field-enablement-REFERENCE.html">
+        <div class="card-icon">📖</div>
+        <div class="card-label">Reference</div>
+        <div class="card-title">SC Field Enablement Reference</div>
+      </a>
+      <a class="card" href="sc-team-intro.html">
+        <div class="card-icon">👋</div>
+        <div class="card-label">Intro</div>
+        <div class="card-title">SC Team Intro</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Stories</div>
+    <div class="grid">
+      <a class="card" href="sc-story-ice-cream-PRESENT.html">
+        <div class="card-icon">🍦</div>
+        <div class="card-label">Story</div>
+        <div class="card-title">Ice Cream — Present</div>
+      </a>
+      <a class="card" href="sc-story-ice-cream.html">
+        <div class="card-icon">🍦</div>
+        <div class="card-label">Story</div>
+        <div class="card-title">Ice Cream — Full</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">CPG</div>
+    <div class="grid">
+      <a class="card" href="CPG%20Homepage.html">
+        <div class="card-icon">🏠</div>
+        <div class="card-label">Homepage</div>
+        <div class="card-title">CPG Homepage</div>
+      </a>
+      <a class="card" href="CPG%20ICP.html">
+        <div class="card-icon">🎯</div>
+        <div class="card-label">ICP</div>
+        <div class="card-title">CPG Ideal Customer Profile</div>
+      </a>
+      <a class="card" href="CPG%20SDR%20Cheat%20Sheet.html">
+        <div class="card-icon">📋</div>
+        <div class="card-label">SDR</div>
+        <div class="card-title">CPG SDR Cheat Sheet</div>
+      </a>
+      <a class="card" href="CPG%20FMD.html">
+        <div class="card-icon">📊</div>
+        <div class="card-label">FMD</div>
+        <div class="card-title">CPG First Meeting Deck</div>
+      </a>
+      <a class="card" href="CPG%20metrics%20that%20matter.html">
+        <div class="card-icon">📈</div>
+        <div class="card-label">Metrics</div>
+        <div class="card-title">CPG Metrics That Matter</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Grocery Retail</div>
+    <div class="grid">
+      <a class="card" href="Grocery%20Retail%20Homepage.html">
+        <div class="card-icon">🏠</div>
+        <div class="card-label">Homepage</div>
+        <div class="card-title">Grocery Retail Homepage</div>
+      </a>
+      <a class="card" href="Grocery%20Retail%20ICP.html">
+        <div class="card-icon">🎯</div>
+        <div class="card-label">ICP</div>
+        <div class="card-title">Grocery Retail ICP</div>
+      </a>
+      <a class="card" href="Grocery%20Retail%20SDR%20Cheat%20Sheet.html">
+        <div class="card-icon">📋</div>
+        <div class="card-label">SDR</div>
+        <div class="card-title">Grocery Retail SDR Cheat Sheet</div>
+      </a>
+      <a class="card" href="Grocery%20Retail%20FMD.html">
+        <div class="card-icon">📊</div>
+        <div class="card-label">FMD</div>
+        <div class="card-title">Grocery Retail First Meeting Deck</div>
+      </a>
+      <a class="card" href="Grocery%20Retail%20metrics%20that%20matter.html">
+        <div class="card-icon">📈</div>
+        <div class="card-label">Metrics</div>
+        <div class="card-title">Grocery Retail Metrics That Matter</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Discrete Manufacturing</div>
+    <div class="grid">
+      <a class="card" href="Discreet%20Mfg%20Homepage.html">
+        <div class="card-icon">🏠</div>
+        <div class="card-label">Homepage</div>
+        <div class="card-title">Discrete Mfg Homepage</div>
+      </a>
+      <a class="card" href="Discreet%20Mfg%20ICP.html">
+        <div class="card-icon">🎯</div>
+        <div class="card-label">ICP</div>
+        <div class="card-title">Discrete Mfg ICP</div>
+      </a>
+      <a class="card" href="Discreet%20Mfg%20SDR%20Cheat%20Sheet.html">
+        <div class="card-icon">📋</div>
+        <div class="card-label">SDR</div>
+        <div class="card-title">Discrete Mfg SDR Cheat Sheet</div>
+      </a>
+      <a class="card" href="Discreet%20Mfg%20FMD.html">
+        <div class="card-icon">📊</div>
+        <div class="card-label">FMD</div>
+        <div class="card-title">Discrete Mfg First Meeting Deck</div>
+      </a>
+      <a class="card" href="Discreet%20Mfg%20metrics%20that%20matter.html">
+        <div class="card-icon">📈</div>
+        <div class="card-label">Metrics</div>
+        <div class="card-title">Discrete Mfg Metrics That Matter</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Fashion Retail</div>
+    <div class="grid">
+      <a class="card" href="Fashion%20Retail%20Homepage.html">
+        <div class="card-icon">🏠</div>
+        <div class="card-label">Homepage</div>
+        <div class="card-title">Fashion Retail Homepage</div>
+      </a>
+      <a class="card" href="Fashion%20Retail%20FMD.html">
+        <div class="card-icon">📊</div>
+        <div class="card-label">FMD</div>
+        <div class="card-title">Fashion Retail First Meeting Deck</div>
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>

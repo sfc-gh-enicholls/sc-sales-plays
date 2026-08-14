@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="snowflake-source" content="cortex-agent-authored" />
+  <title>SDR Cheat Sheet — Grocery Retail</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sf-blue: #249EDC;
+      --sf-mid: #11567F;
+      --sf-deep: #042130;
+      --sf-ice: #F6F9FA;
+      --sf-star: #71D3DC;
+      --sf-white: #FFFFFF;
+      --text-dark: #111827;
+      --text-gray: #4B5568;
+      --text-light: #6B7280;
+      --border: rgba(204,204,204,0.5);
+      --green: #16a34a;
+      --red: #DC2626;
+      --amber: #D97706;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color: var(--text-dark); }
+    body { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.2rem; padding-bottom: 0.9rem; border-bottom: 2px solid var(--sf-mid); }
+    .page-header-left { display: flex; align-items: center; gap: 1rem; }
+    .page-title { font-size: 1.4rem; font-weight: 900; color: var(--sf-mid); letter-spacing: -0.01em; }
+    .page-subtitle { font-size: 0.75rem; color: var(--text-light); font-weight: 500; margin-top: 0.1rem; }
+    .internal-tag { background: rgba(220,38,38,0.08); border: 1px solid rgba(220,38,38,0.25); border-radius: 5px; padding: 0.25rem 0.7rem; font-size: 0.62rem; font-weight: 700; color: var(--red); letter-spacing: 0.08em; text-transform: uppercase; }
+    .section-label { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 0.4rem; }
+    .label-blue { color: var(--sf-blue); }
+    .label-purple { color: var(--sf-mid); }
+    .label-green { color: var(--green); }
+    .label-red { color: var(--red); }
+    .label-amber { color: var(--amber); }
+    .label-teal { color: #0d9488; }
+    .block { background: #FFFFFF; border-radius: 10px; padding: 0.75rem 0.9rem; border: 1px solid var(--border); }
+    .block.blue-top { border-top: 3px solid var(--sf-blue); }
+    .block.purple-top { border-top: 3px solid var(--sf-mid); }
+    .block.green-top { border-top: 3px solid var(--green); }
+    .block.red-top { border-top: 3px solid var(--red); }
+    .block.amber-top { border-top: 3px solid var(--amber); }
+    .block.teal-top { border-top: 3px solid #0d9488; }
+    .block-title { font-size: 0.72rem; font-weight: 800; color: var(--text-dark); margin-bottom: 0.45rem; letter-spacing: 0.01em; }
+    .row { display: grid; gap: 0.8rem; margin-bottom: 0.8rem; }
+    .cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .cols-2 { grid-template-columns: 1fr 1fr; }
+    .cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+    .signal-item { display: flex; align-items: flex-start; gap: 0.4rem; padding: 0.28rem 0; border-bottom: 1px solid rgba(204,204,204,0.25); font-size: 0.74rem; color: var(--text-gray); line-height: 1.4; }
+    .signal-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .signal-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 0.3rem; }
+    .dot-green { background: var(--green); }
+    .dot-red { background: var(--red); }
+    .dot-blue { background: var(--sf-blue); }
+    .dot-amber { background: var(--amber); }
+    .obj-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem 0.8rem; align-items: start; padding: 0.35rem 0; border-bottom: 1px solid rgba(204,204,204,0.25); }
+    .obj-row:last-child { border-bottom: none; }
+    .obj-q { font-size: 0.72rem; color: var(--text-dark); font-weight: 600; font-style: italic; }
+    .obj-a { font-size: 0.72rem; color: var(--text-gray); }
+    .obj-a strong { color: var(--sf-mid); font-weight: 700; }
+    .pitch-box { background: linear-gradient(135deg, rgba(17,86,127,0.06), rgba(36,158,220,0.04)); border: 1.5px solid rgba(17,86,127,0.25); border-radius: 10px; padding: 0.8rem 1rem; }
+    .pitch-text { font-size: 0.8rem; color: var(--text-gray); line-height: 1.65; }
+    .pitch-text strong { color: var(--sf-mid); }
+    .dq-item { padding: 0.3rem 0; border-bottom: 1px solid rgba(204,204,204,0.25); font-size: 0.72rem; color: var(--text-gray); line-height: 1.45; }
+    .dq-item:last-child { border-bottom: none; }
+    .dq-item em { color: var(--sf-blue); font-style: italic; font-size: 0.7rem; }
+    .proof-row { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.32rem 0; border-bottom: 1px solid rgba(204,204,204,0.25); font-size: 0.72rem; color: var(--text-gray); line-height: 1.4; }
+    .proof-row:last-child { border-bottom: none; }
+    .proof-tag { font-size: 0.6rem; font-weight: 700; background: rgba(17,86,127,0.08); border: 1px solid rgba(17,86,127,0.2); border-radius: 3px; padding: 0.1rem 0.35rem; color: var(--sf-mid); white-space: nowrap; flex-shrink: 0; margin-top: 0.1rem; }
+    .proof-tag.green { background: rgba(22,163,74,0.08); border-color: rgba(22,163,74,0.2); color: var(--green); }
+    .pain-quote { background: rgba(220,38,38,0.04); border-left: 3px solid rgba(220,38,38,0.4); border-radius: 0 6px 6px 0; padding: 0.3rem 0.55rem; font-size: 0.71rem; color: var(--text-dark); font-style: italic; margin-bottom: 0.3rem; line-height: 1.4; }
+    .pain-quote:last-child { margin-bottom: 0; }
+    .page-footer { margin-top: 1.2rem; padding-top: 0.7rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .page-footer p { font-size: 0.62rem; color: var(--text-light); }
+    @media print { body { padding: 0.5rem 1rem; background: white; max-width: 100%; } .block { break-inside: avoid; } }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="page-header">
+    <div class="page-header-left">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.9;" alt="Snowflake">
+      <div>
+        <div class="page-title">SDR Cheat Sheet — Grocery Retail</div>
+        <div class="page-subtitle">The Profitable Basket Play &middot; Quick Reference for Prospecting &amp; Discovery Calls</div>
+      </div>
+    </div>
+    <div class="internal-tag">Internal Use Only</div>
+  </header>
+
+  <!-- ROW 1: ICP QUICK SCAN -->
+  <div id="icp-scan" class="row cols-3">
+
+    <!-- Green Signals -->
+    <div class="block green-top">
+      <div class="section-label label-green">ICP Quick Scan</div>
+      <div class="block-title">Green Signals — Call These</div>
+      <div class="signal-item"><span class="signal-dot dot-green"></span><span>&pound;500M+ grocery turnover (ideal: &pound;2B+)</span></div>
+      <div class="signal-item"><span class="signal-dot dot-green"></span><span>Active loyalty programme (Clubcard, Nectar, own-brand CRM)</span></div>
+      <div class="signal-item"><span class="signal-dot dot-green"></span><span>Fresh food categories: bakery, produce, deli, ready meals, dairy</span></div>
+      <div class="signal-item"><span class="signal-dot dot-green"></span><span>Multi-format estate (supermarket, convenience, online grocery)</span></div>
+      <div class="signal-item"><span class="signal-dot dot-green"></span><span>CDO, VP Data, or Chief Digital Officer in place or recently hired</span></div>
+      <div class="signal-item"><span class="signal-dot dot-green"></span><span>Retail media network announced or in development</span></div>
+      <div class="signal-item"><span class="signal-dot dot-green"></span><span>Private label expansion mentioned in investor/analyst day or annual report</span></div>
+      <div class="signal-item"><span class="signal-dot dot-green"></span><span>Sustainability / food waste commitment publicly stated</span></div>
+    </div>
+
+    <!-- Red Flags -->
+    <div class="block red-top">
+      <div class="section-label label-red">ICP Quick Scan</div>
+      <div class="block-title">Red Flags — Deprioritise</div>
+      <div class="signal-item"><span class="signal-dot dot-red"></span><span>Hard-discount only (&lt;&pound;200M, no loyalty programme, no fresh food range)</span></div>
+      <div class="signal-item"><span class="signal-dot dot-red"></span><span>Single-format convenience store with no own-brand range</span></div>
+      <div class="signal-item"><span class="signal-dot dot-red"></span><span>No cloud infrastructure or IT modernisation plans</span></div>
+      <div class="signal-item"><span class="signal-dot dot-red"></span><span>Privately owned with no technology investment track record</span></div>
+      <div class="signal-item"><span class="signal-dot dot-red"></span><span>No e-commerce or digital grocery channel</span></div>
+    </div>
+
+    <!-- Trigger Events -->
+    <div class="block amber-top">
+      <div class="section-label label-amber">ICP Quick Scan</div>
+      <div class="block-title">Trigger Events — Reach Out Now</div>
+      <div class="signal-item"><span class="signal-dot dot-amber"></span><span>New CDO, VP Data &amp; Analytics, or Chief Digital Officer hired</span></div>
+      <div class="signal-item"><span class="signal-dot dot-amber"></span><span>Loyalty programme redesign or relaunch announced</span></div>
+      <div class="signal-item"><span class="signal-dot dot-amber"></span><span>Retail media network announcement or CPG partnership news</span></div>
+      <div class="signal-item"><span class="signal-dot dot-amber"></span><span>Earnings call mentions fresh waste, margin pressure, or digital transformation</span></div>
+      <div class="signal-item"><span class="signal-dot dot-amber"></span><span>Private label expansion initiative announced</span></div>
+      <div class="signal-item"><span class="signal-dot dot-amber"></span><span>Sustainability / food waste reduction target published</span></div>
+      <div class="signal-item"><span class="signal-dot dot-amber"></span><span>New COO, CMO, or CCO appointed</span></div>
+      <div class="signal-item"><span class="signal-dot dot-amber"></span><span>ERP / Oracle Retail modernisation programme announced</span></div>
+    </div>
+
+  </div>
+
+  <!-- ROW 2: 30-SECOND PITCHES -->
+  <div id="pitch" class="row cols-3" style="grid-template-columns:1fr 1fr 1fr;">
+
+    <!-- COO pitch -->
+    <div>
+      <div class="section-label label-purple" style="margin-bottom:0.35rem;">The 30-Second Pitch</div>
+      <div class="pitch-box">
+        <div class="block-title" style="margin-bottom:0.4rem;">For COO / Operations Director</div>
+        <p class="pitch-text">Most grocers order fresh food from weekly averages that can&rsquo;t see tomorrow&rsquo;s demand signals &mdash; weather, local events, footfall. So they oscillate between OOS in the afternoon and spoilage written off at the end of shelf life. Snowflake unifies EPOS, cold chain, weather, and loyalty data into one AI-ready platform so <strong>Cortex AI can predict fresh demand before it happens</strong>, not after you&rsquo;ve ordered the wrong amount. <strong>8% waste reduction. 97% availability maintained.</strong></p>
+      </div>
+    </div>
+
+    <!-- CMO pitch -->
+    <div>
+      <div class="section-label label-blue" style="margin-bottom:0.35rem;">The 30-Second Pitch</div>
+      <div class="pitch-box">
+        <div class="block-title" style="margin-bottom:0.4rem;">For CMO / Chief Customer Officer</div>
+        <p class="pitch-text">Your loyalty programme probably has tens of millions of members and extraordinary first-party data on what they buy, how often, and how price-sensitive they are by category. But <strong>that data is locked in a platform your buying team can&rsquo;t access</strong>. Snowflake connects loyalty and EPOS into a single customer view &mdash; no separate CDP product. Personalised promotions built and deployed in hours. 3&ndash;5x ROI vs. generic offers. <strong>Loyalty data finally reaches the decisions it should be driving.</strong></p>
+      </div>
+    </div>
+
+    <!-- CCO pitch -->
+    <div>
+      <div class="section-label label-teal" style="margin-bottom:0.35rem;">The 30-Second Pitch</div>
+      <div class="pitch-box">
+        <div class="block-title" style="margin-bottom:0.4rem;">For CCO / Head of Commercial</div>
+        <p class="pitch-text">Your loyalty data is worth more than your current margin. CPG brands will pay premium rates to target and measure against your first-party audience &mdash; but only if you have a privacy-safe mechanism to share it. Snowflake Clean Rooms let brands run and measure campaigns <strong>without ever seeing your customer records</strong>. Albertsons built their retail media network on this. <strong>70%+ gross margin on a new P&amp;L line</strong> you already own the data for.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ROW 3: DISCOVERY QUESTIONS -->
+  <div id="discovery" class="row cols-4">
+
+    <!-- COO -->
+    <div class="block purple-top">
+      <div class="section-label label-purple">Discovery Questions</div>
+      <div class="block-title">COO / Head of Operations</div>
+      <div class="dq-item"><em>Opener:</em> &ldquo;What percentage of your fresh inventory do you write off each week, and where does that hit your P&amp;L?&rdquo;</div>
+      <div class="dq-item">&ldquo;How much lead time do you have between a demand signal changing and your replenishment orders updating?&rdquo;</div>
+      <div class="dq-item">&ldquo;How would you describe your team&rsquo;s confidence in the AI projects you&rsquo;ve started on fresh demand forecasting?&rdquo;</div>
+    </div>
+
+    <!-- CMO -->
+    <div class="block blue-top">
+      <div class="section-label label-blue">Discovery Questions</div>
+      <div class="block-title">CMO / Chief Customer Officer</div>
+      <div class="dq-item"><em>Opener:</em> &ldquo;When your loyalty team wants to understand what personalised offer would move a specific segment, how long does it take to get that answer?&rdquo;</div>
+      <div class="dq-item">&ldquo;Can your buying team access loyalty data when making assortment and private label decisions today?&rdquo;</div>
+      <div class="dq-item">&ldquo;What&rsquo;s the ROI difference between your most personalised promotional campaigns and your generic mass offers?&rdquo;</div>
+    </div>
+
+    <!-- CCO -->
+    <div class="block teal-top">
+      <div class="section-label label-teal">Discovery Questions</div>
+      <div class="block-title">CCO / Commercial Director</div>
+      <div class="dq-item"><em>Opener:</em> &ldquo;Is retail media currently a meaningful P&amp;L line for you, or is it still treated as part of trade spend from CPG brands?&rdquo;</div>
+      <div class="dq-item">&ldquo;When CPG brands ask you to share first-party audience data, what&rsquo;s the barrier to doing it today?&rdquo;</div>
+      <div class="dq-item">&ldquo;How are you currently measuring campaign attribution when a CPG brand activates against your loyalty audience?&rdquo;</div>
+    </div>
+
+    <!-- CIO / CDO -->
+    <div class="block amber-top">
+      <div class="section-label label-amber">Discovery Questions</div>
+      <div class="block-title">CIO / CDO / VP Data</div>
+      <div class="dq-item"><em>Opener:</em> &ldquo;Of the AI or ML projects you&rsquo;ve run on loyalty or fresh demand forecasting, how many have made it into production?&rdquo;</div>
+      <div class="dq-item">&ldquo;Do your loyalty, EPOS, and supply chain data currently sit in the same governed platform &mdash; or do teams reconcile them manually?&rdquo;</div>
+      <div class="dq-item">&ldquo;If your CMO asks a question about which customer segments are reducing fresh basket spend, how long before they get a trusted answer?&rdquo;</div>
+    </div>
+
+  </div>
+
+  <!-- ROW 4: PAIN SIGNALS + OBJECTION HANDLING -->
+  <div id="pain-objections" class="row cols-2">
+
+    <!-- Pain Signals -->
+    <div class="block red-top">
+      <div class="section-label label-red">Pain Signals</div>
+      <div class="block-title">If You Hear This, Lean In</div>
+      <div class="pain-quote">&ldquo;We know our fresh waste is high but we can&rsquo;t see it at category or store level in real time.&rdquo;</div>
+      <div class="pain-quote">&ldquo;Our loyalty data is rich but the marketing team can&rsquo;t access it without raising an IT ticket.&rdquo;</div>
+      <div class="pain-quote">&ldquo;CPG brands want to use our first-party data but we don&rsquo;t have a privacy-safe way to share it.&rdquo;</div>
+      <div class="pain-quote">&ldquo;We still send the same promotions to everyone &mdash; we just don&rsquo;t have the segmentation infrastructure.&rdquo;</div>
+      <div class="pain-quote">&ldquo;Online and in-store inventory are on separate systems &mdash; we have availability failures across channels.&rdquo;</div>
+      <div class="pain-quote">&ldquo;We&rsquo;ve tried AI for fresh demand forecasting but it never gets past proof of concept.&rdquo;</div>
+      <div class="pain-quote">&ldquo;Our private label decisions are still based on gut feel and annual range reviews.&rdquo;</div>
+      <div class="pain-quote">&ldquo;Retail media sounds interesting but we don&rsquo;t have the infrastructure to do it properly.&rdquo;</div>
+      <div class="pain-quote">&ldquo;We order from last week&rsquo;s averages and then end up with clearance markdowns at the end of the shelf life.&rdquo;</div>
+    </div>
+
+    <!-- Objection Handling -->
+    <div class="block purple-top">
+      <div class="section-label label-purple">Objection Handling</div>
+      <div class="block-title">Common Objections &amp; Responses</div>
+
+      <div class="obj-row">
+        <div class="obj-q">&ldquo;We already have a loyalty platform (Epsilon, Comarch, own-build).&rdquo;</div>
+        <div class="obj-a">Snowflake is <strong>not replacing it</strong> &mdash; it&rsquo;s the unified layer that connects loyalty to EPOS, buying, and retail media without moving the platform or the data.</div>
+      </div>
+
+      <div class="obj-row">
+        <div class="obj-q">&ldquo;We have Oracle Retail / a data warehouse already.&rdquo;</div>
+        <div class="obj-a">The question is whether <strong>loyalty, EPOS, cold chain, and e-commerce data actually connect in time to act on them</strong>. That&rsquo;s where the value is.</div>
+      </div>
+
+      <div class="obj-row">
+        <div class="obj-q">&ldquo;IT won&rsquo;t support another platform to integrate and maintain.&rdquo;</div>
+        <div class="obj-a"><strong>Zero-copy means no new pipelines</strong> for IT to build or maintain. Your EPOS, loyalty, and cold chain systems stay exactly where they are.</div>
+      </div>
+
+      <div class="obj-row">
+        <div class="obj-q">&ldquo;We&rsquo;re not ready for retail media yet.&rdquo;</div>
+        <div class="obj-a">The <strong>data foundation is the prerequisite</strong> &mdash; starting with waste or loyalty gets you there. Albertsons started with unified data; retail media followed naturally.</div>
+      </div>
+
+      <div class="obj-row">
+        <div class="obj-q">&ldquo;Budget is tight &mdash; margins are under pressure.&rdquo;</div>
+        <div class="obj-a">That&rsquo;s exactly the point. <strong>Every 1% of fresh waste reduction on &pound;500M fresh sales = &pound;5M</strong>. Retail media at 70%+ gross margin adds a new P&amp;L line. Forrester found &lt;6 month payback.</div>
+      </div>
+
+      <div class="obj-row">
+        <div class="obj-q">&ldquo;We already share data with CPG brands through our portal.&rdquo;</div>
+        <div class="obj-a">Portals give brands data but <strong>can&rsquo;t prove campaign ROI or close the attribution loop</strong>. Clean Rooms do &mdash; which is why brands pay media rates, not trade rates.</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ROW 5: PROOF POINTS -->
+  <div id="proof" class="row cols-3">
+
+    <div class="block green-top">
+      <div class="section-label label-green">Proof Points</div>
+      <div class="block-title">Retail Media (Named Grocer)</div>
+      <div class="proof-row">
+        <span class="proof-tag green">Albertsons</span>
+        <span>Built retail media platform on Snowflake &mdash; Clean Rooms for privacy-safe CPG brand collaboration. Targeted campaigns and closed-loop attribution without sharing PII. Retail media is a separate P&amp;L line. <em>(US grocer &mdash; 2,200+ stores &mdash; global reference)</em></span>
+      </div>
+    </div>
+
+    <div class="block blue-top">
+      <div class="section-label label-blue">Proof Points</div>
+      <div class="block-title">Data Foundation (Named CPG)</div>
+      <div class="proof-row">
+        <span class="proof-tag">Kraft Heinz</span>
+        <span>Selected Snowflake as primary cloud data platform to unify global data across marketing, sales and supply chain. <em>Frame as: even major CPG suppliers standardise on Snowflake. Not a grocer reference.</em></span>
+      </div>
+    </div>
+
+    <div class="block purple-top">
+      <div class="section-label label-purple">Proof Points</div>
+      <div class="block-title">ROI Benchmark + Grocer Pattern</div>
+      <div class="proof-row">
+        <span class="proof-tag">Forrester TEI 2024</span>
+        <span><strong style="color:var(--sf-mid);">354% ROI</strong> over 3 years. &lt;6 month average payback. $17.4M 3-year NPV. Composite of Snowflake retail customers.</span>
+      </div>
+      <div class="proof-row">
+        <span class="proof-tag">Leading Grocer</span>
+        <span>Leading European grocer unified loyalty and EPOS on Snowflake &mdash; personalised promotions at scale, loyalty data now accessible to buying. <em>(Reference available on request &mdash; engage field CTO team)</em></span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="page-footer">
+    <p>Snowflake Grocery Retail SDR Cheat Sheet &middot; Internal Use Only &mdash; Not For Customer Distribution</p>
+    <p>&copy; 2026 Snowflake Inc. All Rights Reserved</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supply Chain with Snowflake</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sf-blue:#249EDC; --sf-mid:#11567F; --sf-deep:#042130;
+  --sf-ice:#F6F9FA; --sf-star:#71D3DC; --sf-orange:#FF9F36;
+  --text-dark:#111827; --text-gray:#4B5568; --text-light:#6B7280;
+  --border-card:rgba(204,204,204,0.5); --green:#16a34a; --amber:#D97706;
+  --c-purple:#8b5cf6; --c-teal:#0d9488; --c-orange:#f97316; --c-green:#22c55e;
+  --c-erp:#6366f1; --c-mfg:#ec4899; --c-wms:#f97316; --c-edi:#22c55e; --c-bi:#06b6d4;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:#0a1628;display:flex;align-items:center;justify-content:center;}
+.deck{width:1280px;height:720px;position:relative;transform-origin:center center;flex-shrink:0;}
+.slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.6s cubic-bezier(0.4,0,0.2,1);overflow:hidden;}
+.slide.active{opacity:1;pointer-events:all;}
+.slide-bg{position:absolute;inset:0;z-index:0;}
+.bg-white{background:#FFFFFF;} .bg-ice{background:var(--sf-ice);} .bg-deep{background:var(--sf-deep);}
+.slide-content{position:relative;z-index:10;width:88%;max-width:1200px;padding:1.5rem 2rem 2rem;max-height:640px;overflow-y:auto;scrollbar-width:thin;}
+h1{font-size:clamp(2.8rem,5.5vw,5rem);font-weight:900;line-height:1.02;color:var(--text-dark);letter-spacing:-0.025em;}
+h2{font-size:clamp(1.7rem,3vw,2.8rem);font-weight:800;line-height:1.08;color:var(--text-dark);letter-spacing:-0.02em;margin-bottom:0.45rem;}
+h3.lbl{font-size:0.7rem;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.65rem;}
+h3.lbl.purple{color:var(--sf-mid);}
+p{font-size:1rem;font-weight:300;line-height:1.65;color:var(--text-gray);max-width:720px;}
+.hi{color:var(--sf-blue);} .hip{color:var(--sf-mid);} .his{color:var(--sf-star);}
+.div{width:60px;height:3px;background:linear-gradient(90deg,var(--sf-blue),var(--sf-star));margin:0.7rem 0 0.9rem;border-radius:2px;}
+.divp{width:60px;height:3px;background:linear-gradient(90deg,var(--sf-mid),var(--sf-blue));margin:0.7rem 0 0.9rem;border-radius:2px;}
+.dark-slide h1,.dark-slide h2{color:#FFFFFF;}
+.dark-slide p{color:rgba(255,255,255,0.78);}
+.dark-slide h3.lbl{color:rgba(255,255,255,0.5);}
+.slide-number{position:absolute;bottom:1.5rem;right:1.8rem;font-size:0.7rem;color:var(--text-light);font-weight:500;letter-spacing:0.08em;z-index:20;}
+.dark-slide .slide-number{color:rgba(255,255,255,0.3);}
+.sf-logo{position:absolute;bottom:1.1rem;right:5.5rem;z-index:20;}
+.dark-slide .sf-logo img{filter:brightness(0) invert(1);opacity:0.65;}
+.progress-wrap{position:fixed;top:0;left:0;width:100%;height:3px;z-index:100;}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--sf-mid),var(--sf-blue));transition:width 0.5s ease;width:7.7%;}
+.controls{position:fixed;bottom:1.8rem;left:50%;transform:translateX(-50%);display:flex;gap:0.7rem;z-index:100;align-items:center;}
+.ctrl-btn{background:#FFFFFF;border:1px solid var(--border-card);border-radius:999px;padding:0.4rem 1.2rem;color:var(--text-gray);font-size:0.76rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:0.04em;transition:all 0.18s;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+.ctrl-btn:hover{background:var(--sf-ice);border-color:var(--sf-blue);color:var(--sf-mid);}
+select.slide-sel{background:#FFFFFF;border:1px solid var(--border-card);border-radius:999px;padding:0.4rem 1rem;color:var(--text-gray);font-size:0.74rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
+.deck-badge{position:fixed;top:0.5rem;left:50%;transform:translateX(-50%);z-index:200;background:rgba(17,86,127,0.1);border:1px solid rgba(17,86,127,0.3);border-radius:999px;padding:0.18rem 1rem;font-size:0.6rem;font-weight:700;color:var(--sf-mid);letter-spacing:0.1em;text-transform:uppercase;pointer-events:none;}
+.big-stat{font-size:clamp(2.8rem,5.5vw,5rem);font-weight:900;line-height:1;letter-spacing:-0.03em;}
+.stat-lbl{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.09em;color:var(--text-light);margin-top:0.25rem;}
+.pill{display:inline-block;background:rgba(36,158,220,0.1);border:1px solid rgba(36,158,220,0.3);border-radius:999px;padding:0.2rem 0.7rem;font-size:0.7rem;font-weight:600;color:var(--sf-blue);letter-spacing:0.04em;text-transform:uppercase;margin:0.12rem;}
+.pill.purple{background:rgba(17,86,127,0.08);border-color:rgba(17,86,127,0.3);color:var(--sf-mid);}
+.pill.amber{background:rgba(217,119,6,0.08);border-color:rgba(217,119,6,0.3);color:var(--amber);}
+/* Tech stack animations */
+@keyframes dashIn{from{stroke-dashoffset:26;}to{stroke-dashoffset:0;}}
+@keyframes sfGlow{0%,100%{opacity:.87;}50%{opacity:1;}}
+.rhs-flow{stroke-dasharray:7 5;animation:dashIn 1.9s linear infinite;}
+.sf-hex{animation:sfGlow 2.8s ease-in-out infinite;}
+#tip-v2{position:fixed;pointer-events:none;background:rgba(15,23,42,0.93);color:#e2e8f0;border-radius:7px;padding:8px 12px;font-size:0.73rem;z-index:999;opacity:0;transition:opacity 0.1s;max-width:200px;line-height:1.5;border:1px solid #334155;}
+/* Build viz (slide 2) */
+.chain-node{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.22rem;border-radius:13px;border-width:2px;border-style:solid;text-align:center;font-family:'Inter',sans-serif;animation:s3fade .4s ease both;}
+.arr-wrap{display:flex;align-items:center;padding:0 0.3rem;flex-shrink:0;animation:s3fade .4s ease both;}
+.arr-line{position:relative;height:2px;width:32px;}
+.arr-solid .arr-line{background:#CBD5E0;}
+.arr-dashed .arr-line{background:none;border-top:2px dashed #F59E0B;}
+.arr-line::after{content:'';position:absolute;right:-5px;top:-5px;width:0;height:0;border:5px solid transparent;}
+.arr-solid .arr-line::after{border-left-color:#CBD5E0;}
+.arr-dashed .arr-line::after{border-left-color:#F59E0B;}
+.badge-pill{display:inline-block;border-radius:999px;border-width:1.2px;border-style:solid;padding:.13rem .5rem;font-size:.68rem;font-weight:700;font-family:'Inter',sans-serif;letter-spacing:.03em;white-space:nowrap;animation:s3pop .4s cubic-bezier(.34,1.56,.64,1) both;}
+.callout-box{border-radius:10px;border-width:1.3px;border-style:solid;padding:.4rem .75rem;font-family:'Inter',sans-serif;animation:s3pop .4s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes s3fade{from{opacity:0;transform:translateY(9px);}to{opacity:1;transform:translateY(0);}}
+@keyframes s3pop{0%{opacity:0;transform:scale(.55);}70%{transform:scale(1.07);}100%{opacity:1;transform:scale(1);}}
+/* B&J map (slide 3) */
+.bj-stage-card{display:flex;flex-direction:column;flex:1;border-radius:13px;border-width:1.8px;border-style:solid;overflow:hidden;}
+.bj-stage-top{padding:.6rem .7rem .45rem;display:flex;flex-direction:column;gap:.25rem;flex:1;}
+.bj-icon-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.25rem;font-family:serif;flex-shrink:0;border-width:1.5px;border-style:solid;}
+.bj-fact{font-size:.66rem;color:#4B5568;font-family:'Inter',sans-serif;line-height:1.3;}
+.bj-sys-zone{padding:.38rem .6rem;border-top-width:1px;border-top-style:dashed;border-top-color:rgba(0,0,0,.1);background:rgba(255,255,255,.55);}
+.bj-sys-lbl{font-size:.54rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.55;font-family:'Inter',sans-serif;margin-bottom:.2rem;}
+.bj-sys-pills{display:flex;flex-wrap:wrap;gap:.18rem;}
+.bj-pill{font-size:.61rem;font-weight:700;font-family:'Inter',sans-serif;border-radius:999px;padding:.1rem .44rem;border-width:1.1px;border-style:solid;white-space:nowrap;}
+.bj-conn{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 .2rem;flex-shrink:0;gap:.1rem;color:#CBD5E0;}
+/* Silo cards */
+.silo-card{border-radius:12px;border-width:1.8px;border-style:solid;display:flex;flex-direction:column;gap:.25rem;padding:.5rem .55rem;}
+.silo-head{font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-family:'Inter',sans-serif;padding-bottom:.2rem;border-bottom-width:1px;border-bottom-style:solid;}
+.silo-item{border-radius:6px;border-width:1px;border-style:solid;padding:.2rem .4rem;font-size:.73rem;font-weight:600;font-family:'Inter',sans-serif;}
+/* Step dots for build slide */
+.s2-dots{position:absolute;bottom:5.5rem;left:50%;transform:translateX(-50%);display:flex;gap:.3rem;z-index:30;}
+.s2-dot{width:6px;height:6px;border-radius:50%;background:rgba(0,0,0,.15);cursor:pointer;transition:all .2s;}
+.s2-dot.on{background:var(--sf-mid);transform:scale(1.4);}
+</style>
+</head>
+<body>
+<div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+<div class="deck-badge">Supply Chain with Snowflake</div>
+<div class="deck" id="deck">
+
+<!-- ══ SLIDE 01 — TITLE ══ -->
+<div class="slide dark-slide active" id="slide-1">
+  <div class="slide-bg" style="background:var(--sf-deep);"></div>
+  <div style="background:url(https://images.unsplash.com/photo-1494412651409-8963ce7935a7?w=1920&q=80) center 55%/cover no-repeat;opacity:0.08;position:absolute;inset:0;z-index:0;"></div>
+  <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,rgba(4,33,48,0.55) 0%,rgba(4,33,48,0.22) 60%,rgba(4,33,48,0.62) 100%);"></div>
+  <div class="slide-content" style="text-align:center;display:flex;flex-direction:column;align-items:center;">
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.8rem;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="24" style="display:block;filter:brightness(0) invert(1);opacity:0.9;">
+      <span style="color:rgba(255,255,255,0.25);">|</span>
+      <span style="font-size:0.65rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.42);">Supply Chain GTM · EMEA</span>
+    </div>
+    <h1 style="text-align:center;color:var(--sf-star);font-size:clamp(2.4rem,5.5vw,5rem);margin-bottom:0.1rem;">SUPPLY CHAIN</h1>
+    <h1 style="text-align:center;color:#FFFFFF;font-size:clamp(3rem,6vw,5.5rem);">WITH SNOWFLAKE</h1>
+    <div style="width:60px;height:3px;background:linear-gradient(90deg,var(--sf-blue),var(--sf-star));margin:1.2rem auto;border-radius:2px;"></div>
+    <p style="text-align:center;max-width:580px;font-size:1rem;color:rgba(255,255,255,0.65);">Why supply chain is the biggest data problem in every account — and how Snowflake is the only platform that can solve it.</p>
+  </div>
+  <div class="sf-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="24"></div>
+  <div class="slide-number">01 / 13</div>
+</div>
+
+<!-- ══ SLIDE 02 — FIVE DECISIONS BUILD ══ -->
+<div class="slide" id="slide-2" style="position:absolute;inset:0;">
+  <div class="slide-bg bg-ice"></div>
+  <div class="slide-content">
+    <h3 class="lbl purple" id="s2lbl">THE ICE CREAM VAN · STEP 1 OF 5</h3>
+    <h2 id="s2h">Make it. Move it. <span class="hip">Sell it.</span></h2>
+    <div class="divp"></div>
+    <div id="s2viz" style="height:320px;display:flex;align-items:center;justify-content:center;overflow:hidden;"></div>
+  </div>
+  <div class="s2-dots" id="s2dots"></div>
+  <div class="sf-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="24" style="opacity:0.85;"></div>
+  <div class="slide-number" id="s2num">02 / 13</div>
+</div>
+
+<!-- ══ SLIDE 03 — BEN & JERRY'S MAP ══ -->
+<div class="slide" id="slide-3">
+  <div class="slide-bg bg-white"></div>
+  <div class="slide-content" style="padding-bottom:3.8rem;">
+    <h3 class="lbl">THE DESTINATION · BEN &amp; JERRY'S</h3>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:1.2rem;margin-bottom:0.45rem;">
+      <h2 style="margin:0;">This is what <span class="hi">"scaled"</span> looks like</h2>
+      <div style="flex-shrink:0;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Ben_%26_Jerry%27s.svg" height="44" style="opacity:0.92;display:block;" onerror="this.outerHTML='<div style=&quot;flex-shrink:0;padding:0.35rem 0.8rem;border-radius:10px;background:rgba(26,94,42,0.08);border:1.5px solid rgba(26,94,42,0.28);&quot;><div style=&quot;font-size:1.25rem;font-weight:900;color:#1a5e2a;font-family:Georgia,serif;line-height:1.1;&quot;>Ben &amp; Jerry\&#x2019;s&reg;</div><div style=&quot;font-size:0.52rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#e8a200;&quot;>Vermont\&#x2019;s Finest</div></div>'">
+      </div>
+    </div>
+    <div class="div" style="margin-top:0;"></div>
+    <div style="display:flex;align-items:stretch;gap:0;width:100%;margin-bottom:0.45rem;">
+      <!-- Stage 1 -->
+      <div class="bj-stage-card" style="border-color:#8b5cf6;background:rgba(139,92,246,0.06);">
+        <div class="bj-stage-top">
+          <div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.15rem;">
+            <div class="bj-icon-circle" style="border-color:#8b5cf6;background:rgba(139,92,246,0.15);">🌍</div>
+            <div style="font-weight:800;font-size:0.75rem;color:#8b5cf6;line-height:1.2;font-family:'Inter',sans-serif;">Global Ingredient Sourcing</div>
+          </div>
+          <div class="bj-fact">🇲🇬 Vanilla — Madagascar</div>
+          <div class="bj-fact">🇬🇭 Cocoa — Ghana</div>
+          <div class="bj-fact">🇹🇷 Hazelnuts — Turkey</div>
+          <div class="bj-fact">🇺🇸 Cream — Vermont farms</div>
+          <div class="bj-fact">🇬🇧 Cream — UK dairy</div>
+        </div>
+        <div class="bj-sys-zone">
+          <div class="bj-sys-lbl" style="color:#8b5cf6;">IT Systems</div>
+          <div class="bj-sys-pills">
+            <span class="bj-pill" style="border-color:#a855f7;background:rgba(168,85,247,0.1);color:#a855f7;">Coupa</span>
+            <span class="bj-pill" style="border-color:#6366f1;background:rgba(99,102,241,0.1);color:#6366f1;">SAP Ariba</span>
+            <span class="bj-pill" style="border-color:#a855f7;background:rgba(168,85,247,0.1);color:#a855f7;">Supplier Portal</span>
+            <span class="bj-pill" style="border-color:#F59E0B;background:rgba(245,158,11,0.1);color:#D97706;">3–6 mo. lead times ⚠</span>
+          </div>
+        </div>
+      </div>
+      <div class="bj-conn" style="font-size:1.1rem;font-family:serif;">🚢</div>
+      <!-- Stage 2 -->
+      <div class="bj-stage-card" style="border-color:#ec4899;background:rgba(236,72,153,0.05);">
+        <div class="bj-stage-top">
+          <div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.15rem;">
+            <div class="bj-icon-circle" style="border-color:#ec4899;background:rgba(236,72,153,0.12);">🏭</div>
+            <div style="font-weight:800;font-size:0.75rem;color:#ec4899;line-height:1.2;font-family:'Inter',sans-serif;">Manufacturing</div>
+          </div>
+          <div class="bj-fact">🇺🇸 Waterbury, Vermont (HQ)</div>
+          <div class="bj-fact">🇳🇱 Hellendoorn, Netherlands</div>
+          <div class="bj-fact">60+ flavours per range</div>
+          <div class="bj-fact">Fairtrade &amp; non-GMO</div>
+          <div class="bj-fact">Seasonal demand spikes</div>
+        </div>
+        <div class="bj-sys-zone">
+          <div class="bj-sys-lbl" style="color:#ec4899;">IT Systems</div>
+          <div class="bj-sys-pills">
+            <span class="bj-pill" style="border-color:#6366f1;background:rgba(99,102,241,0.1);color:#6366f1;">SAP S/4HANA</span>
+            <span class="bj-pill" style="border-color:#6366f1;background:rgba(99,102,241,0.1);color:#6366f1;">Infor M3 (legacy)</span>
+            <span class="bj-pill" style="border-color:#ec4899;background:rgba(236,72,153,0.1);color:#ec4899;">MES/Opcenter</span>
+            <span class="bj-pill" style="border-color:#ec4899;background:rgba(236,72,153,0.1);color:#ec4899;">QMS</span>
+          </div>
+        </div>
+      </div>
+      <div class="bj-conn" style="font-size:1.1rem;font-family:serif;">🚛❄️</div>
+      <!-- Stage 3 -->
+      <div class="bj-stage-card" style="border-color:#0d9488;background:rgba(13,148,136,0.05);">
+        <div class="bj-stage-top">
+          <div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.15rem;">
+            <div class="bj-icon-circle" style="border-color:#0d9488;background:rgba(13,148,136,0.12);">❄️</div>
+            <div style="font-weight:800;font-size:0.75rem;color:#0d9488;line-height:1.2;font-family:'Inter',sans-serif;">Cold Chain &amp; Distribution</div>
+          </div>
+          <div class="bj-fact">🇺🇸 US East &amp; West DCs</div>
+          <div class="bj-fact">🇳🇱 EU DC — Netherlands</div>
+          <div class="bj-fact">🇸🇬 Asia DC — Singapore</div>
+          <div class="bj-fact">3PLs across 35 countries</div>
+          <div class="bj-fact">−18°C end-to-end required</div>
+        </div>
+        <div class="bj-sys-zone">
+          <div class="bj-sys-lbl" style="color:#0d9488;">IT Systems</div>
+          <div class="bj-sys-pills">
+            <span class="bj-pill" style="border-color:#f97316;background:rgba(249,115,22,0.1);color:#f97316;">Blue Yonder WMS</span>
+            <span class="bj-pill" style="border-color:#f97316;background:rgba(249,115,22,0.1);color:#f97316;">Manhattan WMS</span>
+            <span class="bj-pill" style="border-color:#0d9488;background:rgba(13,148,136,0.1);color:#0d9488;">IoT Sensors</span>
+            <span class="bj-pill" style="border-color:#eab308;background:rgba(234,179,8,0.1);color:#a16207;">TMS ×3 vendors</span>
+          </div>
+        </div>
+      </div>
+      <div class="bj-conn" style="font-size:1.1rem;font-family:serif;">🚛</div>
+      <!-- Stage 4 -->
+      <div class="bj-stage-card" style="border-color:#22c55e;background:rgba(34,197,94,0.05);">
+        <div class="bj-stage-top">
+          <div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.15rem;">
+            <div class="bj-icon-circle" style="border-color:#22c55e;background:rgba(34,197,94,0.12);">🛒</div>
+            <div style="font-weight:800;font-size:0.75rem;color:#22c55e;line-height:1.2;font-family:'Inter',sans-serif;">Retail, Scoop Shops &amp; DTC</div>
+          </div>
+          <div class="bj-fact">🌍 35 countries</div>
+          <div class="bj-fact">50,000+ retail stores</div>
+          <div class="bj-fact">1,000+ scoop shops</div>
+          <div class="bj-fact">DTC &amp; e-commerce</div>
+          <div class="bj-fact">POS data: 48-hr lag ⚠</div>
+        </div>
+        <div class="bj-sys-zone">
+          <div class="bj-sys-lbl" style="color:#22c55e;">IT Systems</div>
+          <div class="bj-sys-pills">
+            <span class="bj-pill" style="border-color:#22c55e;background:rgba(34,197,94,0.1);color:#16a34a;">EDI ×8 variants</span>
+            <span class="bj-pill" style="border-color:#22c55e;background:rgba(34,197,94,0.1);color:#16a34a;">Order Mgmt</span>
+            <span class="bj-pill" style="border-color:#22c55e;background:rgba(34,197,94,0.1);color:#16a34a;">POS data feeds</span>
+            <span class="bj-pill" style="border-color:#06b6d4;background:rgba(6,182,212,0.1);color:#0891b2;">Retail Analytics</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.3rem 1rem;background:rgba(13,148,136,0.08);border:1.2px solid #0d9488;border-radius:8px;margin-bottom:0.4rem;">
+      <span style="font-size:0.75rem;font-weight:700;color:#0d9488;font-family:'Inter',sans-serif;">❄️ &nbsp;<strong>Cold chain required throughout: −18°C from Vermont factory to freezer shelf in Tokyo</strong></span>
+    </div>
+    <div style="display:flex;gap:0.45rem;justify-content:center;flex-wrap:wrap;">
+      <span style="font-size:0.7rem;font-weight:700;color:#fff;background:rgba(4,33,48,.88);border-radius:999px;padding:0.18rem 0.65rem;font-family:'Inter',sans-serif;">60+ flavours</span>
+      <span style="font-size:0.7rem;font-weight:700;color:#fff;background:rgba(4,33,48,.88);border-radius:999px;padding:0.18rem 0.65rem;font-family:'Inter',sans-serif;">50,000 stores</span>
+      <span style="font-size:0.7rem;font-weight:700;color:#fff;background:rgba(4,33,48,.88);border-radius:999px;padding:0.18rem 0.65rem;font-family:'Inter',sans-serif;">35 countries</span>
+      <span style="font-size:0.7rem;font-weight:700;color:#fff;background:rgba(4,33,48,.88);border-radius:999px;padding:0.18rem 0.65rem;font-family:'Inter',sans-serif;">5 ERPs</span>
+      <span style="font-size:0.7rem;font-weight:700;color:#fff;background:rgba(4,33,48,.88);border-radius:999px;padding:0.18rem 0.65rem;font-family:'Inter',sans-serif;">None of them talk to each other</span>
+    </div>
+  </div>
+  <div class="sf-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="24" style="opacity:0.85;"></div>
+  <div class="slide-number">03 / 13</div>
+</div>
+
+<!-- ══ SLIDE 04 — TECH STACK (ANIMATED, TWO STATES) ══ -->
+<div class="slide" id="slide-4" data-techstate="A">
+  <div class="slide-bg bg-white"></div>
+  <div class="slide-content">
+    <h2><span class="hip">Nobody designed this.</span> It accumulated.</h2>
+    <div class="divp" style="margin-top:0.5rem;"></div>
+
+    <!-- STATE A: Full-width chaos -->
+    <div id="lhs-panel" style="width:100%;transition:opacity 0.3s ease;">
+      <div style="padding:0.42rem 0.75rem;border-radius:7px 7px 0 0;border:1px solid rgba(239,68,68,0.35);border-bottom:none;background:rgba(239,68,68,0.07);">
+        <div style="font-size:0.7rem;font-weight:700;color:#ef4444;">Without Snowflake — Point-to-Point Chaos</div>
+        <div style="font-size:0.6rem;color:rgba(239,68,68,0.65);margin-top:1px;">200+ custom integrations · days of latency · no single source of truth</div>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid rgba(239,68,68,0.18);border-top:none;border-radius:0 0 8px 8px;padding:0.5rem;">
+        <svg id="lhs-svg-v2" display="block" viewBox="0 0 640 520" style="width:100%;max-height:390px;" preserveAspectRatio="xMidYMid meet"></svg>
+        <div id="lhs-legend-v2" style="display:flex;flex-wrap:wrap;gap:3px 8px;margin-top:5px;padding-top:5px;border-top:1px solid rgba(226,232,240,0.7);font-size:0.58rem;color:#64748b;"></div>
+        <p id="lhs-hint" style="font-size:0.6rem;color:#94a3b8;font-style:italic;margin-top:4px;">Hover any node to trace its connections · Press → to see the Snowflake alternative</p>
+      </div>
+    </div>
+
+    <!-- STATE B: Full-width Snowflake hub-and-spoke -->
+    <div id="rhs-panel" style="display:none;width:100%;opacity:0;transition:opacity 0.5s ease;">
+      <div style="padding:0.42rem 0.75rem;border-radius:7px 7px 0 0;border:1px solid rgba(41,181,232,0.4);border-bottom:none;background:rgba(41,181,232,0.08);">
+        <div style="font-size:0.7rem;font-weight:700;color:#29b5e8;">With Snowflake — Unified Intelligence Layer</div>
+        <div style="font-size:0.6rem;color:rgba(41,181,232,0.65);margin-top:1px;">Near-real-time · AI-ready · governed · operational integrations unchanged</div>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid rgba(41,181,232,0.18);border-top:none;border-radius:0 0 8px 8px;padding:1rem 1.2rem;">
+        <div style="display:grid;grid-template-columns:1fr 200px 1fr;gap:1rem;align-items:center;min-height:370px;">
+
+          <!-- Left: 8 system inputs feeding in -->
+          <div style="display:flex;flex-direction:column;gap:0.28rem;">
+            <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;margin-bottom:0.2rem;">Source systems (unchanged)</div>
+            <div style="display:flex;align-items:center;gap:0.35rem;"><div style="flex:1;padding:0.28rem 0.55rem;border-radius:6px;border:1px solid #6366f1;background:#6366f110;font-size:0.67rem;font-weight:700;color:#6366f1;font-family:Inter,sans-serif;">ERP &amp; Finance</div><span style="color:#CBD5E0;font-size:0.8rem;flex-shrink:0;">→</span></div>
+            <div style="display:flex;align-items:center;gap:0.35rem;"><div style="flex:1;padding:0.28rem 0.55rem;border-radius:6px;border:1px solid #8b5cf6;background:#8b5cf610;font-size:0.67rem;font-weight:700;color:#8b5cf6;font-family:Inter,sans-serif;">Planning &amp; S&amp;OP</div><span style="color:#CBD5E0;font-size:0.8rem;flex-shrink:0;">→</span></div>
+            <div style="display:flex;align-items:center;gap:0.35rem;"><div style="flex:1;padding:0.28rem 0.55rem;border-radius:6px;border:1px solid #a855f7;background:#a855f710;font-size:0.67rem;font-weight:700;color:#a855f7;font-family:Inter,sans-serif;">Procurement &amp; SRM</div><span style="color:#CBD5E0;font-size:0.8rem;flex-shrink:0;">→</span></div>
+            <div style="display:flex;align-items:center;gap:0.35rem;"><div style="flex:1;padding:0.28rem 0.55rem;border-radius:6px;border:1px solid #ec4899;background:#ec489910;font-size:0.67rem;font-weight:700;color:#ec4899;font-family:Inter,sans-serif;">Manufacturing &amp; Quality</div><span style="color:#CBD5E0;font-size:0.8rem;flex-shrink:0;">→</span></div>
+            <div style="display:flex;align-items:center;gap:0.35rem;"><div style="flex:1;padding:0.28rem 0.55rem;border-radius:6px;border:1px solid #f97316;background:#f9731610;font-size:0.67rem;font-weight:700;color:#f97316;font-family:Inter,sans-serif;">Warehouse &amp; Fulfillment</div><span style="color:#CBD5E0;font-size:0.8rem;flex-shrink:0;">→</span></div>
+            <div style="display:flex;align-items:center;gap:0.35rem;"><div style="flex:1;padding:0.28rem 0.55rem;border-radius:6px;border:1px solid #eab308;background:#eab30810;font-size:0.67rem;font-weight:700;color:#a16207;font-family:Inter,sans-serif;">Transport &amp; Visibility</div><span style="color:#CBD5E0;font-size:0.8rem;flex-shrink:0;">→</span></div>
+            <div style="display:flex;align-items:center;gap:0.35rem;"><div style="flex:1;padding:0.28rem 0.55rem;border-radius:6px;border:1px solid #22c55e;background:#22c55e10;font-size:0.67rem;font-weight:700;color:#15803d;font-family:Inter,sans-serif;">Sales, Orders &amp; EDI</div><span style="color:#CBD5E0;font-size:0.8rem;flex-shrink:0;">→</span></div>
+            <div style="display:flex;align-items:center;gap:0.35rem;"><div style="flex:1;padding:0.28rem 0.55rem;border-radius:6px;border:1px solid #06b6d4;background:#06b6d410;font-size:0.67rem;font-weight:700;color:#0891b2;font-family:Inter,sans-serif;">Analytics &amp; IoT</div><span style="color:#CBD5E0;font-size:0.8rem;flex-shrink:0;">→</span></div>
+            <div style="display:flex;align-items:center;gap:0.35rem;margin-top:0.1rem;"><div style="flex:1;padding:0.28rem 0.55rem;border-radius:6px;border:1px dashed #CBD5E0;background:#F8FAFC;font-size:0.67rem;font-weight:600;color:#94a3b8;font-family:Inter,sans-serif;">3PL &amp; Partner Data</div><span style="color:#CBD5E0;font-size:0.8rem;flex-shrink:0;">→</span></div>
+          </div>
+
+          <!-- Center: Snowflake hub -->
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.6rem;">
+            <div style="width:110px;height:110px;border-radius:50%;background:rgba(36,158,220,0.1);border:2.5px solid #249EDC;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 30px rgba(36,158,220,0.2);animation:sfGlow 2.8s ease-in-out infinite;">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="32" style="opacity:0.9;">
+              <div style="font-size:0.5rem;font-weight:800;color:#249EDC;letter-spacing:0.06em;text-transform:uppercase;margin-top:0.2rem;">DATA CLOUD</div>
+            </div>
+            <div style="font-size:0.62rem;color:var(--sf-mid);font-weight:600;text-align:center;line-height:1.5;font-family:Inter,sans-serif;">One source of truth<br>for all SC data</div>
+            <div style="display:flex;flex-direction:column;gap:0.18rem;text-align:center;">
+              <span class="pill" style="font-size:0.58rem;padding:0.1rem 0.5rem;">Unified Governance</span>
+              <span class="pill" style="font-size:0.58rem;padding:0.1rem 0.5rem;">Zero-copy Sharing</span>
+            </div>
+          </div>
+
+          <!-- Right: 4 capability outputs -->
+          <div style="display:flex;flex-direction:column;gap:0.5rem;flex:1;">
+            <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;margin-bottom:0.2rem;">What becomes possible</div>
+            <div style="display:flex;align-items:center;gap:0.35rem;">
+              <span style="color:var(--sf-blue);font-size:0.85rem;flex-shrink:0;">→</span>
+              <div style="flex:1;padding:0.55rem 0.75rem;border-radius:9px;border:1.5px solid rgba(36,158,220,0.35);background:rgba(36,158,220,0.06);">
+                <div style="font-size:0.72rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.12rem;">Cortex AI &amp; ML</div>
+                <div style="font-size:0.62rem;color:#4B5568;font-family:Inter,sans-serif;">Demand sensing and exception detection on live, governed data</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.35rem;">
+              <span style="color:var(--sf-blue);font-size:0.85rem;flex-shrink:0;">→</span>
+              <div style="flex:1;padding:0.55rem 0.75rem;border-radius:9px;border:1.5px solid rgba(36,158,220,0.35);background:rgba(36,158,220,0.06);">
+                <div style="font-size:0.72rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.12rem;">Cortex Analyst</div>
+                <div style="font-size:0.62rem;color:#4B5568;font-family:Inter,sans-serif;">"What's below safety stock this week?" answered in seconds, not days</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.35rem;">
+              <span style="color:var(--sf-blue);font-size:0.85rem;flex-shrink:0;">→</span>
+              <div style="flex:1;padding:0.55rem 0.75rem;border-radius:9px;border:1.5px solid rgba(113,211,220,0.38);background:rgba(113,211,220,0.06);">
+                <div style="font-size:0.72rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.12rem;">Closed-loop Execution</div>
+                <div style="font-size:0.62rem;color:#4B5568;font-family:Inter,sans-serif;">One approval updates ERP, TMS, WMS, and replenishment simultaneously</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.35rem;">
+              <span style="color:var(--sf-blue);font-size:0.85rem;flex-shrink:0;">→</span>
+              <div style="flex:1;padding:0.55rem 0.75rem;border-radius:9px;border:1.5px solid rgba(113,211,220,0.38);background:rgba(113,211,220,0.06);">
+                <div style="font-size:0.72rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.12rem;">Secure Data Sharing</div>
+                <div style="font-size:0.62rem;color:#4B5568;font-family:Inter,sans-serif;">Zero-copy POS, 3PL, and supplier data — no movement, no latency</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="24" style="opacity:0.85;"></div>
+  <div class="slide-number">04 / 13</div>
+</div>
+
+<!-- ══ SLIDE 05 — TOYOTA CHIP STORY ══ -->
+<div class="slide dark-slide" id="slide-5">
+  <div class="slide-bg" style="background:var(--sf-deep);"></div>
+  <div style="background:url(https://images.unsplash.com/photo-1565043666747-69f6646db940?w=1920&q=80) center 40%/cover no-repeat;opacity:0.09;position:absolute;inset:0;z-index:0;"></div>
+  <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,rgba(4,33,48,0.52) 0%,rgba(4,33,48,0.18) 55%,rgba(4,33,48,0.58) 100%);"></div>
+  <div class="slide-content">
+    <h2 style="color:#FFFFFF;">The <span style="color:var(--sf-star);">8-cent chip</span> that shut down <span style="color:#FFFFFF;">$210 billion</span> of car production</h2>
+    <div style="width:60px;height:3px;background:rgba(255,255,255,0.2);margin:0.6rem 0 0.85rem;border-radius:2px;"></div>
+    <div style="display:grid;grid-template-columns:0.75fr 1.25fr;gap:1.5rem;align-items:stretch;">
+      <div style="display:flex;flex-direction:column;gap:0.5rem;flex:1;">
+        <!-- Newspaper clippings -->
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.6rem 0.85rem;border-left:3px solid rgba(255,80,80,0.6);">
+          <div style="font-size:0.5rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.3);margin-bottom:0.18rem;">Financial Times · January 2021</div>
+          <div style="font-size:0.76rem;font-weight:700;color:rgba(255,255,255,0.75);line-height:1.4;font-style:italic;">"Ford and GM halt production as global chip shortage grips auto industry"</div>
+        </div>
+        <div style="background:rgba(113,211,220,0.07);border:1px solid rgba(113,211,220,0.2);border-radius:8px;padding:0.6rem 0.85rem;border-left:3px solid rgba(113,211,220,0.45);">
+          <div style="font-size:0.5rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(113,211,220,0.45);margin-bottom:0.18rem;">Reuters · January 2021</div>
+          <div style="font-size:0.76rem;font-weight:700;color:rgba(113,211,220,0.85);line-height:1.4;font-style:italic;">"Toyota avoids semiconductor shortage that has grounded other automakers"</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.13);border-radius:12px;padding:0.75rem 1rem;text-align:center;">
+          <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:0.2rem;">The chip cost</div>
+          <div style="font-size:3rem;font-weight:900;color:var(--sf-star);line-height:1;">$0.08</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.13);border-radius:12px;padding:0.75rem 1rem;text-align:center;">
+          <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:0.2rem;">Lost production</div>
+          <div style="font-size:3rem;font-weight:900;color:#FFFFFF;line-height:1;">$210B</div>
+          <div style="font-size:0.62rem;color:rgba(255,255,255,0.38);margin-top:0.15rem;">Ford · GM · VW · Stellantis</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.5rem;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;margin-bottom:0.15rem;">
+          <div style="text-align:center;font-size:0.65rem;font-weight:700;color:rgba(255,255,255,0.32);text-transform:uppercase;letter-spacing:0.09em;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:0.28rem;">Everyone else</div>
+          <div style="text-align:center;font-size:0.65rem;font-weight:700;color:var(--sf-star);text-transform:uppercase;letter-spacing:0.09em;border-bottom:1px solid rgba(113,211,220,0.28);padding-bottom:0.28rem;display:flex;align-items:center;justify-content:center;gap:0.4rem;"><img src="https://upload.wikimedia.org/wikipedia/commons/9/9d/Toyota_carlogo.svg" height="18" style="filter:brightness(0) saturate(100%) invert(85%) sepia(30%) saturate(400%) hue-rotate(145deg);opacity:0.85;" onerror="this.style.display='none'"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;align-items:stretch;">
+          <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.9rem 1.1rem;flex:1;display:flex;flex-direction:column;justify-content:space-between;">
+            <p style="font-size:0.85rem;color:rgba(255,255,255,0.55);line-height:1.6;margin:0 0 0.5rem;">2020 — COVID disrupts semiconductor supply. No early warning. No buffer.</p>
+            <p style="font-size:0.85rem;color:rgba(255,255,255,0.55);line-height:1.6;margin:0 0 0.5rem;">2021 — Lines shut down. Ford loses 700,000+ vehicles.</p>
+            <p style="font-size:0.88rem;font-weight:700;color:rgba(255,80,80,0.85);margin:0;">$210B in lost production.</p>
+          </div>
+          <div style="background:rgba(113,211,220,0.07);border:1px solid rgba(113,211,220,0.2);border-radius:10px;padding:0.9rem 1.1rem;flex:1;display:flex;flex-direction:column;justify-content:space-between;">
+            <p style="font-size:0.85rem;color:rgba(255,255,255,0.65);line-height:1.6;margin:0 0 0.5rem;">2011 — Fukushima disrupts Toyota. They build a system tracking components <strong style="color:var(--sf-star);">4–6 tiers deep.</strong></p>
+            <p style="font-size:0.85rem;color:rgba(255,255,255,0.65);line-height:1.6;margin:0 0 0.5rem;">2020 — Toyota detects the shortage <strong style="color:var(--sf-star);">8 weeks early.</strong> Builds buffer stock.</p>
+            <p style="font-size:0.88rem;font-weight:700;color:var(--sf-star);margin:0;">Every line keeps running. $20B+ advantage.</p>
+          </div>
+        </div>
+        <div style="background:rgba(113,211,220,0.08);border:1.5px solid rgba(113,211,220,0.22);border-radius:9px;padding:0.6rem 0.85rem;margin-top:0.1rem;">
+          <p style="font-size:0.84rem;color:#FFFFFF;margin:0;line-height:1.5;"><strong style="color:var(--sf-star);">Same shortage. Different outcome.</strong> One company had the data to see it coming. That's the business we're in.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="24"></div>
+  <div class="slide-number">05 / 13</div>
+</div>
+
+<!-- ══ SLIDE 06 — EMEA P&L FRAME ══ -->
+<div class="slide" id="slide-6">
+  <div class="slide-bg bg-white"></div>
+  <div style="background:url(https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&q=80) center 55%/cover no-repeat;opacity:0.04;position:absolute;inset:0;z-index:0;"></div>
+  <div class="slide-content">
+    <h3 class="lbl purple">WHY SC MATTERS · THE CFO FRAME · EMEA</h3>
+    <h2>Supply chain controls <span class="hip">50–55 cents</span> of every revenue pound</h2>
+    <div class="divp"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.9rem;margin-bottom:1.1rem;">
+      <div style="background:rgba(17,86,127,0.06);border:1px solid rgba(17,86,127,0.2);border-radius:14px;padding:0.9rem 1.1rem;text-align:center;">
+        <div class="big-stat" style="color:var(--sf-mid);">€4.2T</div>
+        <div class="stat-lbl">EMEA supply chain spend annually <span style="font-size:0.6rem;">(Gartner 2024)</span>
+          <div style="margin-top:0.3rem;font-size:0.58rem;color:#94a3b8;font-weight:400;line-height:1.4;text-transform:none;letter-spacing:0;">Total SC operating expenditure — materials procurement, manufacturing ops, logistics, warehousing &amp; distribution. SC technology software represents ~€30B of this total.</div>
+        </div>
+      </div>
+      <div style="background:rgba(180,83,9,0.06);border:1px solid rgba(180,83,9,0.2);border-radius:14px;padding:0.9rem 1.1rem;text-align:center;">
+        <div class="big-stat" style="color:#B45309;">80%</div>
+        <div class="stat-lbl">SC AI pilots never reach production <span style="font-size:0.6rem;">(Gartner)</span></div>
+      </div>
+      <div style="background:rgba(36,158,220,0.06);border:1px solid rgba(36,158,220,0.2);border-radius:14px;padding:0.9rem 1.1rem;text-align:center;">
+        <div class="big-stat" style="color:var(--sf-blue);">£750M</div>
+        <div class="stat-lbl" style="margin-top:0.15rem;">annual benefit potential (large-cap)</div>
+        <div style="background:rgba(36,158,220,0.07);border-radius:6px;padding:0.3rem 0.5rem;margin-top:0.4rem;text-align:left;">
+          <div style="font-size:0.6rem;color:var(--sf-mid);font-weight:600;line-height:1.5;">£25B revenue × 50% SC cost base<br>McKinsey: 3% AI efficiency improvement<br><span style="color:#9CA3AF;">Source: McKinsey Global Institute (2023)</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:1.1rem;">
+      <div style="background:rgba(17,86,127,0.05);border:1px solid rgba(17,86,127,0.18);border-radius:12px;padding:0.9rem 1.1rem;">
+        <div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--sf-mid);margin-bottom:0.55rem;">Why the timing is right — right now</div>
+        <div style="display:flex;flex-direction:column;gap:0.38rem;">
+          <div style="display:flex;gap:0.55rem;align-items:flex-start;"><span style="color:var(--sf-blue);font-weight:700;flex-shrink:0;font-size:0.85rem;">→</span><span style="font-size:0.85rem;color:var(--text-gray);">EU Supply Chain Due Diligence Act (CSDDD) — tier-N supplier visibility now a legal requirement</span></div>
+          <div style="display:flex;gap:0.55rem;align-items:flex-start;"><span style="color:var(--sf-blue);font-weight:700;flex-shrink:0;font-size:0.85rem;">→</span><span style="font-size:0.85rem;color:var(--text-gray);">Tariffs and nearshoring mandates creating urgent new EMEA sourcing data needs</span></div>
+          <div style="display:flex;gap:0.55rem;align-items:flex-start;"><span style="color:var(--sf-blue);font-weight:700;flex-shrink:0;font-size:0.85rem;">→</span><span style="font-size:0.85rem;color:var(--text-gray);">Post-COVID boards mandating resilience investment — and now measuring it on the balance sheet</span></div>
+          <div style="display:flex;gap:0.55rem;align-items:flex-start;"><span style="color:var(--sf-blue);font-weight:700;flex-shrink:0;font-size:0.85rem;">→</span><span style="font-size:0.85rem;color:var(--text-gray);">Every CxO has an AI mandate — procurement, operations, finance — none have the data foundation to deliver it</span></div>
+        </div>
+      </div>
+      <div style="background:rgba(36,158,220,0.05);border:1px solid rgba(36,158,220,0.18);border-radius:12px;padding:0.9rem 1.1rem;">
+        <div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--sf-blue);margin-bottom:0.55rem;">Illustrative P&amp;L — £1.00 revenue</div>
+        <div style="display:flex;flex-direction:column;gap:0.16rem;font-size:0.82rem;">
+          <div style="display:grid;grid-template-columns:1fr auto;padding:0.16rem 0;"><span style="color:var(--text-gray);">Gross revenue</span><span style="font-weight:700;">£1.00</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto;padding:0.18rem 0.4rem;background:rgba(36,158,220,0.1);border-left:3px solid var(--sf-blue);border-radius:0 4px 4px 0;"><span style="color:var(--sf-blue);font-weight:600;">Revenue logistics + expedite</span><span style="font-weight:700;color:var(--sf-blue);">(£0.10)</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto;padding:0.18rem 0.4rem;background:rgba(36,158,220,0.1);border-left:3px solid var(--sf-blue);border-radius:0 4px 4px 0;margin-top:0.08rem;"><span style="color:var(--sf-blue);font-weight:600;">COGS — direct materials</span><span style="font-weight:700;color:var(--sf-blue);">(£0.25)</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto;padding:0.18rem 0.4rem;background:rgba(36,158,220,0.1);border-left:3px solid var(--sf-blue);border-radius:0 4px 4px 0;margin-top:0.08rem;"><span style="color:var(--sf-blue);font-weight:600;">COGS — non-material SC</span><span style="font-weight:700;color:var(--sf-blue);">(£0.20)</span></div>
+          <div style="display:grid;grid-template-columns:1fr auto;padding:0.2rem 0;border-top:1.5px solid var(--border-card);margin-top:0.18rem;"><span style="font-weight:700;color:var(--text-dark);">SC-controlled</span><span style="font-weight:900;color:var(--sf-mid);">£0.55</span></div>
+        </div>
+        <p style="font-size:0.68rem;color:var(--text-light);margin-top:0.4rem;max-width:100%;"><em>Varies by industry — higher in automotive, lower in software. The CFO conversation works in any sector.</em></p>
+      </div>
+    </div>
+  </div>
+  <div class="sf-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="24" style="opacity:0.85;"></div>
+  <div class="slide-number">06 / 13</div>
+</div>
+
+<!-- ══ SLIDE 07 — THE AI MOMENT ══ -->
+<div class="slide dark-slide" id="slide-7">
+  <div class="slide-bg" style="background:var(--sf-deep);"></div>
+  <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse at 30% 60%,rgba(36,158,220,0.1) 0%,rgba(4,33,48,0) 65%);"></div>
+  <div class="slide-content">
+    <h3 class="lbl" style="color:rgba(255,255,255,0.5);">WHERE SC IS GOING · THE AUTONOMY SHIFT</h3>
+    <h2 style="color:#FFFFFF;">From <span style="color:rgba(255,100,100,0.85);">18 hours</span> to detect a problem — to <span style="color:var(--sf-star);">seconds</span> to act on it.</h2>
+    <div style="width:60px;height:3px;background:rgba(255,255,255,0.2);margin:0.7rem 0 1rem;border-radius:2px;"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0.55rem;margin-bottom:1.1rem;">
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:0.85rem 0.9rem;">
+        <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.35);margin-bottom:0.4rem;">Stage 1</div>
+        <div style="font-size:0.88rem;font-weight:800;color:rgba(255,255,255,0.5);margin-bottom:0.4rem;">Reporting</div>
+        <p style="font-size:0.77rem;color:rgba(255,255,255,0.38);max-width:100%;margin:0;">What happened? Weekly/monthly views. Data 5 days stale.</p>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:0.85rem 0.9rem;">
+        <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.35);margin-bottom:0.4rem;">Stage 2</div>
+        <div style="font-size:0.88rem;font-weight:800;color:rgba(255,255,255,0.52);margin-bottom:0.4rem;">Analytics</div>
+        <p style="font-size:0.77rem;color:rgba(255,255,255,0.4);max-width:100%;margin:0;">Why did it happen? Analysts dig for days. Maybe actionable.</p>
+      </div>
+      <div style="background:rgba(36,158,220,0.09);border:1.5px solid rgba(36,158,220,0.32);border-radius:12px;padding:0.85rem 0.9rem;">
+        <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--sf-blue);margin-bottom:0.4rem;">Stage 3 · Where most are</div>
+        <div style="font-size:0.88rem;font-weight:800;color:var(--sf-blue);margin-bottom:0.4rem;">Predictive</div>
+        <p style="font-size:0.77rem;color:rgba(255,255,255,0.6);max-width:100%;margin:0;">What will happen? Models that work in isolation. 80% don't reach production.</p>
+      </div>
+      <div style="background:rgba(113,211,220,0.1);border:1.5px solid rgba(113,211,220,0.38);border-radius:12px;padding:0.85rem 0.9rem;">
+        <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--sf-star);margin-bottom:0.4rem;">Stage 4 · Where this goes</div>
+        <div style="font-size:0.88rem;font-weight:800;color:var(--sf-star);margin-bottom:0.4rem;">Autonomous</div>
+        <p style="font-size:0.77rem;color:rgba(255,255,255,0.65);max-width:100%;margin:0;">What should happen next — and do it. One approval. Every system updated.</p>
+      </div>
+    </div>
+    <div style="background:rgba(113,211,220,0.08);border:1.5px solid rgba(113,211,220,0.22);border-radius:10px;padding:0.7rem 1rem;display:grid;grid-template-columns:0.65fr 1fr;gap:1rem;align-items:center;">
+      <div>
+        <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.4);margin-bottom:0.25rem;">What enables the move from Stage 3 → Stage 4</div>
+        <p style="font-size:0.8rem;font-weight:700;color:var(--sf-star);max-width:100%;margin:0;line-height:1.4;">Gartner: "The path to autonomous SC operations is blocked by data fragmentation — not model quality."</p>
+        <p style="font-size:0.68rem;color:rgba(255,255,255,0.4);margin:0.3rem 0 0;max-width:100%;">Gartner, Predicts 2025: Supply Chain Technology</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.3rem;">
+        <div style="display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:var(--sf-star);font-weight:700;flex-shrink:0;font-size:0.82rem;margin-top:0.1rem;">01</span><span style="font-size:0.82rem;color:rgba(255,255,255,0.68);">Unified, governed data — the model and the decision on the same platform, with a single version of OTIF, fill rate, safety stock</span></div>
+        <div style="display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:var(--sf-star);font-weight:700;flex-shrink:0;font-size:0.82rem;margin-top:0.1rem;">02</span><span style="font-size:0.82rem;color:rgba(255,255,255,0.68);">Real-time signals blended at source — POS, IoT, weather, market data in the same platform as the forecast models</span></div>
+        <div style="display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:var(--sf-star);font-weight:700;flex-shrink:0;font-size:0.82rem;margin-top:0.1rem;">03</span><span style="font-size:0.82rem;color:rgba(255,255,255,0.68);">Closed-loop execution — one approval triggers ERP, TMS, WMS, and replenishment simultaneously</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="sf-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="22"></div>
+  <div class="slide-number">07 / 13</div>
+</div>
+
+<!-- ══ SLIDE 08-TECH — FIVE FORCES (WHY NOW) ══ -->
+<div class="slide" id="slide-8-tech">
+  <div class="slide-bg bg-ice"></div>
+  <div class="slide-content">
+    <h3 class="lbl">WHY NOW · MARKET FORCES</h3>
+    <h2>Five Forces Creating <span class="hi">Urgency in Every Account</span></h2>
+    <div class="div"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.9rem;margin-top:0.3rem;">
+
+      <div style="background:linear-gradient(160deg,rgba(17,86,127,0.07),rgba(17,86,127,0.02));border:1.5px solid rgba(17,86,127,0.3);border-radius:14px;padding:1.1rem 1.2rem;">
+        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.3rem;">Force 01</div>
+        <div style="font-size:0.92rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.5rem;line-height:1.2;">Demand Complexity &amp; Volatility</div>
+        <div style="display:flex;flex-direction:column;gap:0.28rem;">
+          <div style="display:flex;gap:0.4rem;font-size:0.78rem;align-items:flex-start;"><span style="color:var(--sf-mid);font-weight:700;flex-shrink:0;">›</span><span>Shorter product lifecycles &amp; frequent NPIs</span></div>
+          <div style="display:flex;gap:0.4rem;font-size:0.78rem;align-items:flex-start;"><span style="color:var(--sf-mid);font-weight:700;flex-shrink:0;">›</span><span>Omnichannel complexity — DTC, retail, wholesale</span></div>
+          <div style="display:flex;gap:0.4rem;font-size:0.78rem;align-items:flex-start;"><span style="color:var(--sf-mid);font-weight:700;flex-shrink:0;">›</span><span>Consumers expect faster response to demand signals</span></div>
+        </div>
+        <div style="margin-top:0.7rem;"><span class="pill purple" style="font-size:0.65rem;">All Industries</span></div>
+      </div>
+
+      <div style="background:linear-gradient(160deg,rgba(36,158,220,0.07),rgba(36,158,220,0.02));border:1.5px solid rgba(36,158,220,0.3);border-radius:14px;padding:1.1rem 1.2rem;">
+        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.3rem;">Force 02</div>
+        <div style="font-size:0.92rem;font-weight:800;color:var(--sf-blue);margin-bottom:0.5rem;line-height:1.2;">Data Explosion &amp; AI Pressure</div>
+        <div style="display:flex;flex-direction:column;gap:0.28rem;">
+          <div style="display:flex;gap:0.4rem;font-size:0.78rem;align-items:flex-start;"><span style="color:var(--sf-blue);font-weight:700;flex-shrink:0;">›</span><span>IoT sensors, RFID, GPS — data volumes 10× in 3 years</span></div>
+          <div style="display:flex;gap:0.4rem;font-size:0.78rem;align-items:flex-start;"><span style="color:var(--sf-blue);font-weight:700;flex-shrink:0;">›</span><span>Boards mandate AI ROI — but ungoverned data blocks it</span></div>
+          <div style="display:flex;gap:0.4rem;font-size:0.78rem;align-items:flex-start;"><span style="color:var(--sf-blue);font-weight:700;flex-shrink:0;">›</span><span>3,600+ live external datasets available on Marketplace</span></div>
+        </div>
+        <div style="margin-top:0.7rem;"><span class="pill" style="font-size:0.65rem;">AI Data Foundation</span></div>
+      </div>
+
+      <div style="background:linear-gradient(160deg,rgba(180,83,9,0.06),rgba(180,83,9,0.01));border:1.5px solid rgba(180,83,9,0.25);border-radius:14px;padding:1.1rem 1.2rem;">
+        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#B45309;margin-bottom:0.3rem;">Force 03</div>
+        <div style="font-size:0.92rem;font-weight:800;color:#B45309;margin-bottom:0.5rem;line-height:1.2;">Geopolitical &amp; Climate Risk</div>
+        <div style="display:flex;flex-direction:column;gap:0.28rem;">
+          <div style="display:flex;gap:0.4rem;font-size:0.78rem;align-items:flex-start;"><span style="color:#B45309;font-weight:700;flex-shrink:0;">›</span><span>Tariffs driving nearshoring &amp; supplier diversification</span></div>
+          <div style="display:flex;gap:0.4rem;font-size:0.78rem;align-items:flex-start;"><span style="color:#B45309;font-weight:700;flex-shrink:0;">›</span><span>Climate events disrupting ports, logistics, agriculture</span></div>
+          <div style="display:flex;gap:0.4rem;font-size:0.78rem;align-items:flex-start;"><span style="color:#B45309;font-weight:700;flex-shrink:0;">›</span><span>Multi-tier supplier risk invisible to most companies</span></div>
+        </div>
+        <div style="margin-top:0.7rem;"><span class="pill amber" style="font-size:0.65rem;">Risk Intelligence</span></div>
+      </div>
+
+      <div style="background:linear-gradient(160deg,rgba(13,148,136,0.07),rgba(13,148,136,0.01));border:1.5px solid rgba(13,148,136,0.3);border-radius:14px;padding:1.1rem 1.2rem;">
+        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#0d9488;margin-bottom:0.3rem;">Force 04</div>
+        <div style="font-size:0.92rem;font-weight:800;color:#0d9488;margin-bottom:0.5rem;line-height:1.2;">IT Cost Pressure &amp; Consolidation</div>
+        <div style="display:flex;flex-direction:column;gap:0.28rem;">
+          <div style="display:flex;gap:0.4rem;font-size:0.78rem;align-items:flex-start;"><span style="color:#0d9488;font-weight:700;flex-shrink:0;">›</span><span>Boards demanding fast positive ROI on IT investments</span></div>
+          <div style="display:flex;gap:0.4rem;font-size:0.78rem;align-items:flex-start;"><span style="color:#0d9488;font-weight:700;flex-shrink:0;">›</span><span>Shift from CapEx licensing to OpEx consumption models</span></div>
+          <div style="display:flex;gap:0.4rem;font-size:0.78rem;align-items:flex-start;"><span style="color:#0d9488;font-weight:700;flex-shrink:0;">›</span><span>5–6 point solutions → one platform (Snowflake)</span></div>
+        </div>
+        <div style="margin-top:0.7rem;"><span style="font-size:0.65rem;background:rgba(13,148,136,0.08);border:1px solid rgba(13,148,136,0.3);border-radius:4px;padding:0.15rem 0.45rem;color:#0d9488;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Consolidation Play</span></div>
+      </div>
+
+      <div style="background:linear-gradient(160deg,rgba(22,163,74,0.06),rgba(22,163,74,0.01));border:1.5px solid rgba(22,163,74,0.3);border-radius:14px;padding:1.1rem 1.2rem;">
+        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#16a34a;margin-bottom:0.3rem;">Force 05</div>
+        <div style="font-size:0.92rem;font-weight:800;color:#16a34a;margin-bottom:0.5rem;line-height:1.2;">M&amp;A &amp; Portfolio Complexity</div>
+        <div style="display:flex;flex-direction:column;gap:0.28rem;">
+          <div style="display:flex;gap:0.4rem;font-size:0.78rem;align-items:flex-start;"><span style="color:#16a34a;font-weight:700;flex-shrink:0;">›</span><span>Acquisitions create multi-ERP chaos overnight</span></div>
+          <div style="display:flex;gap:0.4rem;font-size:0.78rem;align-items:flex-start;"><span style="color:#16a34a;font-weight:700;flex-shrink:0;">›</span><span>Divestitures break established SC data flows</span></div>
+          <div style="display:flex;gap:0.4rem;font-size:0.78rem;align-items:flex-start;"><span style="color:#16a34a;font-weight:700;flex-shrink:0;">›</span><span>Snowflake unifies without ripping out existing systems</span></div>
+        </div>
+        <div style="margin-top:0.7rem;"><span style="font-size:0.65rem;background:rgba(22,163,74,0.08);border:1px solid rgba(22,163,74,0.28);border-radius:4px;padding:0.15rem 0.45rem;color:#16a34a;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Whitespace Trigger</span></div>
+      </div>
+
+      <div style="background:linear-gradient(160deg,rgba(17,86,127,0.05),rgba(36,158,220,0.03));border:1.5px solid rgba(17,86,127,0.2);border-radius:14px;padding:1.1rem 1.2rem;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
+        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.5rem;">Bottom Line</div>
+        <p style="font-size:0.82rem;color:var(--text-gray);margin:0;max-width:100%;"><strong style="color:var(--sf-mid);">Every one of these forces points to a data problem that Snowflake solves.</strong> Volatility means more data. AI pressure means governed data. Consolidation means unified data. Your customer already has the budget — it's sitting in fragmented IT systems.</p>
+      </div>
+
+    </div>
+  </div>
+  <div class="sf-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="24" style="opacity:0.85;"></div>
+</div>
+
+<!-- ══ SLIDE 08 — PERSONAS OVERVIEW ══ -->
+<div class="slide" id="slide-8">
+  <div class="slide-bg bg-white"></div>
+  <div class="slide-content">
+    <h3 class="lbl purple">THE PERSONAS · WHO TO CALL ON</h3>
+    <h2>Three layers, <span class="hip">six buyers,</span> one data problem</h2>
+    <div class="divp"></div>
+    <div style="margin-bottom:0.65rem;">
+      <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(17,86,127,0.5);margin-bottom:0.35rem;padding-left:0.2rem;">Executive layer — economic buyer + strategic sponsor</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.55rem;">
+        <div style="background:rgba(17,86,127,0.06);border:1.5px solid rgba(17,86,127,0.28);border-radius:10px;padding:0.7rem 0.85rem;">
+          <div style="font-size:0.82rem;font-weight:800;color:#11567F;margin-bottom:0.2rem;">🎯 CSCO / VP Supply Chain</div>
+          <p style="font-size:0.78rem;color:var(--text-gray);margin:0 0 0.3rem;max-width:100%;">P&amp;L owner for SC. Accountable for service levels, cost-to-serve, resilience.</p>
+          <div style="font-size:0.68rem;font-weight:600;color:#11567F;background:rgba(17,86,127,0.07);border-radius:4px;padding:0.2rem 0.45rem;display:inline-block;">Language: resilience, OTIF, margin</div>
+        </div>
+        <div style="background:rgba(217,119,6,0.06);border:1.5px solid rgba(217,119,6,0.28);border-radius:10px;padding:0.7rem 0.85rem;">
+          <div style="font-size:0.82rem;font-weight:800;color:#D97706;margin-bottom:0.2rem;">🔗 CPO / Chief Procurement Officer</div>
+          <p style="font-size:0.78rem;color:var(--text-gray);margin:0 0 0.3rem;max-width:100%;">Owns supplier relationships and raw material cost. Urgently needs tier-N risk visibility.</p>
+          <div style="font-size:0.68rem;font-weight:600;color:#D97706;background:rgba(217,119,6,0.07);border-radius:4px;padding:0.2rem 0.45rem;display:inline-block;">Language: supplier risk, spend analytics</div>
+        </div>
+        <div style="background:rgba(13,148,136,0.06);border:1.5px solid rgba(13,148,136,0.28);border-radius:10px;padding:0.7rem 0.85rem;">
+          <div style="font-size:0.82rem;font-weight:800;color:#0d9488;margin-bottom:0.2rem;">📊 CFO (SC angle)</div>
+          <p style="font-size:0.78rem;color:var(--text-gray);margin:0 0 0.3rem;max-width:100%;">Cares about working capital, inventory carrying cost, cash conversion cycle.</p>
+          <div style="font-size:0.68rem;font-weight:600;color:#0d9488;background:rgba(13,148,136,0.07);border-radius:4px;padding:0.2rem 0.45rem;display:inline-block;">Language: inventory turns, cash, WC</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-bottom:0.65rem;">
+      <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(36,158,220,0.5);margin-bottom:0.35rem;padding-left:0.2rem;">Operations layer — transformational champion + process owners (examples below; roles vary by sector)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.55rem;">
+        <div style="background:rgba(36,158,220,0.05);border:1.5px solid rgba(36,158,220,0.3);border-radius:10px;padding:0.7rem 0.85rem;">
+          <div style="font-size:0.82rem;font-weight:800;color:#249EDC;margin-bottom:0.2rem;">🔄 S&amp;OP Lead / IBP Director</div>
+          <p style="font-size:0.78rem;color:var(--text-gray);margin:0 0 0.3rem;max-width:100%;">Owns the cross-functional planning transformation — not just the data, the entire process redesign. Their pain: slow data, mistrust, cycle time measured in weeks.</p>
+          <div style="font-size:0.68rem;font-weight:600;color:var(--sf-blue);background:rgba(36,158,220,0.07);border-radius:4px;padding:0.2rem 0.45rem;display:inline-block;">🔑 Transformational champion — bring in early</div>
+        </div>
+        <div style="background:rgba(236,72,153,0.05);border:1.5px solid rgba(236,72,153,0.3);border-radius:10px;padding:0.7rem 0.85rem;">
+          <div style="font-size:0.82rem;font-weight:800;color:#ec4899;margin-bottom:0.2rem;">🏭 VP Manufacturing / Head of Production</div>
+          <p style="font-size:0.78rem;color:var(--text-gray);margin:0 0 0.3rem;max-width:100%;">Owns OEE, capacity utilisation, OTIF from factory. Cares about MES/SCADA data quality and shift-level visibility.</p>
+          <div style="font-size:0.68rem;font-weight:600;color:#ec4899;background:rgba(236,72,153,0.07);border-radius:4px;padding:0.2rem 0.45rem;display:inline-block;">Opening Q: "How quickly do you see OEE drop?"</div>
+        </div>
+        <div style="background:rgba(139,92,246,0.05);border:1.5px solid rgba(139,92,246,0.3);border-radius:10px;padding:0.7rem 0.85rem;">
+          <div style="font-size:0.82rem;font-weight:800;color:#8b5cf6;margin-bottom:0.2rem;">📋 Head of Supply Chain Planning</div>
+          <p style="font-size:0.78rem;color:var(--text-gray);margin:0 0 0.3rem;max-width:100%;">Owns planning strategy, team KPIs, and the end-to-end planning cycle. Accountable for forecast accuracy, safety stock levels, and S&amp;OP execution. Frustration: can't get a clean, unified demand signal.</p>
+          <div style="font-size:0.68rem;font-weight:600;color:#8b5cf6;background:rgba(139,92,246,0.07);border-radius:4px;padding:0.2rem 0.45rem;display:inline-block;">Opening Q: "What's your current forecast accuracy?"</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(113,211,220,0.6);margin-bottom:0.35rem;padding-left:0.2rem;">Data &amp; IT layer — internal Snowflake champion</div>
+      <div style="background:rgba(6,182,212,0.06);border:1.5px solid rgba(6,182,212,0.3);border-radius:10px;padding:0.7rem 0.85rem;">
+        <div style="font-size:0.82rem;font-weight:800;color:#06b6d4;margin-bottom:0.2rem;">💻 CIO / Data &amp; Analytics Lead</div>
+        <p style="font-size:0.78rem;color:var(--text-gray);margin:0 0 0.3rem;max-width:100%;">Platform consolidator. Drowning in point-to-point integrations. Often already a Snowflake customer — SC hasn't been connected yet. That's the fastest win.</p>
+        <div style="font-size:0.68rem;font-weight:600;color:#06b6d4;background:rgba(6,182,212,0.07);border-radius:4px;padding:0.2rem 0.45rem;display:inline-block;">Opening Q: "How many systems does your SC team pull data from to run S&amp;OP?"</div>
+      </div>
+    </div>
+  </div>
+  <div class="sf-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="22" style="opacity:0.85;"></div>
+  <div class="slide-number">08 / 13</div>
+</div>
+
+<!-- ══ SLIDE 09 — PERSONA LANGUAGE GUIDE ══ -->
+<div class="slide" id="slide-9">
+  <div class="slide-bg bg-ice"></div>
+  <div class="slide-content">
+    <h3 class="lbl">PERSONAS · WHAT TO SAY</h3>
+    <h2>Speak their language. Every persona has <span class="hi">one thing</span> they actually measure.</h2>
+    <div class="div"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+      <div style="background:#FFFFFF;border:1.5px solid rgba(17,86,127,0.25);border-radius:12px;padding:0.9rem 1.1rem;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.45rem;">
+          <div style="font-size:0.88rem;font-weight:800;color:#11567F;">🎯 CSCO / VP Supply Chain</div>
+          <span class="pill purple" style="font-size:0.6rem;">Exec sponsor</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;font-size:0.78rem;">
+          <div><span style="font-weight:700;color:#11567F;">Metric they own:</span><span style="color:var(--text-gray);"> OTIF, cost-to-serve, inventory turns</span></div>
+          <div><span style="font-weight:700;color:#11567F;">Fear:</span><span style="color:var(--text-gray);"> Another disruption with no early warning</span></div>
+          <div style="grid-column:1/-1;"><span style="font-weight:700;color:#11567F;">Your message:</span><span style="color:var(--text-gray);"> "Your planning tools are only as good as the data feeding them. We're the reason that data is clean, current, and connected."</span></div>
+        </div>
+      </div>
+      <div style="background:#FFFFFF;border:1.5px solid rgba(36,158,220,0.28);border-radius:12px;padding:0.9rem 1.1rem;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.45rem;">
+          <div style="font-size:0.88rem;font-weight:800;color:#249EDC;">🔄 S&amp;OP Lead / IBP Director</div>
+          <span class="pill" style="font-size:0.6rem;">Transformational champion</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;font-size:0.78rem;">
+          <div><span style="font-weight:700;color:var(--sf-blue);">Metric they own:</span><span style="color:var(--text-gray);"> Planning cycle time, forecast accuracy, plan adherence</span></div>
+          <div><span style="font-weight:700;color:var(--sf-blue);">Fear:</span><span style="color:var(--text-gray);"> Cross-functional mistrust; every team has different numbers</span></div>
+          <div style="grid-column:1/-1;"><span style="font-weight:700;color:var(--sf-blue);">Your message:</span><span style="color:var(--text-gray);"> "What if Finance, Supply, and Demand all started from the same number? What would that do to your cycle time?"</span></div>
+        </div>
+      </div>
+      <div style="background:#FFFFFF;border:1.5px solid rgba(217,119,6,0.3);border-radius:12px;padding:0.9rem 1.1rem;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.45rem;">
+          <div style="font-size:0.88rem;font-weight:800;color:#D97706;">🔗 CPO / Procurement Director</div>
+          <span class="pill amber" style="font-size:0.6rem;">Exec buyer</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;font-size:0.78rem;">
+          <div><span style="font-weight:700;color:var(--amber);">Metric they own:</span><span style="color:var(--text-gray);"> Supplier risk, raw material cost variance, spend under management</span></div>
+          <div><span style="font-weight:700;color:var(--amber);">Fear:</span><span style="color:var(--text-gray);"> Blind spots in the supplier network; another $0.08-chip moment</span></div>
+          <div style="grid-column:1/-1;"><span style="font-weight:700;color:var(--amber);">Your message:</span><span style="color:var(--text-gray);"> "How many tiers deep can you see into your supplier network today? We can make that 4–6 tiers, in near-real-time."</span></div>
+        </div>
+      </div>
+      <div style="background:#FFFFFF;border:1.5px solid rgba(139,92,246,0.28);border-radius:12px;padding:0.9rem 1.1rem;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.45rem;">
+          <div style="font-size:0.88rem;font-weight:800;color:#8b5cf6;">📋 Head of Supply Chain Planning</div>
+          <span class="pill" style="font-size:0.6rem;background:rgba(139,92,246,0.08);border-color:rgba(139,92,246,0.3);color:#8b5cf6;">Process owner</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;font-size:0.78rem;">
+          <div><span style="font-weight:700;color:#8b5cf6;">Metric they own:</span><span style="color:var(--text-gray);"> Forecast MAPE, planning cycle time, safety stock levels, SLOB inventory</span></div>
+          <div><span style="font-weight:700;color:#8b5cf6;">Fear:</span><span style="color:var(--text-gray);"> Being unable to defend plans — every function has different numbers, no single truth</span></div>
+          <div style="grid-column:1/-1;"><span style="font-weight:700;color:#8b5cf6;">Your message:</span><span style="color:var(--text-gray);"> "What external signals are you pulling into your forecast today? We let you blend POS, weather, and economic signals at scale — and finally get one number Finance and Supply can trust."</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="22" style="opacity:0.85;"></div>
+  <div class="slide-number">09 / 13</div>
+</div>
+
+<!-- ══ SLIDE 11-BIZ — BUSINESS CASE (VALUE DRIVERS) ══ -->
+<div class="slide" id="slide-11-biz">
+  <div class="slide-bg bg-ice"></div>
+  <div class="slide-content" style="padding-top:1.8rem;padding-bottom:1.8rem;">
+    <h3 class="lbl purple">THE BUSINESS CASE · FOR YOUR CUSTOMER &amp; YOUR DEAL</h3>
+    <h2>0.5–2% of Revenue. <span class="hip">Every Year.</span></h2>
+    <div class="divp"></div>
+    <p style="font-size:0.88rem;margin-bottom:0.6rem;">Supply chain planning transformation consistently delivers 0.5–2% of revenue as annual benefit — split across four value buckets. Use this frame to size the business case before your customer does.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0.8rem;margin-top:0.3rem;">
+      <div style="background:linear-gradient(160deg,rgba(17,86,127,0.08),rgba(17,86,127,0.02));border:1.5px solid rgba(17,86,127,0.3);border-radius:14px;padding:1rem 1.1rem;display:flex;flex-direction:column;">
+        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.3rem;">Bucket 01</div>
+        <div style="font-size:0.9rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.5rem;line-height:1.2;">Full-Price Fill Rate</div>
+        <p style="font-size:0.76rem;margin-bottom:0.6rem;flex:1;">Reduce discount depth and markdown frequency. Better forecast accuracy means more products sold at full price. <strong style="color:var(--sf-mid);">1–2% price lift on in-scope products.</strong></p>
+        <div style="background:rgba(17,86,127,0.08);border-radius:8px;padding:0.5rem;text-align:center;">
+          <div style="font-size:1.2rem;font-weight:900;color:var(--sf-mid);line-height:1;">~$70M</div>
+          <div style="font-size:0.58rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;">on $5B revenue</div>
+        </div>
+      </div>
+      <div style="background:linear-gradient(160deg,rgba(36,158,220,0.08),rgba(36,158,220,0.02));border:1.5px solid rgba(36,158,220,0.35);border-radius:14px;padding:1rem 1.1rem;display:flex;flex-direction:column;">
+        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.3rem;">Bucket 02</div>
+        <div style="font-size:0.9rem;font-weight:800;color:var(--sf-blue);margin-bottom:0.5rem;line-height:1.2;">Fill Rate &amp; Stockout Reduction</div>
+        <p style="font-size:0.76rem;margin-bottom:0.6rem;flex:1;">OTIF improvement 5–40%. 10% reduction in logistics fees. Faster time-to-revenue. <strong style="color:var(--sf-blue);">Largest single bucket.</strong></p>
+        <div style="background:rgba(36,158,220,0.08);border-radius:8px;padding:0.5rem;text-align:center;">
+          <div style="font-size:1.2rem;font-weight:900;color:var(--sf-blue);line-height:1;">~$225M</div>
+          <div style="font-size:0.58rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;">on $5B revenue</div>
+        </div>
+      </div>
+      <div style="background:linear-gradient(160deg,rgba(13,148,136,0.08),rgba(13,148,136,0.01));border:1.5px solid rgba(13,148,136,0.35);border-radius:14px;padding:1rem 1.1rem;display:flex;flex-direction:column;">
+        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#0d9488;margin-bottom:0.3rem;">Bucket 03</div>
+        <div style="font-size:0.9rem;font-weight:800;color:#0d9488;margin-bottom:0.5rem;line-height:1.2;">Net Working Capital</div>
+        <p style="font-size:0.76rem;margin-bottom:0.6rem;flex:1;">5–30% reduction in inventory budget. 5–10 day cash cycle improvement. Freed cash compounds. <strong style="color:#0d9488;">CFO's favourite.</strong></p>
+        <div style="background:rgba(13,148,136,0.08);border-radius:8px;padding:0.5rem;text-align:center;">
+          <div style="font-size:1.2rem;font-weight:900;color:#0d9488;line-height:1;">~$13M</div>
+          <div style="font-size:0.58rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;">on $5B revenue</div>
+        </div>
+      </div>
+      <div style="background:linear-gradient(160deg,rgba(180,83,9,0.07),rgba(180,83,9,0.01));border:1.5px solid rgba(180,83,9,0.25);border-radius:14px;padding:1rem 1.1rem;display:flex;flex-direction:column;">
+        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#B45309;margin-bottom:0.3rem;">Bucket 04</div>
+        <div style="font-size:0.9rem;font-weight:800;color:#B45309;margin-bottom:0.5rem;line-height:1.2;">Cost Reduction</div>
+        <p style="font-size:0.76rem;margin-bottom:0.6rem;flex:1;">20–30% reduction in expedite logistics. 10–20% E&amp;O cost reduction. IT consolidation savings. <strong style="color:#B45309;">Hard $ savings.</strong></p>
+        <div style="background:rgba(180,83,9,0.08);border-radius:8px;padding:0.5rem;text-align:center;">
+          <div style="font-size:1.2rem;font-weight:900;color:#B45309;line-height:1;">~$105M</div>
+          <div style="font-size:0.58rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;">on $5B revenue</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:0.8rem;display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
+      <div style="background:linear-gradient(135deg,rgba(17,86,127,0.08),rgba(36,158,220,0.05));border:1.5px solid rgba(17,86,127,0.25);border-radius:12px;padding:0.9rem 1.1rem;">
+        <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.4rem;">Sizing the Snowflake Deal</div>
+        <p style="font-size:0.8rem;margin:0;max-width:100%;">Total annual benefit on $5B manufacturer: <strong style="color:var(--sf-blue);">~$413M.</strong> A $1M Snowflake deal = 0.24% of annual benefit. Deal size should reflect the value you're unlocking — not just the cost to the IT budget.</p>
+      </div>
+      <div style="background:linear-gradient(90deg,rgba(36,158,220,0.07),rgba(113,211,220,0.04));border:1px solid rgba(36,158,220,0.22);border-radius:12px;padding:0.9rem 1.1rem;">
+        <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.4rem;">Forrester TEI (2024) — Snowflake SC Deployments</div>
+        <p style="font-size:0.8rem;margin:0;max-width:100%;"><strong style="color:var(--sf-blue);">354% ROI over 3 years.</strong> Average payback period under 6 months. $17.4M 3-year NPV (composite org). Your LOB justification for the CFO to approve before IT completes evaluation.</p>
+      </div>
+    </div>
+  </div>
+  <div class="sf-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="24" style="opacity:0.85;"></div>
+</div>
+
+<!-- ══ SLIDE 10-11 — PARTNERS (MERGED) ══ -->
+<div class="slide" id="slide-10-11">
+  <div class="slide-bg bg-white"></div>
+  <div class="slide-content" style="overflow-y:auto;max-height:640px;scrollbar-width:thin;padding-top:1.3rem;">
+    <h3 class="lbl purple">THE PARTNERS · YOUR SC BENCH</h3>
+    <h2>Four partners who <span class="hip">extend what you can do</span> in SC accounts</h2>
+    <div class="divp"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;align-items:flex-start;margin-top:0.2rem;">
+
+      <!-- Left: 4 partner cards (compact) -->
+      <div style="display:flex;flex-direction:column;gap:0.5rem;">
+        <div style="background:rgba(17,86,127,0.04);border:1.5px solid rgba(17,86,127,0.22);border-radius:12px;padding:0.75rem 1rem;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.3rem;">
+            <div style="font-size:0.95rem;font-weight:900;color:var(--sf-mid);">Deloitte</div>
+            <span class="pill purple" style="font-size:0.58rem;">SI · Business Case</span>
+          </div>
+          <p style="font-size:0.76rem;color:var(--text-gray);margin:0 0 0.3rem;max-width:100%;">Global SC transformation. CSCO/board language. Builds the business case that unlocks budget.</p>
+          <div style="font-size:0.66rem;font-weight:600;color:var(--sf-mid);">✓ Bring in at: Discovery / Business Case stage</div>
+        </div>
+        <div style="background:rgba(36,158,220,0.04);border:1.5px solid rgba(36,158,220,0.25);border-radius:12px;padding:0.75rem 1rem;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.3rem;">
+            <div style="font-size:0.95rem;font-weight:900;color:var(--sf-blue);">RelationalAI</div>
+            <span class="pill" style="font-size:0.58rem;">Knowledge Graph</span>
+          </div>
+          <p style="font-size:0.76rem;color:var(--text-gray);margin:0 0 0.3rem;max-width:100%;">Native on Snowflake. Tier-N supplier risk, multi-echelon network optimisation. Strongest in manufacturing and CPG.</p>
+          <div style="font-size:0.66rem;font-weight:600;color:var(--sf-blue);">✓ Bring in at: CPO / supplier risk conversation</div>
+        </div>
+        <div style="background:rgba(113,211,220,0.05);border:1.5px solid rgba(113,211,220,0.3);border-radius:12px;padding:0.75rem 1rem;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.3rem;">
+            <div style="font-size:0.95rem;font-weight:900;color:var(--sf-mid);">Aimpoint Digital</div>
+            <span class="pill" style="font-size:0.58rem;background:rgba(113,211,220,0.1);border-color:rgba(113,211,220,0.35);color:var(--sf-mid);">Quick Wins</span>
+          </div>
+          <p style="font-size:0.76rem;color:var(--text-gray);margin:0 0 0.3rem;max-width:100%;">SC analytics and AI — Snowflake specialists. Builds the data foundations that make planning tools work, fast.</p>
+          <div style="font-size:0.66rem;font-weight:600;color:var(--sf-mid);">✓ Bring in at: S&amp;OP Lead / data foundation conversation</div>
+        </div>
+        <div style="background:rgba(17,86,127,0.04);border:1.5px solid rgba(17,86,127,0.22);border-radius:12px;padding:0.75rem 1rem;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.3rem;">
+            <div style="font-size:0.95rem;font-weight:900;color:var(--sf-mid);">Bluecrux</div>
+            <span class="pill purple" style="font-size:0.58rem;">S&amp;OP · IBP Design</span>
+          </div>
+          <p style="font-size:0.76rem;color:var(--text-gray);margin:0 0 0.3rem;max-width:100%;">SC strategy and transformation. Strongest in S&amp;OP / IBP redesign. Process-first, then technology.</p>
+          <div style="font-size:0.66rem;font-weight:600;color:var(--sf-mid);">✓ Bring in at: IBP transformation / SC redesign conversation</div>
+        </div>
+        <div style="background:rgba(17,86,127,0.05);border-left:3px solid var(--sf-mid);border-radius:0 8px 8px 0;padding:0.45rem 0.75rem;">
+          <p style="font-size:0.76rem;font-weight:600;color:var(--sf-mid);margin:0;max-width:100%;">Lead with Snowflake; bring the partner in once the pain is confirmed.</p>
+        </div>
+      </div>
+
+      <!-- Right: Decision guide -->
+      <div>
+        <div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--sf-blue);margin-bottom:0.5rem;">When you hear this in discovery → bring in…</div>
+        <div style="display:flex;flex-direction:column;gap:0.42rem;">
+          <div style="display:grid;grid-template-columns:1.5fr 1fr 0.55fr;gap:0.6rem;background:#FFFFFF;border:1px solid rgba(17,86,127,0.18);border-radius:9px;padding:0.62rem 0.75rem;align-items:center;">
+            <p style="font-size:0.8rem;font-style:italic;color:var(--text-dark);margin:0;max-width:100%;">"We signed BY / Kinaxis / o9 and it's not delivering."</p>
+            <p style="font-size:0.76rem;color:var(--text-gray);margin:0;">Data feeding the tool is broken. Fast entry.</p>
+            <span class="pill amber" style="font-size:0.65rem;">Aimpoint</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1.5fr 1fr 0.55fr;gap:0.6rem;background:#FFFFFF;border:1px solid rgba(36,158,220,0.22);border-radius:9px;padding:0.62rem 0.75rem;align-items:center;">
+            <p style="font-size:0.8rem;font-style:italic;color:var(--text-dark);margin:0;max-width:100%;">"We can't see beyond tier-1 suppliers."</p>
+            <p style="font-size:0.76rem;color:var(--text-gray);margin:0;">Network complexity — knowledge graph territory.</p>
+            <span class="pill" style="font-size:0.65rem;">RelationalAI</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1.5fr 1fr 0.55fr;gap:0.6rem;background:#FFFFFF;border:1px solid rgba(17,86,127,0.18);border-radius:9px;padding:0.62rem 0.75rem;align-items:center;">
+            <p style="font-size:0.8rem;font-style:italic;color:var(--text-dark);margin:0;max-width:100%;">"Our S&amp;OP process is broken — at the process level."</p>
+            <p style="font-size:0.76rem;color:var(--text-gray);margin:0;">Process transformation before platform.</p>
+            <span class="pill purple" style="font-size:0.65rem;">Bluecrux</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1.5fr 1fr 0.55fr;gap:0.6rem;background:#FFFFFF;border:1px solid rgba(17,86,127,0.18);border-radius:9px;padding:0.62rem 0.75rem;align-items:center;">
+            <p style="font-size:0.8rem;font-style:italic;color:var(--text-dark);margin:0;max-width:100%;">"The board has mandated a SC transformation programme."</p>
+            <p style="font-size:0.76rem;color:var(--text-gray);margin:0;">Executive programme — business case + delivery.</p>
+            <span class="pill purple" style="font-size:0.65rem;">Deloitte</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1.5fr 1fr 0.55fr;gap:0.6rem;background:#FFFFFF;border:1px solid rgba(36,158,220,0.22);border-radius:9px;padding:0.62rem 0.75rem;align-items:center;">
+            <p style="font-size:0.8rem;font-style:italic;color:var(--text-dark);margin:0;max-width:100%;">"We have the data. We can't get our AI models to production."</p>
+            <p style="font-size:0.76rem;color:var(--text-gray);margin:0;">ML foundation needed. Aimpoint accelerates fast.</p>
+            <span class="pill amber" style="font-size:0.65rem;">Aimpoint</span>
+          </div>
+        </div>
+        <div style="background:rgba(36,158,220,0.06);border:1px solid rgba(36,158,220,0.22);border-radius:8px;padding:0.5rem 0.8rem;margin-top:0.5rem;">
+          <p style="font-size:0.78rem;color:var(--sf-mid);margin:0;max-width:100%;"><strong>Note:</strong> these partners are not mutually exclusive. Connect via the SC GTM function before engaging.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="sf-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="22" style="opacity:0.85;"></div>
+</div>
+
+<!-- ══ SLIDE 12 — FOUR VERTICALS ══ -->
+<div class="slide" id="slide-12">
+  <div class="slide-bg bg-white"></div>
+  <div class="slide-content">
+    <h3 class="lbl purple">THE VERTICALS · ~$5.9B EMEA SAM</h3>
+    <h2>Four industries. <span class="hip">Same play.</span> Different vocabulary.</h2>
+    <div style="background:rgba(17,86,127,0.05);border-left:2px solid rgba(17,86,127,0.3);border-radius:0 6px 6px 0;padding:0.28rem 0.7rem;margin-bottom:0.5rem;font-size:0.62rem;color:#64748b;">SAM = Serviceable Addressable Market. Source: Snowflake EMEA SC GTM FY27 strategy. Combined Data Platform + Take-Out SaaS addressable universe per vertical.</div>
+    <div class="divp" style="margin-top:0;"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0.85rem;margin-top:0.3rem;">
+      <div style="background:#FFFFFF;border:1.5px solid rgba(17,86,127,0.3);border-radius:14px;padding:1.1rem;display:flex;flex-direction:column;">
+        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.25rem;">Discrete Manufacturing</div>
+        <div style="font-size:1.6rem;font-weight:900;color:var(--sf-mid);line-height:1;margin-bottom:0.2rem;">~$2.2B</div>
+        <div style="font-size:0.62rem;color:var(--text-light);margin-bottom:0.55rem;">Auto · A&amp;D · Industrial · Electronics</div>
+        <p style="font-size:0.78rem;color:var(--text-gray);margin-bottom:0.55rem;flex:1;">Most fragmented SC data stack of any industry. BOM complexity, OTIF contractual penalties, ERP+MES+PLM+SCADA silos.</p>
+        <div style="font-size:0.68rem;font-weight:700;color:var(--sf-mid);background:rgba(17,86,127,0.06);border-radius:5px;padding:0.22rem 0.5rem;line-height:1.4;">Why we win: tier-2/3 supplier visibility — nobody else does this at scale</div>
+      </div>
+      <div style="background:#FFFFFF;border:1.5px solid rgba(36,158,220,0.32);border-radius:14px;padding:1.1rem;display:flex;flex-direction:column;">
+        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.25rem;">Retail</div>
+        <div style="font-size:1.6rem;font-weight:900;color:var(--sf-blue);line-height:1;margin-bottom:0.2rem;">~$1.3B</div>
+        <div style="font-size:0.62rem;color:var(--text-light);margin-bottom:0.55rem;">Grocery · Fashion · DIY · Specialty</div>
+        <p style="font-size:0.78rem;color:var(--text-gray);margin-bottom:0.55rem;flex:1;">DC-level planning misses store-level stockouts. Markdown too late. Perishable OTIF failures. Omnichannel complexity.</p>
+        <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);background:rgba(36,158,220,0.06);border-radius:5px;padding:0.22rem 0.5rem;line-height:1.4;">Why we win: live POS + weather + foot traffic via Marketplace</div>
+      </div>
+      <div style="background:#FFFFFF;border:1.5px solid rgba(180,83,9,0.32);border-radius:14px;padding:1.1rem;display:flex;flex-direction:column;">
+        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#B45309;margin-bottom:0.25rem;">CPG</div>
+        <div style="font-size:1.6rem;font-weight:900;color:#B45309;line-height:1;margin-bottom:0.2rem;">~$1.5B</div>
+        <div style="font-size:0.62rem;color:var(--text-light);margin-bottom:0.55rem;">F&amp;B · Health &amp; Beauty · Household</div>
+        <p style="font-size:0.78rem;color:var(--text-gray);margin-bottom:0.55rem;flex:1;">NPI with no history, trade promo ROI broken, retailer POS 48–72h stale. Bullwhip effect amplified up the chain.</p>
+        <div style="font-size:0.68rem;font-weight:700;color:#B45309;background:rgba(180,83,9,0.06);border-radius:5px;padding:0.22rem 0.5rem;line-height:1.4;">Why we win: zero-copy POS sharing — live sell-through, no copies, no latency</div>
+      </div>
+      <div style="background:#FFFFFF;border:1.5px solid rgba(13,148,136,0.32);border-radius:14px;padding:1.1rem;display:flex;flex-direction:column;">
+        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#0d9488;margin-bottom:0.25rem;">Pharma &amp; Life Sciences</div>
+        <div style="font-size:1.6rem;font-weight:900;color:#0d9488;line-height:1;margin-bottom:0.2rem;">~$0.9B</div>
+        <div style="font-size:0.62rem;color:var(--text-light);margin-bottom:0.55rem;">Branded · Generic · Biotech · CGT</div>
+        <p style="font-size:0.78rem;color:var(--text-gray);margin-bottom:0.55rem;flex:1;">DSCSA/EU FMD/GxP batch traceability, cold chain IoT, multi-channel demand uncertainty. Recall in hours, not days.</p>
+        <div style="font-size:0.68rem;font-weight:700;color:#0d9488;background:rgba(13,148,136,0.06);border-radius:5px;padding:0.22rem 0.5rem;line-height:1.4;">Why we win: the regulation IS the business case — DSCSA &amp; EU FMD built on Snowflake</div>
+      </div>
+    </div>
+    <div style="margin-top:0.7rem;text-align:right;">
+      <a href="sc-field-enablement-REFERENCE.html" target="_blank" style="font-size:0.72rem;font-weight:600;color:var(--sf-mid);text-decoration:none;background:rgba(17,86,127,0.06);border:1px solid rgba(17,86,127,0.18);border-radius:999px;padding:0.28rem 0.85rem;">Full industry deep dives + sub-verticals in reference deck →</a>
+    </div>
+  </div>
+  <div class="sf-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="24" style="opacity:0.85;"></div>
+  <div class="slide-number">12 / 13</div>
+</div>
+
+<!-- ══ SLIDE 15-MAP — CONSUMPTION MAP ══ -->
+<div class="slide" id="slide-15-map">
+  <div class="slide-bg bg-white"></div>
+  <div class="slide-content" style="padding-top:1.8rem;padding-bottom:1.8rem;">
+    <h3 class="lbl">QUOTA RETIREMENT · CONSUMPTION MAP</h3>
+    <h2>How Supply Chain Workloads <span class="hi">Drive Snowflake Consumption</span></h2>
+    <div class="div"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;align-items:stretch;">
+      <div style="background:#FFFFFF;border:1.5px solid rgba(36,158,220,0.35);border-radius:12px;padding:0.9rem 1rem;display:flex;flex-direction:column;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.4rem;">
+          <div style="font-size:0.82rem;font-weight:800;color:var(--sf-mid);">Data Ingestion &amp; Storage</div>
+          <span class="pill" style="font-size:0.6rem;margin:0;padding:0.15rem 0.55rem;">High Volume</span>
+        </div>
+        <p style="font-size:0.78rem;margin-bottom:0.5rem;flex:1;">Snowpipe + Dynamic Tables stream ERP, WMS, POS, and IoT data continuously. SC data is large, high-frequency, and multi-source. Storage + continuous compute = significant baseline consumption.</p>
+        <div style="display:flex;gap:0.35rem;flex-wrap:wrap;">
+          <span style="font-size:0.62rem;background:rgba(36,158,220,0.08);border:1px solid rgba(36,158,220,0.2);border-radius:4px;padding:0.12rem 0.4rem;color:var(--sf-blue);font-weight:600;">Snowpipe</span>
+          <span style="font-size:0.62rem;background:rgba(36,158,220,0.08);border:1px solid rgba(36,158,220,0.2);border-radius:4px;padding:0.12rem 0.4rem;color:var(--sf-blue);font-weight:600;">Dynamic Tables</span>
+          <span style="font-size:0.62rem;background:rgba(36,158,220,0.08);border:1px solid rgba(36,158,220,0.2);border-radius:4px;padding:0.12rem 0.4rem;color:var(--sf-blue);font-weight:600;">Storage</span>
+        </div>
+      </div>
+      <div style="background:#FFFFFF;border:1.5px solid rgba(36,158,220,0.35);border-radius:12px;padding:0.9rem 1rem;display:flex;flex-direction:column;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.4rem;">
+          <div style="font-size:0.82rem;font-weight:800;color:var(--sf-mid);">Cortex AI — Forecasting &amp; ML</div>
+          <span class="pill" style="font-size:0.6rem;margin:0;padding:0.15rem 0.55rem;">High Value</span>
+        </div>
+        <p style="font-size:0.78rem;margin-bottom:0.5rem;flex:1;">Demand forecasting models retrain on every new signal. Anomaly detection runs over IoT/SCADA streams. Supplier risk scoring at scale. Each model training and inference cycle = compute credits.</p>
+        <div style="display:flex;gap:0.35rem;flex-wrap:wrap;">
+          <span style="font-size:0.62rem;background:rgba(36,158,220,0.08);border:1px solid rgba(36,158,220,0.2);border-radius:4px;padding:0.12rem 0.4rem;color:var(--sf-blue);font-weight:600;">Cortex ML</span>
+          <span style="font-size:0.62rem;background:rgba(36,158,220,0.08);border:1px solid rgba(36,158,220,0.2);border-radius:4px;padding:0.12rem 0.4rem;color:var(--sf-blue);font-weight:600;">AI Functions</span>
+          <span style="font-size:0.62rem;background:rgba(36,158,220,0.08);border:1px solid rgba(36,158,220,0.2);border-radius:4px;padding:0.12rem 0.4rem;color:var(--sf-blue);font-weight:600;">Forecasting</span>
+        </div>
+      </div>
+      <div style="background:#FFFFFF;border:1.5px solid rgba(36,158,220,0.35);border-radius:12px;padding:0.9rem 1rem;display:flex;flex-direction:column;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.4rem;">
+          <div style="font-size:0.82rem;font-weight:800;color:var(--sf-mid);">Cortex Analyst — Self-Service</div>
+          <span class="pill" style="font-size:0.6rem;margin:0;padding:0.15rem 0.55rem;">User Growth</span>
+        </div>
+        <p style="font-size:0.78rem;margin-bottom:0.5rem;flex:1;">Every SC query that used to take 3 days via IT ticket now runs in 2.4 seconds. S&amp;OP packs on demand. More users asking more questions = more compute. Scales with user adoption.</p>
+        <div style="display:flex;gap:0.35rem;flex-wrap:wrap;">
+          <span style="font-size:0.62rem;background:rgba(36,158,220,0.08);border:1px solid rgba(36,158,220,0.2);border-radius:4px;padding:0.12rem 0.4rem;color:var(--sf-blue);font-weight:600;">Cortex Analyst</span>
+          <span style="font-size:0.62rem;background:rgba(36,158,220,0.08);border:1px solid rgba(36,158,220,0.2);border-radius:4px;padding:0.12rem 0.4rem;color:var(--sf-blue);font-weight:600;">Compute</span>
+        </div>
+      </div>
+      <div style="background:#FFFFFF;border:1.5px solid rgba(17,86,127,0.25);border-radius:12px;padding:0.9rem 1rem;display:flex;flex-direction:column;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.4rem;">
+          <div style="font-size:0.82rem;font-weight:800;color:var(--sf-mid);">Cortex Agents — Closed Loop</div>
+          <span class="pill purple" style="font-size:0.6rem;margin:0;padding:0.15rem 0.55rem;">AI Premium</span>
+        </div>
+        <p style="font-size:0.78rem;margin-bottom:0.5rem;flex:1;">Always-on agents monitoring supply exceptions, generating recommendations, executing actions. Each agent run = LLM tokens + compute. The more automation a customer builds, the more it consumes. Autonomous SC is the highest-value Cortex consumption driver.</p>
+        <div style="display:flex;gap:0.35rem;flex-wrap:wrap;">
+          <span style="font-size:0.62rem;background:rgba(17,86,127,0.08);border:1px solid rgba(17,86,127,0.2);border-radius:4px;padding:0.12rem 0.4rem;color:var(--sf-mid);font-weight:600;">Cortex Agents</span>
+          <span style="font-size:0.62rem;background:rgba(17,86,127,0.08);border:1px solid rgba(17,86,127,0.2);border-radius:4px;padding:0.12rem 0.4rem;color:var(--sf-mid);font-weight:600;">LLM Tokens</span>
+        </div>
+      </div>
+      <div style="background:#FFFFFF;border:1.5px solid rgba(17,86,127,0.25);border-radius:12px;padding:0.9rem 1rem;display:flex;flex-direction:column;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.4rem;">
+          <div style="font-size:0.82rem;font-weight:800;color:var(--sf-mid);">Secure Data Sharing</div>
+          <span class="pill purple" style="font-size:0.6rem;margin:0;padding:0.15rem 0.55rem;">Multi-Party</span>
+        </div>
+        <p style="font-size:0.78rem;margin-bottom:0.5rem;flex:1;">Supplier collaboration, retailer POS sharing, logistics partner data exchange — all zero-copy. CPG companies with 50 retail partners = 50 new Snowflake touchpoints. Network effects compound.</p>
+        <div style="display:flex;gap:0.35rem;flex-wrap:wrap;">
+          <span style="font-size:0.62rem;background:rgba(17,86,127,0.08);border:1px solid rgba(17,86,127,0.2);border-radius:4px;padding:0.12rem 0.4rem;color:var(--sf-mid);font-weight:600;">Data Sharing</span>
+          <span style="font-size:0.62rem;background:rgba(17,86,127,0.08);border:1px solid rgba(17,86,127,0.2);border-radius:4px;padding:0.12rem 0.4rem;color:var(--sf-mid);font-weight:600;">Network Expansion</span>
+        </div>
+      </div>
+      <div style="background:#FFFFFF;border:1.5px solid rgba(17,86,127,0.25);border-radius:12px;padding:0.9rem 1rem;display:flex;flex-direction:column;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.4rem;">
+          <div style="font-size:0.82rem;font-weight:800;color:var(--sf-mid);">Marketplace — External Signals</div>
+          <span class="pill purple" style="font-size:0.6rem;margin:0;padding:0.15rem 0.55rem;">Enrichment</span>
+        </div>
+        <p style="font-size:0.78rem;margin-bottom:0.5rem;flex:1;">3,600+ live datasets. SC use cases consume: weather data (demand sensing), geo data (store-level planning), port/carrier data (supplier risk), commodity pricing (procurement hedging). Each Marketplace subscription = ARR.</p>
+        <div style="display:flex;gap:0.35rem;flex-wrap:wrap;">
+          <span style="font-size:0.62rem;background:rgba(17,86,127,0.08);border:1px solid rgba(17,86,127,0.2);border-radius:4px;padding:0.12rem 0.4rem;color:var(--sf-mid);font-weight:600;">Marketplace</span>
+          <span style="font-size:0.62rem;background:rgba(17,86,127,0.08);border:1px solid rgba(17,86,127,0.2);border-radius:4px;padding:0.12rem 0.4rem;color:var(--sf-mid);font-weight:600;">3,600+ Datasets</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:0.7rem;background:linear-gradient(90deg,rgba(36,158,220,0.07),rgba(113,211,220,0.04));border:1px solid rgba(36,158,220,0.22);border-radius:10px;padding:0.6rem 1.1rem;">
+      <p style="font-size:0.79rem;color:var(--text-gray);margin:0;max-width:100%;"><strong style="color:var(--sf-mid);">Why SC deals compound:</strong> A customer starts with data ingestion, adds forecasting, then self-service analytics, then agents, then shares data with partners. ARR grows with every capability layer added.</p>
+    </div>
+  </div>
+  <div class="sf-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="24" style="opacity:0.85;"></div>
+</div>
+
+<!-- ══ SLIDE 13 — WORKING WITH EMILY ══ -->
+<div class="slide dark-slide" id="slide-13">
+  <div class="slide-bg" style="background:var(--sf-deep);"></div>
+  <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse at 80% 30%,rgba(113,211,220,0.1) 0%,rgba(4,33,48,0) 60%);"></div>
+  <div class="slide-content">
+    <h3 class="lbl" style="color:rgba(255,255,255,0.5);">WORKING TOGETHER · SC GTM FUNCTION</h3>
+    <h2 style="color:#FFFFFF;">What the SC GTM function <span style="color:var(--sf-star);">does for you</span> — and how to engage it</h2>
+    <div style="width:60px;height:3px;background:rgba(255,255,255,0.2);margin:0.7rem 0 1rem;border-radius:2px;"></div>
+    <div style="display:grid;grid-template-columns:1.1fr 0.9fr;gap:1.1rem;">
+      <div style="display:flex;flex-direction:column;gap:0.55rem;">
+        <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.4);margin-bottom:0.1rem;">What I can do for this team</div>
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.7rem 0.9rem;display:flex;gap:0.7rem;align-items:flex-start;">
+          <div style="width:28px;height:28px;background:rgba(113,211,220,0.12);border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:0.1rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sf-star)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 12 12 14 14"/></svg></div>
+          <div><div style="font-size:0.82rem;font-weight:700;color:#FFFFFF;margin-bottom:0.18rem;">Account strategy &amp; narrative</div><p style="font-size:0.78rem;color:rgba(255,255,255,0.58);margin:0;max-width:100%;">Industry-specific framing, proof points, discovery question prep — before any SC-first conversation. Tell me the account; I'll give you the story.</p></div>
+        </div>
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.7rem 0.9rem;display:flex;gap:0.7rem;align-items:flex-start;">
+          <div style="width:28px;height:28px;background:rgba(113,211,220,0.12);border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:0.1rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sf-star)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div><div style="font-size:0.82rem;font-weight:700;color:#FFFFFF;margin-bottom:0.18rem;">Partner advice &amp; warm introductions</div><p style="font-size:0.78rem;color:rgba(255,255,255,0.58);margin:0;max-width:100%;">Advice on which partner fits the opportunity and warm intros to Deloitte, RelationalAI, Aimpoint, Bluecrux.</p></div>
+        </div>
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.7rem 0.9rem;display:flex;gap:0.7rem;align-items:flex-start;">
+          <div style="width:28px;height:28px;background:rgba(113,211,220,0.12);border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:0.1rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sf-star)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
+          <div><div style="font-size:0.82rem;font-weight:700;color:#FFFFFF;margin-bottom:0.18rem;">Open the door — use my arrival</div><p style="font-size:0.78rem;color:rgba(255,255,255,0.58);margin:0;max-width:100%;">New SC GTM function = a credible reason to reach out to SC contacts who've gone cold. Let's use the moment to re-engage your accounts.</p></div>
+        </div>
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.7rem 0.9rem;display:flex;gap:0.7rem;align-items:flex-start;">
+          <div style="width:28px;height:28px;background:rgba(113,211,220,0.12);border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:0.1rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sf-star)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+          <div><div style="font-size:0.82rem;font-weight:700;color:#FFFFFF;margin-bottom:0.18rem;">Content, collateral &amp; demo</div><p style="font-size:0.78rem;color:rgba(255,255,255,0.58);margin:0;max-width:100%;">First-meeting decks, ICP guides, SDR cheat sheets — and a SC-specific demo narrative for qualified pipeline.</p></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.6rem;">
+        <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.4);margin-bottom:0.1rem;">How to engage — what to bring me</div>
+        <div style="background:rgba(113,211,220,0.07);border:1.5px solid rgba(113,211,220,0.2);border-radius:10px;padding:0.85rem 1rem;">
+          <div style="font-size:0.8rem;font-weight:800;color:var(--sf-star);margin-bottom:0.5rem;">The minimum I need to be useful:</div>
+          <div style="display:flex;flex-direction:column;gap:0.3rem;">
+            <div style="display:flex;gap:0.5rem;"><span style="color:var(--sf-star);font-weight:700;flex-shrink:0;">1.</span><span style="font-size:0.8rem;color:rgba(255,255,255,0.7);">Their tech stack — what APS tool, what ERP <span style="color:rgba(255,255,255,0.38);font-size:0.72rem;">(shapes the story I tell)</span></span></div>
+            <div style="display:flex;gap:0.5rem;"><span style="color:var(--sf-star);font-weight:700;flex-shrink:0;">2.</span><span style="font-size:0.8rem;color:rgba(255,255,255,0.7);">The pain you've heard — even one sentence <span style="color:rgba(255,255,255,0.38);font-size:0.72rem;">(tells me where to land)</span></span></div>
+            <div style="display:flex;gap:0.5rem;"><span style="color:var(--sf-star);font-weight:700;flex-shrink:0;">3.</span><span style="font-size:0.8rem;color:rgba(255,255,255,0.7);">What you want out of the next meeting <span style="color:rgba(255,255,255,0.38);font-size:0.72rem;">(sets my role)</span></span></div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.8rem 0.95rem;">
+          <div style="font-size:0.78rem;font-weight:700;color:#FFFFFF;margin-bottom:0.4rem;">I add most value at senior level</div>
+          <p style="font-size:0.76rem;color:rgba(255,255,255,0.6);margin:0 0 0.35rem;max-width:100%;">C-suite and Director — one level below. The problems we solve (OTIF, resilience, cost-to-serve) are <strong style="color:rgba(255,255,255,0.8);">P&amp;L problems, not IT problems.</strong></p>
+          <p style="font-size:0.76rem;color:rgba(255,255,255,0.6);margin:0;max-width:100%;">SC planners are in execution mode with their current tool — they won't sponsor a platform play. The CSCO or CFO feels the pain and has the budget.</p>
+        </div>
+        <div style="background:rgba(36,158,220,0.08);border:1.5px solid rgba(36,158,220,0.2);border-radius:10px;padding:0.75rem 0.9rem;display:flex;align-items:center;gap:0.75rem;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--sf-star)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <div>
+            <div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.38);margin-bottom:0.15rem;">Join us on Slack</div>
+            <div style="font-size:0.95rem;font-weight:800;color:var(--sf-star);">#supply-chain</div>
+            <div style="font-size:0.7rem;color:rgba(255,255,255,0.42);margin-top:0.1rem;">SC deals, intros, collateral requests</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sf-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="22"></div>
+  <div class="slide-number">13 / 13</div>
+</div>
+
+</div><!-- /deck -->
+
+<div id="tip-v2"></div>
+
+<div class="controls">
+  <button class="ctrl-btn" onclick="prevSlide()">← Prev</button>
+  <select class="slide-sel" id="slideSelect" onchange="goTo(parseInt(this.value)-1)">
+    <option value="1">01 — Supply Chain with Snowflake</option>
+    <option value="2">02 — The complexity build</option>
+    <option value="3">03 — Ben &amp; Jerry's</option>
+    <option value="4">04 — Tech stack: reveal</option>
+    <option value="5">05 — Toyota: the 8-cent chip</option>
+    <option value="6">06 — 50 cents of every pound (EMEA)</option>
+    <option value="7">07 — The AI moment</option>
+    <option value="8">08 — Tech stack: full detail</option>
+    <option value="9">09 — Personas</option>
+    <option value="10">10 — Persona language guide</option>
+    <option value="11">11 — Business case</option>
+    <option value="12">12 — Partners</option>
+    <option value="13">13 — Four verticals</option>
+    <option value="14">14 — Consumption map</option>
+    <option value="15">15 — Working with Emily</option>
+  </select>
+  <button class="ctrl-btn" onclick="nextSlide()">Next →</button>
+</div>
+
+<script>
+/* ─── NAVIGATION ─── */
+const SLIDES=['slide-1','slide-2','slide-3','slide-4','slide-5','slide-6','slide-7',
+              'slide-8-tech','slide-8','slide-9','slide-11-biz','slide-10-11',
+              'slide-12','slide-15-map','slide-13'];
+const TOTAL=SLIDES.length; let current=0;
+let techState='A';
+let techAnimInterval=null;
+
+function goTo(i){
+  if(i<0)i=0;if(i>=TOTAL)i=TOTAL-1;
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  document.getElementById(SLIDES[i]).classList.add('active');
+  document.getElementById('progressBar').style.width=((i+1)/TOTAL*100)+'%';
+  document.getElementById('slideSelect').value=i+1;
+  current=i;
+  // Start/stop tech animation
+  if(i===3){
+    if(techState==='B'){
+      techState='A';
+      const rhs=document.getElementById('rhs-panel');if(rhs)rhs.style.display='none';
+      const lhs=document.getElementById('lhs-panel');if(lhs){lhs.style.display='block';lhs.style.opacity='1';lhs.style.transition='';}
+    }
+    startTechAnim();
+  } else stopTechAnim();
+  // Render build slide
+  if(i===1) renderS2();
+}
+
+function nextSlide(){
+  // Tech stack: intercept first → to reveal RHS
+  if(current===3&&techState==='A'){
+    techState='B';
+    stopTechAnim();
+    const lhs=document.getElementById('lhs-panel');
+    const rhs=document.getElementById('rhs-panel');
+    lhs.style.opacity='0';lhs.style.transition='opacity 0.3s ease';
+    setTimeout(()=>{
+      lhs.style.display='none';
+      rhs.style.display='block';rhs.style.opacity='0';rhs.style.transition='opacity 0.5s ease';
+      requestAnimationFrame(()=>rhs.style.opacity='1');
+    },300);
+    return;
+  }
+  // Build slide: intercept to advance states
+  if(current===1&&s2step<S2_STEPS.length-1){
+    s2step++;renderS2();return;
+  }
+  if(current<TOTAL-1)goTo(current+1);
+}
+function prevSlide(){
+  // Build slide: go back through states
+  if(current===1&&s2step>0){s2step--;renderS2();return;}
+  // Tech stack: reset on back
+  if(current===3&&techState==='B'){
+    techState='A';
+    document.getElementById('rhs-panel').style.display='none';
+    const lhs=document.getElementById('lhs-panel');
+    lhs.style.display='block';lhs.style.opacity='1';lhs.style.transition='';
+    startTechAnim();return;
+  }
+  if(current>0)goTo(current-1);
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();nextSlide();}
+  if(e.key==='ArrowLeft'){e.preventDefault();prevSlide();}
+});
+
+/* ─── TECH STACK VIZ ─── */
+(function(){
+  if(window._v2TechReady)return;window._v2TechReady=true;
+  const NS="http://www.w3.org/2000/svg";
+  function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v));if(parent)parent.appendChild(e);return e;}
+  function txt(c,attrs,parent){const t=el("text",attrs,parent);t.textContent=c;return t;}
+  const LD=[{id:"erp",name:"ERP & Finance",color:"#6366f1",nodes:[{id:"sap_s4",label:"SAP S/4HANA",info:"Core ERP, GL, master data hub"},{id:"oracle_ebs",label:"Oracle EBS",info:"ERP — finance, HR, procurement"},{id:"workday",label:"Workday",info:"HR, payroll, workforce mgmt"},{id:"infor",label:"Infor CloudSuite",info:"Industry-specific ERP"}]},{id:"planning",name:"Planning & S&OP",color:"#8b5cf6",nodes:[{id:"by_dp",label:"Blue Yonder DP",info:"Demand planning & ML forecasting"},{id:"kinaxis",label:"Kinaxis",info:"Concurrent planning"},{id:"o9",label:"o9 Solutions",info:"Integrated business planning"},{id:"sap_ibp",label:"SAP IBP",info:"S&OP, demand & supply planning"},{id:"anaplan",label:"Anaplan",info:"Connected planning & FP&A"}]},{id:"procurement",name:"Procurement & SRM",color:"#a855f7",nodes:[{id:"ariba",label:"SAP Ariba",info:"Procurement & supplier mgmt"},{id:"coupa",label:"Coupa",info:"Business spend management"},{id:"jaggaer",label:"Jaggaer",info:"Source-to-pay platform"},{id:"ivalua",label:"Ivalua",info:"Procurement & supplier risk"},{id:"sup_port",label:"Supplier Portal",info:"Custom B2B collaboration"}]},{id:"mfg",name:"Manufacturing & Quality",color:"#ec4899",nodes:[{id:"siemens",label:"Siemens Opcenter",info:"Manufacturing execution system"},{id:"plex",label:"Plex MES",info:"Cloud manufacturing platform"},{id:"qms",label:"Veeva QMS",info:"Quality management system"},{id:"plm",label:"PTC Windchill",info:"Product lifecycle management"},{id:"scada",label:"SCADA / IIoT",info:"Factory automation & sensor data"}]},{id:"warehouse",name:"Warehouse & Fulfillment",color:"#f97316",nodes:[{id:"manhattan",label:"Manhattan WMS",info:"Warehouse management system"},{id:"by_wms",label:"Blue Yonder WMS",info:"Warehouse & labor management"},{id:"oracle_wms",label:"Oracle WMS",info:"Warehouse management"},{id:"lms",label:"Labor Mgmt",info:"Workforce productivity"},{id:"yms",label:"Yard Mgmt",info:"Dock & yard scheduling"}]},{id:"transport",name:"Transport & Visibility",color:"#eab308",nodes:[{id:"oracle_tms",label:"Oracle TMS",info:"Transportation management"},{id:"by_tms",label:"Blue Yonder TMS",info:"Transport planning & execution"},{id:"p44",label:"project44",info:"Multimodal visibility"},{id:"fourkites",label:"FourKites",info:"Real-time shipment visibility"},{id:"descartes",label:"Descartes",info:"Logistics & compliance"}]},{id:"orders",name:"Sales, Orders & CX",color:"#22c55e",nodes:[{id:"salesforce",label:"Salesforce CRM",info:"Customer relationship mgmt"},{id:"sterling",label:"Sterling OMS",info:"Order management"},{id:"edi",label:"EDI Gateway",info:"B2B data interchange"},{id:"ecomm",label:"Commerce Platform",info:"eCommerce / DTC"},{id:"service",label:"Service Cloud",info:"Customer service & returns"}]},{id:"analytics",name:"Analytics & AI",color:"#06b6d4",nodes:[{id:"dw",label:"Data Warehouse",info:"Central analytics store"},{id:"bi",label:"BI / Reporting",info:"Tableau, Power BI"},{id:"databricks",label:"Databricks",info:"Data engineering & ML"},{id:"ml_models",label:"Custom ML Models",info:"Demand sensing, anomaly detection"}]}];
+  const EDGES=[["sap_s4","by_dp"],["sap_s4","kinaxis"],["sap_s4","sap_ibp"],["oracle_ebs","o9"],["oracle_ebs","anaplan"],["infor","kinaxis"],["sap_s4","ariba"],["oracle_ebs","coupa"],["sap_s4","jaggaer"],["workday","ariba"],["sap_s4","siemens"],["oracle_ebs","plex"],["sap_s4","qms"],["sap_s4","plm"],["infor","siemens"],["sap_s4","manhattan"],["oracle_ebs","oracle_wms"],["sap_s4","by_wms"],["sap_s4","oracle_tms"],["oracle_ebs","by_tms"],["sap_s4","sterling"],["sap_s4","salesforce"],["oracle_ebs","sterling"],["sap_s4","dw"],["oracle_ebs","dw"],["workday","dw"],["infor","dw"],["sap_ibp","ariba"],["kinaxis","coupa"],["by_dp","sup_port"],["kinaxis","siemens"],["sap_ibp","plex"],["by_dp","plex"],["o9","siemens"],["anaplan","siemens"],["by_dp","manhattan"],["kinaxis","by_wms"],["sap_ibp","oracle_wms"],["by_dp","dw"],["kinaxis","dw"],["o9","databricks"],["anaplan","dw"],["sap_ibp","dw"],["ariba","siemens"],["coupa","qms"],["jaggaer","plm"],["sup_port","siemens"],["ivalua","qms"],["ariba","dw"],["coupa","dw"],["jaggaer","dw"],["siemens","manhattan"],["plex","by_wms"],["siemens","oracle_wms"],["scada","databricks"],["siemens","dw"],["plex","dw"],["scada","dw"],["qms","dw"],["plm","dw"],["manhattan","oracle_tms"],["by_wms","by_tms"],["oracle_wms","descartes"],["yms","oracle_tms"],["manhattan","by_tms"],["lms","dw"],["manhattan","sterling"],["by_wms","sterling"],["oracle_wms","service"],["manhattan","dw"],["by_wms","dw"],["oracle_tms","sterling"],["by_tms","service"],["p44","sterling"],["fourkites","salesforce"],["p44","ecomm"],["descartes","edi"],["oracle_tms","dw"],["p44","dw"],["fourkites","databricks"],["descartes","dw"],["salesforce","dw"],["sterling","dw"],["edi","dw"],["ecomm","dw"],["service","dw"],["salesforce","sterling"],["edi","sterling"],["ecomm","sterling"],["edi","by_dp"],["edi","sap_ibp"],["fourkites","sterling"],["p44","salesforce"],["dw","bi"],["databricks","dw"],["databricks","ml_models"],["dw","ml_models"]];
+  const LW=640,LH=520,LML=114,LMT=26,LMB=30,LPW=LW-LML-12,LPH=LH-LMT-LMB,NL=LD.length;
+  const byID={},nodes=[];
+  LD.forEach((layer,li)=>{const y=LMT+(li/(NL-1))*LPH;layer.y=y;layer.nodes.forEach((node,ni)=>{node.x=LML+((ni+1)/(layer.nodes.length+1))*LPW;node.y=y;node.color=layer.color;node.layerName=layer.name;byID[node.id]=node;nodes.push(node);});});
+  const edges=EDGES.filter(([a,b])=>byID[a]&&byID[b]).map(([a,b])=>({s:byID[a],t:byID[b]}));
+  const adj={};nodes.forEach(n=>{adj[n.id]=new Set();});edges.forEach(({s,t})=>{adj[s.id].add(t.id);adj[t.id].add(s.id);});
+  const lSvg=document.getElementById("lhs-svg-v2");
+  LD.forEach(layer=>{el("rect",{x:3,y:layer.y-11,width:LML-8,height:22,rx:5,fill:layer.color,"fill-opacity":"0.14"},lSvg);txt(layer.name,{x:LML-10,y:layer.y+4,"text-anchor":"end","font-size":"8.5px","font-weight":"600",fill:layer.color,"font-family":"system-ui,sans-serif"},lSvg);});
+  const eG=el("g",{},lSvg);
+  const eEls=edges.map(({s,t})=>{const my=(s.y+t.y)/2;const p=el("path",{d:`M${s.x},${s.y} C${s.x},${my} ${t.x},${my} ${t.x},${t.y}`,stroke:s.color,"stroke-opacity":"0.22","stroke-width":"1.2",fill:"none","stroke-linecap":"round"},eG);p._s=s;p._t=t;return p;});
+  const nG=el("g",{},lSvg);const nEls={};
+  nodes.forEach(node=>{const g=el("g",{transform:`translate(${node.x},${node.y})`,style:"cursor:pointer"},nG);const circle=el("circle",{r:"6",fill:node.color,"fill-opacity":"0.88",stroke:node.color,"stroke-width":"1.5"},g);const label=txt(node.label,{y:"15","text-anchor":"middle","font-size":"8px","font-weight":"500",fill:node.color,"font-family":"system-ui,sans-serif","pointer-events":"none"},g);nEls[node.id]={g,circle,label,node};g.addEventListener("mouseenter",ev=>{hlNode(node);showTip(ev,node);});g.addEventListener("mousemove",moveTip);g.addEventListener("mouseleave",()=>{resetHL();hideTip();});});
+  function hlNode(h){const c=adj[h.id];eEls.forEach(p=>{const on=p._s.id===h.id||p._t.id===h.id;p.setAttribute("stroke-opacity",on?"0.85":"0.05");p.setAttribute("stroke-width",on?"2.2":"0.9");p.setAttribute("stroke",on?(p._s.id===h.id?p._s.color:p._t.color):p._s.color);});Object.values(nEls).forEach(({circle,label,node:n})=>{const isH=n.id===h.id,isC=c.has(n.id);circle.setAttribute("r",isH?"9":isC?"7":"5");circle.setAttribute("fill-opacity",isH?"1":isC?"0.9":"0.18");label.setAttribute("fill-opacity",isH||isC?"1":"0.18");});}
+  function resetHL(){eEls.forEach(p=>{p.setAttribute("stroke-opacity","0.22");p.setAttribute("stroke-width","1.2");p.setAttribute("stroke",p._s.color);});Object.values(nEls).forEach(({circle,label})=>{circle.setAttribute("r","6");circle.setAttribute("fill-opacity","0.88");label.setAttribute("fill-opacity","1");});}
+  const leg=document.getElementById("lhs-legend-v2");
+  LD.forEach(layer=>{const d=document.createElement("div");d.style.cssText="display:flex;align-items:center;gap:3px;";d.innerHTML=`<span style="width:6px;height:6px;border-radius:50%;background:${layer.color};display:inline-block;flex-shrink:0;"></span>${layer.name}`;leg.appendChild(d);});
+  const RD=[{name:"ERP & Finance",color:"#6366f1",ex1:"SAP S/4 · Oracle EBS",ex2:"Workday · Infor"},{name:"Planning & S&OP",color:"#8b5cf6",ex1:"Kinaxis · Blue Yonder",ex2:"SAP IBP · Anaplan"},{name:"Procurement & SRM",color:"#a855f7",ex1:"SAP Ariba · Coupa",ex2:"Jaggaer · Ivalua"},{name:"Manufacturing",color:"#ec4899",ex1:"Siemens · Plex MES",ex2:"QMS · PLM · SCADA"},{name:"Warehouse",color:"#f97316",ex1:"Manhattan · BY WMS",ex2:"Oracle WMS · LMS"},{name:"Transport & Visibility",color:"#eab308",ex1:"Oracle TMS · BY TMS",ex2:"project44 · FourKites"},{name:"Sales, Orders & CX",color:"#22c55e",ex1:"Salesforce · Sterling",ex2:"EDI · eCommerce"}];
+  const rSvg=document.getElementById("rhs-svg-v2");
+  const hexPts=(cx,cy,r)=>Array.from({length:6},(_,i)=>{const a=i*60*Math.PI/180;return`${cx+r*Math.cos(a)},${cy+r*Math.sin(a)}`;}).join(" ");
+  const rW=640,rH=520,rML=20,rMT=26,rBH=50,rBPH=rH-rMT-30,rNR=RD.length;
+  const defs=el("defs",{},rSvg);
+  const filt=el("filter",{id:"glow-v2",x:"-50%",y:"-50%",width:"200%",height:"200%"},defs);el("feGaussianBlur",{stdDeviation:"9",result:"blur"},filt);const mrg=el("feMerge",{},filt);el("feMergeNode",{in:"blur"},mrg);el("feMergeNode",{in:"SourceGraphic"},mrg);
+  const sfHex=el("g",{class:"sf-hex",filter:"url(#glow-v2)"},rSvg);const sfCX=400,sfCY=260;
+  el("polygon",{points:hexPts(sfCX,sfCY,62),fill:"rgba(36,158,220,0.18)",stroke:"#29b5e8","stroke-width":"2.5"},sfHex);
+  txt("SNOWFLAKE",{x:sfCX,y:sfCY-8,"text-anchor":"middle","font-size":"9px","font-weight":"800",fill:"#29b5e8","font-family":"system-ui,sans-serif"},sfHex);
+  txt("Data Cloud",{x:sfCX,y:sfCY+7,"text-anchor":"middle","font-size":"8px",fill:"rgba(41,181,232,0.75)","font-family":"system-ui,sans-serif"},sfHex);
+  txt("AI-Ready · Governed",{x:sfCX,y:sfCY+19,"text-anchor":"middle","font-size":"6.5px",fill:"rgba(41,181,232,0.55)","font-family":"system-ui,sans-serif"},sfHex);
+  RD.forEach((d,i)=>{d.y=rMT+(i/(rNR-1))*rBPH;});
+  RD.forEach(d=>{const cx2=(sfCX+130+rW)/2;const my=(d.y+sfCY)/2;const pathEl=el("path",{d:`M${sfCX+64},${sfCY} C${sfCX+100},${sfCY} ${cx2},${my} ${sfCX+130},${d.y}`,stroke:d.color,"stroke-opacity":"0.55","stroke-width":"1.5",fill:"none",class:"rhs-flow"},rSvg);});
+  RD.forEach(d=>{el("rect",{x:sfCX+130,y:d.y-rBH/2,width:110,height:rBH,rx:6,fill:d.color,"fill-opacity":"0.1",stroke:d.color,"stroke-width":"1.5"},rSvg);txt(d.name,{x:sfCX+185,y:d.y-9,"text-anchor":"middle","font-size":"7.5px","font-weight":"700",fill:d.color,"font-family":"system-ui,sans-serif"},rSvg);txt(d.ex1,{x:sfCX+185,y:d.y+4,"text-anchor":"middle","font-size":"6.5px",fill:d.color,"fill-opacity":"0.75","font-family":"system-ui,sans-serif"},rSvg);txt(d.ex2,{x:sfCX+185,y:d.y+14,"text-anchor":"middle","font-size":"6.5px",fill:d.color,"fill-opacity":"0.55","font-family":"system-ui,sans-serif"},rSvg);});
+  const tip=document.getElementById("tip-v2");
+  function showTip(ev,n){tip.innerHTML=`<strong style="color:${n.color}">${n.label}</strong><br><span style="opacity:0.75">${n.info}</span><br><span style="font-size:0.65rem;opacity:0.5">${n.layerName}</span>`;tip.style.opacity="1";}
+  function moveTip(ev){tip.style.left=(ev.clientX+14)+"px";tip.style.top=(ev.clientY-10)+"px";}
+  function hideTip(){tip.style.opacity="0";}
+  // Random flash animation for chaos state
+  window._eEls=eEls;
+  window.startTechAnim=function(){
+    if(techAnimInterval)return;
+    techAnimInterval=setInterval(()=>{
+      const picks=[Math.floor(Math.random()*eEls.length),Math.floor(Math.random()*eEls.length),Math.floor(Math.random()*eEls.length)];
+      picks.forEach(idx=>{
+        const p=eEls[idx];
+        if(!p)return;
+        p.setAttribute('stroke-opacity','0.9');
+        p.setAttribute('stroke-width','2.8');
+        setTimeout(()=>{p.setAttribute('stroke-opacity','0.22');p.setAttribute('stroke-width','1.2');},700);
+      });
+    },550);
+  };
+  window.stopTechAnim=function(){if(techAnimInterval){clearInterval(techAnimInterval);techAnimInterval=null;}};
+
+  // ── Also initialise slide-8-tech SVGs (same data, different element IDs) ──
+  const s8L=document.getElementById('lhs-svg-s8');
+  const s8R=document.getElementById('rhs-svg-s8');
+  const s8Leg=document.getElementById('lhs-legend-s8');
+  if(s8L){
+    LD.forEach(layer=>{el("rect",{x:3,y:layer.y-11,width:LML-8,height:22,rx:5,fill:layer.color,"fill-opacity":"0.14"},s8L);txt(layer.name,{x:LML-10,y:layer.y+4,"text-anchor":"end","font-size":"8.5px","font-weight":"600",fill:layer.color,"font-family":"system-ui,sans-serif"},s8L);});
+    const eG8=el("g",{},s8L);
+    edges.forEach(({s,t})=>{const my=(s.y+t.y)/2;el("path",{d:`M${s.x},${s.y} C${s.x},${my} ${t.x},${my} ${t.x},${t.y}`,stroke:s.color,"stroke-opacity":"0.22","stroke-width":"1.2",fill:"none","stroke-linecap":"round"},eG8);});
+    const nG8=el("g",{},s8L);
+    nodes.forEach(node=>{const g=el("g",{transform:`translate(${node.x},${node.y})`},nG8);el("circle",{r:"6",fill:node.color,"fill-opacity":"0.88",stroke:node.color,"stroke-width":"1.5"},g);txt(node.label,{y:"15","text-anchor":"middle","font-size":"8px","font-weight":"500",fill:node.color,"font-family":"system-ui,sans-serif"},g);});
+    if(s8Leg){LD.forEach(layer=>{const d=document.createElement("div");d.style.cssText="display:flex;align-items:center;gap:3px;";d.innerHTML=`<span style="width:6px;height:6px;border-radius:50%;background:${layer.color};display:inline-block;flex-shrink:0;"></span>${layer.name}`;s8Leg.appendChild(d);});}
+  }
+  if(s8R){
+    const sfHex8=el("g",{class:"sf-hex",filter:"url(#glow-v2)"},s8R);
+    el("polygon",{points:hexPts(sfCX,sfCY,62),fill:"rgba(36,158,220,0.18)",stroke:"#29b5e8","stroke-width":"2.5"},sfHex8);
+    txt("SNOWFLAKE",{x:sfCX,y:sfCY-8,"text-anchor":"middle","font-size":"9px","font-weight":"800",fill:"#29b5e8","font-family":"system-ui,sans-serif"},sfHex8);
+    txt("Data Cloud",{x:sfCX,y:sfCY+7,"text-anchor":"middle","font-size":"8px",fill:"rgba(41,181,232,0.75)","font-family":"system-ui,sans-serif"},sfHex8);
+    txt("AI-Ready · Governed",{x:sfCX,y:sfCY+19,"text-anchor":"middle","font-size":"6.5px",fill:"rgba(41,181,232,0.55)","font-family":"system-ui,sans-serif"},sfHex8);
+    RD.forEach(d=>{const cx2=(sfCX+130+640)/2;const my=(d.y+sfCY)/2;el("path",{d:`M${sfCX+64},${sfCY} C${sfCX+100},${sfCY} ${cx2},${my} ${sfCX+130},${d.y}`,stroke:d.color,"stroke-opacity":"0.55","stroke-width":"1.5",fill:"none",class:"rhs-flow"},s8R);});
+    RD.forEach(d=>{el("rect",{x:sfCX+130,y:d.y-25,width:110,height:50,rx:6,fill:d.color,"fill-opacity":"0.1",stroke:d.color,"stroke-width":"1.5"},s8R);txt(d.name,{x:sfCX+185,y:d.y-9,"text-anchor":"middle","font-size":"7.5px","font-weight":"700",fill:d.color,"font-family":"system-ui,sans-serif"},s8R);txt(d.ex1,{x:sfCX+185,y:d.y+4,"text-anchor":"middle","font-size":"6.5px",fill:d.color,"fill-opacity":"0.75","font-family":"system-ui,sans-serif"},s8R);txt(d.ex2,{x:sfCX+185,y:d.y+14,"text-anchor":"middle","font-size":"6.5px",fill:d.color,"fill-opacity":"0.55","font-family":"system-ui,sans-serif"},s8R);});
+  }
+})();
+
+/* ─── BUILD VIZ (SLIDE 2) ─── */
+function mkNode(ic,lb,sub,c,sz,delay){
+  const d=document.createElement('div');
+  const pad=sz==='lg'?'0.9rem 1.4rem':sz==='md'?'0.55rem 1rem':'0.4rem 0.75rem';
+  const mw=sz==='lg'?130:sz==='md'?105:88;
+  d.className='chain-node';
+  d.style.cssText=`border-color:${c};background:${c}18;padding:${pad};min-width:${mw}px;animation-delay:${delay||0}ms;`;
+  if(ic){const s=document.createElement('span');s.style.cssText=`font-family:serif;font-size:${sz==='lg'?'2rem':sz==='md'?'1.4rem':'1.1rem'};`;s.textContent=ic;d.appendChild(s);}
+  if(lb){const s=document.createElement('span');s.style.cssText=`font-weight:${sz==='lg'?800:700};font-size:${sz==='lg'?'1rem':sz==='md'?'0.82rem':'0.74rem'};color:${c};line-height:1.2;`;s.textContent=lb;d.appendChild(s);}
+  if(sub){const s=document.createElement('span');s.style.cssText='font-size:0.65rem;color:#9CA3AF;';s.textContent=sub;d.appendChild(s);}
+  return d;
+}
+function mkArr(dashed,delay,c){
+  const d=document.createElement('div');
+  d.className=`arr-wrap arr-${dashed?'dashed':'solid'}`;
+  d.style.animationDelay=`${delay||0}ms`;
+  const l=document.createElement('div');l.className='arr-line';d.appendChild(l);return d;
+}
+function mkBadge(text,c,delay){
+  const d=document.createElement('span');d.className='badge-pill';
+  d.style.cssText=`border-color:${c};background:${c}1A;color:${c};animation-delay:${delay||0}ms`;
+  d.textContent=text;return d;
+}
+function mkCallout(h,s,c,delay){
+  const d=document.createElement('div');d.className='callout-box';
+  d.style.cssText=`border-color:${c};background:${c}18;animation-delay:${delay||0}ms`;
+  const dh=document.createElement('div');dh.style.cssText=`font-size:0.82rem;font-weight:700;color:${c};font-family:Inter,sans-serif;`;dh.textContent=h;d.appendChild(dh);
+  if(s){const ds=document.createElement('div');ds.style.cssText=`font-size:0.72rem;color:${c};opacity:.8;margin-top:.1rem;font-family:Inter,sans-serif;`;ds.textContent=s;d.appendChild(ds);}
+  return d;
+}
+function mkRow(...items){const d=document.createElement('div');d.style.cssText='display:flex;align-items:center;gap:0.65rem;';items.forEach(i=>i&&d.appendChild(i));return d;}
+function mkCol(...items){const d=document.createElement('div');d.style.cssText='display:flex;flex-direction:column;gap:0.45rem;';items.forEach(i=>i&&d.appendChild(i));return d;}
+function mkCtr(child){const d=document.createElement('div');d.style.cssText='display:flex;align-items:center;justify-content:center;width:100%;height:100%;';d.appendChild(child);return d;}
+
+const S2_STEPS=[
+  {lbl:'THE ICE CREAM VAN · STEP 1 OF 5',h:'Make it. Move it. <span class="hip">Sell it.</span>',
+   build(viz){viz.appendChild(mkCtr(mkRow(mkNode('🧁','MAKE IT',null,'#249EDC','lg',0),mkArr(false,350),mkNode('🚐','MOVE IT',null,'#11567F','lg',200),mkArr(false,600),mkNode('😊','SELL IT',null,'#22c55e','lg',400))));}},
+  {lbl:'STEP 2 OF 5 · Scaling up',h:'You sell out every day. So you <span class="hip">scale up.</span>',
+   build(viz){
+    const routes=mkCol(mkRow(mkNode('🚐','Van 1',null,'#11567F','md',200),mkArr(false,320),mkNode('🌳','Park',null,'#374151','sm',380)),mkRow(mkNode('🚐','Van 2',null,'#11567F','md',280),mkArr(false,400),mkNode('🏙️','Town',null,'#374151','sm',460)),mkRow(mkNode('🚐','Van 3',null,'#11567F','md',360),mkArr(false,480),mkNode('🏖️','Beach',null,'#374151','sm',540)));
+    viz.appendChild(mkCtr(mkRow(mkCol(mkNode('🏭','Workshop',null,'#249EDC','md',0),mkBadge('📊 Spreadsheet (first system)','#6366f1',650)),mkArr(false,150),routes)));}},
+  {lbl:'STEP 3 OF 5 · First blind spot',h:'Local cafés want to stock you. <span class="hip">Flying blind at the shelf.</span>',
+   build(viz){
+    const routes=mkCol(mkRow(mkNode('🚐','Van 1',null,'#11567F','md',180),mkArr(false,280),mkNode('🌳','Park',null,'#374151','sm',340)),mkRow(mkNode('🚐','Van 2',null,'#11567F','md',240),mkArr(false,340),mkNode('🏙️','Town',null,'#374151','sm',400)),mkRow(mkNode('🚐','Van 3',null,'#11567F','md',300),mkArr(false,400),mkNode('🏖️','Beach',null,'#374151','sm',460)),mkRow(mkArr(true,560,'#F59E0B'),mkNode('☕','Café channel',null,'#D97706','sm',600),mkCallout('⚠ Flying blind','No shelf visibility','#D97706',750)));
+    viz.appendChild(mkCtr(mkRow(mkCol(mkNode('🏭','Workshop',null,'#249EDC','md',0),mkBadge('📊 Spreadsheet','#6366f1',480)),mkArr(false,100),routes)));}},
+  {lbl:'STEP 4 OF 5 · The lead time problem',h:'You contract a manufacturer. <span class="hip">Three-week lead time.</span>',
+   build(viz){
+    const ings=mkCol(mkNode('🌿','Vanilla','Madagascar','#8b5cf6','sm',0),mkNode('🍫','Cocoa','Ghana','#8b5cf6','sm',80),mkNode('🥛','Cream','UK farms','#8b5cf6','sm',160));
+    const mfg=mkCol(mkNode('🏭','Manufacturer',null,'#8b5cf6','md',320),mkCallout('⏱ 3-week lead time','Forecast before demand','#8b5cf6',500));
+    const dc=mkCol(mkNode('📦','Distribution',null,'#11567F','md',550),mkBadge('📊 Demand Planning','#8b5cf6',700));
+    const dests=mkCol(mkNode('🌳','Park',null,'#374151','sm',820),mkNode('🏙️','Town',null,'#374151','sm',880),mkNode('🏖️','Beach',null,'#374151','sm',940),mkRow(mkArr(true,960,'#F59E0B'),mkNode('☕','Café',null,'#D97706','sm',1000)));
+    viz.appendChild(mkCtr(mkRow(ings,mkArr(false,240),mfg,mkArr(false,620),dc,mkArr(false,750),dests)));}},
+  {lbl:'STEP 5 OF 5 · Retail scale',h:'Supermarkets. <span class="hip">500 stores overnight.</span>',
+   build(viz){
+    const ings=mkCol(mkNode('🌿','Vanilla','Madagascar','#8b5cf6','sm',0),mkNode('🍫','Cocoa','Ghana','#8b5cf6','sm',70),mkNode('🥛','Cream','UK farms','#8b5cf6','sm',140));
+    const mfg=mkCol(mkNode('🏭','Manufacturer',null,'#8b5cf6','md',280),mkBadge('ERP','#6366f1',450));
+    const dc=mkCol(mkNode('📦','Distribution',null,'#11567F','md',510),mkBadge('WMS','#f97316',640),mkBadge('TMS','#eab308',680));
+    const retailers=mkCol(mkNode('🛒','Tesco',null,'#15803d','sm',760),mkNode('🛒','Sainsbury\'s',null,'#16a34a','sm',820),mkNode('🛒','Waitrose',null,'#166534','sm',880),mkNode('🛒','Asda',null,'#14532d','sm',940));
+    const edi=mkCallout('⏱ EDI: 48-hr lag','Format from the 1970s','#F59E0B',980);
+    viz.appendChild(mkCtr(mkRow(ings,mkArr(false,200),mfg,mkArr(false,590),dc,mkArr(false,710),retailers,edi)));}}
+];
+
+let s2step=0;
+function renderS2(){
+  const step=S2_STEPS[s2step];
+  document.getElementById('s2lbl').textContent=step.lbl;
+  document.getElementById('s2h').innerHTML=step.h;
+  const viz=document.getElementById('s2viz');
+  viz.style.opacity='0';viz.style.transition='opacity .2s ease';
+  setTimeout(()=>{viz.innerHTML='';step.build(viz);viz.style.opacity='1';},200);
+  // Dots
+  const d=document.getElementById('s2dots');d.innerHTML='';
+  S2_STEPS.forEach((_,i)=>{
+    const dot=document.createElement('div');dot.className='s2-dot'+(i===s2step?' on':'');
+    dot.onclick=()=>{s2step=i;renderS2();};d.appendChild(dot);
+  });
+}
+
+// Init
+goTo(0);
+renderS2();
+
+// Scale deck to fit window
+function scaleViewport(){
+  const deck=document.querySelector('.deck');
+  const s=Math.min(window.innerWidth/1280,window.innerHeight/720);
+  deck.style.transform='scale('+s+')';
+}
+window.addEventListener('resize',scaleViewport);
+scaleViewport();
+</script>
+</body>
+</html>

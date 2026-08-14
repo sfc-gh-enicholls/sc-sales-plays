@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snowflake Grocery Retail — Metrics That Matter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sf-blue: #249EDC; --sf-mid: #11567F; --sf-deep: #042130; --sf-ice: #F6F9FA; --sf-star: #71D3DC; --sf-orange: #FF9F36; --sf-white: #FFFFFF;
+  --text-dark: #111827; --text-gray: #4B5568; --text-light: #6B7280; --border-card: rgba(204,204,204,0.5); --green: #16a34a;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', sans-serif; background: #FFFFFF; }
+.deck { width: 100vw; height: 100vh; position: relative; }
+.slide { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1); overflow: hidden; }
+.slide.active { opacity: 1; pointer-events: all; }
+.slide-bg { position: absolute; inset: 0; z-index: 0; }
+.bg-white { background: #FFFFFF; }
+.bg-ice { background: var(--sf-ice); }
+.slide-content { position: relative; z-index: 10; width: 88%; max-width: 1200px; padding: 2.2rem 2rem; }
+h3.label { font-size: clamp(0.65rem, 1vw, 0.8rem); font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sf-blue); margin-bottom: 0.7rem; }
+h3.label.purple { color: var(--sf-mid); }
+h3.label.white { color: rgba(255,255,255,0.7); }
+h1 { font-size: clamp(2.4rem, 5vw, 4.5rem); font-weight: 900; line-height: 1.05; color: var(--text-dark); letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.5rem, 2.8vw, 2.5rem); font-weight: 800; line-height: 1.1; color: var(--text-dark); letter-spacing: -0.01em; margin-bottom: 0.5rem; }
+.slide.dark-slide h1, .slide.dark-slide h2 { color: #FFFFFF; }
+.slide.dark-slide p { color: rgba(255,255,255,0.85); }
+.highlight { color: var(--sf-blue); }
+.highlight-purple { color: var(--sf-mid); }
+.highlight-green { color: var(--green); }
+.divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--sf-blue), var(--sf-star)); margin: 0.75rem 0 0.9rem 0; border-radius: 2px; }
+.divider-purple { width: 60px; height: 3px; background: linear-gradient(90deg, var(--sf-mid), var(--sf-blue)); margin: 0.75rem 0 0.9rem 0; border-radius: 2px; }
+p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.6; color: var(--text-gray); max-width: 750px; margin-bottom: 0.4rem; }
+.metric-card { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 12px; padding: 1rem 1.1rem; display: flex; flex-direction: column; }
+.metric-card.blue { border-color: rgba(36,158,220,0.4); }
+.metric-card.purple { border-color: rgba(17,86,127,0.35); }
+.metric-card.green { border-color: rgba(22,163,74,0.35); }
+.metric-card.teal { border-color: rgba(113,211,220,0.45); }
+.metric-card.amber { border-color: rgba(217,119,6,0.35); }
+.metric-name { font-size: 1rem; font-weight: 900; color: var(--sf-mid); letter-spacing: -0.01em; margin-bottom: 0.1rem; }
+.metric-full { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-light); margin-bottom: 0.45rem; }
+.metric-body { font-size: 0.78rem; color: var(--text-gray); line-height: 1.5; margin-bottom: 0.5rem; flex: 1; }
+.metric-snowflake { display: flex; align-items: flex-start; gap: 0.4rem; background: linear-gradient(90deg,rgba(36,158,220,0.07),rgba(113,211,220,0.04)); border: 1px solid rgba(36,158,220,0.2); border-radius: 7px; padding: 0.42rem 0.6rem; margin-top: auto; }
+.metric-snowflake p { font-size: 0.72rem; color: var(--sf-mid); font-weight: 500; margin: 0; max-width: 100%; }
+.metric-snowflake svg { flex-shrink: 0; margin-top: 0.05rem; }
+.benchmark { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.2rem 0.55rem; border-radius: 999px; margin-bottom: 0.4rem; }
+.benchmark.avg { background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.4); color: #92400E; }
+.benchmark.target { background: rgba(22,163,74,0.08); border: 1px solid rgba(22,163,74,0.3); color: var(--green); }
+.pos-card { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 12px; padding: 1.1rem 1.3rem; }
+.pos-card.blue { border-color: rgba(36,158,220,0.4); }
+.pos-card.purple { border-color: rgba(17,86,127,0.35); }
+.pos-card p { font-size: 0.84rem; max-width: 100%; margin: 0; }
+.framework-cell { background: #FFFFFF; border-radius: 12px; padding: 1rem 1.1rem; border: 1.5px solid rgba(204,204,204,0.5); }
+.proof-bar { background: linear-gradient(90deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05)); border: 1px solid rgba(36,158,220,0.25); border-radius: 10px; padding: 0.65rem 1.2rem; }
+.proof-bar p { font-size: 0.79rem; color: var(--text-gray); margin: 0; max-width: 100%; }
+.slide-number { position: absolute; bottom: 1.5rem; right: 1.8rem; font-size: 0.72rem; color: var(--text-light); font-weight: 500; letter-spacing: 0.08em; z-index: 20; }
+.slide.dark-slide .slide-number { color: rgba(255,255,255,0.4); }
+.snowflake-logo { position: absolute; bottom: 1.2rem; right: 5.5rem; z-index: 20; opacity: 0.85; display: flex; align-items: center; height: 32px; }
+.progress-bar-wrap { position: fixed; top: 0; left: 0; width: 100%; height: 3px; z-index: 100; background: rgba(0,0,0,0.06); }
+.progress-bar { height: 100%; background: linear-gradient(90deg, var(--sf-mid), var(--sf-blue)); transition: width 0.5s ease; }
+.controls { position: fixed; bottom: 2.2rem; left: 50%; transform: translateX(-50%); display: flex; gap: 0.8rem; z-index: 100; align-items: center; }
+.controls button { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 999px; padding: 0.5rem 1.3rem; color: var(--text-gray); font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.controls button:hover { background: var(--sf-ice); border-color: var(--sf-blue); color: var(--sf-mid); }
+.controls select { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 999px; padding: 0.5rem 1.1rem; color: var(--text-gray); font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; outline: none; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+</style>
+</head>
+<body>
+
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:12.5%"></div></div>
+
+<div class="controls">
+  <button onclick="prevSlide()">&#8592; Prev</button>
+  <select id="slideSelect" onchange="goTo(this.value-1)">
+    <option value="1">01 &mdash; Title</option>
+    <option value="2">02 &mdash; Business Imperative</option>
+    <option value="3">03 &mdash; Value Framework</option>
+    <option value="4">04 &mdash; Fresh &amp; Availability</option>
+    <option value="5">05 &mdash; Loyalty &amp; Customer</option>
+    <option value="6">06 &mdash; Inventory &amp; Waste</option>
+    <option value="7">07 &mdash; Retail Media &amp; Commercial</option>
+    <option value="8">08 &mdash; Financial Impact</option>
+  </select>
+  <button onclick="nextSlide()">Next &#8594;</button>
+</div>
+
+<div class="deck">
+
+<!-- ============================================================ SLIDE 01 ============================================================ -->
+<div class="slide dark-slide active" id="slide-1">
+  <div class="slide-bg">
+    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1920&q=80" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,33,48,0.88) 0%,rgba(17,86,127,0.80) 50%,rgba(4,33,48,0.92) 100%);"></div>
+  </div>
+  <div class="slide-content" style="display:flex;flex-direction:column;justify-content:center;min-height:60vh;">
+    <h3 class="label white">SNOWFLAKE &middot; GROCERY RETAIL</h3>
+    <div style="margin-top:1.2rem;">
+      <h1 style="color:var(--sf-star);font-size:clamp(3rem,7vw,6.5rem);line-height:1;">METRICS</h1>
+      <h1 style="color:#FFFFFF;font-size:clamp(3rem,7vw,6.5rem);line-height:1;">THAT MATTER</h1>
+    </div>
+    <div class="divider" style="margin-top:1.4rem;"></div>
+    <p style="color:rgba(255,255,255,0.8);font-size:clamp(0.9rem,1.4vw,1.15rem);font-weight:300;max-width:680px;margin-top:0.5rem;">Connecting Snowflake capabilities to the KPIs that move boards, CFOs, and retail leaders in grocery</p>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;filter:brightness(0) invert(1);"></div>
+  <div class="slide-number">01 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 02 ============================================================ -->
+<div class="slide bg-white" id="slide-2">
+  <div class="slide-content" style="padding-top:1.6rem;padding-bottom:4rem;">
+    <h3 class="label purple">WHY NOW</h3>
+    <h2>The Business Imperative for <span class="highlight-purple">Grocery Retailers</span></h2>
+    <div class="divider-purple"></div>
+    <div style="display:grid;grid-template-columns:1.15fr 1fr;gap:1.2rem;margin-top:0.6rem;">
+      <div style="display:flex;flex-direction:column;gap:0.9rem;">
+        <div class="pos-card purple" style="padding:0.9rem 1.1rem;">
+          <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.5rem;">The Problem</div>
+          <p style="font-size:0.78rem;margin-bottom:0.6rem;">Grocery operates on a 2&ndash;5% trading margin. Every percentage point of fresh waste, every generic promotion that should have been personalised, every retail media opportunity left on the table — compresses that margin further. The data to fix all three already exists in every large grocery estate. But <strong>EPOS, loyalty, cold chain, and e-commerce data run in silos</strong>, and they never connect in time to act on them.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.55rem;margin-top:0.2rem;">
+            <div style="background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:0.55rem 0.7rem;">
+              <div style="font-size:0.63rem;font-weight:700;color:#dc2626;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.35rem;">Without Snowflake</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">&#x2715; Replenishment calibrated to last week — demand signals never reach the order</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">&#x2715; Loyalty data locked from buying and personalisation — generic promotions go to everyone</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">&#x2715; Retail media targeting generic — CPG brands can't prove ROI, don't reinvest</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;">&#x2715; AI pilots fail — EPOS, loyalty, and cold chain never unified</div>
+            </div>
+            <div style="background:rgba(36,158,220,0.05);border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.55rem 0.7rem;">
+              <div style="font-size:0.63rem;font-weight:700;color:var(--sf-mid);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.35rem;">With Snowflake</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">&#x2713; Unified demand platform — AI forecasting on live EPOS, weather, footfall</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">&#x2713; Loyalty data reaches buying and personalisation in real time</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">&#x2713; Retail media clean rooms — CPG brands target and measure without PII</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;">&#x2713; AI that reasons on governed data — reaches production</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.9rem;">
+        <div class="pos-card blue" style="padding:0.9rem 1.1rem;">
+          <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.5rem;">The Snowflake Platform for Grocery</div>
+          <p style="font-size:0.78rem;margin-bottom:0.7rem;">The AI Data Cloud is the only platform that unifies EPOS, loyalty, cold chain, e-commerce, and supplier data into a governed, AI-ready foundation &mdash; without moving data or replacing existing systems. It transforms grocery operations from reactive margin erosion to proactive, closed-loop intelligence across Protect, Grow, and Monetise.</p>
+          <div style="margin-bottom:0.7rem;">
+            <span style="display:inline-block;background:rgba(17,86,127,0.08);border:1px solid rgba(17,86,127,0.2);border-radius:999px;padding:0.22rem 0.75rem;font-size:0.7rem;font-weight:600;color:var(--sf-mid);margin:0.15rem;">Protect</span>
+            <span style="display:inline-block;background:rgba(36,158,220,0.08);border:1px solid rgba(36,158,220,0.2);border-radius:999px;padding:0.22rem 0.75rem;font-size:0.7rem;font-weight:600;color:var(--sf-blue);margin:0.15rem;">Grow</span>
+            <span style="display:inline-block;background:rgba(22,163,74,0.08);border:1px solid rgba(22,163,74,0.2);border-radius:999px;padding:0.22rem 0.75rem;font-size:0.7rem;font-weight:600;color:#16a34a;margin:0.15rem;">Monetise</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;">
+            <div style="background:linear-gradient(135deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05));border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.6rem 0.7rem;text-align:center;">
+              <div style="font-size:1.3rem;font-weight:900;color:var(--sf-mid);line-height:1;">354%</div>
+              <div style="font-size:0.62rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-top:0.2rem;">ROI</div>
+              <div style="font-size:0.6rem;color:var(--text-light);margin-top:0.1rem;">Forrester TEI 2024</div>
+            </div>
+            <div style="background:linear-gradient(135deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05));border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.6rem 0.7rem;text-align:center;">
+              <div style="font-size:1.3rem;font-weight:900;color:var(--sf-mid);line-height:1;">70%+</div>
+              <div style="font-size:0.62rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-top:0.2rem;">Media gross margin</div>
+              <div style="font-size:0.6rem;color:var(--text-light);margin-top:0.1rem;">Retail media benchmark</div>
+            </div>
+            <div style="background:linear-gradient(135deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05));border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.6rem 0.7rem;text-align:center;">
+              <div style="font-size:1.3rem;font-weight:900;color:var(--sf-mid);line-height:1;">&lt;6mo</div>
+              <div style="font-size:0.62rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-top:0.2rem;">Payback Period</div>
+              <div style="font-size:0.6rem;color:var(--text-light);margin-top:0.1rem;">Forrester TEI 2024</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">02 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 03 ============================================================ -->
+<div class="slide bg-ice" id="slide-3">
+  <div class="slide-content" style="padding-top:1.6rem;padding-bottom:4rem;">
+    <h3 class="label">THE VALUE FRAMEWORK</h3>
+    <h2>Five Value Categories. <span class="highlight">One Connected Platform.</span></h2>
+    <div class="divider"></div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0.7rem;margin-top:0.6rem;">
+      <div class="framework-cell" style="border-color:rgba(17,86,127,0.4);">
+        <div style="font-size:0.62rem;font-weight:700;color:var(--sf-mid);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">01</div>
+        <div style="font-size:0.85rem;font-weight:800;color:var(--sf-mid);line-height:1.2;margin-bottom:0.45rem;">Fresh &amp; Availability</div>
+        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">Waste % &middot; Availability &middot; Forecast Error &middot; Replenishment Accuracy &middot; Shelf-Life Pricing</div>
+        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:var(--sf-mid);letter-spacing:0.04em;">&rarr; Slide 04</div>
+      </div>
+      <div class="framework-cell" style="border-color:rgba(36,158,220,0.4);">
+        <div style="font-size:0.62rem;font-weight:700;color:var(--sf-blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">02</div>
+        <div style="font-size:0.85rem;font-weight:800;color:var(--sf-blue);line-height:1.2;margin-bottom:0.45rem;">Loyalty &amp; Customer</div>
+        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">Basket Value &middot; Member Engagement &middot; Personalisation ROI &middot; Churn Rate &middot; Segment Coverage</div>
+        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:var(--sf-blue);letter-spacing:0.04em;">&rarr; Slide 05</div>
+      </div>
+      <div class="framework-cell" style="border-color:rgba(13,148,136,0.4);">
+        <div style="font-size:0.62rem;font-weight:700;color:#0d9488;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">03</div>
+        <div style="font-size:0.85rem;font-weight:800;color:#0d9488;line-height:1.2;margin-bottom:0.45rem;">Inventory &amp; Waste</div>
+        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">Spoilage % &middot; Markdown Rate &middot; Shrinkage &middot; Inventory Turns &middot; Out-of-Stock Rate</div>
+        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:#0d9488;letter-spacing:0.04em;">&rarr; Slide 06</div>
+      </div>
+      <div class="framework-cell" style="border-color:rgba(22,163,74,0.35);">
+        <div style="font-size:0.62rem;font-weight:700;color:var(--green);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">04</div>
+        <div style="font-size:0.85rem;font-weight:800;color:var(--green);line-height:1.2;margin-bottom:0.45rem;">Retail Media &amp; Commercial</div>
+        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">Media Revenue &middot; Media Gross Margin &middot; CPG Campaign ROI &middot; Attribution Rate &middot; Private Label Mix</div>
+        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:var(--green);letter-spacing:0.04em;">&rarr; Slide 07</div>
+      </div>
+      <div class="framework-cell" style="border-color:rgba(180,83,9,0.35);">
+        <div style="font-size:0.62rem;font-weight:700;color:#B45309;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">05</div>
+        <div style="font-size:0.85rem;font-weight:800;color:#B45309;line-height:1.2;margin-bottom:0.45rem;">Financial Impact</div>
+        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">EBITDA Margin &middot; Own-Brand Mix % &middot; Total Basket Value &middot; SC Cost % Revenue &middot; Working Capital</div>
+        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:#B45309;letter-spacing:0.04em;">&rarr; Slide 08</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.7rem;">
+      <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:10px;padding:0.75rem 1rem;">
+        <div style="font-size:0.63rem;font-weight:700;color:var(--sf-blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">Data Foundation</div>
+        <div style="font-size:0.72rem;color:var(--text-gray);line-height:1.5;">Unified EPOS &middot; Loyalty &middot; Cold Chain/WMS &middot; E-commerce OMS &middot; Supplier Data &middot; Weather &amp; External Signals &mdash; one semantic layer</div>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:10px;padding:0.75rem 1rem;">
+        <div style="font-size:0.63rem;font-weight:700;color:var(--sf-blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">AI Intelligence</div>
+        <div style="font-size:0.72rem;color:var(--text-gray);line-height:1.5;">Cortex AI &middot; Cortex Analyst &middot; Snowflake Marketplace (3,600+ live datasets including weather, footfall, and consumer data)</div>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:10px;padding:0.75rem 1rem;">
+        <div style="font-size:0.63rem;font-weight:700;color:var(--sf-blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">Monetise</div>
+        <div style="font-size:0.72rem;color:var(--text-gray);line-height:1.5;">Snowflake Clean Rooms for retail media &middot; Privacy-safe CPG brand collaboration &middot; Zero-copy Data Sharing with suppliers</div>
+      </div>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">03 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 04 ============================================================ -->
+<div class="slide bg-white" id="slide-4">
+  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
+    <h3 class="label purple">CATEGORY 01</h3>
+    <h2>Fresh &amp; Availability <span class="highlight-purple">Performance</span></h2>
+    <div class="divider-purple"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.5rem;">
+
+      <div class="metric-card purple">
+        <div class="metric-name">Fresh Waste %</div>
+        <div class="metric-full">Unsold Fresh Inventory as % of Fresh Sales</div>
+        <span class="benchmark avg">Industry range: 5&ndash;15% of fresh category value</span>
+        <span class="benchmark target">Target: &lt;5%</span>
+        <div class="metric-body">The most direct measure of fresh category margin loss. Each 1% of fresh waste on &pound;500M fresh sales costs &pound;5M in pure margin &mdash; before disposal and markdown costs. Driven by demand forecast error, order inflexibility, and the inability to see the signals (weather, footfall, local events) that move fresh demand day-to-day.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI unifies EPOS, cold chain, weather, and footfall data to predict fresh demand by store and shelf-life window. Replenishment and dynamic pricing recommendations before spoilage is inevitable.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Fresh Availability %</div>
+        <div class="metric-full">% of Time Fresh SKUs Are On-Shelf and In-Stock</div>
+        <span class="benchmark avg">Industry avg: 93&ndash;96%</span>
+        <span class="benchmark target">Target: 98%+</span>
+        <div class="metric-body">OOS in fresh categories is an immediate lost sale — a customer who can't find fresh chicken or salad at 6pm doesn't wait; they switch stores or to another format. Every availability failure in fresh is a loyalty event, not just a replenishment miss. Root cause: orders calibrated to averages that don't see demand signals.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex Analyst: "Which fresh SKUs are at risk of OOS today across my South East stores?" — answered from live EPOS in seconds. Replenishment agent triggers before the shelf empties.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Demand Forecast Error (MAPE)</div>
+        <div class="metric-full">Mean Absolute % Error on Fresh Categories</div>
+        <span class="benchmark avg">Fresh perishables without AI: 25&ndash;35% MAPE</span>
+        <span class="benchmark target">Target: &lt;12% MAPE</span>
+        <div class="metric-body">Fresh demand is highly non-linear — a 2°C temperature increase doubles salad sales; a local event can strip a bakery range in an afternoon. Statistical models calibrated on historical averages cannot see these signals. A 10-point MAPE reduction on £200M fresh sales eliminates millions in overstock, markdown, and disposal cost annually.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI demand models retrain continuously on live EPOS, weather, footfall, and loyalty purchase signals from Snowflake Marketplace. Forecast accuracy compounds every season.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Replenishment Accuracy</div>
+        <div class="metric-full">Actual Units Ordered vs Demand-Optimal Order</div>
+        <span class="benchmark avg">Typical error: ±20% on perishable categories</span>
+        <div class="metric-body">The gap between what the replenishment system orders and what demand actually needed. In fresh grocery, overordering and underordering are equally damaging — one creates waste, the other creates OOS. Replenishment accuracy can only improve when demand signals feed directly into the ordering logic in near real-time.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Unified demand, weather, and EPOS data on Snowflake enables AI-driven replenishment recommendations per store per category — updated daily with live signals, not weekly averages.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Shelf-Life Pricing Uplift</div>
+        <div class="metric-full">Revenue Recovered Through Dynamic Shelf-Life Pricing</div>
+        <span class="benchmark target">Target: recover 40%+ of potential waste value</span>
+        <div class="metric-body">When fresh items approach end of shelf life, dynamic markdown pricing can recover a significant fraction of margin that would otherwise be lost to disposal. Most grocery retailers apply blanket markdown rules too late — typically in the last 2 hours — because they lack real-time visibility into which SKUs at which stores are at risk.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI monitors shelf-life window by SKU and store against demand forecast. Pricing recommendations surface 4–6 hours before the markdown window — maximising sell-through before disposal.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Cross-Channel Availability</div>
+        <div class="metric-full">Online vs. In-Store Inventory Accuracy</div>
+        <span class="benchmark avg">Omnichannel discrepancy: 8&ndash;15% of SKUs showing incorrect availability</span>
+        <div class="metric-body">When a customer orders online and their fresh items are substituted at pick, or they see OOS online while the store is fully stocked, it directly damages loyalty. The root cause is almost always that online OMS and store EPOS run as separate systems with no shared inventory layer.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Unified EPOS and OMS on Snowflake ensures a single inventory truth across all channels. Cortex Analyst: "What's the substitution rate for fresh produce picks in my online grocery operation?" answered from live data.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="proof-bar" style="margin-top:0.7rem;">
+      <p>Snowflake Retail Data Cloud: retailers are centralising sales, supply-chain and inventory data as the foundation for AI demand forecasting, reducing out-of-stocks and food waste &nbsp;&middot;&nbsp; Forrester TEI 2024: 354% ROI</p>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">04 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 05 ============================================================ -->
+<div class="slide bg-ice" id="slide-5">
+  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
+    <h3 class="label">CATEGORY 02</h3>
+    <h2>Loyalty &amp; <span class="highlight">Customer Intelligence</span></h2>
+    <div class="divider"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.5rem;">
+
+      <div class="metric-card blue">
+        <div class="metric-name">Average Basket Value</div>
+        <div class="metric-full">Total Spend per Transaction</div>
+        <span class="benchmark avg">UK grocery average: £24&ndash;£32 per visit</span>
+        <span class="benchmark target">Target: grow 3–5% through personalisation</span>
+        <div class="metric-body">The fundamental commercial metric for grocery. Basket value is driven by category penetration, promotion response, and personalisation — all of which require unified loyalty and EPOS data to optimise. A 3% basket value improvement across 20M loyalty members making 26 visits per year = hundreds of millions in incremental revenue.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI identifies which loyalty segments are under-indexing on fresh, non-food, or private label — and surfaces personalised offer recommendations to reverse the trend. Each offer measurable against basket outcome.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Personalisation ROI</div>
+        <div class="metric-full">Redemption Rate &amp; Basket Uplift vs Generic Offers</div>
+        <span class="benchmark avg">Generic promotions: 1–3% redemption rate</span>
+        <span class="benchmark target">Personalised: 8–15% redemption, 3–5x ROI</span>
+        <div class="metric-body">The difference between a generic promotion and a personalised one is entirely about data quality. Grocers with unified loyalty and EPOS data consistently demonstrate 3–5x ROI on personalised offers vs. generic mass campaigns. The challenge: most loyalty data is siloed and campaign build takes weeks, not hours — eliminating the commercial window to act.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Loyalty and EPOS unified in governed Snowflake semantic layer. Cortex AI segments in real time. Personalised offer campaigns built in hours. Redemption and basket uplift measurable per segment per campaign.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Loyalty Member Churn Rate</div>
+        <div class="metric-full">% of Active Members Lost per Quarter</div>
+        <span class="benchmark avg">Grocery loyalty churn: 8–15% per year</span>
+        <span class="benchmark target">Target: reduce churn 20–30% through proactive intervention</span>
+        <div class="metric-body">A loyalty member who stops engaging costs as much to reacquire as a new member. Most grocers can only identify churn retrospectively — after the member has already stopped shopping. Proactive churn prediction requires unified loyalty and purchase frequency data, segmented by category behaviour change.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI models churn risk by purchase frequency, basket composition, and category engagement changes. "Which top 50K members are showing early churn signals this month?" — answered from unified loyalty data in seconds.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Segment Activation Rate</div>
+        <div class="metric-full">% of Loyalty Members Receiving Personalised Offers</div>
+        <span class="benchmark avg">Industry avg: 20–40% of members truly personalised</span>
+        <span class="benchmark target">Target: 80%+ meaningful personalisation</span>
+        <div class="metric-body">Most loyalty programmes personalise at a surface level — name on the email, same vouchers segmented by broad tier. True personalisation at the individual or micro-segment level requires a real-time single customer view. The gap between "we have a loyalty programme" and "we personalise at scale" is almost entirely a data infrastructure question.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>CDP-style single customer view on Snowflake without a separate CDP product. Cortex AI segments millions of members in real time — enabling micro-segment personalisation at scale in hours, not weeks.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Loyalty Data Cycle Time</div>
+        <div class="metric-full">Time from Question to Actionable Customer Insight</div>
+        <span class="benchmark avg">Without Snowflake: 2–4 weeks for segment analysis</span>
+        <span class="benchmark target">With Snowflake: hours to days</span>
+        <div class="metric-body">The commercial window for acting on loyalty insight is short — promotion planning cycles, buyer range reviews, and seasonal assortment decisions all have deadlines. When the data team takes 2–4 weeks to produce a segment analysis, the answer arrives after the decision has already been made on instinct.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex Analyst delivers self-service loyalty analytics in seconds. "Which segments are under-indexing on our new private label range?" answered from live data — no IT ticket, no 2-week wait.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Loyalty Data-to-Buying Connection</div>
+        <div class="metric-full">% of Buying/Category Decisions Informed by Loyalty Data</div>
+        <span class="benchmark avg">Most grocers: loyalty data rarely reaches buying decisions</span>
+        <span class="benchmark target">Target: buying decisions informed by segment-level data</span>
+        <div class="metric-body">Loyalty programmes generate the richest data in retail about what customers actually buy, at what price, in what context. Yet most buying and category decisions are made without access to it — because loyalty is owned by marketing and buying is a separate function with separate tools. This is purely a data silo problem.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Loyalty and EPOS unified in one governed Snowflake platform — buyers and category directors query the same data as marketing. Private label and range decisions grounded in actual consumer behaviour.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="proof-bar" style="margin-top:0.7rem;">
+      <p>Leading European grocer: unified loyalty and EPOS on Snowflake to power personalised promotions at scale, loyalty data now accessible to buying teams &nbsp;&middot;&nbsp; McKinsey / Salesforce: personalised promotions deliver 3&ndash;5x ROI vs generic</p>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">05 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 06 ============================================================ -->
+<div class="slide bg-white" id="slide-6">
+  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
+    <h3 class="label purple">CATEGORY 03</h3>
+    <h2>Inventory &amp; <span class="highlight-purple">Waste Reduction</span></h2>
+    <div class="divider-purple"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.5rem;">
+
+      <div class="metric-card blue">
+        <div class="metric-name">Spoilage &amp; Disposal Cost</div>
+        <div class="metric-full">Cost of Wasted Food as % of Fresh Revenue</div>
+        <span class="benchmark avg">UK grocery: up to 15% of fresh category value written off</span>
+        <span class="benchmark target">Target: reduce 30&ndash;50% through AI forecasting</span>
+        <div class="metric-body">Spoilage cost includes not just the lost margin on unsold product, but also disposal cost, markdown labour, and sustainability impact. For a grocer with £500M in fresh sales, a 5% spoilage rate = £25M in annualised loss before disposal cost. Every 1-point improvement through better demand forecasting is pure margin. Source: WRAP UK / ECR Europe.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI demand forecasting on unified EPOS, weather, footfall, and cold chain data reduces overordering at category and store level — the root cause of spoilage. Waste reduction in pilots: 8%+ per category.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Markdown Rate</div>
+        <div class="metric-full">% of Products Sold Below Full Margin</div>
+        <span class="benchmark avg">Fresh categories: 8&ndash;18% of volume sold on markdown</span>
+        <span class="benchmark target">Target: reduce unnecessary markdown 20&ndash;30%</span>
+        <div class="metric-body">Not all markdown is avoidable — but a significant proportion reflects demand forecast error rather than genuine excess. When replenishment over-orders because the signal was last week's average, the resulting clearance markdown is a pure data problem. Smarter forecasting and earlier shelf-life pricing reduce unnecessary markdown without sacrificing availability.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Unified demand forecast and cold chain data identifies markdown risk 4–6 hours before the window closes. Dynamic shelf-life pricing deploys at the right time — recovering margin that blanket end-of-day markdowns lose.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Shrinkage Rate</div>
+        <div class="metric-full">Unexplained Inventory Loss as % of Sales</div>
+        <span class="benchmark avg">UK grocery average: 1.5&ndash;2.5% of revenue</span>
+        <span class="benchmark target">Target: &lt;1.5%</span>
+        <div class="metric-body">Shrinkage — from theft, supplier short-delivery, and administrative errors — is one of the most margin-destructive problems in grocery. Most grocers lack the unified inventory view to separate waste, shrinkage, and unrecorded stock events at category and store level. Root cause analysis requires unified EPOS, WMS, and supplier delivery data.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Snowflake unifies EPOS, WMS, and supplier delivery records. Cortex Analyst: "Which stores and categories show anomalous shrinkage vs. the store cluster average?" — anomalies surfaced automatically.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Inventory Turns</div>
+        <div class="metric-full">COGS ÷ Average Inventory Value</div>
+        <span class="benchmark avg">UK grocery: 15&ndash;25 turns/year on fresh · 6&ndash;10 on ambient</span>
+        <div class="metric-body">Higher turns mean less capital tied up, less spoilage risk, and lower carrying costs. Fresh grocery turns are highly sensitive to demand forecast accuracy. Better turns free working capital that can be reinvested in private label, store estate, or digital infrastructure — a direct CFO-level metric.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Unified demand and supply data drives better inventory turns through more accurate positioning by category, store, and format. Cortex AI: "What is my days-of-supply risk for fresh produce across my convenience estate?" — answered from live data.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Food Waste Sustainability Score</div>
+        <div class="metric-full">Tonnes Wasted per £M Revenue</div>
+        <span class="benchmark avg">UK grocery reporting under WRAP Courtauld Commitment</span>
+        <div class="metric-body">Sustainability reporting around food waste is increasing in regulatory and investor focus. Grocers that can demonstrate measurable, data-supported waste reduction have a genuine ESG story. This requires the same unified demand and waste data that improves operations — the sustainability and commercial cases are the same platform investment.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Snowflake provides the auditable, governed waste data layer for WRAP Courtauld reporting, investor ESG disclosures, and internal sustainability scorecards — from the same platform that drives operational waste reduction.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Out-of-Stock Rate</div>
+        <div class="metric-full">% of SKUs OOS at Any Given Time</div>
+        <span class="benchmark avg">Grocery average: 4&ndash;8% OOS rate</span>
+        <span class="benchmark target">Target: &lt;2% for core range</span>
+        <div class="metric-body">OOS in grocery is a loyalty and revenue event combined. Research consistently shows that OOS causes shoppers to either switch to a competitor brand or switch to a competitor store. For a grocer with 2% OOS and £3B revenue, recovering to 1% OOS could represent tens of millions in additional annual revenue.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI detects OOS risk before it materialises — correlating EPOS velocity, replenishment lead time, and demand forecast to surface proactive replenishment alerts by SKU and store cluster.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="proof-bar" style="margin-top:0.7rem;">
+      <p>Albertsons &amp; Kroger (retail media platform): same data foundation that powers retail media also supports sustainability reporting &nbsp;&middot;&nbsp; Forrester TEI 2024: inventory carrying cost reductions among top 3 value drivers in Snowflake retail deployments</p>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">06 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 07 ============================================================ -->
+<div class="slide bg-ice" id="slide-7">
+  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
+    <h3 class="label">CATEGORY 04</h3>
+    <h2>Retail Media &amp; <span class="highlight">Commercial Performance</span></h2>
+    <div class="divider"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.5rem;">
+
+      <div class="metric-card green">
+        <div class="metric-name">Retail Media Revenue</div>
+        <div class="metric-full">Revenue from CPG Brand Advertising on First-Party Audiences</div>
+        <span class="benchmark avg">UK retail media market: &pound;1.2B+ (WARC 2024)</span>
+        <span class="benchmark target">Target: establish as a standalone P&amp;L line</span>
+        <div class="metric-body">Retail media converts first-party loyalty and purchase data — which a grocer already owns — into a high-margin revenue stream. CPG brands pay for access to targeted, measurable audiences that no other media channel can offer: real grocery shoppers, proven by purchase history. The infrastructure requirement is a governed data platform with Clean Room capability.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Snowflake Clean Rooms enable CPG brand targeting and measurement on loyalty segments without sharing raw PII. Albertsons built their retail media platform on exactly this architecture. The result: retail media becomes a separate P&L line, not a trade budget line.</p>
+        </div>
+      </div>
+
+      <div class="metric-card green">
+        <div class="metric-name">Retail Media Gross Margin</div>
+        <div class="metric-full">Media Revenue Gross Margin</div>
+        <span class="benchmark avg">Grocery trading margin: 2&ndash;5%</span>
+        <span class="benchmark target">Retail media gross margin: 70&ndash;80%</span>
+        <div class="metric-body">Retail media is one of the highest-margin activities available to a grocery retailer. The infrastructure investment (a governed data platform and clean rooms) is relatively modest compared to the revenue opportunity. Every £10M in retail media revenue at 70% gross margin contributes £7M gross profit — equivalent to £140M+ in additional grocery sales at 5% margin.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Snowflake is the platform that makes retail media possible at scale — zero-copy data governance, Clean Room brand collaboration, and closed-loop attribution. The margin opportunity is in the first-party data you already own.</p>
+        </div>
+      </div>
+
+      <div class="metric-card green">
+        <div class="metric-name">CPG Campaign Attribution Rate</div>
+        <div class="metric-full">% of Retail Media Campaigns with Closed-Loop Attribution</div>
+        <span class="benchmark avg">Without Clean Rooms: attribution often estimated or unavailable</span>
+        <span class="benchmark target">Target: 100% of campaigns with measurable uplift</span>
+        <div class="metric-body">The reason CPG brands pay media rates (not trade rates) for retail media is closed-loop attribution: the ability to measure exactly which loyalty members saw a campaign and what they subsequently bought. Without this, media spend reverts to trade budget. The Clean Room is what makes attribution trustworthy and repeatable — without sharing PII.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Snowflake Clean Rooms: CPG brand runs a controlled query against loyalty purchase data — measures campaign uplift, category penetration, and incremental spend — without the grocer sharing raw records. Attributable results CPG brands trust and reinvest.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Private Label Margin Premium</div>
+        <div class="metric-full">Own-Brand Gross Margin vs National Brand Equivalent</div>
+        <span class="benchmark avg">Own-brand: 25&ndash;35% higher gross margin than national brand equivalent</span>
+        <div class="metric-body">Private label is one of the highest-leverage margin plays available to a grocery retailer. Yet most assortment and pricing decisions for private label are still made at annual range reviews based on buyer instinct, not consumer preference data. The gap between "we have own-brand" and "we maximise own-brand margin" is entirely a data and analytics question.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Loyalty and EPOS data on Snowflake reveals segment-level price sensitivity, own-brand vs national brand switching, and category preference by store format. Buying decisions grounded in real data, not annual review cycles.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Own-Brand Mix %</div>
+        <div class="metric-full">Own-Brand as % of Total Category Revenue</div>
+        <span class="benchmark avg">UK grocery leaders: 45&ndash;55% own-brand share</span>
+        <span class="benchmark target">Target: grow mix by 3&ndash;5 points over 3 years</span>
+        <div class="metric-body">Growing own-brand mix is the most reliable path to margin improvement in grocery. Each 1 point of mix shift from national brand to own-brand at 25% higher gross margin contributes significantly to total EBITDA. Data-driven assortment decisions — using loyalty insight to understand where customers would switch to own-brand given the right range — accelerate this shift.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex Analyst: "Which national brand categories show highest own-brand switching propensity among loyalty segments in my top 50 stores?" — answered from live data, feeding directly into buying decisions.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Promotion ROI</div>
+        <div class="metric-full">Revenue Return on Promotional Investment</div>
+        <span class="benchmark avg">Most grocery promotions: negative net ROI when measured properly</span>
+        <span class="benchmark target">Target: positive ROI on 70%+ of promotional investment</span>
+        <div class="metric-body">Grocery promotions represent a massive percentage of the commercial budget, yet very few can be properly evaluated because promotional sell-through, base volume, and spend are never unified in one system. Like CPG, most grocery promotions cannot be accurately measured post-event — which means the same mistakes repeat every cycle.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>EPOS sell-through, loyalty redemption, and promotional spend unified on Snowflake. Cortex Analyst delivers post-promotion ROI analysis in seconds: incremental volume, net margin impact, and comparison to similar historical promotions.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="proof-bar" style="margin-top:0.7rem;">
+      <p>Albertsons Media Collective: retail media platform built on Snowflake Clean Rooms &mdash; CPG brand collaboration, closed-loop attribution, retail media as a separate P&amp;L line &nbsp;&middot;&nbsp; WARC Compass: UK retail media £1.2B+ (2024)</p>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">07 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 08 ============================================================ -->
+<div class="slide bg-white" id="slide-8">
+  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
+    <h3 class="label purple">CATEGORY 05 &middot; THE CFO VIEW</h3>
+    <h2>Financial Impact &amp; <span class="highlight-purple">The CFO Conversation</span></h2>
+    <div class="divider-purple"></div>
+    <div style="display:grid;grid-template-columns:1.1fr 0.9fr;gap:1.2rem;margin-top:0.6rem;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;">
+
+        <div class="metric-card purple">
+          <div class="metric-name">EBITDA Margin</div>
+          <div class="metric-full">Grocery EBITDA as % Revenue</div>
+          <span class="benchmark avg">UK grocery leaders: 3&ndash;7% EBITDA</span>
+          <div class="metric-body">Grocery EBITDA is compressed from every direction: food inflation, fresh waste, promotional spend, and omnichannel cost. Snowflake impacts EBITDA through three simultaneous levers: waste reduction (cost), basket value growth (revenue), and retail media (new high-margin revenue). Together, they represent the most material EBITDA opportunity in grocery today.</div>
+          <div class="metric-snowflake">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <p>Protect + Grow + Monetise on one platform. Each pillar adds EBITDA independently; together they compound. CFO gets cost reduction, revenue growth, and a new P&L line from one data investment.</p>
+          </div>
+        </div>
+
+        <div class="metric-card purple">
+          <div class="metric-name">SC Cost as % Revenue</div>
+          <div class="metric-full">Total Supply Chain Cost ÷ Net Revenue</div>
+          <span class="benchmark avg">Grocery average: 12&ndash;18% of revenue</span>
+          <div class="metric-body">Supply chain cost in grocery is disproportionately influenced by fresh demand forecast error. Every overstock drives markdown and disposal cost; every OOS drives lost revenue and loyalty damage. Better forecasting, tighter replenishment, and adaptive supplier collaboration reduce SC cost without compromising availability — the rarest combination in grocery.</div>
+          <div class="metric-snowflake">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <p>Unified demand, supply, and cold chain on Snowflake enables AI-driven SC optimisation. Adaptive supplier collaboration via zero-copy Data Sharing reduces lead time mismatches.</p>
+          </div>
+        </div>
+
+        <div class="metric-card blue">
+          <div class="metric-name">Working Capital</div>
+          <div class="metric-full">Inventory and Trade Terms Impact on Cash</div>
+          <span class="benchmark avg">Every 5-day reduction in fresh DoS on £200M fresh = £2.7M freed</span>
+          <div class="metric-body">Grocery working capital is uniquely constrained by fresh inventory and payment terms. Over-ordering fresh creates both waste cost and working capital tie-up. AI-driven replenishment that right-sizes fresh stock frees capital that can be redeployed in store investment, digital capability, or private label development.</div>
+          <div class="metric-snowflake">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <p>Better demand/supply matching through unified Snowflake data and Cortex AI directly reduces average fresh inventory held. Working capital freed = reinvestment potential for store or digital growth.</p>
+          </div>
+        </div>
+
+        <div class="metric-card blue">
+          <div class="metric-name">Basket-Level Gross Margin</div>
+          <div class="metric-full">Weighted Gross Margin Across the Full Basket</div>
+          <span class="benchmark avg">UK grocery: 22&ndash;30% gross margin across all categories</span>
+          <div class="metric-body">Basket-level gross margin improves when customers buy higher-margin categories (fresh, own-brand, non-food) rather than exclusively promoted national brands. Personalised promotions that steer baskets towards own-brand fresh and non-food categories can move basket margin meaningfully without requiring any additional footfall.</div>
+          <div class="metric-snowflake">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <p>Cortex AI identifies which promotions drive margin-positive category penetration vs. which merely discount existing volume. Loyalty targeting steers baskets toward private label and fresh — the highest-margin zones in every estate.</p>
+          </div>
+        </div>
+
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.75rem;">
+        <div style="background:linear-gradient(135deg,rgba(17,86,127,0.06),rgba(36,158,220,0.04));border:1px solid rgba(17,86,127,0.2);border-radius:12px;padding:1rem 1.1rem;">
+          <div style="font-size:0.63rem;font-weight:700;color:var(--sf-mid);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.6rem;">Forrester Total Economic Impact</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;margin-bottom:0.7rem;">
+            <div style="text-align:center;"><div style="font-size:1.6rem;font-weight:900;color:var(--sf-mid);line-height:1;">354%</div><div style="font-size:0.6rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;margin-top:0.15rem;">ROI</div></div>
+            <div style="text-align:center;"><div style="font-size:1.6rem;font-weight:900;color:var(--sf-mid);line-height:1;">&lt;6mo</div><div style="font-size:0.6rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;margin-top:0.15rem;">Payback</div></div>
+            <div style="text-align:center;"><div style="font-size:1.6rem;font-weight:900;color:var(--sf-mid);line-height:1;">$17.4M</div><div style="font-size:0.6rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;margin-top:0.15rem;">NPV</div></div>
+          </div>
+          <p style="font-size:0.69rem;color:var(--text-light);line-height:1.45;max-width:100%;margin:0;">Based on a composite organisation of Snowflake retail customers. Benefits include productivity gains from unified data, reduction in data management costs, and supply chain performance improvements.</p>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:0.55rem;">
+          <div class="proof-bar" style="padding:0.6rem 0.85rem;">
+            <div style="font-size:0.67rem;font-weight:700;color:var(--sf-mid);margin-bottom:0.2rem;">Albertsons Media Collective</div>
+            <p style="font-size:0.69rem;color:var(--text-gray);margin:0;max-width:100%;">Retail media platform on Snowflake Clean Rooms &middot; CPG brand collaboration without PII sharing &middot; Closed-loop campaign attribution &middot; Retail media is a separate P&amp;L line</p>
+          </div>
+          <div class="proof-bar" style="padding:0.6rem 0.85rem;">
+            <div style="font-size:0.67rem;font-weight:700;color:var(--sf-mid);margin-bottom:0.2rem;">Kraft Heinz</div>
+            <p style="font-size:0.69rem;color:var(--text-gray);margin:0;max-width:100%;">Selected Snowflake as primary cloud data platform for global data unification &middot; Unified demand, supply, and commercial data &middot; CPG supplier reference for data foundation</p>
+          </div>
+          <div class="proof-bar" style="padding:0.6rem 0.85rem;">
+            <div style="font-size:0.67rem;font-weight:700;color:var(--sf-mid);margin-bottom:0.2rem;">Leading European Grocer</div>
+            <p style="font-size:0.69rem;color:var(--text-gray);margin:0;max-width:100%;">Unified loyalty and EPOS on Snowflake &middot; Personalised promotions at scale &middot; Loyalty data now accessible to buying and category teams in real time</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">08 / 08</div>
+</div>
+
+</div><!-- end deck -->
+
+<script>
+const TOTAL = 8;
+let current = 0;
+function goTo(index) {
+  document.querySelectorAll('.slide').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('slide-' + (index+1)).classList.add('active');
+  document.getElementById('progressBar').style.width = ((index+1)/TOTAL*100) + '%';
+  document.getElementById('slideSelect').value = index + 1;
+  current = index;
+}
+function nextSlide() { if (current < TOTAL - 1) goTo(current + 1); }
+function prevSlide() { if (current > 0) goTo(current - 1); }
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+});
+goTo(0);
+</script>
+</body>
+</html>

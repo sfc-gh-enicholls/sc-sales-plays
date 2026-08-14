@@ -1,0 +1,6 @@
+*.zip
+*.backup.html
+*.jpg
+PHOTO-*.jpg
+.DS_Store
+.snowflake/

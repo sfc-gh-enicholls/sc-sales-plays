@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snowflake Discrete Manufacturing — SDR Cheat Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sf-blue: #249EDC;
+  --sf-mid: #11567F;
+  --sf-deep: #042130;
+  --sf-ice: #F6F9FA;
+  --sf-star: #71D3DC;
+  --sf-white: #FFFFFF;
+  --text-dark: #111827;
+  --text-gray: #4B5568;
+  --text-light: #6B7280;
+  --border: rgba(204,204,204,0.5);
+  --green: #16a34a;
+  --red: #DC2626;
+  --amber: #D97706;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color: var(--text-dark); }
+body { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* Header */
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.2rem; padding-bottom: 0.9rem; border-bottom: 2px solid var(--sf-mid); }
+.page-header-left { display: flex; align-items: center; gap: 1rem; }
+.page-title { font-size: 1.4rem; font-weight: 900; color: var(--sf-mid); letter-spacing: -0.01em; }
+.page-subtitle { font-size: 0.75rem; color: var(--text-light); font-weight: 500; margin-top: 0.1rem; }
+.internal-tag { background: rgba(220,38,38,0.08); border: 1px solid rgba(220,38,38,0.25); border-radius: 5px; padding: 0.25rem 0.7rem; font-size: 0.62rem; font-weight: 700; color: var(--red); letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* Section headers */
+.section-label { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 0.4rem; }
+.label-blue { color: var(--sf-blue); }
+.label-purple { color: var(--sf-mid); }
+.label-green { color: var(--green); }
+.label-red { color: var(--red); }
+.label-amber { color: var(--amber); }
+.label-teal { color: #0d9488; }
+
+/* Card / block base */
+.block { background: #FFFFFF; border-radius: 10px; padding: 0.75rem 0.9rem; border: 1px solid var(--border); }
+.block.blue-top { border-top: 3px solid var(--sf-blue); }
+.block.purple-top { border-top: 3px solid var(--sf-mid); }
+.block.green-top { border-top: 3px solid var(--green); }
+.block.red-top { border-top: 3px solid var(--red); }
+.block.amber-top { border-top: 3px solid var(--amber); }
+.block.teal-top { border-top: 3px solid #0d9488; }
+.block-title { font-size: 0.72rem; font-weight: 800; color: var(--text-dark); margin-bottom: 0.45rem; letter-spacing: 0.01em; }
+
+/* Row grid layouts */
+.row { display: grid; gap: 0.8rem; margin-bottom: 0.8rem; }
+.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.cols-2 { grid-template-columns: 1fr 1fr; }
+.cols-2-1 { grid-template-columns: 2fr 1fr; }
+.cols-1-2 { grid-template-columns: 1fr 2fr; }
+.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+/* Signal items */
+.signal-item { display: flex; align-items: flex-start; gap: 0.4rem; padding: 0.28rem 0; border-bottom: 1px solid rgba(204,204,204,0.25); font-size: 0.74rem; color: var(--text-gray); line-height: 1.4; }
+.signal-item:last-child { border-bottom: none; padding-bottom: 0; }
+.signal-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 0.3rem; }
+.dot-green { background: var(--green); }
+.dot-red { background: var(--red); }
+.dot-blue { background: var(--sf-blue); }
+.dot-amber { background: var(--amber); }
+
+/* Objection rows */
+.obj-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem 0.8rem; align-items: start; padding: 0.35rem 0; border-bottom: 1px solid rgba(204,204,204,0.25); }
+.obj-row:last-child { border-bottom: none; }
+.obj-q { font-size: 0.72rem; color: var(--text-dark); font-weight: 600; font-style: italic; }
+.obj-a { font-size: 0.72rem; color: var(--text-gray); }
+.obj-a strong { color: var(--sf-mid); font-weight: 700; }
+
+/* Pitch box */
+.pitch-box { background: linear-gradient(135deg, rgba(17,86,127,0.06), rgba(36,158,220,0.04)); border: 1.5px solid rgba(17,86,127,0.25); border-radius: 10px; padding: 0.8rem 1rem; }
+.pitch-text { font-size: 0.8rem; color: var(--text-gray); line-height: 1.65; }
+.pitch-text strong { color: var(--sf-mid); }
+
+/* Discovery Q */
+.dq-item { padding: 0.3rem 0; border-bottom: 1px solid rgba(204,204,204,0.25); font-size: 0.72rem; color: var(--text-gray); line-height: 1.45; }
+.dq-item:last-child { border-bottom: none; }
+.dq-item em { color: var(--sf-blue); font-style: italic; font-size: 0.7rem; }
+
+/* Proof table */
+.proof-row { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.32rem 0; border-bottom: 1px solid rgba(204,204,204,0.25); font-size: 0.72rem; color: var(--text-gray); line-height: 1.4; }
+.proof-row:last-child { border-bottom: none; }
+.proof-tag { font-size: 0.6rem; font-weight: 700; background: rgba(17,86,127,0.08); border: 1px solid rgba(17,86,127,0.2); border-radius: 3px; padding: 0.1rem 0.35rem; color: var(--sf-mid); white-space: nowrap; flex-shrink: 0; margin-top: 0.1rem; }
+
+/* Next step pills */
+.ns-item { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.28rem 0; border-bottom: 1px solid rgba(204,204,204,0.25); font-size: 0.73rem; color: var(--text-gray); line-height: 1.4; }
+.ns-item:last-child { border-bottom: none; }
+.ns-num { font-size: 0.8rem; font-weight: 900; color: var(--sf-blue); flex-shrink: 0; min-width: 1rem; }
+
+/* Pain signal quote */
+.pain-quote { background: rgba(220,38,38,0.04); border-left: 3px solid rgba(220,38,38,0.4); border-radius: 0 6px 6px 0; padding: 0.3rem 0.55rem; font-size: 0.71rem; color: var(--text-dark); font-style: italic; margin-bottom: 0.3rem; line-height: 1.4; }
+.pain-quote:last-child { margin-bottom: 0; }
+
+/* Footer */
+.page-footer { margin-top: 1.2rem; padding-top: 0.7rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.page-footer p { font-size: 0.62rem; color: var(--text-light); }
+
+@media print {
+  body { padding: 0.5rem 1rem; background: white; max-width: 100%; }
+  .block { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="page-header-left">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.9;">
+    <div>
+      <div class="page-title">SDR Cheat Sheet &mdash; Discrete Manufacturing</div>
+      <div class="page-subtitle">Supply Chain Transformation Play &nbsp;&middot;&nbsp; Quick Reference for Prospecting &amp; Discovery Calls</div>
+    </div>
+  </div>
+  <div class="internal-tag">Internal Only &mdash; Do Not Share</div>
+</div>
+
+<!-- ROW 1: ICP QUICK SCAN + TRIGGER EVENTS -->
+<div class="row cols-3">
+
+  <!-- Call signals -->
+  <div class="block green-top">
+    <div class="section-label label-green">ICP Quick Scan &mdash; Call These</div>
+    <div class="block-title">Green Signals</div>
+    <div class="signal-item"><div class="signal-dot dot-green"></div><span>$500M+ revenue (ideal: $1B+)</span></div>
+    <div class="signal-item"><div class="signal-dot dot-green"></div><span>5+ global manufacturing sites</span></div>
+    <div class="signal-item"><div class="signal-dot dot-green"></div><span>SAP or Oracle ERP in place</span></div>
+    <div class="signal-item"><div class="signal-dot dot-green"></div><span>Has MES, SCADA, or industrial historian</span></div>
+    <div class="signal-item"><div class="signal-dot dot-green"></div><span>Active digital / AI transformation initiative</span></div>
+    <div class="signal-item"><div class="signal-dot dot-green"></div><span>Sub-industry: Automotive, Aerospace, Industrial, Medical Devices, Electronics, Power Equipment</span></div>
+  </div>
+
+  <!-- Disqualifiers -->
+  <div class="block red-top">
+    <div class="section-label label-red">ICP Quick Scan &mdash; Deprioritise</div>
+    <div class="block-title">Red Flags</div>
+    <div class="signal-item"><div class="signal-dot dot-red"></div><span>Process manufacturing (chemicals, food &amp; beverage, pharma) &mdash; <em style="font-weight:600;">route to CPG / Process Mfg play instead</em></span></div>
+    <div class="signal-item"><div class="signal-dot dot-red"></div><span>Revenue &lt;$200M</span></div>
+    <div class="signal-item"><div class="signal-dot dot-red"></div><span>Single-site, low product complexity</span></div>
+    <div class="signal-item"><div class="signal-dot dot-red"></div><span>Public sector &mdash; <em style="font-weight:600;">warning: very different procurement motion</em></span></div>
+    <div class="signal-item"><div class="signal-dot dot-red"></div><span>No cloud infrastructure or IT modernisation plans</span></div>
+    <div class="signal-item"><div class="signal-dot dot-red"></div><span>No MES or plant digitisation at all</span></div>
+  </div>
+
+  <!-- Trigger events -->
+  <div class="block amber-top">
+    <div class="section-label label-amber">Trigger Events &mdash; Reach Out Now</div>
+    <div class="block-title">Why Call Today</div>
+    <div class="signal-item"><div class="signal-dot dot-amber"></div><span>New CDO, VP Data &amp; Analytics, or Chief Digital Officer hired</span></div>
+    <div class="signal-item"><div class="signal-dot dot-amber"></div><span>SAP S/4HANA migration announced or underway</span></div>
+    <div class="signal-item"><div class="signal-dot dot-amber"></div><span>Earnings call or press release mentions supply chain visibility or disruption challenges</span></div>
+    <div class="signal-item"><div class="signal-dot dot-amber"></div><span>New CSCO or VP Supply Chain appointed</span></div>
+    <div class="signal-item"><div class="signal-dot dot-amber"></div><span>AI / Industry 4.0 / Smart Factory programme publicly announced</span></div>
+    <div class="signal-item"><div class="signal-dot dot-amber"></div><span>Supply chain disruption news (component shortage, recalls, production halt)</span></div>
+  </div>
+</div>
+
+<!-- ROW 2: THE PITCH -->
+<div class="row" style="margin-bottom:0.8rem;">
+  <div style="background:linear-gradient(90deg,rgba(17,86,127,0.07),rgba(36,158,220,0.04));border:1.5px solid rgba(17,86,127,0.2);border-radius:10px;padding:0.8rem 1.1rem;">
+    <div class="section-label label-purple" style="margin-bottom:0.5rem;">The 30-Second Pitch &mdash; Adapt by Persona</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.7rem;">
+      <div>
+        <div style="font-size:0.65rem;font-weight:700;color:var(--sf-mid);margin-bottom:0.3rem;">For CSCO / SVP Supply Chain</div>
+        <p style="font-size:0.74rem;color:var(--text-gray);line-height:1.6;">&ldquo;Most discrete manufacturers run 5 systems that never agree on the same number. Your team spends days reconciling ERP, MES, and PLM before making a supply decision. Snowflake unifies all of it into one governed platform so AI can actually work &mdash; and decisions happen in seconds, not shifts. ABB did this and saved over $200M a year in inventory.&rdquo;</p>
+      </div>
+      <div>
+        <div style="font-size:0.65rem;font-weight:700;color:var(--sf-blue);margin-bottom:0.3rem;">For CIO / CDO / VP Data</div>
+        <p style="font-size:0.74rem;color:var(--text-gray);line-height:1.6;">&ldquo;Most manufacturing AI pilots fail in production &mdash; not because the algorithm is wrong, but because the data is fragmented and ungoverned. Snowflake connects SAP, MES, PLM, and SCADA into a single governed semantic layer. OEE, yield, cycle time &mdash; defined once, trusted everywhere. That&rsquo;s what makes AI actually reach production.&rdquo;</p>
+      </div>
+      <div>
+        <div style="font-size:0.65rem;font-weight:700;color:#0d9488;margin-bottom:0.3rem;">For VP Manufacturing / SVP Ops</div>
+        <p style="font-size:0.74rem;color:var(--text-gray);line-height:1.6;">&ldquo;When a component shortage is heading toward your line, you find out when it stops &mdash; not 6 weeks earlier. Snowflake connects your MES, ERP, and supplier signals so Cortex AI detects the risk early and your team can act. One approval triggers ERP, MES, and QMS simultaneously &mdash; decision cycle goes from 18 hours to under 2 seconds.&rdquo;</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ROW 3: DISCOVERY QUESTIONS -->
+<div class="row cols-4">
+
+  <div class="block purple-top">
+    <div class="section-label label-purple">CSCO / SVP Supply Chain</div>
+    <div class="block-title">Discovery Questions</div>
+    <div class="dq-item"><em>Opener:</em> &ldquo;How many systems does your team reconcile before making a supply planning decision today?&rdquo;</div>
+    <div class="dq-item">&ldquo;When you last had a component shortage, how far in advance did you know about it?&rdquo;</div>
+    <div class="dq-item">&ldquo;How would you describe your team&rsquo;s confidence in the AI investments you&rsquo;ve made in supply chain so far?&rdquo;</div>
+  </div>
+
+  <div class="block blue-top">
+    <div class="section-label label-blue">VP Manufacturing / Head of Ops</div>
+    <div class="block-title">Discovery Questions</div>
+    <div class="dq-item"><em>Opener:</em> &ldquo;What&rsquo;s the cost of an hour of unplanned downtime on your highest-volume production line?&rdquo;</div>
+    <div class="dq-item">&ldquo;When an ECO is issued, how long does it take for MES, ERP, and procurement to all reflect the change?&rdquo;</div>
+    <div class="dq-item">&ldquo;If your production planner wants to know which components are below reorder for next week&rsquo;s schedule, how long does it take to get that answer?&rdquo;</div>
+  </div>
+
+  <div class="block teal-top">
+    <div class="section-label label-teal">CIO / CDO / VP Data</div>
+    <div class="block-title">Discovery Questions</div>
+    <div class="dq-item"><em>Opener:</em> &ldquo;Of the AI or ML pilots you&rsquo;ve run in manufacturing, how many have made it into production?&rdquo;</div>
+    <div class="dq-item">&ldquo;If your CSCO asks a supply chain question, how long before they get a trusted answer from your data team?&rdquo;</div>
+    <div class="dq-item">&ldquo;Do your engineering, procurement, and production teams work from the same definition of OEE and cycle time &mdash; or do they argue about numbers in S&OP?&rdquo;</div>
+  </div>
+
+  <div class="block amber-top">
+    <div class="section-label label-amber">CPO / Head of Supply Planning</div>
+    <div class="block-title">Discovery Questions</div>
+    <div class="dq-item"><em>Opener:</em> &ldquo;How far in advance do you typically know when a component from a sole-source supplier is at risk?&rdquo;</div>
+    <div class="dq-item">&ldquo;What percentage of your supply planning team&rsquo;s time is spent preparing data before S&OP vs actually making decisions in it?&rdquo;</div>
+    <div class="dq-item">&ldquo;When a supplier misses a delivery, how quickly can your team execute the response across ERP, scheduling, and procurement?&rdquo;</div>
+  </div>
+
+</div>
+
+<!-- ROW 4: PAIN SIGNALS + OBJECTION HANDLING -->
+<div class="row cols-2">
+
+  <!-- Pain signals -->
+  <div class="block red-top">
+    <div class="section-label label-red">Pain Signals &mdash; Listen For These Phrases</div>
+    <div class="block-title">If You Hear This, Lean In</div>
+    <div class="pain-quote">&ldquo;We always find out about component shortages when the line actually stops.&rdquo;</div>
+    <div class="pain-quote">&ldquo;Our MES and ERP never agree on the same inventory number.&rdquo;</div>
+    <div class="pain-quote">&ldquo;Our planning team spends most of their time building the S&OP pack, not making decisions in it.&rdquo;</div>
+    <div class="pain-quote">&ldquo;We&rsquo;ve tried AI in supply chain but it never makes it to production.&rdquo;</div>
+    <div class="pain-quote">&ldquo;We have great data, it&rsquo;s just all siloed across different systems.&rdquo;</div>
+    <div class="pain-quote">&ldquo;Every time engineering issues an ECO, it takes days to propagate through MES, ERP, and procurement &mdash; it&rsquo;s all manual re-entry.&rdquo;</div>
+    <div class="pain-quote">&ldquo;We can&rsquo;t trace a quality failure back to the specific component batch or BOM revision &mdash; traceability is still a spreadsheet exercise.&rdquo;</div>
+    <div class="pain-quote">&ldquo;Every ECO feels like a fire drill across engineering, procurement, and manufacturing.&rdquo;</div>
+    <div class="pain-quote">&ldquo;Our visibility ends at our own factory wall &mdash; we can&rsquo;t see what&rsquo;s happening at tier-2 suppliers.&rdquo;</div>
+  </div>
+
+  <!-- Objection handling -->
+  <div class="block purple-top">
+    <div class="section-label label-purple">Objection Handling</div>
+    <div class="block-title">Common Objections &amp; Tight Responses</div>
+    <div class="obj-row">
+      <div class="obj-q">&ldquo;We&rsquo;re already committed to [incumbent platform / enterprise suite].&rdquo;</div>
+      <div class="obj-a">Snowflake is <strong>not a replacement</strong> for your ERP, MES, or planning tool &mdash; it sits on top of them. ABB and Honeywell run SAP and Snowflake side by side.</div>
+    </div>
+    <div class="obj-row">
+      <div class="obj-q">&ldquo;IT won&rsquo;t support another platform to integrate and maintain.&rdquo;</div>
+      <div class="obj-a"><strong>Zero-copy</strong> means no new pipelines for IT to build or maintain. Your systems stay exactly where they are.</div>
+    </div>
+    <div class="obj-row">
+      <div class="obj-q">&ldquo;We already have a data warehouse / data lake.&rdquo;</div>
+      <div class="obj-a">Snowflake likely works <strong>alongside it</strong>, not instead of it. The question is whether your manufacturing systems and AI actually trust what&rsquo;s in it.</div>
+    </div>
+    <div class="obj-row">
+      <div class="obj-q">&ldquo;We&rsquo;re not ready for AI yet.&rdquo;</div>
+      <div class="obj-a">That&rsquo;s exactly why we start with the <strong>data foundation</strong>. Most aren&rsquo;t &mdash; the data fragmentation is the reason AI hasn&rsquo;t worked yet.</div>
+    </div>
+    <div class="obj-row">
+      <div class="obj-q">&ldquo;Budget is tight &mdash; this isn&rsquo;t a priority right now.&rdquo;</div>
+      <div class="obj-a">Forrester found <strong>&lt;6 month payback</strong>. ABB found $200M+ annual savings. Supply chain is typically 50–70% of revenue &mdash; even a 1% improvement is material.</div>
+    </div>
+    <div class="obj-row">
+      <div class="obj-q">&ldquo;We&rsquo;re evaluating alternatives that do everything in one platform.&rdquo;</div>
+      <div class="obj-a">Closed, proprietary platforms <strong>lock your data in</strong>. Snowflake is open &mdash; your stack stays yours. The world&rsquo;s best supply chain apps (including Blue Yonder) chose Snowflake as their data foundation.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ROW 5: PROOF POINTS -->
+<div class="row">
+
+  <!-- Proof points -->
+  <div class="block blue-top">
+    <div class="section-label label-blue">Proof Points by Sub-Industry &mdash; Which Story to Tell</div>
+    <div class="block-title">Match the Customer, Match the Story</div>
+    <div class="proof-row"><span class="proof-tag">Electrification / Industrial</span><span><strong style="color:var(--sf-mid);">ABB</strong> &mdash; $200M+ annual inventory savings, $900M revenue growth influenced. Consolidated 40 ERPs. 3.5M parts matched in near real-time across 55,000 suppliers.</span></div>
+    <div class="proof-row"><span class="proof-tag">Industrial / Aerospace</span><span><strong style="color:var(--sf-mid);">Honeywell</strong> &mdash; 33 data warehouses unified to 1. Global inventory tracked hourly across 55,000 suppliers. Used to navigate semiconductor shortages.</span></div>
+    <div class="proof-row"><span class="proof-tag">Automation / Smart Factory</span><span><strong style="color:var(--sf-mid);">Schneider Electric</strong> &mdash; Gartner #1 Supply Chain 4 consecutive years. 290+ smart factories unified. Real-time OEE &amp; quality insights across every production line.</span></div>
+    <div class="proof-row"><span class="proof-tag">ROI Benchmark</span><span><strong style="color:var(--sf-mid);">Forrester TEI 2024</strong> &mdash; 354% ROI over 3 years. &lt;6 month average payback. $17.4M 3-year NPV on a composite Snowflake supply chain deployment.</span></div>
+    <div class="proof-row"><span class="proof-tag">Industry Average</span><span><strong style="color:var(--sf-mid);">McKinsey &amp; Company</strong> &mdash; $18M average annual savings from supply chain visibility improvements across discrete manufacturers. Use this as the floor, not the ceiling.</span></div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="page-footer">
+  <p>Snowflake Discrete Manufacturing SDR Cheat Sheet &nbsp;&middot;&nbsp; <strong>Internal Use Only &mdash; Not For Customer Distribution</strong></p>
+  <p style="text-align:right;">&copy; 2026 Snowflake Inc. All Rights Reserved</p>
+</div>
+
+</body>
+</html>
