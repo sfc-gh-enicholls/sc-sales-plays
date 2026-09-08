@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPG — Supply Chain Conceptual Demo Flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sf-blue: #249EDC;
+  --sf-mid: #11567F;
+  --sf-deep: #042130;
+  --sf-ice: #F6F9FA;
+  --sf-star: #71D3DC;
+  --text-dark: #111827;
+  --text-gray: #4B5568;
+  --text-light: #6B7280;
+  --border: rgba(204,204,204,0.5);
+  --red: #DC2626;
+  --green: #16a34a;
+  --amber: #d97706;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color: var(--text-dark); line-height: 1.6; }
+
+/* Header */
+.doc-header {
+  background: linear-gradient(135deg, var(--sf-deep) 0%, var(--sf-mid) 60%, rgba(36,158,220,0.85) 100%);
+  padding: 2.5rem 3rem 2rem;
+}
+.header-inner { max-width: 900px; margin: 0 auto; }
+.header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+.internal-tag { background: rgba(220,38,38,0.2); border: 1px solid rgba(220,38,38,0.4); border-radius: 5px; padding: 0.3rem 0.8rem; font-size: 0.62rem; font-weight: 700; color: rgba(255,120,120,0.9); letter-spacing: 0.1em; text-transform: uppercase; }
+.doc-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(113,211,220,0.8); margin-bottom: 0.4rem; }
+.doc-title { font-size: 2.2rem; font-weight: 900; color: #FFFFFF; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+.doc-subtitle { font-size: 1rem; color: rgba(255,255,255,0.65); font-weight: 300; max-width: 600px; line-height: 1.6; }
+
+/* Body */
+.doc-body { max-width: 900px; margin: 0 auto; padding: 2.5rem 3rem 4rem; }
+
+/* Context box */
+.context-box { background: linear-gradient(135deg, rgba(17,86,127,0.06), rgba(36,158,220,0.04)); border: 1.5px solid rgba(17,86,127,0.2); border-radius: 14px; padding: 1.5rem 1.8rem; margin-bottom: 2.5rem; }
+.context-box h3 { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--sf-mid); margin-bottom: 0.8rem; }
+.context-box p { font-size: 0.9rem; color: var(--text-gray); margin-bottom: 0.6rem; line-height: 1.6; }
+.context-box p:last-child { margin-bottom: 0; }
+.context-box strong { color: var(--text-dark); }
+.context-box .hook { font-size: 1rem; font-weight: 700; color: var(--sf-mid); font-style: italic; margin-bottom: 0.5rem; }
+
+/* Section heading */
+.section-block { margin-bottom: 3rem; }
+.section-header { background: linear-gradient(90deg, var(--sf-mid), rgba(36,158,220,0.8)); border-radius: 10px; padding: 0.9rem 1.4rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+.section-header h2 { font-size: 1rem; font-weight: 800; color: #FFFFFF; }
+.section-persona { font-size: 0.7rem; font-weight: 600; color: rgba(255,255,255,0.7); letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* Scene card */
+.scene-card { background: #FFFFFF; border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.6rem; margin-bottom: 1.2rem; }
+.scene-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sf-blue); margin-bottom: 0.9rem; padding-bottom: 0.6rem; border-bottom: 1px solid rgba(36,158,220,0.15); }
+
+/* Scene row */
+.scene-row { display: grid; grid-template-columns: 120px 1fr; gap: 0.8rem; margin-bottom: 0.8rem; align-items: start; }
+.scene-row:last-child { margin-bottom: 0; }
+.scene-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); padding-top: 0.1rem; }
+.scene-content { font-size: 0.85rem; color: var(--text-gray); line-height: 1.55; }
+.scene-content ul { padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.3rem; }
+.scene-content li { font-size: 0.85rem; color: var(--text-gray); }
+
+/* Highlight boxes */
+.aha-box { background: rgba(36,158,220,0.05); border-left: 3px solid var(--sf-blue); border-radius: 0 8px 8px 0; padding: 0.6rem 0.9rem; font-size: 0.85rem; color: var(--text-gray); line-height: 1.5; }
+.aha-box strong { color: var(--sf-mid); }
+.sowhat-box { background: rgba(22,163,74,0.05); border-left: 3px solid var(--green); border-radius: 0 8px 8px 0; padding: 0.6rem 0.9rem; font-size: 0.85rem; color: var(--text-gray); line-height: 1.5; }
+.sowhat-box strong { color: var(--green); }
+
+/* Features table */
+.features-section { margin-top: 3rem; }
+.features-section h2 { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--sf-mid); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(17,86,127,0.15); }
+.feature-row { display: grid; grid-template-columns: 200px 1fr; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid rgba(204,204,204,0.3); align-items: start; font-size: 0.82rem; }
+.feature-row:last-child { border-bottom: none; }
+.feature-scene { font-weight: 700; color: var(--text-dark); }
+.feature-tags { color: var(--text-gray); }
+.feature-tag { display: inline-block; background: rgba(36,158,220,0.08); border: 1px solid rgba(36,158,220,0.2); border-radius: 4px; padding: 0.1rem 0.45rem; font-size: 0.72rem; font-weight: 600; color: var(--sf-mid); margin: 0.1rem 0.15rem 0.1rem 0; }
+
+/* Narrative event callout */
+.narrative-event { background: linear-gradient(135deg, rgba(220,38,38,0.04), rgba(217,119,6,0.04)); border: 1.5px solid rgba(220,38,38,0.2); border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 2rem; }
+.narrative-event h3 { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); margin-bottom: 0.6rem; }
+.event-item { display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.45rem; }
+.event-item:last-child { margin-bottom: 0; }
+.event-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 0.35rem; }
+.event-dot.red { background: var(--red); }
+.event-dot.amber { background: var(--amber); }
+.event-dot.blue { background: var(--sf-blue); }
+.event-text { font-size: 0.87rem; color: var(--text-gray); line-height: 1.5; }
+.event-text strong { color: var(--text-dark); }
+
+/* Footer */
+.doc-footer { background: var(--sf-deep); padding: 1.2rem 3rem; text-align: center; }
+.doc-footer p { font-size: 0.68rem; color: rgba(255,255,255,0.35); }
+
+@media (max-width: 700px) {
+  .doc-header, .doc-body { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .scene-row { grid-template-columns: 1fr; }
+  .feature-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="doc-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.95;filter:brightness(0) invert(1);">
+      <div class="internal-tag">Internal Only &mdash; Do Not Share</div>
+    </div>
+    <div class="doc-label">Demo Script &middot; CPG</div>
+    <div class="doc-title">Supply Chain Conceptual Demo Flow</div>
+    <p class="doc-subtitle">From Forecast to Foresight &mdash; CPG scenario &mdash; Consumer Packaged Goods</p>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="doc-body">
+
+  <!-- CONTEXT -->
+  <div class="context-box">
+    <h3>What we&rsquo;re doing &amp; how it relates to the play</h3>
+    <p class="hook">&ldquo;Stop reacting to disruption and reporting deadlines. Predict them.&rdquo;</p>
+    <p>This demo is the conceptual centrepiece for the &ldquo;From Forecast to Foresight&rdquo; CPG play. The play&rsquo;s premise: across EMEA CPG, every major supply-chain theme &mdash; cost &amp; margin pressure, resilience &amp; agility, AI demand forecasting, and traceability &mdash; is fundamentally a data problem. Fragmented systems force leaders to react to disruption after the fact; Snowflake collapses that into one governed platform so leaders predict and respond.</p>
+    <p><strong>Positioning:</strong> From Forecast to Foresight helps EMEA CPG leaders turn fragmented supply-chain data into a single, trusted intelligence layer &mdash; so every decision, from demand to compliance, is made with foresight, not hindsight.</p>
+    <p><strong>What this demo proves:</strong> one narrative event &mdash; a competitor recall (demand upside) colliding with a drought at a key ingredient supplier and a delayed bottling-line commissioning (supply risk) &mdash; followed across four personas, all on Snowflake. It maps to the play&rsquo;s arc: Forecast (AI keeps the base plan current + quantifies new demand &mdash; S1&ndash;2) &rarr; Foresight (AI surfaces risk early, dollar-quantifies it, runs optimised scenarios &mdash; S1, 3&ndash;4) &rarr; Proof (bridge: same platform underpins traceability + CSRD/DPP &mdash; not demonstrated below; add a closing slide).</p>
+  </div>
+
+  <!-- FICTIONAL COMPANY -->
+  <div style="background:#FFFFFF;border:1px solid var(--border);border-radius:12px;padding:1.3rem 1.6rem;margin-bottom:2rem;">
+    <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.8rem;">Fictional Company &mdash; Demo Context</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+      <div>
+        <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem;">Company</div>
+        <div style="font-size:0.88rem;font-weight:700;color:var(--text-dark);">Fictional large EMEA CPG manufacturer</div>
+        <div style="font-size:0.78rem;color:var(--text-gray);">Multi-category branded goods business operating across the EMEA region.</div>
+      </div>
+      <div>
+        <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem;">Supply Chain</div>
+        <div style="font-size:0.78rem;color:var(--text-gray);">Complex multi-tier supply chain with ingredient sourcing exposure, manufacturing constraints, and retailer service-level commitments.</div>
+      </div>
+      <div>
+        <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem;">Planning Context</div>
+        <div style="font-size:0.78rem;color:var(--text-gray);">Seasonal demand patterns, promotional planning complexity, and ingredient supply exposure create persistent forecast and fulfilment risk.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NARRATIVE EVENT -->
+  <div class="narrative-event">
+    <h3>The Narrative Event &mdash; Multiple Pressures Converging</h3>
+    <div class="event-item">
+      <div class="event-dot blue"></div>
+      <div class="event-text"><strong>Demand upside:</strong> A competitor product has been recalled, creating an opportunity to capture shelf space and a major retailer contract</div>
+    </div>
+    <div class="event-item">
+      <div class="event-dot red"></div>
+      <div class="event-text"><strong>Supply risk 1:</strong> New bottling line commissioning delayed due to resource and engineering constraints</div>
+    </div>
+    <div class="event-item">
+      <div class="event-dot red"></div>
+      <div class="event-text"><strong>Supply risk 2:</strong> Extreme weather (drought) affecting a key agricultural ingredient supplier, creating shortages in coming weeks/months</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 1 &mdash; SC Health &amp; Alerts</h2>
+      <div class="section-persona">Persona: Head of Supply Chain (Planning)</div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 1a &middot; SC Health Overview</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The exec starts their day in a single control tower dashboard &mdash; no more pulling reports from disparate systems.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Control tower with at-a-glance KPIs: service level, inventory, forecast accuracy</li>
+            <li>Real-time AI insights surfacing the areas that need attention most</li>
+            <li>Customizable alert thresholds (only what matters shows up)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> AI-driven dashboard eliminates manual data aggregation. The exec isn&rsquo;t reacting to reports &mdash; they&rsquo;re managing by exception.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Proactive vs. reactive supply chain management. Hours saved on reporting.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 1b &middot; Key Alerts</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">System has flagged two critical developments this morning:</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>AI-powered alert feed, personalized and prioritized</li>
+            <li>System auto-quantifies risk in financial terms: &ldquo;XX% revenue uplift in Q2 and Q3 at risk&rdquo;</li>
+            <li>Instant visibility into financial consequences of inaction</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> System doesn&rsquo;t just flag risks &mdash; it puts dollar values on them so leadership can prioritize fast.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Leadership is always informed of potential risks and understands severity before it becomes a crisis.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 1c &middot; Scenario Comparison</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">Given the risks and opportunities, the exec wants to evaluate options quickly.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Copy from base scenario, modify parameters, add comments &mdash; collaborative workflow creation</li>
+            <li>Automated workflow assigns tasks to demand, supply, and finance teams</li>
+            <li>Side-by-side scenario comparison on key metrics: revenue, margin, service level impact</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Workflow creation is automated and linked to scenario creation &mdash; no manual task assignment, no delays. Comments route to the right owner immediately.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Faster decisions, better decisions &mdash; full business impact visibility, cross-functional alignment built into the workflow.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 2 &mdash; Demand Planning</h2>
+      <div class="section-persona">Persona: Demand Planner</div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 2a &middot; Base Demand Forecasting</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The demand planner needs to keep the base forecast current without drowning in manual adjustments.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Base demand forecasting dashboard with &ldquo;auto-selected&rdquo; best fit model highlighted</li>
+            <li>FCA (Forecast Contribution Add) value-add metric &mdash; highlights where planner input improves accuracy vs. hurts it</li>
+            <li>Focuses planner time on value-add areas only</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> AI continuously updates the forecasting model. Planner only intervenes where they add value, as measured by FCA. It prevents interventions that reduce accuracy.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Higher forecast accuracy with reduced effort. Planner time freed for scenario modeling, action design, decision prep.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 2b &middot; Demand Opportunity Review</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The competitor recall creates a new demand scenario to model. Planner needs to quantify volume and financial impact of capturing the retailer contract quickly.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Scenario planning dashboard with real-time business impact visualization</li>
+            <li>AI agent surfaces relevant historical scenarios with related assumptions for the planner to build from</li>
+            <li>Planner tweaks opportunity parameters (margin, timing, volume, probability)</li>
+            <li>Comparison chart: volume/revenue impact vs. current targets</li>
+            <li>Immediate cross-functional task assignment to responsible demand planners</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The AI agent enhances scenario modelling with insights from past cases. Immediate volume/financial visibility into potential revenue shifts.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Early identification of demand shifts enables ROI-backed decisions. Enables cross-functional alignment with supply and finance teams before plans are locked.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 3 &mdash; Supply &mdash; Gap Review &amp; Bottleneck</h2>
+      <div class="section-persona">Persona: End-to-End Supply Planner</div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 3a &middot; Supply Gap Review</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The system has already identified new supply risks (feeding from the alerts in Section 1). Two specific bottlenecks are surfaced:</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Solver re-runs automatically across all internal and external constraints for two scenarios (pessimistic and optimistic)</li>
+            <li>Supply gap dashboard showing projected gaps over time with respective bottlenecks</li>
+            <li>Initiative tracking: mitigation actions, their volume/financial impact, and ROI for management decisions</li>
+            <li>AI-powered recommendations and drill-down ranking for risk mitigation</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> AI-driven optimisation reduces manual effort. Early risk identification provides longer lead time and a broader solution set. System prioritises and recommends drill-down actions to minimise gap and maximise profit.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Minimises lost sales and excess inventory. Accelerates decision-making and enables timely responses to disruptions.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 3b &middot; Internal Bottleneck Drill-Down</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The new bottling line commissioning has been delayed due to resource and engineering constraints. Planner drills into this from the supply gap overview.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Internal capacity drill-down dashboard: bottling line status, project timelines, production schedules</li>
+            <li>Planner identifies that reallocation of production line operators and shift capacity resolves some of the gap (requires management sign-off with trade-off evaluation)</li>
+            <li>ROI/cost/investment impact evaluations for trade-offs: labour costs vs. production gains vs. project prioritisation</li>
+            <li>Overtime adjustments on existing lines bridge remaining gap at higher cost</li>
+            <li>Both actions auto-documented as drafts, triggering action owners to review and financially evaluate</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Internal bottleneck visibility is automated &mdash; real-time monitoring. Decision trade-offs are quantified for management.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Maximises production efficiency by reallocating constrained resources. Aligns operational decisions with strategic and financial trade-offs. Ensures company-wide optimisation.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 4 &mdash; Supply &mdash; External Ingredient Sourcing</h2>
+      <div class="section-persona">Persona: End-to-End Supply Planner</div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 4a &middot; External Ingredient Sourcing Drill-Down</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">Drought conditions have disrupted the supply of a critical raw ingredient (e.g. hops, barley, or CO₂). Cascading effects are expected on the primary ingredient supplier in coming weeks/months. Planner analyses volume at risk and defines mitigation actions:</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Sourcing drill-down dashboard: primary supplier constraints, at-risk order volumes</li>
+            <li>Upstream volume requirement analysis of the critical ingredient, visualised via ingredient supply chain network chart (from raw agricultural source through to finished product)</li>
+            <li>Financial trade-off comparison: cost of securing additional supply vs. supply assurance benefits</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Proactive risk detection enables early mitigation. Scenario modelling quantifies the financial impact of securing additional inventory and stockpiling critical ingredients.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Enhances supply chain resilience through improved visibility and proactive risk management. Ensures demand fulfilment by securing supply ahead of potential disruptions.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 4b &middot; Supply Gap Review (Updated)</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">Planner reviews all newly created mitigation initiatives, categorised by scenario. Each scenario outlines specific actions from internal and external bottleneck analyses.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Supply gap dashboard with prioritised mitigation initiatives per scenario</li>
+            <li>Side-by-side scenario comparison: financial and operational impact</li>
+            <li>Approval workflow module for streamlined management decision-making</li>
+            <li>All risk-mitigation actions aggregated into structured, actionable initiatives</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Seamless transition to executive decision-making. All actions aggregated and ready for the next dashboard (executive layer).</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Provides a structured approach for resolving supply gaps, ensuring cross-team alignment. Enables data-driven management decisions, optimising resource allocation.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SNOWFLAKE FEATURES -->
+  <div class="features-section">
+    <h2>Snowflake Features Powering Each Scene</h2>
+
+    <div class="feature-row">
+      <div class="feature-scene">Scene 1a &mdash; SC Health Overview</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Streamlit in Snowflake (control tower)</span>
+        <span class="feature-tag">Dynamic Tables (incremental KPIs)</span>
+        <span class="feature-tag">Snowpipe Streaming</span>
+        <span class="feature-tag">Cortex ML anomaly detection</span>
+        <span class="feature-tag">Snowflake Alerts</span>
+        <span class="feature-tag">Row-Level Security</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 1b &mdash; Key Alerts</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex ML anomaly detection</span>
+        <span class="feature-tag">Cortex AI ($ quantification + insight cards)</span>
+        <span class="feature-tag">Snowflake Marketplace (recall/weather/agri signals)</span>
+        <span class="feature-tag">Alerts + Notification Integrations</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 1c &mdash; Scenario Comparison</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Dynamic Tables (scenario branch)</span>
+        <span class="feature-tag">Snowflake Tasks (task assignment)</span>
+        <span class="feature-tag">Notification Integrations</span>
+        <span class="feature-tag">Cortex Analyst</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 2a &mdash; Base Demand Forecasting</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex ML Forecasting (auto best-fit model)</span>
+        <span class="feature-tag">Dynamic Tables (FCA recompute)</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 2b &mdash; Demand Opportunity Review</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex Agents / Cortex Search (historical scenarios)</span>
+        <span class="feature-tag">Dynamic Tables (real-time impact)</span>
+        <span class="feature-tag">Snowflake Tasks</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 3a &mdash; Supply Gap Review</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Snowpark (solver)</span>
+        <span class="feature-tag">Dynamic Tables (auto re-run)</span>
+        <span class="feature-tag">Cortex ML (recommendations/ranking)</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 3b &mdash; Internal Bottleneck Drill-Down</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Streamlit</span>
+        <span class="feature-tag">Dynamic Tables (ROI/trade-off)</span>
+        <span class="feature-tag">Snowflake Tasks (draft actions)</span>
+        <span class="feature-tag">Cortex Analyst</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 4a &mdash; External Ingredient Sourcing</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Snowflake Marketplace (weather/agri data)</span>
+        <span class="feature-tag">Data Sharing (to supplier's Snowflake)</span>
+        <span class="feature-tag">Streamlit (network chart)</span>
+        <span class="feature-tag">Cortex ML</span>
+        <span class="feature-tag">Snowpark</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 4b &mdash; Supply Gap Review (Updated)</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Dynamic Tables (aggregate initiatives)</span>
+        <span class="feature-tag">Snowflake Tasks + Notification Integrations (approval)</span>
+        <span class="feature-tag">Streamlit</span>
+        <span class="feature-tag">Cortex Analyst</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <p>CPG Supply Chain &mdash; Demo Script &mdash; Internal Only &mdash; Snowflake EMEA</p>
+</div>
+
+</body>
+</html>

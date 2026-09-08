@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discrete Manufacturing — Every Tier, Every Part — Conceptual Demo Flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sf-blue: #249EDC;
+  --sf-mid: #11567F;
+  --sf-deep: #042130;
+  --sf-ice: #F6F9FA;
+  --sf-star: #71D3DC;
+  --text-dark: #111827;
+  --text-gray: #4B5568;
+  --text-light: #6B7280;
+  --border: rgba(204,204,204,0.5);
+  --red: #DC2626;
+  --green: #16a34a;
+  --amber: #d97706;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color: var(--text-dark); line-height: 1.6; }
+
+/* Header */
+.doc-header {
+  background: linear-gradient(135deg, var(--sf-deep) 0%, var(--sf-mid) 60%, rgba(36,158,220,0.85) 100%);
+  padding: 2.5rem 3rem 2rem;
+}
+.header-inner { max-width: 900px; margin: 0 auto; }
+.header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+.internal-tag { background: rgba(220,38,38,0.2); border: 1px solid rgba(220,38,38,0.4); border-radius: 5px; padding: 0.3rem 0.8rem; font-size: 0.62rem; font-weight: 700; color: rgba(255,120,120,0.9); letter-spacing: 0.1em; text-transform: uppercase; }
+.doc-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(113,211,220,0.8); margin-bottom: 0.4rem; }
+.doc-title { font-size: 2.2rem; font-weight: 900; color: #FFFFFF; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+.doc-subtitle { font-size: 1rem; color: rgba(255,255,255,0.65); font-weight: 300; max-width: 600px; line-height: 1.6; }
+
+/* Body */
+.doc-body { max-width: 900px; margin: 0 auto; padding: 2.5rem 3rem 4rem; }
+
+/* Context box */
+.context-box { background: linear-gradient(135deg, rgba(17,86,127,0.06), rgba(36,158,220,0.04)); border: 1.5px solid rgba(17,86,127,0.2); border-radius: 14px; padding: 1.5rem 1.8rem; margin-bottom: 2.5rem; }
+.context-box h3 { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--sf-mid); margin-bottom: 0.8rem; }
+.context-box p { font-size: 0.9rem; color: var(--text-gray); margin-bottom: 0.6rem; line-height: 1.6; }
+.context-box p:last-child { margin-bottom: 0; }
+.context-box strong { color: var(--text-dark); }
+.context-box .hook { font-size: 1rem; font-weight: 700; color: var(--sf-mid); font-style: italic; margin-bottom: 0.5rem; }
+
+/* Section heading */
+.section-block { margin-bottom: 3rem; }
+.section-header { background: linear-gradient(90deg, var(--sf-mid), rgba(36,158,220,0.8)); border-radius: 10px; padding: 0.9rem 1.4rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+.section-header h2 { font-size: 1rem; font-weight: 800; color: #FFFFFF; }
+.section-persona { font-size: 0.7rem; font-weight: 600; color: rgba(255,255,255,0.7); letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* Scene card */
+.scene-card { background: #FFFFFF; border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.6rem; margin-bottom: 1.2rem; }
+.scene-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sf-blue); margin-bottom: 0.9rem; padding-bottom: 0.6rem; border-bottom: 1px solid rgba(36,158,220,0.15); }
+
+/* Scene row */
+.scene-row { display: grid; grid-template-columns: 120px 1fr; gap: 0.8rem; margin-bottom: 0.8rem; align-items: start; }
+.scene-row:last-child { margin-bottom: 0; }
+.scene-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); padding-top: 0.1rem; }
+.scene-content { font-size: 0.85rem; color: var(--text-gray); line-height: 1.55; }
+.scene-content ul { padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.3rem; }
+.scene-content li { font-size: 0.85rem; color: var(--text-gray); }
+
+/* Highlight boxes */
+.aha-box { background: rgba(36,158,220,0.05); border-left: 3px solid var(--sf-blue); border-radius: 0 8px 8px 0; padding: 0.6rem 0.9rem; font-size: 0.85rem; color: var(--text-gray); line-height: 1.5; }
+.aha-box strong { color: var(--sf-mid); }
+.sowhat-box { background: rgba(22,163,74,0.05); border-left: 3px solid var(--green); border-radius: 0 8px 8px 0; padding: 0.6rem 0.9rem; font-size: 0.85rem; color: var(--text-gray); line-height: 1.5; }
+.sowhat-box strong { color: var(--green); }
+
+/* Features table */
+.features-section { margin-top: 3rem; }
+.features-section h2 { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--sf-mid); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(17,86,127,0.15); }
+.feature-row { display: grid; grid-template-columns: 200px 1fr; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid rgba(204,204,204,0.3); align-items: start; font-size: 0.82rem; }
+.feature-row:last-child { border-bottom: none; }
+.feature-scene { font-weight: 700; color: var(--text-dark); }
+.feature-tags { color: var(--text-gray); }
+.feature-tag { display: inline-block; background: rgba(36,158,220,0.08); border: 1px solid rgba(36,158,220,0.2); border-radius: 4px; padding: 0.1rem 0.45rem; font-size: 0.72rem; font-weight: 600; color: var(--sf-mid); margin: 0.1rem 0.15rem 0.1rem 0; }
+
+/* Narrative event callout */
+.narrative-event { background: linear-gradient(135deg, rgba(220,38,38,0.04), rgba(217,119,6,0.04)); border: 1.5px solid rgba(220,38,38,0.2); border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 2rem; }
+.narrative-event h3 { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); margin-bottom: 0.6rem; }
+.event-item { display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.45rem; }
+.event-item:last-child { margin-bottom: 0; }
+.event-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 0.35rem; }
+.event-dot.red { background: var(--red); }
+.event-dot.amber { background: var(--amber); }
+.event-dot.blue { background: var(--sf-blue); }
+.event-text { font-size: 0.87rem; color: var(--text-gray); line-height: 1.5; }
+.event-text strong { color: var(--text-dark); }
+
+/* Tier map */
+.tier-map { display: flex; align-items: center; gap: 0.5rem; margin: 0.9rem 0; flex-wrap: wrap; }
+.tier-node { background: #FFFFFF; border: 1.5px solid var(--border); border-radius: 10px; padding: 0.6rem 0.9rem; flex: 1; min-width: 150px; }
+.tier-node.dim { opacity: 0.55; border-style: dashed; }
+.tier-node .tier-badge { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.25rem; }
+.tier-node .tier-name { font-size: 0.8rem; font-weight: 700; color: var(--text-dark); }
+.tier-node .tier-desc { font-size: 0.68rem; color: var(--text-light); margin-top: 0.15rem; }
+.tier-arrow { font-size: 1rem; color: var(--sf-blue); flex-shrink: 0; }
+
+/* Footer */
+.doc-footer { background: var(--sf-deep); padding: 1.2rem 3rem; text-align: center; }
+.doc-footer p { font-size: 0.68rem; color: rgba(255,255,255,0.35); }
+
+@media (max-width: 700px) {
+  .doc-header, .doc-body { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .scene-row { grid-template-columns: 1fr; }
+  .feature-row { grid-template-columns: 1fr; }
+  .tier-map { flex-direction: column; }
+  .tier-arrow { transform: rotate(90deg); }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="doc-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.95;filter:brightness(0) invert(1);">
+      <div class="internal-tag">Internal Only &mdash; Do Not Share</div>
+    </div>
+    <div class="doc-label">Demo Script &middot; Every Tier, Every Part</div>
+    <div class="doc-title">Supply Chain Conceptual Demo Flow</div>
+    <p class="doc-subtitle">Automotive Tier 1 scenario &mdash; Vectron Components GmbH &mdash; Powertrain &amp; Chassis</p>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="doc-body">
+
+  <!-- CONTEXT -->
+  <div class="context-box">
+    <h3>What we&rsquo;re doing &amp; how it relates to the play</h3>
+    <p class="hook">&ldquo;Nobody knows their tier-3 exposure until it stops. See it before it does.&rdquo;</p>
+    <p>This demo is the conceptual centrepiece for the Discrete Manufacturing &ldquo;Every Tier, Every Part&rdquo; play. The play&rsquo;s premise: every discrete manufacturer can see their own BOM and their tier-1 suppliers. Almost none can see two or three tiers deep &mdash; the raw material refiners, the specialty processors, the single-source chokepoints that everything else depends on. That blind spot is not a technology limitation of any one company; it&rsquo;s a data-sharing problem across company boundaries. Snowflake is the only platform that solves it without anyone having to move, copy, or expose their proprietary data to get there.</p>
+    <p><strong>Positioning:</strong> The Vectron Components scenario shows discrete manufacturing supply chain and procurement leaders how live, governed data sharing across tiers &mdash; not EDI integration, not portals, not spreadsheets &mdash; turns a multi-tier blind spot into a mapped, quantified, and actionable exposure.</p>
+    <p><strong>What this demo proves:</strong> One narrative event &mdash; a new export control on a rare-earth material at a tier-3 refiner Vectron has never directly dealt with &mdash; traced up through tier-2 to Vectron&rsquo;s own BOMs and OEM commitments, using data shared live from tier-2 and tier-3 partners&rsquo; own Snowflake accounts. It maps to the play&rsquo;s arc: <strong>Decision Speed</strong> (the exposure surfaces automatically, not after weeks of phone calls &mdash; S1) &rarr; <strong>Intelligence Edge</strong> (the multi-tier BOM graph and financial exposure are computed, not manually assembled &mdash; S2) &rarr; <strong>Signal to Action</strong> (supplier collaboration, alternate sourcing, and shop floor mitigation close the loop &mdash; S3&ndash;4).</p>
+  </div>
+
+  <!-- FICTIONAL COMPANY -->
+  <div style="background:#FFFFFF;border:1px solid var(--border);border-radius:12px;padding:1.3rem 1.6rem;margin-bottom:2rem;">
+    <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.8rem;">Fictional Company &mdash; Demo Context</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+      <div>
+        <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem;">Company</div>
+        <div style="font-size:0.88rem;font-weight:700;color:var(--text-dark);">Vectron Components GmbH</div>
+        <div style="font-size:0.78rem;color:var(--text-gray);">Fictional Tier 1 automotive supplier. Powertrain, chassis &amp; brake systems. Headquartered Munich. ~&euro;8B revenue.</div>
+      </div>
+      <div>
+        <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem;">Footprint</div>
+        <div style="font-size:0.78rem;color:var(--text-gray);">12 manufacturing plants (DE, CZ, PL, MX). 18,000 active BOM components. Multi-tier network of 300+ tier 2 and 1,400+ tier 3 suppliers, progressively connected via Snowflake Data Sharing.</div>
+      </div>
+      <div>
+        <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem;">OEM Customers</div>
+        <div style="font-size:0.78rem;color:var(--text-gray);">BMW Group, VW Group (Audi / Porsche), Stellantis. JIT / JIS delivery SLAs. IATF 16949 certified.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIER MAP -->
+  <div style="background:#FFFFFF;border:1px solid var(--border);border-radius:12px;padding:1.3rem 1.6rem;margin-bottom:2rem;">
+    <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.4rem;">The Chain Nobody Sees End to End</div>
+    <div class="tier-map">
+      <div class="tier-node dim">
+        <div class="tier-badge" style="color:var(--red);">Tier 3</div>
+        <div class="tier-name">Boreal Rare Earth Refining</div>
+        <div class="tier-desc">Refines the rare-earth magnet alloy. No direct relationship with Vectron. Newly subject to export licensing controls.</div>
+      </div>
+      <div class="tier-arrow">&#8594;</div>
+      <div class="tier-node">
+        <div class="tier-badge" style="color:var(--amber);">Tier 2</div>
+        <div class="tier-name">Elyon Sensorik GmbH</div>
+        <div class="tier-desc">Builds the actuator motors for active suspension control sensors, using Boreal&rsquo;s magnet alloy as a sole-sourced input.</div>
+      </div>
+      <div class="tier-arrow">&#8594;</div>
+      <div class="tier-node" style="border-color:var(--sf-blue);">
+        <div class="tier-badge" style="color:var(--sf-blue);">Tier 1</div>
+        <div class="tier-name">Vectron Components</div>
+        <div class="tier-desc">Buys the active suspension control sensor from Elyon. Has never heard of Boreal.</div>
+      </div>
+      <div class="tier-arrow">&#8594;</div>
+      <div class="tier-node" style="border-color:var(--green);">
+        <div class="tier-badge" style="color:var(--green);">OEM</div>
+        <div class="tier-name">BMW / VW / Stellantis</div>
+        <div class="tier-desc">4 vehicle programmes depend on the sensor. None of them know about Boreal either.</div>
+      </div>
+    </div>
+    <p style="font-size:0.78rem;color:var(--text-light);margin-top:0.6rem;">Vectron&rsquo;s ERP and PLM know their own BOM down to the sensor. They do not know, and have never needed to know, what is inside the sensor &mdash; until now.</p>
+  </div>
+
+  <!-- NARRATIVE EVENT -->
+  <div class="narrative-event">
+    <h3>The Narrative Event &mdash; A Tier 3 Chokepoint Nobody Tracked</h3>
+    <div class="event-item">
+      <div class="event-dot amber"></div>
+      <div class="event-text"><strong>The trigger:</strong> A new export licensing requirement on rare-earth permanent magnets takes effect in 4 weeks, originating at Boreal Rare Earth Refining &mdash; a tier-3 supplier Vectron has never directly contracted with or even heard of.</div>
+    </div>
+    <div class="event-item">
+      <div class="event-dot red"></div>
+      <div class="event-text"><strong>The exposure:</strong> Boreal&rsquo;s magnet alloy is a sole-sourced input to the actuator motors that Elyon Sensorik (Vectron&rsquo;s tier-2 supplier) uses to build active suspension control sensors &mdash; a component Vectron buys directly and fits across 4 OEM vehicle programmes.</div>
+    </div>
+    <div class="event-item">
+      <div class="event-dot blue"></div>
+      <div class="event-text"><strong>The scale of the blind spot:</strong> Once the exposure is mapped, 2 additional component families &mdash; sourced through 3 different tier-2 suppliers &mdash; are found to share the same tier-3 chokepoint at Boreal. A concentration risk that no single tier-1 relationship could have revealed.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 1 &mdash; SC Health &amp; Alerts</h2>
+      <div class="section-persona">Persona: VP Supply Chain / CSCO</div>
+    </div>
+
+    <!-- Scene 1a -->
+    <div class="scene-card">
+      <div class="scene-title">Scene 1a &middot; Multi-Tier Network Health</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The VP Supply Chain starts their week in a single control tower dashboard &mdash; not just Vectron&rsquo;s own 12 plants and 6 OEM programmes, but a live health view of the wider supplier network: how many tier-2 and tier-3 suppliers are actively sharing data into Snowflake, and where coverage gaps remain.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Control tower with network coverage KPIs: tier-2 suppliers connected (247 of 300), tier-3 suppliers connected (890 of 1,400+), exposure mapped vs. unmapped BOM value</li>
+            <li>AI-surfaced exceptions: which component families still have zero tier-3 visibility, ranked by revenue exposure</li>
+            <li>Live refresh &mdash; supplier-shared data updates continuously via Snowflake Data Sharing, no batch file, no portal login required from either side</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> &ldquo;This isn&rsquo;t a survey Vectron sent to suppliers once a year. It&rsquo;s a live network health score &mdash; who&rsquo;s sharing, what&rsquo;s still dark, and which dark components carry the most risk.&rdquo;</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> The VP knows where the blind spots are before a disruption hits &mdash; not after. Network visibility becomes a managed asset, not a one-off exercise.</div></div>
+      </div>
+    </div>
+
+    <!-- Scene 1b -->
+    <div class="scene-card">
+      <div class="scene-title">Scene 1b &middot; Key Alert &mdash; Tier-3 Export Control Signal</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">An external trade compliance feed from the Snowflake Marketplace flags a new export licensing requirement on rare-earth magnets, naming Boreal Rare Earth Refining as an affected producer. Vectron has no record of Boreal anywhere in its own ERP or PLM &mdash; the connection only exists because Elyon Sensorik, Vectron&rsquo;s tier-2 supplier, has shared its own upstream exposure data into Snowflake.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>AI cross-references the regulatory signal against Elyon&rsquo;s shared sub-tier exposure data and Vectron&rsquo;s own BOM &mdash; without Vectron ever seeing Elyon&rsquo;s full supplier list or commercial terms, only the specific exposure that matters to Vectron</li>
+            <li>Alert generated: &ldquo;Active suspension control sensor (4 OEM programmes) has tier-3 exposure to a magnet alloy now subject to export licensing, effective in 4 weeks&rdquo;</li>
+            <li>Financial exposure auto-quantified: &euro;38M in annual sensor purchases across the 4 affected programmes</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> &ldquo;Vectron never had a contract with Boreal, never audited them, never even knew their name. The exposure surfaced because Elyon shared a governed slice of their own upstream risk data &mdash; not the whole supplier list, just the piece that matters to Vectron. That&rsquo;s the entire pitch: every tier, every part, without anyone giving up their own data.&rdquo;</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> A 4-week warning window on a disruption that would otherwise have surfaced as an unexplained sensor shortage from Elyon &mdash; with no visibility into why.</div></div>
+      </div>
+    </div>
+
+    <!-- Scene 1c -->
+    <div class="scene-card">
+      <div class="scene-title">Scene 1c &middot; Scenario Comparison</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The VP wants to evaluate mitigation options before escalating to the OEMs. Requalify the sensor with a non-Boreal magnet source? Build buffer stock ahead of the license deadline? Or accept short-term risk while a redesign is evaluated?</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Branch from base plan, model each option &mdash; scenario recomputes financial and timeline impact instantly</li>
+            <li>Side-by-side comparison: cost, lead time, and OEM OTIF risk for each of the three paths</li>
+            <li>Automated cross-functional task assignment: procurement gets alternate sourcing, production planning gets buffer stock modelling, quality gets requalification scoping</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> &ldquo;Three mitigation paths, modelled and costed, before the 8am stand-up. Six weeks ago this would have started with someone trying to figure out who Elyon&rsquo;s magnet supplier even was.&rdquo;</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> A regulatory shock with a 4-week clock becomes a managed decision with weeks of runway, not a scramble.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 2 &mdash; Multi-Tier Exposure Mapping</h2>
+      <div class="section-persona">Persona: Head of Supply Chain Risk / Supply Planning</div>
+    </div>
+
+    <!-- Scene 2a -->
+    <div class="scene-card">
+      <div class="scene-title">Scene 2a &middot; BOM-to-Tier Traceability</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The risk lead needs to trace the full chain: from the finished e-axle assembly, down through Vectron&rsquo;s own BOM to the sensor, into Elyon&rsquo;s sub-component structure, to the specific magnet alloy at Boreal &mdash; a graph that spans three companies and none of their individual systems.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Multi-tier BOM graph rendered in Streamlit: Vectron&rsquo;s PLM/ERP BOM data joined live with the specific exposure metrics shared by Elyon (tier 2), which are themselves computed from data shared by Boreal and other tier-3 sources (tier 3) &mdash; each party sees only what it needs to</li>
+            <li>Cortex Analyst query: &ldquo;Which of our finished components rely on magnet alloys subject to the new export licence, and which OEM programmes do they feed?&rdquo; &mdash; answered in seconds from data that spans three companies&rsquo; Snowflake accounts</li>
+            <li>No party had to export a spreadsheet, complete a supplier questionnaire, or grant blanket access to their systems &mdash; each share is scoped to exactly the fields needed</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> &ldquo;This is a live join across three companies&rsquo; data, computed in seconds, and none of them had to give up control of their own data to make it happen. That is not possible with EDI, and it is not possible with a portal.&rdquo;</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Multi-tier traceability that used to take a specialist consulting engagement and six weeks now happens as a standing capability, refreshed continuously.</div></div>
+      </div>
+    </div>
+
+    <!-- Scene 2b -->
+    <div class="scene-card">
+      <div class="scene-title">Scene 2b &middot; Network-Wide Concentration Risk</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">Having mapped the sensor exposure, the risk lead asks the obvious follow-up: does Boreal&rsquo;s magnet alloy show up anywhere else in Vectron&rsquo;s supply base &mdash; through completely different tier-2 suppliers that nobody would think to connect?</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Network-wide search across all connected tier-2 and tier-3 shares: &ldquo;Which other components trace back to Boreal, through any supplier path?&rdquo;</li>
+            <li>Result: 2 additional component families &mdash; a steering angle sensor and an e-motor position sensor &mdash; sourced through 2 other tier-2 suppliers, both also using Boreal-refined magnets</li>
+            <li>Concentration risk dashboard: total revenue exposure across all 3 component families, and confirmation that this single tier-3 refiner is a hidden chokepoint across 40% of Vectron&rsquo;s sensor portfolio</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> &ldquo;Three different tier-1 component families, three different tier-2 suppliers, one shared tier-3 chokepoint. Nobody at Vectron would ever have found this by asking their direct suppliers &lsquo;who do you buy from?&rsquo; &mdash; because none of them would have known to compare notes.&rdquo;</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> A concentration risk that would otherwise have stayed invisible until three unrelated supply disruptions hit in the same quarter &mdash; now visible, quantified, and actionable as one problem.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 3 &mdash; Supplier Collaboration &amp; Mitigation</h2>
+      <div class="section-persona">Persona: CPO / Procurement Lead</div>
+    </div>
+
+    <!-- Scene 3a -->
+    <div class="scene-card">
+      <div class="scene-title">Scene 3a &middot; Tier-2 Supplier Collaboration</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The procurement lead needs Elyon&rsquo;s help fast &mdash; specifically, whether Elyon can requalify the sensor with a non-Boreal magnet source, and how quickly. Rather than a phone call and an email trail, the request and the response both happen inside the same shared data space.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Collaboration workspace in Streamlit: Vectron publishes the specific ask (alternate magnet source options, requalification lead time) directly into a scoped share on Elyon&rsquo;s Snowflake account</li>
+            <li>Elyon responds by sharing back structured data &mdash; two alternate magnet suppliers, requalification timeline, unit cost delta &mdash; without disclosing its full supplier contracts or margins</li>
+            <li>Cortex Analyst query on Vectron&rsquo;s side: &ldquo;Which of Elyon&rsquo;s proposed alternates avoid the export licensing requirement entirely?&rdquo; &mdash; answered directly from the shared data</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> &ldquo;This exchange used to take two weeks of emails and NDAs before anyone would share a supplier name. Here, Elyon shares exactly what Vectron needs to make a decision &mdash; and nothing more &mdash; and it updates in real time as the requalification progresses.&rdquo;</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Supplier collaboration compressed from weeks to hours, with both sides retaining control over what they disclose.</div></div>
+      </div>
+    </div>
+
+    <!-- Scene 3b -->
+    <div class="scene-card">
+      <div class="scene-title">Scene 3b &middot; Qualifying an Alternate Tier-3 Source</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">Of the two alternate magnet suppliers Elyon proposed, one is EU-based and unaffected by the export licence, at a cost premium. The procurement lead needs a full cost/risk/timeline trade-off for CFO sign-off &mdash; covering all 3 exposed component families, not just the sensor.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Trade-off dashboard: cost of switching all 3 component families to the EU-based magnet source vs. cost of production risk if the export licence disrupts Boreal-sourced supply</li>
+            <li>Break-even analysis: expedited requalification cost vs. cost of a line stoppage across the 4 affected OEM programmes</li>
+            <li>One-click approval workflow: decision memo routed to CPO and CFO with full multi-tier exposure context embedded &mdash; no separate deck assembled by hand</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> &ldquo;The CFO isn&rsquo;t approving a supplier switch in isolation &mdash; they&rsquo;re approving a decision that accounts for all three component families this chokepoint touches, with the full financial picture in one place.&rdquo;</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> A single, well-informed sourcing decision that resolves the concentration risk across the whole portfolio &mdash; not three separate scrambles, three months apart.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 4 &mdash; Production Capacity &amp; Shop Floor</h2>
+      <div class="section-persona">Persona: Head of Production Planning</div>
+    </div>
+
+    <!-- Scene 4a -->
+    <div class="scene-card">
+      <div class="scene-title">Scene 4a &middot; Regensburg Plant Impact Modelling</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The Regensburg plant controller needs to know exactly when the sensor requalification needs to land relative to current stock cover, and whether a production slowdown is ever on the table if the timeline slips.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Plant capacity dashboard: live sensor stock cover by line, tied directly to the requalification timeline from Scene 3a &mdash; both feeds updating from the same governed data, not two separate reports someone has to reconcile</li>
+            <li>Scenario overlay: requalification on schedule vs. requalification delayed by 2 weeks &mdash; system flags the exact week stock cover would run out under each scenario</li>
+            <li>Buffer stock build option: cost and feasibility of building 6 extra weeks of sensor safety stock from remaining Boreal-sourced supply before the licence takes effect</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> &ldquo;The plant team isn&rsquo;t waiting for a memo from procurement. The requalification timeline and the shop floor stock position are the same data, updating together. If the timeline slips, the plant sees it the same day procurement does.&rdquo;</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Production risk managed proactively against a real timeline, not discovered when the sensor bin runs empty on the line.</div></div>
+      </div>
+    </div>
+
+    <!-- Scene 4b -->
+    <div class="scene-card">
+      <div class="scene-title">Scene 4b &middot; Mitigation Plan &amp; Approval Workflow</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">All mitigation actions are now aggregated: the alternate magnet source qualification, the buffer stock build at Regensburg, and the portfolio-wide sourcing decision covering all 3 exposed component families. The system assembles these into a single decision pack for sign-off.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Consolidated mitigation dashboard: every action across procurement, risk, and production in one view, each with financial impact, owner, and status</li>
+            <li>Full exposure closure tracker: which of the 3 affected component families are fully resolved, in progress, or still exposed to the export licence deadline</li>
+            <li>One-click approval: decision routed to CSCO and CFO with the complete multi-tier exposure map embedded &mdash; the same graph from Scene 2a, now showing mitigated vs. unmitigated paths</li>
+            <li>Post-approval: actions trigger automatically in SAP (buffer stock PO), the qualification workflow with Elyon, and a notification back to the OEM commercial teams confirming supply continuity</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> &ldquo;A disruption that started three companies away from Vectron, at a supplier they&rsquo;d never heard of, is resolved end to end &mdash; discovery, mapping, collaboration, and action &mdash; inside four weeks, with a full audit trail for every OEM that asks how it was handled.&rdquo;</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Every tier, every part, mapped and actionable &mdash; not because Vectron got lucky, but because the data-sharing infrastructure was already in place before the disruption hit.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SNOWFLAKE FEATURES -->
+  <div class="features-section">
+    <h2>Snowflake Features Powering Each Scene</h2>
+
+    <div class="feature-row">
+      <div class="feature-scene">Scene 1a &mdash; Multi-Tier Network Health</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Streamlit in Snowflake</span>
+        <span class="feature-tag">Data Sharing (network coverage)</span>
+        <span class="feature-tag">Dynamic Tables</span>
+        <span class="feature-tag">Row-Level Security</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 1b &mdash; Tier-3 Export Control Signal</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Snowflake Marketplace (trade compliance feed)</span>
+        <span class="feature-tag">Data Sharing (tier-2 exposure share)</span>
+        <span class="feature-tag">Cortex AI ($ quantification)</span>
+        <span class="feature-tag">Alerts + Notification Integrations</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 1c &mdash; Scenario Comparison</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Dynamic Tables (scenario branch)</span>
+        <span class="feature-tag">Snowflake Tasks (cross-functional assignment)</span>
+        <span class="feature-tag">Cortex Analyst</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 2a &mdash; BOM-to-Tier Traceability</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Data Sharing (multi-party, scoped fields)</span>
+        <span class="feature-tag">Cortex Analyst (cross-company query)</span>
+        <span class="feature-tag">Streamlit (BOM graph)</span>
+        <span class="feature-tag">Dynamic Tables</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 2b &mdash; Network-Wide Concentration Risk</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Data Sharing (network-wide traversal)</span>
+        <span class="feature-tag">Cortex AI (risk scoring)</span>
+        <span class="feature-tag">Dynamic Tables (exposure aggregation)</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 3a &mdash; Tier-2 Supplier Collaboration</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Data Sharing (scoped bidirectional share)</span>
+        <span class="feature-tag">Cortex Analyst</span>
+        <span class="feature-tag">Streamlit (collaboration workspace)</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 3b &mdash; Alternate Tier-3 Sourcing</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Dynamic Tables (cost trade-off)</span>
+        <span class="feature-tag">Snowflake Tasks (approval workflow)</span>
+        <span class="feature-tag">Notification Integrations</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 4a &mdash; Regensburg Plant Impact</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Snowpipe Streaming (live MES/stock data)</span>
+        <span class="feature-tag">Dynamic Tables (stock cover vs. timeline)</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 4b &mdash; Mitigation Plan &amp; Approval</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Dynamic Tables (aggregate actions)</span>
+        <span class="feature-tag">Snowflake Tasks + Notification Integrations (approval + SAP writeback)</span>
+        <span class="feature-tag">Cortex Analyst</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <p>Discrete Manufacturing — Every Tier, Every Part — Demo Script &mdash; Internal Only &mdash; Snowflake EMEA</p>
+</div>
+
+</body>
+</html>

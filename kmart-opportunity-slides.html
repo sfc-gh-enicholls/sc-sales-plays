@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="snowflake-source" content="cortex-agent-authored">
+<title>Kmart × Snowflake | Supply Chain Data</title>
+<script type="application/json" id="snowflake-report-metadata">
+{
+  "generated": "2026-08-25",
+  "intent": "Two-slide opportunity framing for Kmart/Wesfarmers supply chain data meeting. SnowPlan-inspired dark navy design. Slide 1: merchandising data gap mapped to Planning→Sourcing→Distribution→Fulfilment→Service. Slide 2: what Snowflake enables (governed domains, repeatable onboarding, decisions at speed).",
+  "sections": [
+    { "id": "slide-1", "title": "The Merchandising Data Gap" },
+    { "id": "slide-2", "title": "What Snowflake Enables" }
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #071525;
+  --surface:  rgba(255,255,255,0.04);
+  --border:   rgba(41,181,232,0.14);
+  --border-s: rgba(41,181,232,0.08);
+  --teal:     #29B5E8;
+  --teal-dim: rgba(41,181,232,0.55);
+  --teal-faint: rgba(41,181,232,0.12);
+  --white:    #FFFFFF;
+  --white-70: rgba(255,255,255,0.70);
+  --white-45: rgba(255,255,255,0.45);
+  --white-25: rgba(255,255,255,0.25);
+  --red:      rgba(248,113,113,0.9);
+  --red-bg:   rgba(220,38,38,0.08);
+  --red-bdr:  rgba(220,38,38,0.22);
+  --green:    rgba(74,222,128,0.9);
+  --green-bg: rgba(22,163,74,0.08);
+  --green-bdr:rgba(22,163,74,0.22);
+  --nav-h:    52px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', sans-serif; background: var(--bg); }
+
+/* ─── DECK & SLIDES ─── */
+.deck { width: 100vw; height: 100vh; position: relative; }
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+.slide.active { opacity: 1; pointer-events: all; }
+
+/* ─── PARTICLE BACKGROUND ─── */
+.particle-bg {
+  position: absolute; inset: 0; z-index: 0; overflow: hidden;
+  background: radial-gradient(ellipse 80% 60% at 50% 20%, rgba(17,86,127,0.18) 0%, transparent 70%),
+              radial-gradient(ellipse 50% 40% at 85% 80%, rgba(41,181,232,0.06) 0%, transparent 60%),
+              var(--bg);
+}
+
+/* ─── NAV BAR ─── */
+.nav-bar {
+  position: relative; z-index: 20;
+  height: var(--nav-h);
+  background: rgba(7,21,37,0.96);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2rem;
+  flex-shrink: 0;
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.82rem; font-weight: 700; color: var(--white);
+  letter-spacing: 0.02em;
+}
+.nav-brand .sep { color: var(--white-25); margin: 0 0.2rem; font-weight: 300; }
+.nav-brand .sf-label { color: var(--white-70); }
+.nav-tabs {
+  display: flex; align-items: center; gap: 0.25rem;
+}
+.nav-tab {
+  display: flex; align-items: center; gap: 0.45rem;
+  padding: 0.3rem 0.75rem; border-radius: 999px;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em;
+  color: var(--white-45); cursor: pointer; transition: all 0.2s;
+  border: 1px solid transparent;
+}
+.nav-tab .tab-num {
+  font-size: 0.62rem; font-weight: 700;
+  background: rgba(255,255,255,0.1); border-radius: 50%;
+  width: 18px; height: 18px; display: flex; align-items: center; justify-content: center;
+}
+.nav-tab.active {
+  color: var(--teal); background: var(--teal-faint);
+  border-color: var(--border);
+}
+.nav-tab.active .tab-num { background: var(--teal-faint); color: var(--teal); }
+.nav-dots { display: flex; gap: 5px; align-items: center; }
+.nav-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.18); transition: all 0.2s; }
+.nav-dot.active { background: var(--teal); }
+
+/* ─── SLIDE BODY ─── */
+.slide-body {
+  position: relative; z-index: 10;
+  flex: 1; display: flex; flex-direction: column; justify-content: center;
+  padding: 2rem 5% 4.5rem;
+  max-width: 1360px; width: 100%; margin: 0 auto;
+}
+
+/* ─── SECTION LABEL ─── */
+.section-label {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 0.65rem;
+}
+.section-label::before {
+  content: ''; display: block; width: 28px; height: 2.5px;
+  background: var(--teal); border-radius: 2px; flex-shrink: 0;
+}
+
+/* ─── HEADLINE ─── */
+.headline {
+  font-size: clamp(1.7rem, 2.8vw, 2.5rem);
+  font-weight: 800; color: var(--white);
+  line-height: 1.1; letter-spacing: -0.02em;
+  margin-bottom: 0.4rem;
+}
+.headline .hl { color: var(--teal); }
+.divider-line {
+  width: 50px; height: 2.5px;
+  background: linear-gradient(90deg, var(--teal), rgba(41,181,232,0.3));
+  border-radius: 2px; margin: 0.8rem 0;
+}
+
+/* ─── TABLE / CARD CONTAINER ─── */
+.table-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+.table-header {
+  display: grid; align-items: center;
+  padding: 0.55rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(41,181,232,0.04);
+}
+.th {
+  font-size: 0.58rem; font-weight: 700; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--teal-dim);
+}
+.table-row {
+  display: grid; align-items: start;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-s);
+}
+.table-row:last-child { border-bottom: none; }
+.row-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--teal-faint); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.58rem; font-weight: 800; color: var(--teal); flex-shrink: 0;
+}
+.cell-primary { font-size: 0.82rem; font-weight: 700; color: var(--white); line-height: 1.35; margin-bottom: 0.18rem; }
+.cell-secondary { font-size: 0.71rem; font-weight: 400; color: var(--white-45); line-height: 1.4; }
+.cell-body { font-size: 0.78rem; font-weight: 400; color: var(--white-70); line-height: 1.5; }
+.cell-arrow { font-size: 0.72rem; color: var(--teal-dim); }
+.cell-outcome { font-size: 0.78rem; color: var(--white-70); line-height: 1.5; }
+.kpi-highlight { color: var(--teal); font-weight: 700; }
+.red-flag { color: var(--red); }
+
+/* ─── PAIN POINT CARDS ─── */
+.pain-card {
+  background: var(--red-bg); border: 1px solid var(--red-bdr);
+  border-radius: 7px; padding: 0.52rem 0.6rem;
+  display: flex; align-items: flex-start; gap: 0.4rem;
+}
+.pain-dot { width: 5px; height: 5px; min-width: 5px; border-radius: 50%; background: var(--red); margin-top: 0.35rem; }
+.pain-text { font-size: 0.69rem; line-height: 1.45; color: var(--white-70); }
+
+/* ─── CALLOUT ─── */
+.callout {
+  background: rgba(17,86,127,0.35); border: 1px solid var(--border);
+  border-radius: 10px; padding: 0.65rem 1.1rem;
+}
+.callout p { font-size: 0.78rem; font-weight: 600; color: var(--white-70); max-width: 100%; margin: 0; }
+
+/* ─── BOTTOM NAV ─── */
+.bottom-nav {
+  position: fixed; bottom: 1.4rem; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 1rem; z-index: 100;
+}
+.nav-btn {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+  color: var(--white-70); font-size: 0.95rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-family: 'Inter', sans-serif;
+  transition: all 0.2s;
+}
+.nav-btn:hover { background: var(--teal-faint); border-color: var(--teal); color: var(--teal); }
+.nav-count { font-size: 0.78rem; font-weight: 600; color: var(--white-45); letter-spacing: 0.06em; }
+
+/* ─── PROGRESS BAR ─── */
+.progress-bar-wrap { position: fixed; top: 0; left: 0; width: 100%; height: 2px; z-index: 200; }
+.progress-bar { height: 100%; background: linear-gradient(90deg, #11567F, var(--teal)); transition: width 0.45s ease; }
+
+@media (max-width: 768px) {
+  .flow-grid, .pain-grid, .table-row { grid-template-columns: 1fr !important; }
+  .nav-tabs { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<div class="deck" id="deck">
+
+<!-- ================================================================ -->
+<!-- SLIDE 1 — THE MERCHANDISING DATA GAP                             -->
+<!-- ================================================================ -->
+<div class="slide active" id="slide-1">
+
+  <!-- Background -->
+  <div class="particle-bg" id="particles-1"></div>
+
+  <!-- Nav bar -->
+  <div class="nav-bar">
+    <div class="nav-brand">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Kmart_Australia_logo.svg" height="18" alt="Kmart" style="filter:brightness(0) invert(1);opacity:0.88;">
+      <span class="sep">×</span>
+      <!-- Snowflake crystal icon -->
+      <svg width="17" height="17" viewBox="0 0 48 48" fill="none" stroke="var(--teal)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="24" y1="4" x2="24" y2="44"/>
+        <line x1="7" y1="14" x2="41" y2="34"/>
+        <line x1="41" y1="14" x2="7" y2="34"/>
+        <line x1="18" y1="10" x2="24" y2="4"/><line x1="24" y1="4" x2="30" y2="10"/>
+        <line x1="18" y1="38" x2="24" y2="44"/><line x1="24" y1="44" x2="30" y2="38"/>
+        <line x1="35" y1="10" x2="41" y2="14"/><line x1="41" y1="14" x2="43" y2="21"/>
+        <line x1="5" y1="27" x2="7" y2="34"/><line x1="7" y1="34" x2="13" y2="38"/>
+        <line x1="5" y1="21" x2="7" y2="14"/><line x1="7" y1="14" x2="13" y2="10"/>
+        <line x1="43" y1="27" x2="41" y2="34"/><line x1="41" y1="34" x2="35" y2="38"/>
+        <circle cx="24" cy="24" r="3" fill="var(--teal)" stroke="none"/>
+      </svg>
+      <span class="sf-label">Snowflake</span>
+    </div>
+    <div class="nav-tabs">
+      <div class="nav-tab active" id="tab-1"><span class="tab-num">1</span> The Challenge</div>
+      <div class="nav-tab" id="tab-2"><span class="tab-num">2</span> What We Enable</div>
+    </div>
+    <div class="nav-dots">
+      <div class="nav-dot active"></div>
+      <div class="nav-dot"></div>
+    </div>
+  </div>
+
+  <!-- Slide body -->
+  <div class="slide-body">
+    <div class="section-label">01 — The Merchandising Data Gap</div>
+    <h2 class="headline">Five functions. <span class="hl">Five versions of the truth.</span></h2>
+    <div class="divider-line"></div>
+
+    <!-- 5-stage flow bar -->
+    <div style="display:flex;align-items:center;gap:0.3rem;margin:0 0 0.65rem;">
+      <div style="flex:1;background:rgba(17,86,127,0.55);border:1px solid var(--border);border-radius:8px;padding:0.45rem 0.5rem;text-align:center;">
+        <div style="font-size:0.48rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal-dim);margin-bottom:0.12rem;">01</div>
+        <div style="font-size:0.78rem;font-weight:800;color:var(--white);">Planning</div>
+      </div>
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;"><path d="M2 6.5h9M8 3.5l3 3-3 3" stroke="var(--teal-dim)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div style="flex:1;background:rgba(17,86,127,0.45);border:1px solid var(--border-s);border-radius:8px;padding:0.45rem 0.5rem;text-align:center;">
+        <div style="font-size:0.48rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal-dim);margin-bottom:0.12rem;">02</div>
+        <div style="font-size:0.78rem;font-weight:800;color:var(--white);">Sourcing</div>
+      </div>
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;"><path d="M2 6.5h9M8 3.5l3 3-3 3" stroke="var(--teal-dim)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div style="flex:1;background:rgba(17,86,127,0.35);border:1px solid var(--border-s);border-radius:8px;padding:0.45rem 0.5rem;text-align:center;">
+        <div style="font-size:0.48rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal-dim);margin-bottom:0.12rem;">03</div>
+        <div style="font-size:0.78rem;font-weight:800;color:var(--white);">Distribution</div>
+      </div>
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;"><path d="M2 6.5h9M8 3.5l3 3-3 3" stroke="var(--teal-dim)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div style="flex:1;background:rgba(17,86,127,0.25);border:1px solid var(--border-s);border-radius:8px;padding:0.45rem 0.5rem;text-align:center;">
+        <div style="font-size:0.48rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal-dim);margin-bottom:0.12rem;">04</div>
+        <div style="font-size:0.78rem;font-weight:800;color:var(--white);">Fulfilment</div>
+      </div>
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;"><path d="M2 6.5h9M8 3.5l3 3-3 3" stroke="var(--teal-dim)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div style="flex:1;background:rgba(17,86,127,0.15);border:1px solid var(--border-s);border-radius:8px;padding:0.45rem 0.5rem;text-align:center;">
+        <div style="font-size:0.48rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal-dim);margin-bottom:0.12rem;">05</div>
+        <div style="font-size:0.78rem;font-weight:800;color:var(--white);">Service</div>
+      </div>
+    </div>
+
+    <!-- Pain points as table -->
+    <div class="table-wrap" style="margin-bottom:0.65rem;">
+
+      <!-- Row 1 -->
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--border-s);">
+        <div style="padding:0.85rem 0.9rem;border-right:1px solid var(--border-s);">
+          <div class="pain-card" style="background:transparent;border:none;padding:0;"><div class="pain-dot"></div><span class="pain-text" style="font-size:0.76rem;">Range buy decisions lag sell-through data by 2–3 weeks</span></div>
+        </div>
+        <div style="padding:0.85rem 0.9rem;border-right:1px solid var(--border-s);">
+          <div class="pain-card" style="background:transparent;border:none;padding:0;"><div class="pain-dot"></div><span class="pain-text" style="font-size:0.76rem;">PO status tracked across supplier portals, not consolidated</span></div>
+        </div>
+        <div style="padding:0.85rem 0.9rem;border-right:1px solid var(--border-s);">
+          <div class="pain-card" style="background:transparent;border:none;padding:0;"><div class="pain-dot"></div><span class="pain-text" style="font-size:0.76rem;">DC allocation driven by static rules, not live demand signals</span></div>
+        </div>
+        <div style="padding:0.85rem 0.9rem;border-right:1px solid var(--border-s);">
+          <div class="pain-card" style="background:transparent;border:none;padding:0;"><div class="pain-dot"></div><span class="pain-text" style="font-size:0.76rem;">Store replenishment runs on schedule, not depletion signals</span></div>
+        </div>
+        <div style="padding:0.85rem 0.9rem;">
+          <div class="pain-card" style="background:transparent;border:none;padding:0;"><div class="pain-dot"></div><span class="pain-text" style="font-size:0.76rem;">Out-of-stocks found at shelf, not predicted from supply data</span></div>
+        </div>
+      </div>
+
+      <!-- Row 2 -->
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--border-s);">
+        <div style="padding:0.85rem 0.9rem;border-right:1px solid var(--border-s);">
+          <div class="pain-card" style="background:transparent;border:none;padding:0;"><div class="pain-dot"></div><span class="pain-text" style="font-size:0.76rem;">OTB and allocation plans built from different data sets</span></div>
+        </div>
+        <div style="padding:0.85rem 0.9rem;border-right:1px solid var(--border-s);">
+          <div class="pain-card" style="background:transparent;border:none;padding:0;"><div class="pain-dot"></div><span class="pain-text" style="font-size:0.76rem;">Cost changes don't flow automatically to margin forecasts</span></div>
+        </div>
+        <div style="padding:0.85rem 0.9rem;border-right:1px solid var(--border-s);">
+          <div class="pain-card" style="background:transparent;border:none;padding:0;"><div class="pain-dot"></div><span class="pain-text" style="font-size:0.76rem;">In-transit inventory invisible until it arrives at the DC</span></div>
+        </div>
+        <div style="padding:0.85rem 0.9rem;border-right:1px solid var(--border-s);">
+          <div class="pain-card" style="background:transparent;border:none;padding:0;"><div class="pain-dot"></div><span class="pain-text" style="font-size:0.76rem;">Click &amp; collect and home delivery compete for the same inventory</span></div>
+        </div>
+        <div style="padding:0.85rem 0.9rem;">
+          <div class="pain-card" style="background:transparent;border:none;padding:0;"><div class="pain-dot"></div><span class="pain-text" style="font-size:0.76rem;">Customer demand signals don't reach buying and ranging teams</span></div>
+        </div>
+      </div>
+
+      <!-- Row 3 -->
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);">
+        <div style="padding:0.85rem 0.9rem;border-right:1px solid var(--border-s);">
+          <div class="pain-card" style="background:transparent;border:none;padding:0;"><div class="pain-dot"></div><span class="pain-text" style="font-size:0.76rem;">Promotion planning disconnected from live inventory positions</span></div>
+        </div>
+        <div style="padding:0.85rem 0.9rem;border-right:1px solid var(--border-s);">
+          <div class="pain-card" style="background:transparent;border:none;padding:0;"><div class="pain-dot"></div><span class="pain-text" style="font-size:0.76rem;">Orders placed on average lead times — variance not captured</span></div>
+        </div>
+        <div style="padding:0.85rem 0.9rem;border-right:1px solid var(--border-s);">
+          <div class="pain-card" style="background:transparent;border:none;padding:0;"><div class="pain-dot"></div><span class="pain-text" style="font-size:0.76rem;">Allocation and replenishment systems pulling from different inventory records</span></div>
+        </div>
+        <div style="padding:0.85rem 0.9rem;border-right:1px solid var(--border-s);">
+          <div class="pain-card" style="background:transparent;border:none;padding:0;"><div class="pain-dot"></div><span class="pain-text" style="font-size:0.76rem;">Markdown decisions made without full network-wide stock visibility</span></div>
+        </div>
+        <div style="padding:0.85rem 0.9rem;">
+          <div class="pain-card" style="background:transparent;border:none;padding:0;"><div class="pain-dot"></div><span class="pain-text" style="font-size:0.76rem;">Returns data not feeding back to demand or inventory models</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="callout">
+      <p>Each function has the data it needs. Merchandising transformation needs data that spans all of them.</p>
+    </div>
+  </div>
+
+</div><!-- /slide-1 -->
+
+<!-- ================================================================ -->
+<!-- SLIDE 2 — WHAT SNOWFLAKE ENABLES                                 -->
+<!-- ================================================================ -->
+<div class="slide" id="slide-2">
+
+  <div class="particle-bg" id="particles-2"></div>
+
+  <div class="nav-bar">
+    <div class="nav-brand">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Kmart_Australia_logo.svg" height="18" alt="Kmart" style="filter:brightness(0) invert(1);opacity:0.88;">
+      <span class="sep">×</span>
+      <svg width="17" height="17" viewBox="0 0 48 48" fill="none" stroke="var(--teal)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="24" y1="4" x2="24" y2="44"/>
+        <line x1="7" y1="14" x2="41" y2="34"/>
+        <line x1="41" y1="14" x2="7" y2="34"/>
+        <line x1="18" y1="10" x2="24" y2="4"/><line x1="24" y1="4" x2="30" y2="10"/>
+        <line x1="18" y1="38" x2="24" y2="44"/><line x1="24" y1="44" x2="30" y2="38"/>
+        <line x1="35" y1="10" x2="41" y2="14"/><line x1="41" y1="14" x2="43" y2="21"/>
+        <line x1="5" y1="27" x2="7" y2="34"/><line x1="7" y1="34" x2="13" y2="38"/>
+        <line x1="5" y1="21" x2="7" y2="14"/><line x1="7" y1="14" x2="13" y2="10"/>
+        <line x1="43" y1="27" x2="41" y2="34"/><line x1="41" y1="34" x2="35" y2="38"/>
+        <circle cx="24" cy="24" r="3" fill="var(--teal)" stroke="none"/>
+      </svg>
+      <span class="sf-label">Snowflake</span>
+    </div>
+    <div class="nav-tabs">
+      <div class="nav-tab" id="tab-1b"><span class="tab-num">1</span> The Challenge</div>
+      <div class="nav-tab active" id="tab-2b"><span class="tab-num">2</span> What We Enable</div>
+    </div>
+    <div class="nav-dots">
+      <div class="nav-dot"></div>
+      <div class="nav-dot active"></div>
+    </div>
+  </div>
+
+  <div class="slide-body">
+    <div class="section-label">02 — What Snowflake Enables</div>
+    <h2 class="headline">When supply chain data is treated as a <span class="hl">product</span>,<br>the whole organisation moves differently.</h2>
+    <div class="divider-line"></div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <!-- Header row -->
+      <div class="table-header" style="grid-template-columns:1.8rem 1.4fr 1.8fr 1.8fr 1.8fr;">
+        <div></div>
+        <div class="th">Capability</div>
+        <div class="th">What it provides</div>
+        <div class="th">For Kmart this means</div>
+        <div class="th">Decisions unlocked</div>
+      </div>
+
+      <!-- Row 1: Governed Domains -->
+      <div class="table-row" style="grid-template-columns:1.8rem 1.4fr 1.8fr 1.8fr 1.8fr;gap:1rem;">
+        <div class="row-num">1</div>
+        <div>
+          <div class="cell-primary">Governed Domains</div>
+          <div class="cell-secondary">Single version of the truth</div>
+        </div>
+        <div class="cell-body">Canonical data models for <span class="kpi-highlight">inventory, POs, inbound logistics, lead times, fulfilment</span> and warehouse ops — defined once, owned clearly</div>
+        <div class="cell-body">Supply Chain, Advanced Analytics and Finance all answer from the same record — no more reconciliation before a decision</div>
+        <div>
+          <div style="display:flex;align-items:center;gap:0.3rem;margin-bottom:0.25rem;">
+            <div style="width:4px;height:4px;border-radius:50%;background:var(--teal);flex-shrink:0;"></div>
+            <span style="font-size:0.72rem;color:var(--white-70);">Inventory accuracy at speed</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.3rem;">
+            <div style="width:4px;height:4px;border-radius:50%;background:var(--teal);flex-shrink:0;"></div>
+            <span style="font-size:0.72rem;color:var(--white-70);">Margin visibility across the chain</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: Repeatable Onboarding -->
+      <div class="table-row" style="grid-template-columns:1.8rem 1.4fr 1.8fr 1.8fr 1.8fr;gap:1rem;">
+        <div class="row-num">2</div>
+        <div>
+          <div class="cell-primary">Repeatable Onboarding</div>
+          <div class="cell-secondary">No bespoke pipelines per team</div>
+        </div>
+        <div class="cell-body">Standard pattern for onboarding new supply chain domains — new use cases draw from <span class="kpi-highlight">certified, governed data</span> rather than rebuilding from scratch</div>
+        <div class="cell-body">Future domains (e.g. vendor compliance, markdown intelligence) plug into the same framework — faster time to value on every initiative</div>
+        <div>
+          <div style="display:flex;align-items:center;gap:0.3rem;margin-bottom:0.25rem;">
+            <div style="width:4px;height:4px;border-radius:50%;background:var(--teal);flex-shrink:0;"></div>
+            <span style="font-size:0.72rem;color:var(--white-70);">Faster analytics delivery</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.3rem;">
+            <div style="width:4px;height:4px;border-radius:50%;background:var(--teal);flex-shrink:0;"></div>
+            <span style="font-size:0.72rem;color:var(--white-70);">Sustainable transformation</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 3: Decisions at Speed -->
+      <div class="table-row" style="grid-template-columns:1.8rem 1.4fr 1.8fr 1.8fr 1.8fr;gap:1rem;">
+        <div class="row-num">3</div>
+        <div>
+          <div class="cell-primary">Decisions at Speed</div>
+          <div class="cell-secondary">From signal to action</div>
+        </div>
+        <div class="cell-body">Supply chain data connected to decisions in <span class="kpi-highlight">near real time</span> — replenishment, supplier exceptions, inbound visibility and promotional positioning without manual reconciliation</div>
+        <div class="cell-body">Buying teams see sell-through as it happens. DC allocation responds to demand. Out-of-stocks become predictable, not reactive</div>
+        <div>
+          <div style="display:flex;align-items:center;gap:0.3rem;margin-bottom:0.25rem;">
+            <div style="width:4px;height:4px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
+            <span style="font-size:0.72rem;color:var(--white-70);">Automated replenishment</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.3rem;">
+            <div style="width:4px;height:4px;border-radius:50%;background:var(--green);flex-shrink:0;"></div>
+            <span style="font-size:0.72rem;color:var(--white-70);">Supplier exception alerting</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /table-wrap -->
+
+  </div>
+
+</div><!-- /slide-2 -->
+
+</div><!-- /deck -->
+
+<!-- Bottom nav -->
+<div class="bottom-nav">
+  <button class="nav-btn" id="btnPrev" aria-label="Previous">&#8592;</button>
+  <span class="nav-count" id="navCount">1 / 2</span>
+  <button class="nav-btn" id="btnNext" aria-label="Next">&#8594;</button>
+</div>
+
+<script>
+// ── Navigation ──────────────────────────────────────────────
+const slides  = Array.from(document.querySelectorAll('.slide'));
+const total   = slides.length;
+let   current = 0;
+
+const tab1  = document.getElementById('tab-1');
+const tab2  = document.getElementById('tab-2');
+const tab1b = document.getElementById('tab-1b');
+const tab2b = document.getElementById('tab-2b');
+
+function goTo(n) {
+  slides[current].classList.remove('active');
+  current = ((n % total) + total) % total;
+  slides[current].classList.add('active');
+  document.getElementById('progressBar').style.width = ((current + 1) / total * 100) + '%';
+  document.getElementById('navCount').textContent = (current + 1) + ' / ' + total;
+}
+
+document.getElementById('btnPrev').addEventListener('click', function() { goTo(current - 1); });
+document.getElementById('btnNext').addEventListener('click', function() { goTo(current + 1); });
+if (tab1)  tab1.addEventListener('click',  function() { goTo(0); });
+if (tab2)  tab2.addEventListener('click',  function() { goTo(1); });
+if (tab1b) tab1b.addEventListener('click', function() { goTo(0); });
+if (tab2b) tab2b.addEventListener('click', function() { goTo(1); });
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')                     { e.preventDefault(); goTo(current - 1); }
+  if (e.key === 'f' || e.key === 'F') { document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); }
+});
+
+// Init
+document.getElementById('progressBar').style.width = (1 / total * 100) + '%';
+
+// ── Particles ────────────────────────────────────────────────
+function spawnParticles(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const count = 38;
+  for (let i = 0; i < count; i++) {
+    const d = document.createElement('div');
+    const size  = 1 + Math.random() * 2.2;
+    const alpha = 0.12 + Math.random() * 0.38;
+    d.style.cssText = [
+      'position:absolute',
+      'border-radius:50%',
+      'pointer-events:none',
+      'width:'  + size + 'px',
+      'height:' + size + 'px',
+      'background:rgba(41,181,232,' + alpha.toFixed(2) + ')',
+      'left:'   + (Math.random() * 100) + '%',
+      'top:'    + (Math.random() * 100) + '%',
+    ].join(';');
+    el.appendChild(d);
+  }
+}
+spawnParticles('particles-1');
+spawnParticles('particles-2');
+</script>
+</body>
+</html>

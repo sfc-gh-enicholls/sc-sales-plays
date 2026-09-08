@@ -17,6 +17,23 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', 
 .deck { width: 100vw; height: 100vh; position: relative; }
 .slide { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1); overflow: hidden; }
 [data-reveal] { transition: opacity 0.5s ease; }
+/* Customer proof wall: four aligned cards */
+.proof-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.7rem; }
+.proof-card { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+.proof-brand { padding: 0.85rem 0.8rem; text-align: center; }
+.proof-brand-name { font-size: 0.95rem; font-weight: 800; color: #FFFFFF; line-height: 1.15; letter-spacing: -0.01em; }
+.proof-brand-sub { font-size: 0.57rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sf-star); margin-top: 0.18rem; }
+.proof-claim { font-size: 0.79rem; font-weight: 800; color: var(--text-dark); line-height: 1.28; text-align: center; padding: 0.7rem 0.8rem 0.55rem; }
+.proof-pill { font-size: 0.56rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid; border-radius: 999px; padding: 0.22rem 0.6rem; margin: 0 0.8rem 0.6rem; text-align: center; }
+.proof-bullets { padding: 0 0.8rem 0.65rem; display: flex; flex-direction: column; gap: 0.4rem; }
+.proof-bullets p { font-size: 0.685rem; color: var(--text-gray); line-height: 1.4; margin: 0; max-width: 100%; }
+.proof-metric { margin-top: auto; background: var(--sf-deep); color: rgba(255,255,255,0.8); font-size: 0.72rem; line-height: 1.35; padding: 0.55rem 0.8rem; text-align: center; }
+.proof-metric strong { color: #FFFFFF; font-weight: 800; display: block; font-size: 0.85rem; }
+@supports (grid-template-rows: subgrid) {
+  .proof-grid { grid-template-rows: auto auto auto 1fr auto; }
+  .proof-card { display: grid; grid-template-rows: subgrid; grid-row: 1 / -1; }
+  .proof-metric { margin-top: 0; }
+}
 /* On-ramp cards: align every row across the three cards regardless of text length */
 .onramp-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
 .onramp-card { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 12px; padding: 1.2rem; display: flex; flex-direction: column; }
@@ -667,66 +684,80 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
 </div>
 
 <div class="slide" id="slide-11">
-  <div class="slide-bg bg-white"></div>
-  <div class="slide-content" style="padding-top:1.7rem;padding-bottom:1.1rem;">
+  <div class="slide-bg bg-ice"></div>
+  <div class="slide-content" style="padding-top:1.6rem;padding-bottom:1.1rem;">
     <h3 class="label">CUSTOMER PROOF</h3>
-    <h2>Two CPG Businesses. <span class="highlight">Already in Production.</span></h2>
+    <h2>Leading Consumer Brands Run Supply Chain <span class="highlight">on Snowflake</span></h2>
     <div class="divider"></div>
-    <p style="font-size:0.87rem;margin-bottom:0.9rem;max-width:1000px;">Neither of these is a pilot, a proof of concept or a roadmap commitment. Both are running today on the same foundation described in the previous two slides.</p>
+    <p style="font-size:0.85rem;margin-bottom:0.8rem;max-width:1020px;">None of these is a pilot or a proof of concept. All four are running in production on the foundation described in the previous two slides.</p>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+    <div class="proof-grid">
 
-      <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.4);border-top:3px solid var(--sf-blue);border-radius:12px;padding:1rem 1.15rem;display:flex;flex-direction:column;">
-        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:0.5rem;margin-bottom:0.5rem;">
-          <div style="font-size:1.15rem;font-weight:900;color:var(--text-dark);">Nestl&eacute;</div>
-          <span class="pill" style="margin:0;">EMEA &middot; DACH</span>
+      <!-- 1. KRAFT HEINZ -->
+      <div class="proof-card">
+        <div class="proof-brand" style="background:linear-gradient(155deg,#11567F,#042130);">
+          <div class="proof-brand-name">Kraft Heinz</div>
+          <div class="proof-brand-sub">Food &amp; Beverage</div>
         </div>
-        <div style="font-size:0.88rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.55rem;line-height:1.25;">Replaced manual disruption firefighting with agentic AI</div>
-        <p style="font-size:0.775rem;margin:0 0 0.6rem;max-width:100%;">Risk signals were buried across systems. Root cause analysis took days of manual investigation, and mitigation depended on cross-functional coordination too slow to prevent impact. Nestl&eacute; deployed <strong style="color:var(--sf-mid);">PULSE</strong>, three specialised agents running in production.</p>
-        <div style="display:flex;flex-direction:column;gap:0.28rem;flex:1;">
-          <div style="display:flex;gap:0.45rem;align-items:flex-start;"><span style="color:#16a34a;font-weight:700;font-size:0.76rem;flex-shrink:0;">&#10003;</span><p style="font-size:0.755rem;margin:0;max-width:100%;">Risk detection agent monitoring continuously for supply anomalies</p></div>
-          <div style="display:flex;gap:0.45rem;align-items:flex-start;"><span style="color:#16a34a;font-weight:700;font-size:0.76rem;flex-shrink:0;">&#10003;</span><p style="font-size:0.755rem;margin:0;max-width:100%;">Mitigation agent generating and ranking response options</p></div>
-          <div style="display:flex;gap:0.45rem;align-items:flex-start;"><span style="color:#16a34a;font-weight:700;font-size:0.76rem;flex-shrink:0;">&#10003;</span><p style="font-size:0.755rem;margin:0;max-width:100%;">Root cause agent tracing disruptions to origin in real time</p></div>
+        <div class="proof-claim">Out-of-stocks cut by two thirds in four weeks</div>
+        <div class="proof-pill" style="background:rgba(17,86,127,0.09);border-color:rgba(17,86,127,0.3);color:var(--sf-mid);">Forecast &middot; Proof</div>
+        <div class="proof-bullets">
+          <p>70% of retailer data by sales volume ingested through direct data sharing, replacing spreadsheets and email</p>
+          <p>Supply chain control tower improved COGS, case fill rate and on-time delivery</p>
         </div>
-        <div style="margin-top:0.65rem;background:var(--sf-ice);border-radius:10px;padding:0.7rem 0.9rem;display:flex;align-items:center;gap:1rem;">
-          <div style="text-align:center;">
-            <div style="font-size:2rem;font-weight:900;color:var(--sf-blue);line-height:1;">3</div>
-            <div style="font-size:0.6rem;color:var(--text-light);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">agents live</div>
-          </div>
-          <div style="border-left:1px solid var(--border-card);padding-left:1rem;">
-            <p style="font-size:0.735rem;margin:0;max-width:100%;">In production on the Snowflake AI Data Cloud. Days of manual root cause analysis replaced by real-time investigation.</p>
-          </div>
-        </div>
+        <div class="proof-metric"><strong>20% to 6%</strong> out-of-stock, in 4 weeks</div>
       </div>
 
-      <div style="background:#FFFFFF;border:1px solid rgba(17,86,127,0.4);border-top:3px solid var(--sf-mid);border-radius:12px;padding:1rem 1.15rem;display:flex;flex-direction:column;">
-        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:0.5rem;margin-bottom:0.5rem;">
-          <div style="font-size:1.15rem;font-weight:900;color:var(--text-dark);">Kraft Heinz</div>
-          <span class="pill purple" style="margin:0;">Global &middot; Retail</span>
+      <!-- 2. NESTLE -->
+      <div class="proof-card">
+        <div class="proof-brand" style="background:linear-gradient(155deg,#0d9488,#042130);">
+          <div class="proof-brand-name">Nestl&eacute;</div>
+          <div class="proof-brand-sub">Food &amp; Beverage &middot; DACH</div>
         </div>
-        <div style="font-size:0.88rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.55rem;line-height:1.25;">Cut out-of-stocks from 20% to 6% in four weeks</div>
-        <p style="font-size:0.775rem;margin:0 0 0.6rem;max-width:100%;">Out-of-stocks at 20% were costing lost sales, retailer chargebacks and brand trust. Demand sensing, retailer collaboration and supply visibility were fragmented across disconnected systems. Unifying retailer data on Snowflake gave one governed view of demand and supply.</p>
-        <div style="display:flex;flex-direction:column;gap:0.28rem;flex:1;">
-          <div style="display:flex;gap:0.45rem;align-items:flex-start;"><span style="color:#16a34a;font-weight:700;font-size:0.76rem;flex-shrink:0;">&#10003;</span><p style="font-size:0.755rem;margin:0;max-width:100%;">70% of retailer data by sales volume now governed on Snowflake</p></div>
-          <div style="display:flex;gap:0.45rem;align-items:flex-start;"><span style="color:#16a34a;font-weight:700;font-size:0.76rem;flex-shrink:0;">&#10003;</span><p style="font-size:0.755rem;margin:0;max-width:100%;">Millions saved through NielsenIQ sharing and retailer collaboration</p></div>
-          <div style="display:flex;gap:0.45rem;align-items:flex-start;"><span style="color:#16a34a;font-weight:700;font-size:0.76rem;flex-shrink:0;">&#10003;</span><p style="font-size:0.755rem;margin:0;max-width:100%;">A Cortex-powered agent answers supply questions without an IT queue</p></div>
+        <div class="proof-claim">Manual disruption firefighting replaced by agentic AI</div>
+        <div class="proof-pill" style="background:rgba(13,148,136,0.09);border-color:rgba(13,148,136,0.3);color:#0d7490;">Foresight</div>
+        <div class="proof-bullets">
+          <p>Three specialised agents live: risk detection, mitigation recommendation and root cause analysis</p>
+          <p>Cross-functional disruption management automated rather than coordinated by hand</p>
         </div>
-        <div style="margin-top:0.65rem;background:var(--sf-ice);border-radius:10px;padding:0.7rem 0.9rem;display:flex;align-items:center;gap:1rem;">
-          <div style="display:flex;align-items:baseline;gap:0.4rem;">
-            <span style="font-size:1.5rem;font-weight:900;color:var(--text-light);line-height:1;">20%</span>
-            <span style="font-size:0.9rem;color:var(--text-light);">&rarr;</span>
-            <span style="font-size:2rem;font-weight:900;color:#16a34a;line-height:1;">6%</span>
-          </div>
-          <div style="border-left:1px solid var(--border-card);padding-left:1rem;">
-            <p style="font-size:0.735rem;margin:0;max-width:100%;">Out-of-stock rate across the retail accounts in scope, achieved in the first four weeks.</p>
-          </div>
+        <div class="proof-metric"><strong>3 AI agents</strong> in production</div>
+      </div>
+
+      <!-- 3. PEPSICO -->
+      <div class="proof-card">
+        <div class="proof-brand" style="background:linear-gradient(155deg,#249EDC,#11567F);">
+          <div class="proof-brand-name">PepsiCo</div>
+          <div class="proof-brand-sub">Food &amp; Beverage</div>
         </div>
+        <div class="proof-claim">One ML engine measuring return across 60+ data sources</div>
+        <div class="proof-pill" style="background:rgba(36,158,220,0.09);border-color:rgba(36,158,220,0.3);color:var(--sf-blue);">Foresight</div>
+        <div class="proof-bullets">
+          <p>Data sharing removed the ETL pipelines between commercial, marketing and supply teams</p>
+          <p>Multi-cloud replication carries the same governed model across global markets</p>
+        </div>
+        <div class="proof-metric"><strong>Double-digit</strong> lift in digital penetration</div>
+      </div>
+
+      <!-- 4. BREAKTHRU BEVERAGE -->
+      <div class="proof-card">
+        <div class="proof-brand" style="background:linear-gradient(155deg,#11567F,#0d7490);">
+          <div class="proof-brand-name">Breakthru Beverage</div>
+          <div class="proof-brand-sub">Beverages</div>
+        </div>
+        <div class="proof-claim">Cortex AI turned first and third party data into forecast signal</div>
+        <div class="proof-pill" style="background:rgba(17,86,127,0.09);border-color:rgba(17,86,127,0.3);color:var(--sf-mid);">Forecast &middot; Foresight</div>
+        <div class="proof-bullets">
+          <p>Cleansing and parsing of 1P and 3P sources automated with Cortex AI, no separate pipeline estate</p>
+          <p>New distribution points surfaced from the same forecast, alongside upsell opportunities</p>
+        </div>
+        <div class="proof-metric"><strong>2&times; more likely</strong> to buy forecasted products</div>
       </div>
 
     </div>
 
-    <div style="margin-top:0.85rem;background:linear-gradient(90deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05));border:1px solid rgba(36,158,220,0.25);border-radius:10px;padding:0.7rem 1.2rem;">
-      <p style="font-size:0.83rem;color:var(--text-gray);margin:0;max-width:100%;"><span style="font-weight:700;color:var(--sf-mid);">Both started additively.</span> Neither replaced a planning system to get these results. They connected what they already had, then built on top of it.</p>
+    <div style="margin-top:0.75rem;display:flex;gap:0.8rem;align-items:flex-start;">
+      <p style="font-size:0.72rem;color:var(--text-gray);margin:0;flex:1;"><span style="font-weight:700;color:var(--sf-mid);">Swap these for the customer&rsquo;s own sub-vertical and peer set.</span> Four is the format; which four depends on who is in the room. Supporting benchmark: Forrester TEI 2024 found 354% ROI over three years with payback inside six months.</p>
+      <p style="font-size:0.66rem;color:var(--text-light);margin:0;width:250px;flex-shrink:0;">Sources: Snowflake customer stories and published case studies. Confirm the latest approved wording before sharing externally.</p>
     </div>
 
   </div>
@@ -1429,7 +1460,7 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
       </div>
       <div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:0.75rem 0.9rem;">
         <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-star);margin-bottom:0.35rem;">4 &middot; Swap the Customer Proof (Slide 11)</div>
-        <p style="font-size:0.74rem;color:rgba(255,255,255,0.75);margin:0;max-width:100%;font-family:monospace;line-height:1.55;">&ldquo;Replace one or both proof cases on slide 11 with [Customer A] and [Customer B], whichever are closest to [Company Name] in sub-category, size and region. Keep the two-column layout and the closing line about starting additively.&rdquo;</p>
+        <p style="font-size:0.74rem;color:rgba(255,255,255,0.75);margin:0;max-width:100%;font-family:monospace;line-height:1.55;">&ldquo;Replace any of the four proof cards on slide 11 with the references closest to [Company Name] in sub-category, size and region. Keep the four-card layout, one metric per card, and the line stating that none of them is a pilot.&rdquo; <span style="display:block;margin-top:0.4rem;font-size:0.66rem;color:#B45309;"><strong>Shareability:</strong> Kraft Heinz, Nestl&eacute;, PepsiCo and Breakthru Beverage are all cleared for external use as written. Keurig Dr Pepper and the anonymised multinational CPG forecast accuracy story are internal only, so do not put either on this slide. Add customer logos only once brand approval is in place.</span></p>
       </div>
       <div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:0.75rem 0.9rem;">
         <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-star);margin-bottom:0.35rem;">5 &middot; Generate Discovery Question Hooks</div>

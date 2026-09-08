@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vertical Retail — Supply Chain Conceptual Demo Flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sf-blue: #249EDC;
+  --sf-mid: #11567F;
+  --sf-deep: #042130;
+  --sf-ice: #F6F9FA;
+  --sf-star: #71D3DC;
+  --text-dark: #111827;
+  --text-gray: #4B5568;
+  --text-light: #6B7280;
+  --border: rgba(204,204,204,0.5);
+  --red: #DC2626;
+  --green: #16a34a;
+  --amber: #d97706;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color: var(--text-dark); line-height: 1.6; }
+
+/* Header */
+.doc-header {
+  background: linear-gradient(135deg, var(--sf-deep) 0%, var(--sf-mid) 60%, rgba(36,158,220,0.85) 100%);
+  padding: 2.5rem 3rem 2rem;
+}
+.header-inner { max-width: 900px; margin: 0 auto; }
+.header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+.internal-tag { background: rgba(220,38,38,0.2); border: 1px solid rgba(220,38,38,0.4); border-radius: 5px; padding: 0.3rem 0.8rem; font-size: 0.62rem; font-weight: 700; color: rgba(255,120,120,0.9); letter-spacing: 0.1em; text-transform: uppercase; }
+.doc-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(113,211,220,0.8); margin-bottom: 0.4rem; }
+.doc-title { font-size: 2.2rem; font-weight: 900; color: #FFFFFF; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+.doc-subtitle { font-size: 1rem; color: rgba(255,255,255,0.65); font-weight: 300; max-width: 600px; line-height: 1.6; }
+
+/* Body */
+.doc-body { max-width: 900px; margin: 0 auto; padding: 2.5rem 3rem 4rem; }
+
+/* Context box */
+.context-box { background: linear-gradient(135deg, rgba(17,86,127,0.06), rgba(36,158,220,0.04)); border: 1.5px solid rgba(17,86,127,0.2); border-radius: 14px; padding: 1.5rem 1.8rem; margin-bottom: 2.5rem; }
+.context-box h3 { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--sf-mid); margin-bottom: 0.8rem; }
+.context-box p { font-size: 0.9rem; color: var(--text-gray); margin-bottom: 0.6rem; line-height: 1.6; }
+.context-box p:last-child { margin-bottom: 0; }
+.context-box strong { color: var(--text-dark); }
+.context-box .hook { font-size: 1rem; font-weight: 700; color: var(--sf-mid); font-style: italic; margin-bottom: 0.5rem; }
+
+/* Section heading */
+.section-block { margin-bottom: 3rem; }
+.section-header { background: linear-gradient(90deg, var(--sf-mid), rgba(36,158,220,0.8)); border-radius: 10px; padding: 0.9rem 1.4rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+.section-header h2 { font-size: 1rem; font-weight: 800; color: #FFFFFF; }
+.section-persona { font-size: 0.7rem; font-weight: 600; color: rgba(255,255,255,0.7); letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* Scene card */
+.scene-card { background: #FFFFFF; border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.6rem; margin-bottom: 1.2rem; }
+.scene-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sf-blue); margin-bottom: 0.9rem; padding-bottom: 0.6rem; border-bottom: 1px solid rgba(36,158,220,0.15); }
+
+/* Scene row */
+.scene-row { display: grid; grid-template-columns: 120px 1fr; gap: 0.8rem; margin-bottom: 0.8rem; align-items: start; }
+.scene-row:last-child { margin-bottom: 0; }
+.scene-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); padding-top: 0.1rem; }
+.scene-content { font-size: 0.85rem; color: var(--text-gray); line-height: 1.55; }
+.scene-content ul { padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.3rem; }
+.scene-content li { font-size: 0.85rem; color: var(--text-gray); }
+
+/* Highlight boxes */
+.aha-box { background: rgba(36,158,220,0.05); border-left: 3px solid var(--sf-blue); border-radius: 0 8px 8px 0; padding: 0.6rem 0.9rem; font-size: 0.85rem; color: var(--text-gray); line-height: 1.5; }
+.aha-box strong { color: var(--sf-mid); }
+.sowhat-box { background: rgba(22,163,74,0.05); border-left: 3px solid var(--green); border-radius: 0 8px 8px 0; padding: 0.6rem 0.9rem; font-size: 0.85rem; color: var(--text-gray); line-height: 1.5; }
+.sowhat-box strong { color: var(--green); }
+
+/* Features table */
+.features-section { margin-top: 3rem; }
+.features-section h2 { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--sf-mid); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(17,86,127,0.15); }
+.feature-row { display: grid; grid-template-columns: 200px 1fr; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid rgba(204,204,204,0.3); align-items: start; font-size: 0.82rem; }
+.feature-row:last-child { border-bottom: none; }
+.feature-scene { font-weight: 700; color: var(--text-dark); }
+.feature-tags { color: var(--text-gray); }
+.feature-tag { display: inline-block; background: rgba(36,158,220,0.08); border: 1px solid rgba(36,158,220,0.2); border-radius: 4px; padding: 0.1rem 0.45rem; font-size: 0.72rem; font-weight: 600; color: var(--sf-mid); margin: 0.1rem 0.15rem 0.1rem 0; }
+
+/* Narrative event callout */
+.narrative-event { background: linear-gradient(135deg, rgba(17,86,127,0.06), rgba(113,211,220,0.08)); border: 1.5px solid rgba(36,158,220,0.25); border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 2rem; }
+.narrative-event h3 { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sf-mid); margin-bottom: 0.6rem; }
+.event-item { display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.45rem; }
+.event-item:last-child { margin-bottom: 0; }
+.event-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 0.35rem; }
+.event-dot.red { background: var(--red); }
+.event-dot.amber { background: var(--amber); }
+.event-dot.blue { background: var(--sf-blue); }
+.event-text { font-size: 0.87rem; color: var(--text-gray); line-height: 1.5; }
+.event-text strong { color: var(--text-dark); }
+
+/* Footer */
+.doc-footer { background: var(--sf-deep); padding: 1.2rem 3rem; text-align: center; }
+.doc-footer p { font-size: 0.68rem; color: rgba(255,255,255,0.35); }
+
+@media (max-width: 700px) {
+  .doc-header, .doc-body { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .scene-row { grid-template-columns: 1fr; }
+  .feature-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="doc-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.95;filter:brightness(0) invert(1);">
+      <div class="internal-tag">Internal Only &mdash; Do Not Share</div>
+    </div>
+    <div class="doc-label">Demo Script &middot; Vertical Retail</div>
+    <div class="doc-title">Supply Chain Conceptual Demo Flow</div>
+    <p class="doc-subtitle">Vertical fashion retail scenario &mdash; Calla &mdash; Premium Contemporary Apparel</p>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="doc-body">
+
+  <!-- CONTEXT -->
+  <div class="context-box">
+    <h3>What we&rsquo;re doing &amp; how it relates to the play</h3>
+    <p class="hook">&ldquo;Move from disconnected fashion planning cycles to one Snowflake-native planning model that detects trend shifts early, propagates them instantly, and turns demand upside into action before the season closes.&rdquo;</p>
+    <p>Calla is a premium contemporary vertical fashion retailer (think COS / Arket tier) &mdash; they design, develop, and sell their own garments across ~400 global stores and a growing DTC e-commerce channel. Because Calla controls the full product lifecycle from design through to the shop floor, they have more levers to pull than a wholesale buyer &mdash; but they also carry more risk, and their planning process is genuinely complex: they are simultaneously managing in-season reaction, pre-season buying commitments, and supplier lead times that stretch 9&ndash;12 months out.</p>
+    <p>This demo is built around a single trend event &mdash; skinny jeans losing share to flare jeans mid-season &mdash; and follows the planning response across four personas. The entire planning capability runs natively on Snowflake: Streamlit in Snowflake for the planning UI, Cortex ML for forecasting and trend detection, Dynamic Tables for plan propagation across horizons, and Snowflake Tasks for cross-functional workflow automation.</p>
+    <p><strong>Key positioning:</strong> Calla is not running a legacy planning system sitting on top of Snowflake. Their MFP, assortment planning, OTB, replenishment, and supplier collaboration all operate as Snowflake-native applications &mdash; which means every plan, every scenario, and every supplier order is queryable in the same platform as their POS actuals, DC inventory, and third-party trend signals. No reconciliation between systems. No black hole between in-season and pre-season plans.</p>
+  </div>
+
+  <!-- FICTIONAL COMPANY -->
+  <div style="background:#FFFFFF;border:1px solid var(--border);border-radius:12px;padding:1.3rem 1.6rem;margin-bottom:2rem;">
+    <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.8rem;">Fictional Company &mdash; Demo Context</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+      <div>
+        <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem;">Company</div>
+        <div style="font-size:0.88rem;font-weight:700;color:var(--text-dark);">Calla</div>
+        <div style="font-size:0.78rem;color:var(--text-gray);">Premium contemporary vertical fashion retailer (COS / Arket tier). Designs and sells its own garments across ~400 global stores and DTC e-commerce.</div>
+      </div>
+      <div>
+        <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem;">Operating Model</div>
+        <div style="font-size:0.78rem;color:var(--text-gray);">Full product lifecycle ownership from design through to the shop floor. Connected MFP, assortment, demand, inventory, and supplier collaboration.</div>
+      </div>
+      <div>
+        <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem;">Planning Constraint</div>
+        <div style="font-size:0.78rem;color:var(--text-gray);">Supplier lead times stretch 9&ndash;12 months, so in-season trend shifts must inform both immediate action and pre-season commitments.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NARRATIVE EVENT -->
+  <div class="narrative-event">
+    <h3>The Narrative Event &mdash; Trend Shift Opportunity</h3>
+    <div class="event-item">
+      <div class="event-dot blue"></div>
+      <div class="event-text"><strong>Demand upside:</strong> skinny jeans are losing share to flare jeans mid-season, creating a meaningful upside opportunity if Calla can pivot quickly enough.</div>
+    </div>
+    <div class="event-item">
+      <div class="event-dot blue"></div>
+      <div class="event-text"><strong>Inventory implication:</strong> flare jeans need more demand, inventory, and assortment support now while the trend window is still open.</div>
+    </div>
+    <div class="event-item">
+      <div class="event-dot blue"></div>
+      <div class="event-text"><strong>Balance to manage:</strong> skinny jeans now carry overstock risk, so Calla needs one connected response across MFP, OTB, forecasting, replenishment, and supplier collaboration.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 1 &mdash; Connected Planning &amp; Trend Detection</h2>
+      <div class="section-persona">Persona: Category Planner</div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 1a &middot; Connected Retail Planning Homepage</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The Category Planner starts their day in Calla's Streamlit in Snowflake planning homepage &mdash; a single connected view across merchandise financial planning (MFP), assortment planning, and supply chain planning. All KPIs are computed by Dynamic Tables refreshing incrementally as overnight store sales, DC movements, and web orders land via Snowpipe Streaming.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Connected planning homepage in Streamlit in Snowflake: MFP actuals vs. plan, assortment performance by class, and supply chain health (stock coverage, in-transit, open POs) &mdash; all querying Snowflake live</li>
+            <li>No switching between systems &mdash; the same Snowflake data that feeds finance feeds the planner's view, eliminating the reconciliation that historically consumed Monday mornings</li>
+            <li>Role-based layout: Category Planner sees the denim category view; a different role would see a different scope &mdash; all governed by Snowflake's row-level security</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> This is one application, one data platform. MFP, assortment, and supply chain have historically lived in separate tools at most retailers. At Calla, they're all Snowflake-native &mdash; the planner doesn't need to open three systems to understand their category.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Faster, more complete situational awareness at the start of every planning day. For Calla's category planners who manage global line plans across hundreds of SKUs, this is the difference between spending Monday on reporting and spending it on decisions.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 1b &middot; AI Insight &mdash; Flare Jeans Trend Signal</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The planner hasn't gone looking for this &mdash; Cortex AI has surfaced it. Flare jeans, historically a minor SKU in the denim assortment, are showing an accelerating trend signal. The system has already cross-referenced POS sell-through acceleration, web search trend data from the Snowflake Marketplace, and social signal indices &mdash; all joined in Snowflake without any ETL.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Cortex ML anomaly detection has flagged flare jeans as an outlier: sell-through rate in the last 3 weeks is running 2.4x the seasonal baseline, surfaced as a Snowflake Alert in the planner's homepage</li>
+            <li>Simultaneously, a supply-side signal: store-level stockout network chart rendered in Streamlit in Snowflake showing flare jean stockouts spreading across Calla's London, Amsterdam, and Stockholm cluster &mdash; fed by real-time DC allocation data in Snowflake</li>
+            <li>Third-party trend data from the Snowflake Marketplace (e.g. social commerce indices, search trend signals) joined directly to Calla's item-level sell-through &mdash; Cortex AI has already correlated the external trend lift with the in-store stockout pattern and generated a plain-English insight card</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The insight is not a report the planner ran &mdash; Cortex ML anomaly detection spotted the signal automatically, enriched it with external trend data from the Snowflake Marketplace, and surfaced it as an actionable alert. The planner didn't need to go looking; Snowflake came to them.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> In vertical fashion, trend windows are short. Calla has a 2&ndash;3 week advantage over competitors who are still running weekly reporting cycles in legacy tools. That window is the difference between capturing a trend and missing it.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 1c &middot; Spin Up a Scenario &mdash; Flare Jeans Demand Response</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The planner spins up a new planning scenario directly within the Snowflake-native application to model Calla's response to the flare jeans phenomenon.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Scenario creation branching off the current base plan &mdash; powered by Dynamic Tables in Snowflake: the base plan is the source, the scenario branch recomputes impacted metrics (revenue, margin, cover, OTB) incrementally as parameters change</li>
+            <li>Scenario named "Flare Jean Trend Response Q2" &mdash; stored as a Snowflake object, versioned, and accessible to all downstream personas (demand planner, inventory planner, senior reviewer) without needing to be exported or shared</li>
+            <li>Snowflake Tasks trigger a notification via Snowflake Notification Integrations to the demand planner and inventory planner that a new scenario is in progress &mdash; no email, no Teams message, built into the platform</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Scenario branching is a Dynamic Table operation. It doesn't copy a spreadsheet &mdash; it creates an incremental computation branch in Snowflake. Every downstream plan that references the scenario (OTB, assortment, replenishment) will automatically recompute when the scenario parameters change.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Multi-persona planning on a single scenario, in real time, without version control risk. This is the operational model that most retailers are still trying to achieve by emailing Excel files.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 2 &mdash; Merchant Command Centre</h2>
+      <div class="section-persona">Persona: Category Planner</div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 2a &middot; Underperforming vs. Overperforming Items</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The planner moves to the Merchant Command Centre &mdash; their item-level performance view &mdash; to confirm what the AI insight signalled.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Item performance dashboard in Streamlit in Snowflake: skinny jeans are tracking 34% below target sales plan; flare jeans are 67% above target &mdash; both querying live POS actuals in Snowflake via Snowpipe Streaming from store till systems and e-commerce platform</li>
+            <li>Cortex Analyst allows the planner to ask plain-English questions: "Show me the last 4 weeks of sell-through for skinny vs. flare jeans across all regions" &mdash; Cortex Analyst translates this to SQL against Calla's item and store tables in Snowflake and returns the answer in seconds</li>
+            <li>Visual crossover chart rendered in the Streamlit UI: the point at which flare overtook skinny in units sold &mdash; automatically computed by Snowflake, no manual pivot table</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The planner asks a business question in plain English and Cortex Analyst answers it from live Snowflake data. No analyst request, no overnight query, no spreadsheet export.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Confirms the trend signal with actual transaction data. The planner is now confident in the scenario they're building &mdash; and they have the data to justify the decisions they're about to make to their merchandising director.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 2b &middot; MFP Update &mdash; In-Season vs. Actual</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The planner updates the Merchandise Financial Plan (MFP) to reflect the new reality: uplift the sales plan for flare jeans, reduce the plan for skinny.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>MFP in-season vs. actual view in Streamlit in Snowflake: current plan vs. actuals side by side, with variance flagged by Cortex ML anomaly detection</li>
+            <li>Planner adjusts the flare jeans sales plan upward and the skinny plan downward within the scenario &mdash; the MFP Dynamic Table recomputes the financial impact (revenue, margin, sell-through rate) incrementally across all remaining weeks of the season</li>
+            <li>The MFP update automatically propagates downstream: the OTB calculation and assortment coverage metrics update in the same Dynamic Table chain &mdash; the planner can see the knock-on effect immediately in the same view</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> MFP changes propagate downstream automatically via Dynamic Tables &mdash; the planner doesn't need to manually update OTB and assortment after adjusting the financial plan. The computation chain runs in Snowflake and every dependent metric recomputes.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> This is the "connected plan" that retailers have been trying to achieve for years. One change in MFP ripples correctly through OTB and assortment &mdash; no broken formula in a spreadsheet, no overnight batch job needed.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 2c &middot; Assortment Update &mdash; Shift 20% from Skinny to Flare</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The planner adjusts Calla's assortment, moving 20% of the denim slot allocation from skinny to flare &mdash; and critically, this modification needs to flow through to future seasons, not just fix in-season.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Assortment planning view in Streamlit in Snowflake: cluster-level assortment grid showing current denim slot allocation by store cluster (e.g. fashion-forward urban clusters vs. suburban mainstream clusters)</li>
+            <li>Planner drags 20% of skinny allocation to flare across the relevant clusters &mdash; the Dynamic Table recomputes assortment cover, option count, and space productivity metrics instantly</li>
+            <li>Multi-season propagation: because assortment is modelled as a Dynamic Table chain in Snowflake, the reallocation flows automatically through Q3, Q4, and into pre-season planning &mdash; the planner can toggle forward and see the impact on future seasons without opening a different system</li>
+            <li>For cluster-level variation: Calla's London and Stockholm clusters get a larger flare allocation than suburban clusters &mdash; driven by Cortex ML cluster segmentation running on historical style preference data in Snowflake</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The assortment change flows through to pre-season automatically &mdash; no manual update required in a separate planning horizon. This is the "black hole" problem solved: Calla's Q3, Q4, and pre-season plans are connected to what's happening right now in Q2.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Calla is not just fixing today &mdash; they're proactively shaping next season. Competitors doing this in disconnected tools will make their pre-season buys without knowing what the in-season trend data is telling them. Calla won't.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 2d &middot; OTB &mdash; Scenario Analysis</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The planner now needs to reallocate Open-to-Buy (OTB) to fund the increased flare jean receipts. They take budget from a lower-priority category that still has unspent OTB.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>OTB scenario analysis view in Streamlit in Snowflake: remaining OTB by category, with planned vs. actual receipts and EOP (end-of-period) inventory &mdash; all computed from Snowflake financial and inventory tables</li>
+            <li>Planner increases OTB for the jeans class and reduces it for another category (e.g. jersey tops) that has remaining budget and lower urgency &mdash; the Dynamic Table recomputes the OTB balance and receipt plan immediately</li>
+            <li>OTB view extends to pre-season: the planner can see the OTB position all the way forward, not just the current month &mdash; enabled by the multi-horizon Dynamic Table chain in Snowflake</li>
+            <li>Cortex Analyst allows the planner to query: "Which categories have the most uncommitted OTB remaining this season?" &mdash; answered directly from Snowflake's financial tables</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> OTB is typically a monthly meeting exercise done in spreadsheets. Here it's a live Snowflake query &mdash; the planner can see every category's OTB position at any moment and model reallocations in real time with immediate downstream impact shown.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> The planner has adjusted MFP, assortment, and OTB in a single connected scenario. They can now hand off to the demand and inventory planners with full confidence that everyone is working off the same Snowflake data.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 3 &mdash; Demand Planning</h2>
+      <div class="section-persona">Persona: Demand Planner</div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 3a &middot; Analytics &amp; AI Forecast Impact</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The demand planner receives a Snowflake Task-triggered notification that the Category Planner's scenario is ready for demand input. They open the analytics view to understand how the trend shift affects the AI forecasts.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Demand analytics dashboard in Streamlit in Snowflake: Cortex ML Forecasting forecast vs. actuals for skinny and flare jeans, showing where the statistical model is now diverging from the trend</li>
+            <li>Cortex ML Forecasting model selection: the demand planner shifts the algorithm for both styles from a standard seasonal model to a higher-reactivity trend-following model &mdash; configurable directly in the Streamlit UI, executed as a Snowflake ML model update</li>
+            <li>Impact visualisation: the re-forecast is computed in Snowflake and the demand planner can immediately see the updated weekly demand curve for both styles, side by side with current inventory cover</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The demand planner doesn't need to rebuild a model or run an offline script &mdash; they change the algorithm setting in the UI and Cortex ML retrains and re-forecasts within the Snowflake platform. The updated forecast is immediately visible to the category planner and inventory planner via shared Snowflake tables &mdash; no file exchange.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Demand model changes propagate instantly across the planning team. Everyone is always working off the same forecast, computed in Snowflake.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 3b &middot; Activate Promotion on Skinny Jeans</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">With too much skinny jean inventory and a weakening demand trend, the demand planner needs to activate a promotion to accelerate sell-through and free up space and OTB for flare.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Promotion planning module in Streamlit in Snowflake: the demand planner selects skinny jeans, models a markdown promotion (e.g. 25% off for 2 weeks), and sees the demand uplift estimate computed by Cortex ML price elasticity modelling running in Snowflake</li>
+            <li>Promotion scenario shows: expected sell-through acceleration, revised EOP inventory, and margin impact &mdash; all recomputed by the Dynamic Table chain</li>
+            <li>Cortex AI suggests the promotion depth and duration based on price elasticity learned from historical Calla promotion data stored in Snowflake &mdash; e.g. "A 25% markdown on skinny jeans in Week 14 is projected to clear 68% of remaining stock within 2 weeks at a gross margin of XX%"</li>
+            <li>Promotion decision triggers a Snowflake Task that notifies the inventory planner and DC team that skinny is entering a promo period &mdash; they can start reviewing open POs accordingly</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The promotion recommendation is not a planner's intuition &mdash; Cortex AI is reading Calla's full historical promotion response data in Snowflake and applying price elasticity modelling to produce an evidence-based recommendation for depth and timing.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Data-driven promotions that are right-sized from the start &mdash; not too deep (margin destruction) and not too shallow (stock doesn't clear). And the downstream teams are automatically notified via Snowflake Tasks the moment the promotion is activated.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 4 &mdash; Inventory Planning</h2>
+      <div class="section-persona">Persona: Inventory Planner</div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 4a &middot; Replenishment Planning &mdash; Skinny Jeans in Promo</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The inventory planner receives notification via Snowflake Notification Integrations that skinny jeans are entering a promotion period. They open replenishment planning to review alerts and adjust ordering behaviour.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Replenishment planning dashboard in Streamlit in Snowflake: Snowflake Alerts flagging skinny jeans replenishment orders that were scheduled before the promo was activated &mdash; these are now creating overstock risk</li>
+            <li>Planner reviews the alert queue: which replenishment orders for skinny need to be suppressed or reduced given the promo-driven sell-through acceleration</li>
+            <li>Cortex Analyst: "Show me all open replenishment orders for skinny jeans in the next 4 weeks and their expected stock cover post-promo" &mdash; answered from Snowflake's inventory and order tables in seconds</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The promotion activation via Snowflake Tasks automatically triggered the replenishment alert review &mdash; the inventory planner didn't need to monitor the demand planner's actions separately. The platform connected the events.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Avoids the classic retail error of replenishing into a promotion and creating a post-promo overstock problem. The connected workflow in Snowflake means the inventory planner acts on the right information at the right time.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 4b &middot; DC Inventory Planning &mdash; Firm vs. Cancellable POs</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The inventory planner reviews the broader DC inventory position for skinny jeans &mdash; specifically which supplier purchase orders can still be cancelled or modified vs. which are firm.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>DC inventory planning view in Streamlit in Snowflake: open PO list for skinny jeans with lead time status &mdash; which POs are within the cut-off window (firm) and which can still be cancelled or quantity-reduced</li>
+            <li>Cortex AI automatically segments the PO list: "Next 5 POs are firm (within supplier lead time cut-off). POs 6&ndash;12 can be modified. System-calculated new requirements based on revised demand forecast and promo sell-through."</li>
+            <li>New requirement calculation is a Dynamic Table computation in Snowflake: revised demand forecast + promo sell-through projection &minus; current inventory = updated order requirement by week &mdash; the inventory planner sees the recommended PO changes instantly</li>
+            <li>Supplier lead time data is stored and refreshed in Snowflake directly from supplier EDI feeds via Snowpipe &mdash; no manual lead time table maintenance</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The firm vs. cancellable segmentation is computed automatically from lead time data in Snowflake &mdash; no manual calendar check, no email to procurement. The planner sees exactly what they can change and what they can't, with the revised quantity recommendations already calculated.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Calla avoids landing inventory they can't sell. In vertical fashion where the retailer owns the stock risk, cancelling the right POs at the right time is directly accretive to margin.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 4c &middot; Flare Jeans &mdash; Segment Change &amp; Supplier Collaboration</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">With flares outperforming, the inventory planner needs to increase supply urgently. The product has been reclassified by Cortex ML from a B-Y segment (moderate volume, slow replenishment) to an A-X segment (high volume, fast replenishment) &mdash; which changes how it's managed in replenishment and allocation.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Segmentation dashboard in Streamlit in Snowflake: flare jeans segment reclassification from B-Y to A-X &mdash; driven by Cortex ML automatically re-running the ABC/XYZ segmentation model on updated sell-through data in Snowflake</li>
+            <li>Lead time visibility: supplier lead time for flare jean production shown directly from the Snowflake supply table &mdash; critical for understanding how quickly Calla can respond</li>
+            <li>Supplier collaboration module: the inventory planner uses Snowflake Data Sharing to publish the updated demand signal and revised order requirements directly to Calla's supplier's Snowflake account &mdash; no email attachment, no portal upload. The supplier sees the revised flare jean demand in their own Snowflake environment in real time</li>
+            <li>Cortex Analyst query: "Which of our active suppliers for woven bottoms has available capacity within the next 6 weeks?" &mdash; answered from Snowflake's supplier capacity data</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Supplier collaboration via Snowflake Data Sharing means Calla's demand signal reaches the supplier's planning team instantly, without intermediaries. The supplier can respond directly to the updated requirements &mdash; critical when the trend window is 3&ndash;4 weeks.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Speed to supply. In vertical fashion, the retailer who gets product to the shop floor first captures the trend. Snowflake Data Sharing eliminates the communication lag that costs Calla sales when trends break fast.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 5 &mdash; Plan Review &amp; Pre-Season Propagation</h2>
+      <div class="section-persona">Persona: Senior Merchandiser + Category Planner</div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 5a &middot; Review Scenarios, Approve the New Plan</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The Senior Merchandiser reviews the full scenario that has been built across the Category Planner, Demand Planner, and Inventory Planner &mdash; all in the same Snowflake environment.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Senior review dashboard in Streamlit in Snowflake: MFP targets vs. revised plan across the scenario &mdash; revenue, margin, sell-through rate, inventory cover &mdash; all queried live from Snowflake</li>
+            <li>Scenario comparison: original plan vs. "Flare Jean Trend Response Q2" &mdash; side by side, computed by Dynamic Tables</li>
+            <li>Cortex Analyst for exec-level Q&amp;A: "What is the total margin impact of approving this scenario vs. holding the current plan?" &mdash; answered directly from Snowflake in seconds, no analyst prep required</li>
+            <li>One-click scenario approval triggers a Snowflake Task that promotes the scenario to the active plan, updates all downstream Dynamic Tables (OTB, assortment, replenishment), and sends confirmation notifications via Snowflake Notification Integrations to all relevant planners</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The approval isn't a meeting &mdash; it's a Snowflake workflow. When the Senior Merchandiser approves, the entire planning cascade updates automatically. No one needs to manually apply the new plan in three separate systems.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Governance and speed together. Calla has a formal approval gate before the plan changes, but once approved, execution is immediate and consistent across the entire planning team.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 5b &middot; Homepage &mdash; Updated KPIs for the New Scenario</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">Loop back to the connected planning homepage. The approved scenario is now the live plan &mdash; all KPIs have updated to reflect it.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Homepage in Streamlit in Snowflake: all KPIs now reflect the approved scenario &mdash; flare jeans coverage improved, skinny markdown plan active, OTB rebalanced, supplier collaboration initiated</li>
+            <li>The planner can see the before/after in a single view &mdash; the scenario that was a branch 2 hours ago is now the operating plan</li>
+            <li>Pre-season outlook: the changes made in-season are already visible in the forward-looking pre-season plan, propagated automatically by the Dynamic Table chain</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The homepage hasn't been manually refreshed or rebuilt. It's a live Streamlit in Snowflake application querying Dynamic Tables &mdash; when the plan changed, the KPIs changed. The planner sees the same view their MD will see when they open the dashboard this afternoon.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 6a &middot; Pre-Season Update &mdash; Changes Flow Forward</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The final scene shows the payoff of a Snowflake-connected planning model: the in-season trend response doesn't just fix Q2 &mdash; it automatically informs Calla's pre-season planning for Q3, Q4, and Q1 next year.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Pre-season planning view in Streamlit in Snowflake: the assortment reallocation (20% from skinny to flare) has already propagated forward into the pre-season option plan via Dynamic Tables &mdash; the category planner can see the updated slot allocation for future seasons without any manual work</li>
+            <li>Cortex ML Forecasting attribute-level trend forecast: "What is the projected denim silhouette mix (skinny vs. straight vs. flare vs. wide-leg) for Q1 next year?" &mdash; computed from Snowflake's historical sell-through, segmentation trends, and third-party fashion trend indices from the Snowflake Marketplace</li>
+            <li>The category planner reviews the propagated pre-season changes and approves them &mdash; triggering a Snowflake Task that notifies the design team that the line plan slot allocation has been updated and placeholder briefs should be adjusted</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> This is the "black hole" problem solved. Q3, Q4, and pre-season plans have historically just sat in a system while in-season actuals diverged from them. At Calla, the Dynamic Table chain means in-season learning automatically updates the forward plan &mdash; the planner reviews and approves, rather than manually rebuilding.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Calla's pre-season buying decisions for Q1 next year will be informed by what's actually trending in Q2 this year &mdash; not by what was trending in Q2 last year, which is how most retailers plan. That's the competitive advantage Snowflake enables.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SNOWFLAKE FEATURES -->
+  <div class="features-section">
+    <h2>Snowflake Features Powering Each Scene</h2>
+
+    <div class="feature-row">
+      <div class="feature-scene">Scene 1a</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Streamlit in Snowflake</span>
+        <span class="feature-tag">Dynamic Tables (incremental KPIs)</span>
+        <span class="feature-tag">Snowpipe Streaming</span>
+        <span class="feature-tag">Row-Level Security</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 1b</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex ML (anomaly detection)</span>
+        <span class="feature-tag">Snowflake Marketplace (trend/social signals)</span>
+        <span class="feature-tag">Snowflake Alerts</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 1c</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Dynamic Tables (scenario branch)</span>
+        <span class="feature-tag">Snowflake Tasks</span>
+        <span class="feature-tag">Notification Integrations</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 2a</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex Analyst</span>
+        <span class="feature-tag">Snowpipe Streaming (POS live)</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 2b</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex ML (anomaly detection)</span>
+        <span class="feature-tag">Dynamic Tables (MFP propagation)</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 2c</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Dynamic Tables (multi-season chain)</span>
+        <span class="feature-tag">Cortex ML (cluster segmentation)</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 2d</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex Analyst</span>
+        <span class="feature-tag">Dynamic Tables (OTB recompute)</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 3a</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex ML Forecasting (model selection)</span>
+        <span class="feature-tag">Dynamic Tables</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 3b</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex AI (price elasticity)</span>
+        <span class="feature-tag">Cortex ML</span>
+        <span class="feature-tag">Dynamic Tables</span>
+        <span class="feature-tag">Snowflake Tasks</span>
+        <span class="feature-tag">Notification Integrations</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 4a</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Snowflake Alerts</span>
+        <span class="feature-tag">Cortex Analyst</span>
+        <span class="feature-tag">Snowflake Tasks</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 4b</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex AI (PO segmentation)</span>
+        <span class="feature-tag">Dynamic Tables (requirement calc)</span>
+        <span class="feature-tag">Snowpipe (supplier EDI)</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 4c</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex ML (ABC/XYZ segmentation)</span>
+        <span class="feature-tag">Data Sharing (supplier collaboration)</span>
+        <span class="feature-tag">Cortex Analyst</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 5a</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex Analyst</span>
+        <span class="feature-tag">Dynamic Tables</span>
+        <span class="feature-tag">Snowflake Tasks</span>
+        <span class="feature-tag">Notification Integrations</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 5b</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Dynamic Tables (live plan)</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 6a</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex ML Forecasting (attribute trend)</span>
+        <span class="feature-tag">Dynamic Tables (pre-season propagation)</span>
+        <span class="feature-tag">Snowflake Marketplace</span>
+        <span class="feature-tag">Snowflake Tasks</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <p>Vertical Retail Supply Chain &mdash; Demo Script &mdash; Internal Only &mdash; Snowflake EMEA</p>
+</div>
+
+</body>
+</html>

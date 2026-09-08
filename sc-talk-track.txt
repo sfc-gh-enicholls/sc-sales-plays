@@ -1,0 +1,225 @@
+Good morning. I'm Emily Nicholls. I lead the Supply Chain GTM function for EMEA, which means my job is to make sure every single one of you can walk into a manufacturing plant, a CPG HQ, or a grocery retailer and have a credible, specific conversation about why their supply chain problem is a Snowflake problem.
+
+Before we get into the detail — hands up if you've got at least one account in your territory with a VP of Supply Chain or a CSCO involved in your deal. Good. This session is for you. And for those with your hand down — it will be by the end of the year.
+
+Supply chain is the largest data problem in every enterprise we sell into. It's also the most under-served. Let me show you what I mean.
+
+Slide two. The complexity build.
+
+I want to start with something simple. An ice cream van. Demand is simple. One van, one product, you need to know how many ice creams to buy on a sunny day.
+
+Add weather data. Sunny weekend coming? Buy more. Simple forecasting.
+
+Add multiple flavours. Now you've got a small assortment problem.
+
+Add a second location. Now you've got distribution.
+
+Add online ordering — ship from store, click and collect. Now you've got omnichannel complexity.
+
+Add seasonal promotions. Now you need to align marketing, supply, and pricing.
+
+And that's still a small business. Now scale that to a company with 300 factories, 50,000 suppliers, and 200 retail customers. That's what we're selling into. That's what every supply chain team is living every single day.
+
+Slide three. Ben and Jerry's.
+
+Let me make it real. Ben and Jerry's. They source cocoa from West Africa, sugar from Brazil, dairy from Vermont farms. They manufacture in Vermont and the Netherlands. They run cold chain at minus 18 degrees Celsius through global 3PLs. They sell in 35 countries.
+
+And sitting behind all of that are about 12 different IT systems — none of which talk to each other natively. SAP for finance. A demand planning tool. A separate warehouse management system. EDI for retailer connections. Sensor data from cold chain trucks.
+
+Every S and OP cycle starts with someone from finance, someone from supply, and someone from demand pulling data out of different systems into spreadsheets and spending three days reconciling before a single planning decision gets made. This isn't a technology problem. It's a data problem. And Snowflake solves data problems.
+
+Slide four. The tech stack reveal.
+
+Here's what that looks like at enterprise scale. This is a real manufacturing company's supply chain data architecture. I've generalised it slightly, but I've seen this exact picture at automotive OEMs, at CPG giants, at pharmaceutical companies.
+
+Two hundred plus custom integrations. Every system talks to every other system bilaterally. Data copied, moved, duplicated. No single source of truth. When something breaks — and it breaks constantly — nobody knows where the failure originated.
+
+The result: S and OP cycles that take two weeks of reconciliation before a single decision gets made. Forecasts that Finance doesn't trust. Supply teams that build in a buffer on top of a buffer on top of a buffer because the data is never reliable.
+
+Now — here's what the same company looks like with Snowflake. The operational systems don't change. We don't rip anything out. We sit above them as the intelligence layer. One unified view. Every team working from the same numbers. Cortex AI running on top. The operational integrations stay. We replace the analytics copy layer. That's the conversation.
+
+Slide five. Toyota. The eight-cent chip.
+
+Let me give you a number that opens doors.
+
+In 2021, a fire at a Renesas semiconductor factory in Japan halted production of a chip that costs eight cents. That single chip caused Toyota to cut global production by 40 percent. For a chip that costs less than your morning coffee.
+
+The cost: estimates put it at over two billion dollars in lost revenue. Because Toyota — Gartner's number one ranked supply chain in the world — couldn't see far enough into its own supply chain to know that one factory in Japan was making a chip that was non-negotiable for every car they built.
+
+Now imagine telling a Chief Supply Chain Officer: we can give you tier-N visibility into your supply chain. We can pull in carrier disruption data, port congestion signals, supplier financial health data — all from our Marketplace — and surface the risk before it becomes a production stoppage. That's the conversation. That's the business case. This is why supply chain is the biggest P and L lever in every enterprise account we own.
+
+Slide six. 50 cents of every pound.
+
+Across the four industries we focus on — manufacturing, retail, CPG, and pharma — supply chain costs represent 50 to 70 percent of total revenue cost. For a five billion euro manufacturer, supply chain is two and a half to three and a half billion euros of spend.
+
+A 5 percent improvement in supply chain efficiency is 125 to 175 million euros. That's not a technology investment. That's a CFO-level business case that pays for itself in weeks.
+
+When you're sitting in front of a CFO or a CSCO, the question isn't why would we spend money on data. The question is: why are we not doing this already. Our anchor: supply chain is 50 to 70 cents of every pound of revenue cost. That's where the money is.
+
+Slide seven. The AI moment.
+
+We are at a genuine inflection point. Gartner's supply chain AI maturity model goes from Stage 1 — reactive, fire-fighting — all the way to Stage 5 — fully autonomous. Self-sensing, self-correcting supply chain. Fewer than 5 percent of companies are above Stage 2.
+
+The reason isn't ambition. Every CSCO I meet wants an autonomous supply chain. The reason is data. You cannot run AI on fragmented, dirty, siloed data. AI agents need a clean, connected, governed data foundation.
+
+What we're seeing — and this is a real shift in 2026 — is that the AI imperative is forcing the data conversation in a way it never has before. The board has told the CSCO to implement AI in supply chain. The CSCO is asking: on top of what data? That question is our entry point. That question is where Snowflake lives.
+
+The three things you need to move from Stage 3 to Stage 4: unified data across every supply chain system, real-time signals from inside and outside the business, and closed-loop execution where the insight triggers the action automatically. We are the only platform that delivers all three. Not as separate point solutions. As one foundation.
+
+Slide eight. Five forces. Why now.
+
+And beyond the AI mandate — there are five structural forces creating urgency in every account right now. All five. Simultaneously.
+
+Force one: demand complexity. Product lifecycles are shorter, omnichannel has multiplied the signals you need to forecast accurately.
+
+Force two: data explosion and AI pressure. IoT sensor data has increased ten times in three years. Boards are mandating AI ROI. You can't deliver AI ROI on ungoverned data.
+
+Force three: geopolitical and climate risk. Tariffs, nearshoring, carbon regulation, port disruptions. Most companies still can't see beyond their tier-1 suppliers.
+
+Force four: IT cost pressure. Every CIO is being asked to consolidate point solutions. Five or six separate supply chain analytics tools is a rationalisation target.
+
+Force five: M and A. Every acquisition inherits a new ERP, a new planning tool, a new data warehouse. Snowflake unifies the combined entity in weeks.
+
+Every single one of these forces creates a data problem. We solve data problems.
+
+Slide nine. The SC agentic architecture.
+
+So what does Snowflake actually look like in a supply chain context?
+
+The customer doesn't change their systems. SAP stays. Kinaxis or o9 or Blue Yonder stays. The manufacturing execution systems, the SCADA, the IoT sensors — they all stay. We connect to all of them.
+
+On top of that, they can pull in third-party data from our Marketplace. Port disruption data. Weather signals. IQVIA prescribing data for pharma. Retailer POS data. Three thousand six hundred plus live datasets.
+
+That all lands in Snowflake. Snowpipe for continuous ingestion. Dynamic Tables for near-real-time supply chain views. And critically — a semantic layer that defines OTIF, OEE, MAPE, cost-to-serve once and makes those definitions trusted everywhere. Finance, Supply, and Demand all starting from the same number.
+
+On top of that sits Cortex AI — forecasting, anomaly detection, risk scoring. Cortex Agents for autonomous supply chain decisions. Cortex Analyst for natural language queries — your Head of Demand Planning asking: what's my forecast accuracy by customer this week? And getting an answer in seconds.
+
+The key message: we're not replacing the operational systems. We're making them intelligent.
+
+Slide ten. Personas.
+
+There are three layers in every account.
+
+At the top: the economic buyers. The CSCO or VP Supply Chain — they own the P and L, they own service levels. Language: OTIF, cost-to-serve, margin. The CPO — they own supplier relationships. Language: supplier risk, spend analytics. The CFO — they care about working capital, inventory carrying cost, cash conversion.
+
+In the operations layer: the S and OP Lead or IBP Director is your transformational champion. Bring them in early. VP Manufacturing owns OEE and OTIF from the factory floor. Head of Supply Chain Planning owns the end-to-end planning cycle and forecast accuracy.
+
+And at the data and IT layer: the CIO or Data and Analytics Lead. Often already a Snowflake customer. The fastest win in the book is connecting an existing Snowflake deployment to the supply chain use case.
+
+Practical advice: start with the CSCO or the S and OP Lead. Never pitch the planner first. They're in execution mode with their current tool. They won't sponsor a platform play.
+
+Slide eleven. Persona language guide.
+
+This is the slide I want you to screenshot and keep on your phone.
+
+CSCO: their metric is OTIF, cost-to-serve, inventory turns. Their fear is another disruption with no early warning. Your message: your planning tools are only as good as the data feeding them. We're the reason that data is clean, current, and connected.
+
+S and OP Lead: their fear is that Finance, Supply, and Demand all have different numbers and nobody trusts the plan. Your message: what if everyone started from the same number? What would that do to your cycle time?
+
+CPO: how quickly do you know when a tier-2 supplier is about to fail you?
+
+Head of Supply Chain Planning: what's your current forecast accuracy by SKU by customer — and how long does it take to get that number?
+
+CIO: you're already on Snowflake for something else. Your supply chain team is pulling data out of six different systems every week. That's the fastest win in your portfolio.
+
+The single most important thing: ask about the pain before you pitch the product.
+
+Slide twelve. Business case.
+
+When you're building the business case — and you should be doing this with a partner, not alone — there are four buckets.
+
+Cost reduction: inventory carrying cost reduction, write-offs, obsolescence. Conservative benchmark is 10 to 15 percent inventory reduction. For a company with 500 million euros of inventory, that's 50 to 75 million freed from working capital.
+
+Revenue protection: OTIF improvement, stockout reduction, penalty avoidance. One percentage point improvement in OTIF at an automotive supplier is worth 50 thousand to 500 thousand dollars per customer per year.
+
+Efficiency gains: planning cycle time, data reconciliation time. Every company we've deployed has people spending 60 to 70 percent of their time gathering and reconciling data rather than using it.
+
+Risk avoidance: regulatory compliance, recall cost avoidance. For pharma, a single batch recall can cost 40 million plus. We've reduced recall trace time from 72 hours to 4 hours at named customers.
+
+Walk in with one number from each bucket. Pick the one that resonates with the persona in the room.
+
+Slide thirteen. Four verticals.
+
+We focus on four verticals in EMEA supply chain — and the combined addressable opportunity is 5.9 billion dollars of SaaS displacement alone.
+
+Manufacturing — 2.2 billion dollars. Automotive, aerospace, industrial. The ERP plus MES plus SCADA silo problem. OTIF penalties. SAP APO end-of-life driving a massive migration wave right now.
+
+Retail — 1.3 billion dollars. Grocery, fashion, home improvement. Store-level replenishment, markdown management, inbound visibility.
+
+CPG — 1.5 billion dollars. Food and beverage, health and beauty. NPI forecasting, trade promotion ROI, zero-copy POS sharing with retailers. The Kraft Heinz and Albertsons story is our most powerful proof point in this space.
+
+Life Sciences — 900 million dollars. Pharma, biotech, diagnostics. GxP compliance, cold chain, multi-channel demand sensing. The regulation is the business case — you don't have to build it.
+
+The play is the same across all four. The vocabulary changes.
+
+Slide fourteen. The SC SaaS displacement play.
+
+The single biggest commercial opportunity in your territory right now.
+
+Every manufacturing, CPG, retail, and pharma company is spending a fortune on legacy demand planning software and the services to maintain it. Illustrative example: a large CPG company paying 3.5 million dollars a year for Anaplan licenses, plus 5 million a year for Accenture to build and maintain the models. That's 8.5 million dollars a year.
+
+Snowflake can cover that planning capability — on an open, governed, AI-ready platform — for around 250 thousand in platform plus 250 thousand in partner services. Total: 500 thousand dollars.
+
+The customer saves over 90 percent of their annual cost. They get rid of vendor lock-in. Their data is on Snowflake so Cortex AI can run on top of it.
+
+And for you: 500 thousand dollars is a full acquisition quota from a single deal.
+
+There's 5.7 to 6.5 billion dollars of Take-Out SaaS opportunity in EMEA. Three triggers to spot it: SAP APO end-of-life; Anaplan, Kinaxis, or o9 contract renewal; and stalled SI programme — the model was built, nobody trusts the output.
+
+The qualifying question you should be asking in every supply chain discovery: when does your demand planning contract renew — and are you happy with what you're getting from it?
+
+Slide fifteen. Consumption map.
+
+Supply chain deals compound.
+
+A customer starts by ingesting data from their ERP and planning tools — baseline storage and compute. They add forecasting and anomaly detection with Cortex AI — machine learning compute. They roll out Cortex Analyst to their planning teams — user-driven compute that scales with adoption. Then they add Cortex Agents for autonomous decisions — the highest-value driver.
+
+And if it's a SaaS displacement deal, that's net-new ARR on consumption pricing.
+
+Every capability layer adds consumption. The expansion story is built into the architecture. Supply chain deals land as a data platform, expand through AI use cases, and compound with every new workload that moves onto Snowflake.
+
+Slide sixteen. CoCo and CoWork account prep.
+
+Before you go into any supply chain first meeting, I want you to do four things.
+
+One — open CoWork and research the account. Who's the CSCO? What supply chain tools do they run? Have there been any supply chain disruptions in their earnings calls recently?
+
+Two — take that research into CoCo and generate a discovery brief. Tell CoCo: generate an SC discovery brief for this company. Include anticipated CSCO questions, the Snowflake angle for each topic, suggested demo moments, and the two most likely objections. It takes five minutes.
+
+Three — use that brief to personalise the deck. Put their ERP and planning tool names in the tech stack slide. The deck should feel like it was built for them.
+
+Four — do a two-page internal prep with the Account Executive and Solutions Engineer before you walk in. Buyer profile, top objection, agenda, roles. No surprises in the room.
+
+You can get all of this done in 45 minutes with CoWork and CoCo. There's no excuse to walk in cold. Any account you want prep on — drop it in the supply-chain Slack channel and I'll generate the brief with you.
+
+Slide seventeen. The 30-minute first meeting.
+
+Here's how the 30 minutes should run.
+
+Minutes zero to five: context setting. Don't open with a company overview slide. Open with one number from their business — their OTIF rate, their inventory days, a supply chain disruption from their last earnings call. You found it in CoWork. It shows you did the work. It earns you the right to the rest of the meeting.
+
+Minutes five to fifteen: run the IBP demo. End-to-end. Demand sensing through supply response. The point isn't to show every feature — the point is to show them the breadth of what's possible on one platform. Let them see the scope. Let them tell you which part they want to go deeper on.
+
+Minutes fifteen to twenty-two: supply chain challenge questions. This is where they push back. Anticipate the questions from your CoCo brief. The ones that always come up: we already have Kinaxis, why do we need Snowflake? What about SAP? How long does this take? Have crisp answers ready.
+
+Minutes twenty-two to thirty: gap analysis and one clear next step. What's missing from their current setup? Define the next action before anyone leaves the room. A date, a name, or a question to go and answer.
+
+The principle: show the full IBP story end-to-end. Let them see the breadth — then let them tell you which part they want to go deeper on.
+
+Slide eighteen. Working with Emily.
+
+And this is where I come in.
+
+I can help you with four things.
+
+Account strategy and narrative — if you've got an account you want to go after in manufacturing, CPG, retail, or pharma, I'll build the story with you. Tell me the account and I'll give you the industry framing, the proof points, and the discovery questions.
+
+Partner advice and warm introductions — Deloitte for business case and executive programmes. RelationalAI for supplier risk and network complexity. Spaulding Ridge for SaaS displacement and planning transformation — they have a specific take-out play. Aimpoint Digital for quick wins and AI foundations. Bluecrux for S and OP and IBP process redesign.
+
+Opening doors — I'm new in post, and that's actually useful. Our new SC GTM Lead would love to meet your CSCO is a credible reason to re-engage accounts that have gone cold. Let's use the moment.
+
+Content and demo — first meeting decks, ICP guides, the IBP demo. I can help you get ready for any supply chain conversation.
+
+The minimum I need to help you: their tech stack, the pain you've heard, and what you want from the next meeting. That's it. I'll do the rest.
+
+Any questions — and then let's spend time on accounts. If anyone has a specific supply chain deal they want to work through, let's pull it up now. Thank you.
