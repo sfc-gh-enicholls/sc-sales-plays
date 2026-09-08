@@ -20,9 +20,11 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', 
 /* Customer proof wall: four aligned cards */
 .proof-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.7rem; }
 .proof-card { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
-.proof-brand { padding: 0.85rem 0.8rem; text-align: center; }
-.proof-brand-name { font-size: 0.95rem; font-weight: 800; color: #FFFFFF; line-height: 1.15; letter-spacing: -0.01em; }
-.proof-brand-sub { font-size: 0.57rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sf-star); margin-top: 0.18rem; }
+.proof-brand { padding: 0.9rem 0.8rem 0.6rem; text-align: center; background: #FFFFFF; border-bottom: 1px solid var(--border-card); }
+.proof-logo { height: 34px; display: flex; align-items: center; justify-content: center; }
+.proof-logo img { max-width: 82%; width: auto; object-fit: contain; }
+.proof-brand-sub { font-size: 0.57rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); margin-top: 0.4rem; }
+.proof-card > *:not(.proof-brand):not(.proof-metric) { background: #FFFFFF; }
 .proof-claim { font-size: 0.79rem; font-weight: 800; color: var(--text-dark); line-height: 1.28; text-align: center; padding: 0.7rem 0.8rem 0.55rem; }
 .proof-pill { font-size: 0.56rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid; border-radius: 999px; padding: 0.22rem 0.6rem; margin: 0 0.8rem 0.6rem; text-align: center; }
 .proof-bullets { padding: 0 0.8rem 0.65rem; display: flex; flex-direction: column; gap: 0.4rem; }
@@ -685,7 +687,7 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
 
 <div class="slide" id="slide-11">
   <div class="slide-bg bg-ice"></div>
-  <div class="slide-content" style="padding-top:1.6rem;padding-bottom:1.1rem;">
+  <div class="slide-content" style="padding-top:1.6rem;padding-bottom:3.6rem;">
     <h3 class="label">CUSTOMER PROOF</h3>
     <h2>Leading Consumer Brands Run Supply Chain <span class="highlight">on Snowflake</span></h2>
     <div class="divider"></div>
@@ -695,8 +697,8 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
 
       <!-- 1. KRAFT HEINZ -->
       <div class="proof-card">
-        <div class="proof-brand" style="background:linear-gradient(155deg,#11567F,#042130);">
-          <div class="proof-brand-name">Kraft Heinz</div>
+        <div class="proof-brand">
+          <div class="proof-logo"><img src="assets/logos/kraftheinz.svg" alt="Kraft Heinz" style="max-height:30px;"></div>
           <div class="proof-brand-sub">Food &amp; Beverage</div>
         </div>
         <div class="proof-claim">Out-of-stocks cut by two thirds in four weeks</div>
@@ -710,8 +712,8 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
 
       <!-- 2. NESTLE -->
       <div class="proof-card">
-        <div class="proof-brand" style="background:linear-gradient(155deg,#0d9488,#042130);">
-          <div class="proof-brand-name">Nestl&eacute;</div>
+        <div class="proof-brand">
+          <div class="proof-logo"><img src="assets/logos/nestle.svg" alt="Nestle" style="max-height:26px;"></div>
           <div class="proof-brand-sub">Food &amp; Beverage &middot; DACH</div>
         </div>
         <div class="proof-claim">Manual disruption firefighting replaced by agentic AI</div>
@@ -725,8 +727,8 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
 
       <!-- 3. PEPSICO -->
       <div class="proof-card">
-        <div class="proof-brand" style="background:linear-gradient(155deg,#249EDC,#11567F);">
-          <div class="proof-brand-name">PepsiCo</div>
+        <div class="proof-brand">
+          <div class="proof-logo"><img src="assets/logos/pepsico.svg" alt="PepsiCo" style="max-height:28px;"></div>
           <div class="proof-brand-sub">Food &amp; Beverage</div>
         </div>
         <div class="proof-claim">One ML engine measuring return across 60+ data sources</div>
@@ -740,8 +742,8 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
 
       <!-- 4. BREAKTHRU BEVERAGE -->
       <div class="proof-card">
-        <div class="proof-brand" style="background:linear-gradient(155deg,#11567F,#0d7490);">
-          <div class="proof-brand-name">Breakthru Beverage</div>
+        <div class="proof-brand">
+          <div class="proof-logo"><img src="assets/logos/breakthru.png" alt="Breakthru Beverage" style="max-height:34px;"></div>
           <div class="proof-brand-sub">Beverages</div>
         </div>
         <div class="proof-claim">Cortex AI turned first and third party data into forecast signal</div>
@@ -755,12 +757,7 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
 
     </div>
 
-    <div style="margin-top:0.75rem;display:flex;gap:0.8rem;align-items:flex-start;">
-      <p style="font-size:0.72rem;color:var(--text-gray);margin:0;flex:1;"><span style="font-weight:700;color:var(--sf-mid);">Swap these for the customer&rsquo;s own sub-vertical and peer set.</span> Four is the format; which four depends on who is in the room. Supporting benchmark: Forrester TEI 2024 found 354% ROI over three years with payback inside six months.</p>
-      <p style="font-size:0.66rem;color:var(--text-light);margin:0;width:250px;flex-shrink:0;">Sources: Snowflake customer stories and published case studies. Confirm the latest approved wording before sharing externally.</p>
-    </div>
-
-  </div>
+    
   <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
   <div class="slide-number">11 / 14</div>
 </div>
@@ -1460,7 +1457,7 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
       </div>
       <div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:0.75rem 0.9rem;">
         <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-star);margin-bottom:0.35rem;">4 &middot; Swap the Customer Proof (Slide 11)</div>
-        <p style="font-size:0.74rem;color:rgba(255,255,255,0.75);margin:0;max-width:100%;font-family:monospace;line-height:1.55;">&ldquo;Replace any of the four proof cards on slide 11 with the references closest to [Company Name] in sub-category, size and region. Keep the four-card layout, one metric per card, and the line stating that none of them is a pilot.&rdquo; <span style="display:block;margin-top:0.4rem;font-size:0.66rem;color:#B45309;"><strong>Shareability:</strong> Kraft Heinz, Nestl&eacute;, PepsiCo and Breakthru Beverage are all cleared for external use as written. Keurig Dr Pepper and the anonymised multinational CPG forecast accuracy story are internal only, so do not put either on this slide. Add customer logos only once brand approval is in place.</span></p>
+        <p style="font-size:0.74rem;color:rgba(255,255,255,0.75);margin:0;max-width:100%;font-family:monospace;line-height:1.55;">&ldquo;Replace any of the four proof cards on slide 11 with the references closest to [Company Name] in sub-category, size and region. Keep the four-card layout, one metric per card, and the line stating that none of them is a pilot.&rdquo; <span style="display:block;margin-top:0.4rem;font-size:0.66rem;color:#B45309;"><strong>Shareability:</strong> Kraft Heinz, Nestl&eacute;, PepsiCo and Breakthru Beverage are all cleared for external use as written. Keurig Dr Pepper and the anonymised multinational CPG forecast accuracy story are internal only, so do not put either on this slide. Logos are stored locally in <code>assets/logos/</code>: Kraft Heinz, Nestl&eacute; and PepsiCo from Wikimedia Commons, Breakthru Beverage from the company&rsquo;s own published brand asset. Confirm marketing is comfortable with customer logo use before any external distribution, and replace like for like if you swap a card.</span></p>
       </div>
       <div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:0.75rem 0.9rem;">
         <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-star);margin-bottom:0.35rem;">5 &middot; Generate Discovery Question Hooks</div>
