@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Snowflake CPG — Metrics That Matter</title>
+<title>Snowflake CPG: Metrics That Matter</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -77,14 +77,14 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
 <div class="controls">
   <button onclick="prevSlide()">&#8592; Prev</button>
   <select id="slideSelect" onchange="goTo(this.value-1)">
-    <option value="1">01 — Title</option>
-    <option value="2">02 — Business Imperative</option>
-    <option value="3">03 — Value Framework</option>
-    <option value="4">04 — Customer Service &amp; Fill</option>
-    <option value="5">05 — Demand Planning &amp; Promotions</option>
-    <option value="6">06 — Inventory &amp; Working Capital</option>
-    <option value="7">07 — Operations &amp; Manufacturing</option>
-    <option value="8">08 — Financial Impact</option>
+    <option value="1">01 &middot; Title</option>
+    <option value="2">02 &middot; Business Imperative</option>
+    <option value="3">03 &middot; Value Framework</option>
+    <option value="4">04 &middot; Customer Service &amp; Fill</option>
+    <option value="5">05 &middot; Demand Planning &amp; Promotions</option>
+    <option value="6">06 &middot; Inventory &amp; Working Capital</option>
+    <option value="7">07 &middot; Operations &amp; Manufacturing</option>
+    <option value="8">08 &middot; Financial Impact</option>
   </select>
   <button onclick="nextSlide()">Next &#8594;</button>
 </div>
@@ -121,21 +121,21 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
       <div style="display:flex;flex-direction:column;gap:0.9rem;">
         <div class="pos-card purple" style="padding:0.9rem 1.1rem;">
           <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.5rem;">The Problem</div>
-          <p style="font-size:0.78rem;margin-bottom:0.6rem;">Today's CPG companies face permanent volatility — promotional demand spikes, retailer compliance pressure, SKU proliferation, cost inflation — but their data infrastructure is built for stability. ERP, demand planning, TPM, WMS, and retailer data run in silos. Every planning decision starts with reconciliation. Supply chain costs represent <strong>40–60% of revenue</strong> for most CPG companies, yet demand plans and trade promotion plans are built in complete isolation from each other.</p>
+          <p style="font-size:0.78rem;margin-bottom:0.6rem;">Today's CPG companies face permanent volatility, from promotional demand spikes and retailer compliance pressure to SKU proliferation and cost inflation, but their data infrastructure is built for stability. ERP, demand planning, TPM, WMS, and retailer data run in silos. Every planning decision starts with reconciliation. Supply chain costs represent <strong>40–60% of revenue</strong> for most CPG companies, yet demand plans and trade promotion plans are built in complete isolation from each other.</p>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.55rem;margin-top:0.2rem;">
             <div style="background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:0.55rem 0.7rem;">
               <div style="font-size:0.63rem;font-weight:700;color:#dc2626;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.35rem;">Without Snowflake</div>
-              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✕ 4 systems, 4 truths — promotional plans never reach supply planning</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✕ 4 systems, 4 truths. Promotional plans never reach supply planning</div>
               <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✕ Retailer chargebacks found when the invoice arrives, not 6 weeks earlier</div>
-              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✕ AI pilots fail — ungoverned POS and TPM data is the root cause</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✕ AI pilots fail. Ungoverned POS and TPM data is the root cause</div>
               <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;">✕ 3-day S&amp;OP pack prep before any decisions are made</div>
             </div>
             <div style="background:rgba(36,158,220,0.05);border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.55rem 0.7rem;">
               <div style="font-size:0.63rem;font-weight:700;color:var(--sf-mid);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.35rem;">With Snowflake</div>
-              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✓ Unified demand platform — one semantic layer, one truth</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✓ Unified demand platform: one semantic layer, one truth</div>
               <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✓ Proactive fill rate signals 4–6 weeks before retailer compliance failure</div>
-              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✓ AI that reasons on governed demand + promotional data — reaches production</div>
-              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;">✓ Self-service S&amp;OP analytics in seconds — decisions made in the meeting</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✓ AI that reasons on governed demand and promotional data, so it reaches production</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;">✓ Self-service S&amp;OP analytics in seconds, so decisions get made in the meeting</div>
             </div>
           </div>
         </div>
@@ -144,7 +144,7 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
       <div style="display:flex;flex-direction:column;gap:0.9rem;">
         <div class="pos-card blue" style="padding:0.9rem 1.1rem;">
           <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.5rem;">The Snowflake Platform for CPG</div>
-          <p style="font-size:0.78rem;margin-bottom:0.7rem;">The AI Data Cloud is the only platform that unifies ERP, demand planning, TPM, WMS, and retailer POS data into a governed, AI-ready foundation — without moving data or replacing existing systems. It transforms supply chain planning from reactive reconciliation to proactive, closed-loop intelligence.</p>
+          <p style="font-size:0.78rem;margin-bottom:0.7rem;">The AI Data Cloud is the only platform that unifies ERP, demand planning, TPM, WMS, and retailer POS data into a governed, AI-ready foundation, without moving data or replacing existing systems. It transforms supply chain planning from reactive reconciliation to proactive, closed-loop intelligence.</p>
           <div style="margin-bottom:0.7rem;">
             <span class="pill">Unify &amp; Govern</span>
             <span class="pill">Reason &amp; Predict</span>
@@ -216,7 +216,7 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.7rem;">
       <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:10px;padding:0.75rem 1rem;">
         <div style="font-size:0.63rem;font-weight:700;color:var(--sf-blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">Data Foundation</div>
-        <div style="font-size:0.72rem;color:var(--text-gray);line-height:1.5;">Unified ERP · Demand Planning · TPM · WMS · Retailer POS · Syndicated Data (NielsenIQ/Circana) — one semantic layer</div>
+        <div style="font-size:0.72rem;color:var(--text-gray);line-height:1.5;">Unified ERP · Demand Planning · TPM · WMS · Retailer POS · Syndicated Data (NielsenIQ/Circana) in one semantic layer</div>
       </div>
       <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:10px;padding:0.75rem 1rem;">
         <div style="font-size:0.63rem;font-weight:700;color:var(--sf-blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">AI Intelligence</div>
@@ -248,13 +248,13 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-body">The primary customer service KPI for CPG. Every percentage point below target triggers retailer deductions, chargebacks, or loss of shelf space. For CPG companies with Walmart, Amazon, or Kroger as customers, fill rate directly determines profitability. A 1-point improvement on $2B of orders eliminates ~$20M in chargebacks and lost sales.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Snowflake unifies ERP, WMS, and demand plan in real time. Cortex Analyst enables "what is case fill rate for customer X this week?" in seconds — answered from live data, not last night's batch.</p>
+          <p>Snowflake unifies ERP, WMS, and demand plan in real time. Cortex Analyst enables "what is case fill rate for customer X this week?" in seconds, answered from live data, not last night's batch.</p>
         </div>
       </div>
 
       <div class="metric-card purple">
         <div class="metric-name">OTIF</div>
-        <div class="metric-full">On Time In Full — Retailer Compliance</div>
+        <div class="metric-full">On Time In Full &middot; Retailer Compliance</div>
         <span class="benchmark avg">Walmart target: 98%+</span>
         <span class="benchmark target">Penalty per failure: 3% of invoice</span>
         <div class="metric-body">Retailer compliance performance that directly affects invoice value. Walmart charges a 3% deduction for every OTIF failure; Amazon uses SCI to penalise non-compliant suppliers. For a CPG company with $500M in Walmart sales, every 1% OTIF miss is $1.5M in deductions. Root cause is almost always a demand signal that didn't reach supply planning in time.</div>
@@ -269,7 +269,7 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-full">% of Time Product Is Available at Shelf</div>
         <span class="benchmark avg">Industry avg: 95%</span>
         <span class="benchmark target">Best-in-class: 98%+</span>
-        <div class="metric-body">The revenue metric retailers care about most. Every point of OOS is a sale lost — to a competitor, to private label, or to the retailer's own brand. OSA is driven by case fill rate and DC replenishment, but its root cause is almost always upstream in demand planning accuracy.</div>
+        <div class="metric-body">The revenue metric retailers care about most. Every point of OOS is a sale lost, whether to a competitor, to private label, or to the retailer's own brand. OSA is driven by case fill rate and DC replenishment, but its root cause is almost always upstream in demand planning accuracy.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <p>Retailer POS and syndicated data (NielsenIQ, Circana) unified with internal supply data on Snowflake. Cortex AI detects OSA deterioration by SKU-store before replenishment orders are placed.</p>
@@ -283,7 +283,7 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-body">Composite measure of order completeness, delivery timing, documentation accuracy, and product condition. A single failure in any dimension counts as an imperfect order. Drives retailer relationship quality and deduction frequency in complex CPG supply chains.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Unified data layer correlates WMS shipment data, ERP order records, and logistics events to automatically calculate perfect order rate — no manual cross-system reconciliation.</p>
+          <p>Unified data layer correlates WMS shipment data, ERP order records, and logistics events to automatically calculate perfect order rate, with no manual cross-system reconciliation.</p>
         </div>
       </div>
 
@@ -291,7 +291,7 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-name">Retailer SCI Score</div>
         <div class="metric-full">Amazon Supplier Confirmation Index</div>
         <span class="benchmark target">Target: 95%+ to avoid velocity restrictions</span>
-        <div class="metric-body">Amazon's measure of supplier reliability — confirmation rate, cancellation rate, and fill rate combined. SCI score below threshold triggers Amazon to reduce purchase order volume from that supplier and route demand to competitors. Recovery from a poor SCI score takes 90+ days. Prevention requires upstream demand signal clarity.</div>
+        <div class="metric-body">Amazon's measure of supplier reliability: confirmation rate, cancellation rate, and fill rate combined. SCI score below threshold triggers Amazon to reduce purchase order volume from that supplier and route demand to competitors. Recovery from a poor SCI score takes 90+ days. Prevention requires upstream demand signal clarity.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <p>Cortex AI monitors Amazon order confirmation and fill signals in near real-time. Exception alerts surface SKU-level risk to the supply planning team before confirmation windows close.</p>
@@ -302,16 +302,16 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-name">Forecast Bias</div>
         <div class="metric-full">Systematic Over or Under-Prediction</div>
         <span class="benchmark target">Target: ±5% at product family · ±10% at SKU</span>
-        <div class="metric-body">Persistent forecast bias distorts inventory positioning across the entire supply chain. In CPG, over-forecasting drives waste and markdowns; under-forecasting drives OOS and chargebacks. Promotional forecast bias is the most common and most damaging — post-event demand voids are the direct result.</div>
+        <div class="metric-body">Persistent forecast bias distorts inventory positioning across the entire supply chain. In CPG, over-forecasting drives waste and markdowns; under-forecasting drives OOS and chargebacks. Promotional forecast bias is the most common and most damaging, and post-event demand voids are the direct result.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Cortex AI detects systematic bias by SKU, category, and customer — automatically correcting model inputs faster than any monthly planning cycle can.</p>
+          <p>Cortex AI detects systematic bias by SKU, category, and customer, automatically correcting model inputs faster than any monthly planning cycle can.</p>
         </div>
       </div>
 
     </div>
     <div class="proof-bar" style="margin-top:0.7rem;">
-      <p>Kraft Heinz: out-of-stocks reduced from 20% to 6% in 4 weeks on Snowflake &nbsp;&middot;&nbsp; Keurig Dr Pepper: $14M in self-service analytics value across SC and commercial teams <span style="font-size:0.65rem;color:#D97706;font-style:italic;">(&#9888; internal use only &mdash; do not share externally)</span></p>
+      <p>Kraft Heinz: out-of-stocks reduced from 20% to 6% in 4 weeks on Snowflake &nbsp;&middot;&nbsp; Keurig Dr Pepper: $14M in self-service analytics value across SC and commercial teams <span style="font-size:0.65rem;color:#D97706;font-style:italic;">(&#9888; internal use only. Do not share externally)</span></p>
     </div>
   </div>
   <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
@@ -334,7 +334,7 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-body">The foundation metric for everything downstream. A 10-point MAPE improvement on a CPG company with $1B revenue reduces excess inventory, emergency freight, and lost sales by tens of millions. Most CPG AI demand sensing pilots fail because retailer POS data is fragmented and not unified with internal planning data.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Cortex AI demand models retrain continuously on live signals — order book, POS shipment history, and external market data from Snowflake Marketplace (consumer sentiment, economic indicators). Forecast accuracy compounds over time.</p>
+          <p>Cortex AI demand models retrain continuously on live signals: order book, POS shipment history, and external market data from Snowflake Marketplace (consumer sentiment, economic indicators). Forecast accuracy compounds over time.</p>
         </div>
       </div>
 
@@ -343,10 +343,10 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-full">Predicted vs Actual Promotional Uplift</div>
         <span class="benchmark avg">Industry avg error: 25–40% on incremental volume</span>
         <span class="benchmark target">Target: &lt;15% error</span>
-        <div class="metric-body">Trade promotions represent 15–25% of CPG revenue. A 10% error in promotional lift forecast creates a wave of either excess inventory or OOS across every promotional cycle — amplified across the full SKU range. Root cause: promotion plans are built in TPM without live supply constraints, and historical lift data is never systematically unified with demand baselines.</div>
+        <div class="metric-body">Trade promotions represent 15–25% of CPG revenue. A 10% error in promotional lift forecast creates a wave of either excess inventory or OOS across every promotional cycle, amplified across the full SKU range. Root cause: promotion plans are built in TPM without live supply constraints, and historical lift data is never systematically unified with demand baselines.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Snowflake unifies TPM promotion calendars, retailer POS sell-through, historical base and incremental lift, and supply constraints into one governed platform. Cortex AI builds promotional response models from every historical event — improving lift accuracy with every promotion run.</p>
+          <p>Snowflake unifies TPM promotion calendars, retailer POS sell-through, historical base and incremental lift, and supply constraints into one governed platform. Cortex AI builds promotional response models from every historical event, improving lift accuracy with every promotion run.</p>
         </div>
       </div>
 
@@ -357,7 +357,7 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-body">Trade spend is the second largest line item in the P&amp;L after COGS for most CPG companies. The tragedy: most promotions cannot be evaluated post-event because sell-through data from retailers, base volume, and incremental lift are never unified in one system. Decisions are based on intuition, not evidence.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Retailer POS sell-through unified with TPM spend, base volume baselines, and financial actuals on Snowflake. Cortex Analyst enables post-promotion review in seconds: "What was the incremental ROI of our Q2 Walmart promotion on SKU X?" — answered from live data.</p>
+          <p>Retailer POS sell-through unified with TPM spend, base volume baselines, and financial actuals on Snowflake. Cortex Analyst enables post-promotion review in seconds: "What was the incremental ROI of our Q2 Walmart promotion on SKU X?", answered from live data.</p>
         </div>
       </div>
 
@@ -366,10 +366,10 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-full">Forecast Accuracy for NPD in First 3 Months</div>
         <span class="benchmark avg">Average NPD fill rate in week 1: &lt;70%</span>
         <span class="benchmark target">Target: 90%+</span>
-        <div class="metric-body">New product launches are the highest-stakes demand forecasting event in CPG. Getting it wrong in either direction costs: OOS in week 1 loses distribution; overstock creates delistings. Root cause: there's no historical data for genuinely new products, so analogues must be selected — a process that requires unified data across all SKUs, all customers, all categories.</div>
+        <div class="metric-body">New product launches are the highest-stakes demand forecasting event in CPG. Getting it wrong in either direction costs: OOS in week 1 loses distribution; overstock creates delistings. Root cause: there's no historical data for genuinely new products, so analogues must be selected, a process that requires unified data across all SKUs, all customers, all categories.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Cortex AI enables analogue-based NPD forecasting: "Which existing SKU most closely matches this new product's launch profile?" — answered instantly from unified historical data. Launch fill rate confidence improves materially.</p>
+          <p>Cortex AI enables analogue-based NPD forecasting: "Which existing SKU most closely matches this new product's launch profile?", answered instantly from unified historical data. Launch fill rate confidence improves materially.</p>
         </div>
       </div>
 
@@ -380,7 +380,7 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-body">In most CPG companies, the S&amp;OP meeting is the most expensive reconciliation exercise in the business. Demand, supply, and finance arrive with different numbers from different systems. The first hour is spent agreeing on the facts, not making decisions. Root cause: no shared data platform where all functions see the same demand signal.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Snowflake's governed semantic layer ensures every function reads from the same defined KPIs. Cortex Analyst generates S&amp;OP pack data on demand — "show me the demand gap for next quarter by category" answered in seconds.</p>
+          <p>Snowflake's governed semantic layer ensures every function reads from the same defined KPIs. Cortex Analyst generates S&amp;OP pack data on demand. "Show me the demand gap for next quarter by category", answered in seconds.</p>
         </div>
       </div>
 
@@ -398,7 +398,7 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
 
     </div>
     <div class="proof-bar" style="margin-top:0.7rem;">
-      <p>Kraft Heinz: demand and supply unified on Snowflake — improved COGS, fill rate, and on-time delivery &nbsp;·&nbsp; Promotional ROI: 50–70% of industry promotions generate negative ROI — Snowflake makes every event measurable</p>
+      <p>Kraft Heinz: demand and supply unified on Snowflake, improving COGS, fill rate, and on-time delivery &nbsp;·&nbsp; Promotional ROI: 50–70% of industry promotions generate negative ROI. Snowflake makes every event measurable</p>
     </div>
   </div>
   <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
@@ -417,10 +417,10 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-name">Days of Supply</div>
         <div class="metric-full">Inventory on Hand ÷ Average Daily Sales</div>
         <span class="benchmark avg">Food &amp; Bev: 25–45 days · Personal Care: 35–60 days</span>
-        <div class="metric-body">Direct measure of how much capital is locked in inventory. For CPG with seasonal products and promotional cycles, DoS fluctuates dramatically — the challenge is keeping DoS right-sized despite volatile promotional demand. Every 5-day reduction in DoS on $500M inventory frees ~$7M in working capital.</div>
+        <div class="metric-body">Direct measure of how much capital is locked in inventory. For CPG with seasonal products and promotional cycles, DoS fluctuates dramatically, so the challenge is keeping DoS right-sized despite volatile promotional demand. Every 5-day reduction in DoS on $500M inventory frees ~$7M in working capital.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Cortex AI-driven demand sensing and live TPM signals reduce the uncertainty that forces excess DoS. Governed semantic layer means finance, supply, and operations agree on the same inventory number — no padding for reconciliation uncertainty.</p>
+          <p>Cortex AI-driven demand sensing and live TPM signals reduce the uncertainty that forces excess DoS. Governed semantic layer means finance, supply, and operations agree on the same inventory number, with no padding for reconciliation uncertainty.</p>
         </div>
       </div>
 
@@ -428,7 +428,7 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-name">Inventory Turns</div>
         <div class="metric-full">COGS ÷ Average Inventory Value</div>
         <span class="benchmark avg">Food &amp; Bev: 8–15x · Personal Care: 5–10x · Household: 5–8x</span>
-        <div class="metric-body">Higher turns = less capital tied up, less obsolescence risk, lower carrying costs. CPG inventory turns are highly sensitive to promotional forecasting accuracy. A turns improvement of 1x on a $300M inventory base frees ~$30M in working capital — directly improving cash-to-cash cycle.</div>
+        <div class="metric-body">Higher turns = less capital tied up, less obsolescence risk, lower carrying costs. CPG inventory turns are highly sensitive to promotional forecasting accuracy. A turns improvement of 1x on a $300M inventory base frees ~$30M in working capital, directly improving cash-to-cash cycle.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <p>Unified demand + promotional signals + supply data drives better turns through more accurate inventory positioning by SKU, DC, and customer.</p>
@@ -439,10 +439,10 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-name">Safety Stock Level</div>
         <div class="metric-full">Buffer Inventory Held Against Forecast Uncertainty</div>
         <span class="benchmark avg">Most CPG hold 20–35% more safety stock than demand risk requires</span>
-        <div class="metric-body">Safety stock in CPG is rational insurance against demand and supply variability — the problem is when it's sized to cover data uncertainty rather than genuine business risk. Most CPG companies hold significantly more safety stock than necessary because they don't trust their promotional forecasts or supply signals.</div>
+        <div class="metric-body">Safety stock in CPG is rational insurance against demand and supply variability. The problem is when it's sized to cover data uncertainty rather than genuine business risk. Most CPG companies hold significantly more safety stock than necessary because they don't trust their promotional forecasts or supply signals.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Cortex AI continuous risk scoring enables right-sizing safety stock by actual demand variability — not as a blanket hedge against data lag. Hold less where promotional forecasts are reliable; hold more where NPD uncertainty is genuine.</p>
+          <p>Cortex AI continuous risk scoring enables right-sizing safety stock by actual demand variability, not as a blanket hedge against data lag. Hold less where promotional forecasts are reliable; hold more where NPD uncertainty is genuine.</p>
         </div>
       </div>
 
@@ -451,7 +451,7 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-full">E&amp;O as % of Total Inventory Value</div>
         <span class="benchmark avg">Industry avg: 5–12%</span>
         <span class="benchmark target">Best-in-class: &lt;2%</span>
-        <div class="metric-body">E&amp;O in CPG is driven by promotional over-forecasting, failed NPD launches, and poor visibility into aging stock near shelf-life expiry. An average $1B CPG company writes off $25–60M annually in E&amp;O. Short-dated stock near expiry is particularly costly — markdown, donation, or disposal all destroy value.</div>
+        <div class="metric-body">E&amp;O in CPG is driven by promotional over-forecasting, failed NPD launches, and poor visibility into aging stock near shelf-life expiry. An average $1B CPG company writes off $25–60M annually in E&amp;O. Short-dated stock near expiry is particularly costly, since markdown, donation, or disposal all destroy value.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <p>Cortex AI detects aging inventory and near-expiry risk before write-offs materialise. Unified WMS and demand data identifies inter-DC transfer opportunities to consume at-risk stock before expiry.</p>
@@ -463,10 +463,10 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-full">DIO + DSO − DPO</div>
         <span class="benchmark avg">Industry avg: 30–60 days</span>
         <span class="benchmark target">Target: reduce 10–20%</span>
-        <div class="metric-body">The CFO's primary supply chain metric. Every 10-day improvement on a $2B CPG business frees ~$55M in cash. CPG cash conversion is uniquely affected by promotional timing — large retailer orders at quarter-end, followed by voids, create working capital peaks and troughs that better demand planning can smooth.</div>
+        <div class="metric-body">The CFO's primary supply chain metric. Every 10-day improvement on a $2B CPG business frees ~$55M in cash. CPG cash conversion is uniquely affected by promotional timing: large retailer orders at quarter-end, followed by voids, create working capital peaks and troughs that better demand planning can smooth.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Snowflake connects supply chain and financial data in one platform — enabling real-time cash-to-cash tracking and scenario modelling for working capital optimisation decisions.</p>
+          <p>Snowflake connects supply chain and financial data in one platform, enabling real-time cash-to-cash tracking and scenario modelling for working capital optimisation decisions.</p>
         </div>
       </div>
 
@@ -474,10 +474,10 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-name">Inventory Carrying Cost</div>
         <div class="metric-full">25–35% of Annual Inventory Value</div>
         <span class="benchmark avg">Carrying cost rate: 25–35%/yr</span>
-        <div class="metric-body">The true cost of holding inventory: capital cost + storage + handling + insurance + write-off risk. A CPG company with $400M in average inventory pays $100–140M per year just to hold it. Even a 10% inventory reduction saves $10–14M annually — before counting the freed working capital.</div>
+        <div class="metric-body">The true cost of holding inventory: capital cost + storage + handling + insurance + write-off risk. A CPG company with $400M in average inventory pays $100–140M per year just to hold it. Even a 10% inventory reduction saves $10–14M annually, before counting the freed working capital.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Better demand/supply matching through unified Snowflake data and Cortex AI directly reduces average inventory held. ABB (Discreet Mfg) found $200M+ in annual savings — the principle applies equally to CPG inventory reduction.</p>
+          <p>Better demand/supply matching through unified Snowflake data and Cortex AI directly reduces average inventory held. ABB (Discreet Mfg) found $200M+ in annual savings, and the principle applies equally to CPG inventory reduction.</p>
         </div>
       </div>
 
@@ -518,7 +518,7 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-body">The direct measure of whether manufacturing is executing to the promotional and replenishment plan. Low schedule adherence drives premium freight, OOS at retail, and retailer chargebacks. Root cause is almost always upstream: stale demand signal causing a plan that couldn't be executed against available ingredients.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Live ingredient availability from Snowflake feeds into production planning — schedules built on real data. Cortex AI flags ingredient shortages before the schedule is locked, not after the line stops.</p>
+          <p>Live ingredient availability from Snowflake feeds into production planning, so schedules are built on real data. Cortex AI flags ingredient shortages before the schedule is locked, not after the line stops.</p>
         </div>
       </div>
 
@@ -527,7 +527,7 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-full">Ingredient and Finished Goods Waste as % of Output</div>
         <span class="benchmark avg">Industry avg: 3–8%</span>
         <span class="benchmark target">Target: &lt;2%</span>
-        <div class="metric-body">CPG process manufacturing generates significant waste through product changeovers, CIP loss, and shelf-life-driven write-offs. Waste directly impacts COGS and sustainability targets. Root cause analysis requires correlating production data with ingredient batch records and yield models — typically fragmented across QMS, MES, and ERP.</div>
+        <div class="metric-body">CPG process manufacturing generates significant waste through product changeovers, CIP loss, and shelf-life-driven write-offs. Waste directly impacts COGS and sustainability targets. Root cause analysis requires correlating production data with ingredient batch records and yield models, typically fragmented across QMS, MES, and ERP.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <p>Unified QMS, MES, and ingredient data on Snowflake enables automatic correlation of waste events with ingredient batches, process parameters, and changeover sequences. AI anomaly detection triggers before waste accumulates.</p>
@@ -541,7 +541,7 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-body">In CPG process manufacturing, batch yield directly drives COGS. A 1% yield improvement on a product with 60% gross margin and $200M revenue is worth ~$1.2M annually. Yield variation is often linked to specific ingredient supplier lots, seasonal raw material quality, or undetected process parameter drift.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Cortex AI connects batch yield records with ingredient lot traceability, supplier data, and environmental parameters. Root cause of yield degradation identified in minutes — before it affects the full production run.</p>
+          <p>Cortex AI connects batch yield records with ingredient lot traceability, supplier data, and environmental parameters. Root cause of yield degradation identified in minutes, before it affects the full production run.</p>
         </div>
       </div>
 
@@ -549,10 +549,10 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-name">Capacity Utilisation</div>
         <div class="metric-full">Actual Output vs Rated Capacity</div>
         <span class="benchmark avg">Target: 75–85% sustainable</span>
-        <div class="metric-body">Running too low wastes capital investment. Running too high creates quality risk and no buffer for demand surges. CPG capacity utilisation is complicated by SKU proliferation and promotional demand spikes — optimising across 500+ SKUs on 20+ lines requires unified demand forecast and production scheduling data.</div>
+        <div class="metric-body">Running too low wastes capital investment. Running too high creates quality risk and no buffer for demand surges. CPG capacity utilisation is complicated by SKU proliferation and promotional demand spikes. Optimising across 500+ SKUs on 20+ lines requires unified demand forecast and production scheduling data.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Snowflake unifies MES capacity data, production schedules, and demand plans in one query. Cortex AI enables scenario modelling for promotional capacity allocation — "can we accommodate this promotion if we reschedule line 3?" answered in seconds.</p>
+          <p>Snowflake unifies MES capacity data, production schedules, and demand plans in one query. Cortex AI enables scenario modelling for promotional capacity allocation. "Can we accommodate this promotion if we reschedule line 3?", answered in seconds.</p>
         </div>
       </div>
 
@@ -560,10 +560,10 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-name">Changeover Frequency</div>
         <div class="metric-full">Number of Product Changeovers per Day/Week</div>
         <span class="benchmark avg">Varies by line complexity</span>
-        <div class="metric-body">In CPG process manufacturing, changeovers represent the single largest source of OEE loss — typically 30–40% of all downtime. Reducing changeover frequency through better run sequencing directly improves OEE, yield, and cleaning time. Optimal sequencing requires unified demand forecast + production schedule + product compatibility data.</div>
+        <div class="metric-body">In CPG process manufacturing, changeovers represent the single largest source of OEE loss, typically 30–40% of all downtime. Reducing changeover frequency through better run sequencing directly improves OEE, yield, and cleaning time. Optimal sequencing requires unified demand forecast + production schedule + product compatibility data.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Unified demand forecast and production compatibility data on Snowflake enables AI-optimised run sequencing — minimising changeovers while meeting fill rate targets. Cortex Analyst: "What's the optimal production sequence for next week's demand?" answered in seconds.</p>
+          <p>Unified demand forecast and production compatibility data on Snowflake enables AI-optimised run sequencing, minimising changeovers while meeting fill rate targets. Cortex Analyst: "What's the optimal production sequence for next week's demand?" answered in seconds.</p>
         </div>
       </div>
 
@@ -590,7 +590,7 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
           <div class="metric-name">Net Revenue per Case</div>
           <div class="metric-full">Revenue after Trade Deductions</div>
           <span class="benchmark avg">Industry: highly variable by category</span>
-          <div class="metric-body">The real revenue metric. Gross revenue minus deductions (OTIF penalties, promotional allowances, off-invoice discounts) = net revenue. Every OTIF improvement and chargeback reduction flows directly to net revenue. Trade spend is the primary lever — but only if promotional ROI is measurable.</div>
+          <div class="metric-body">The real revenue metric. Gross revenue minus deductions (OTIF penalties, promotional allowances, off-invoice discounts) = net revenue. Every OTIF improvement and chargeback reduction flows directly to net revenue. Trade spend is the primary lever, but only if promotional ROI is measurable.</div>
           <div class="metric-snowflake">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             <p>Unified TPM, deduction management, and financial data means every trade decision has a real net revenue impact. Cortex Analyst: "What is our net revenue per case for customer X after all deductions?" answered from live data.</p>
@@ -601,7 +601,7 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
           <div class="metric-name">Trade Spend as % Revenue</div>
           <div class="metric-full">Total Trade Investment ÷ Gross Revenue</div>
           <span class="benchmark avg">CPG average: 15–25% of revenue</span>
-          <div class="metric-body">For many CPG companies, trade spend is the second largest P&amp;L line after COGS. Despite this scale, most companies cannot measure whether individual promotions make money. Snowflake unifies retailer sell-through with TPM spend data — making every promotion measurable and every future investment decision evidence-based.</div>
+          <div class="metric-body">For many CPG companies, trade spend is the second largest P&amp;L line after COGS. Despite this scale, most companies cannot measure whether individual promotions make money. Snowflake unifies retailer sell-through with TPM spend data, making every promotion measurable and every future investment decision evidence-based.</div>
           <div class="metric-snowflake">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             <p>Cortex Analyst delivers post-promotion analysis in seconds: incremental lift vs. base, net revenue impact, and comparison to similar historical events. Trade decisions become data-driven rather than relationship-driven.</p>
@@ -626,7 +626,7 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
           <div class="metric-body">The CFO's primary supply chain efficiency KPI. A 1-point improvement on $2B revenue = $20M annual saving. Driven by inventory reduction, logistics efficiency, deduction elimination, and planning cost reduction.</div>
           <div class="metric-snowflake">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <p>Unified data eliminates duplicate reconciliation cost and reduces the expedite premium — typically 10–15% of logistics spend.</p>
+            <p>Unified data eliminates duplicate reconciliation cost and reduces the expedite premium, typically 10–15% of logistics spend.</p>
           </div>
         </div>
 
