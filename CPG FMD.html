@@ -16,6 +16,7 @@
 html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', sans-serif; background: #FFFFFF; }
 .deck { width: 100vw; height: 100vh; position: relative; }
 .slide { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1); overflow: hidden; }
+[data-reveal] { transition: opacity 0.5s ease; }
 .slide.active { opacity: 1; pointer-events: all; }
 .slide-bg { position: absolute; inset: 0; z-index: 0; }
 .bg-white { background: #FFFFFF; }
@@ -250,7 +251,7 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
 <div class="slide" id="slide-5">
   <div class="slide-bg bg-white"></div>
   <div class="slide-content" style="padding-top:2rem;padding-bottom:2rem;">
-    <h3 class="label">CHAPTER 1 &middot; YOUR OBJECTIVES</h3>
+    <h3 class="label">YOUR OBJECTIVES</h3>
     <h2>Our Understanding of Your <span class="highlight">Business Objectives</span></h2>
     <div class="divider"></div>
     <p style="font-size:0.87rem;margin-bottom:0.6rem;max-width:1000px;">As we understand them from our conversations so far. Correct us where we have this wrong &mdash; that correction is the most useful thing that can happen in this meeting.</p>
@@ -271,94 +272,94 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
 
 <div class="slide" id="slide-6">
   <div class="slide-bg bg-ice"></div>
-  <div class="slide-content" style="padding-top:1.5rem;padding-bottom:1rem;">
-    <h3 class="label">CHAPTER 2 &middot; THE ROOT CAUSE</h3>
+  <div class="slide-content" style="padding-top:1.6rem;padding-bottom:1.1rem;">
+    <h3 class="label">THE ROOT CAUSE</h3>
     <h2>Five Systems. <span class="highlight">Five Versions of Demand.</span></h2>
     <div class="divider"></div>
-    <p style="font-size:0.85rem;margin-bottom:0.7rem;max-width:1000px;">Every symptom on this slide traces to one structural fact: these systems were never connected. Each is authoritative about its own slice and blind to the rest &mdash; and nothing joins them into a picture your teams, or an AI model, can reason across.</p>
+    <p style="font-size:0.87rem;margin-bottom:0.85rem;max-width:1000px;">Every symptom below traces to one structural fact: these systems were never connected to each other. Each one is authoritative about its own slice and blind to the rest, and nothing joins them into a single picture your teams &mdash; or an AI model &mdash; can reason across.</p>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.85rem;align-items:start;">
+    <div style="display:grid;grid-template-columns:1.15fr 1fr;gap:1.1rem;align-items:start;">
 
       <!-- LEFT: The systems + the gap -->
-      <div style="background:#FFFFFF;border:1px solid var(--border-card);border-radius:12px;padding:0.9rem 1rem;">
-        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.5rem;">Where your demand signal lives today</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.35rem;">
-          <div style="background:var(--sf-ice);border:1px solid var(--border-card);border-radius:7px;padding:0.4rem 0.55rem;">
-            <div style="font-size:0.72rem;font-weight:700;color:var(--sf-mid);">SAP / Oracle ERP</div>
-            <div style="font-size:0.63rem;color:var(--text-light);">Orders &middot; inventory &middot; financials</div>
+      <div data-reveal="1" style="background:#FFFFFF;border:1px solid var(--border-card);border-radius:12px;padding:1rem 1.1rem;">
+        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.6rem;">Where your demand signal lives today</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;">
+          <div style="background:var(--sf-ice);border:1px solid var(--border-card);border-radius:8px;padding:0.45rem 0.6rem;">
+            <div style="font-size:0.74rem;font-weight:700;color:var(--sf-mid);">SAP / Oracle ERP</div>
+            <div style="font-size:0.65rem;color:var(--text-light);">Orders &middot; inventory &middot; financials</div>
           </div>
-          <div style="background:var(--sf-ice);border:1px solid var(--border-card);border-radius:7px;padding:0.4rem 0.55rem;">
-            <div style="font-size:0.72rem;font-weight:700;color:var(--sf-mid);">Demand Planning</div>
-            <div style="font-size:0.63rem;color:var(--text-light);">Blue Yonder &middot; o9 &middot; Anaplan</div>
+          <div style="background:var(--sf-ice);border:1px solid var(--border-card);border-radius:8px;padding:0.45rem 0.6rem;">
+            <div style="font-size:0.74rem;font-weight:700;color:var(--sf-mid);">Demand Planning</div>
+            <div style="font-size:0.65rem;color:var(--text-light);">Blue Yonder &middot; o9 &middot; Anaplan</div>
           </div>
-          <div style="background:var(--sf-ice);border:1px solid var(--border-card);border-radius:7px;padding:0.4rem 0.55rem;">
-            <div style="font-size:0.72rem;font-weight:700;color:var(--sf-mid);">TPM</div>
-            <div style="font-size:0.63rem;color:var(--text-light);">Promo calendar &middot; trade spend</div>
+          <div style="background:var(--sf-ice);border:1px solid var(--border-card);border-radius:8px;padding:0.45rem 0.6rem;">
+            <div style="font-size:0.74rem;font-weight:700;color:var(--sf-mid);">TPM</div>
+            <div style="font-size:0.65rem;color:var(--text-light);">Promo calendar &middot; trade spend</div>
           </div>
-          <div style="background:var(--sf-ice);border:1px solid var(--border-card);border-radius:7px;padding:0.4rem 0.55rem;">
-            <div style="font-size:0.72rem;font-weight:700;color:var(--sf-mid);">WMS / TMS</div>
-            <div style="font-size:0.63rem;color:var(--text-light);">DC stock &middot; replenishment</div>
+          <div style="background:var(--sf-ice);border:1px solid var(--border-card);border-radius:8px;padding:0.45rem 0.6rem;">
+            <div style="font-size:0.74rem;font-weight:700;color:var(--sf-mid);">WMS / TMS</div>
+            <div style="font-size:0.65rem;color:var(--text-light);">DC stock &middot; replenishment</div>
           </div>
-          <div style="background:var(--sf-ice);border:1px solid var(--border-card);border-radius:7px;padding:0.4rem 0.55rem;">
-            <div style="font-size:0.72rem;font-weight:700;color:var(--sf-mid);">Retailer EPOS</div>
-            <div style="font-size:0.63rem;color:var(--text-light);">NielsenIQ &middot; Circana &middot; EDI</div>
+          <div style="background:var(--sf-ice);border:1px solid var(--border-card);border-radius:8px;padding:0.45rem 0.6rem;">
+            <div style="font-size:0.74rem;font-weight:700;color:var(--sf-mid);">Retailer EPOS</div>
+            <div style="font-size:0.65rem;color:var(--text-light);">NielsenIQ &middot; Circana &middot; EDI</div>
           </div>
-          <div style="background:var(--sf-ice);border:1px solid var(--border-card);border-radius:7px;padding:0.4rem 0.55rem;">
-            <div style="font-size:0.72rem;font-weight:700;color:var(--sf-mid);">ESG &amp; Supplier</div>
-            <div style="font-size:0.63rem;color:var(--text-light);">Scope 3 &middot; provenance &middot; CSRD</div>
+          <div style="background:var(--sf-ice);border:1px solid var(--border-card);border-radius:8px;padding:0.45rem 0.6rem;">
+            <div style="font-size:0.74rem;font-weight:700;color:var(--sf-mid);">ESG &amp; Supplier</div>
+            <div style="font-size:0.65rem;color:var(--text-light);">Scope 3 &middot; provenance &middot; CSRD</div>
           </div>
         </div>
-        <!-- The gap: connecting the systems to the consequences -->
-        <div style="margin-top:0.55rem;background:rgba(220,38,38,0.04);border:1.5px dashed rgba(220,38,38,0.3);border-radius:8px;padding:0.45rem 0.65rem;text-align:center;">
-          <div style="font-size:0.75rem;font-weight:800;color:#DC2626;letter-spacing:0.01em;margin-bottom:0.12rem;">&#9888;&nbsp; Nothing connects them</div>
-          <div style="font-size:0.65rem;color:var(--text-gray);line-height:1.35;">No shared definitions. No shared governance. Nowhere for a person or a model to see all six at once.</div>
-        </div>
-        <!-- Arrow connecting to consequences -->
-        <div style="text-align:center;margin-top:0.45rem;font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);">&darr; What that costs you, every cycle</div>
       </div>
 
-      <!-- RIGHT: The consequences -->
-      <div style="display:flex;flex-direction:column;gap:0.35rem;">
-        <div style="background:#FFFFFF;border:1px solid var(--border-card);border-left:3px solid var(--sf-blue);border-radius:0 8px 8px 0;padding:0.45rem 0.7rem;">
-          <div style="font-size:0.76rem;font-weight:700;color:var(--text-dark);">Promotions surprise supply</div>
-          <div style="font-size:0.68rem;color:var(--text-gray);line-height:1.35;">TPM and supply planning are separate worlds. The spike arrives as news.</div>
+      <!-- RIGHT: The gap message (revealed on click 2) -->
+      <div data-reveal="2" style="display:flex;flex-direction:column;gap:0.4rem;">
+        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.05rem;">What that costs you, every cycle</div>
+        <div style="background:#FFFFFF;border:1px solid var(--border-card);border-left:3px solid var(--sf-blue);border-radius:0 8px 8px 0;padding:0.5rem 0.75rem;">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--text-dark);">Promotions surprise supply</div>
+          <div style="font-size:0.7rem;color:var(--text-gray);line-height:1.4;">TPM and supply planning are separate worlds. The spike arrives as news.</div>
         </div>
-        <div style="background:#FFFFFF;border:1px solid var(--border-card);border-left:3px solid var(--sf-blue);border-radius:0 8px 8px 0;padding:0.45rem 0.7rem;">
-          <div style="font-size:0.76rem;font-weight:700;color:var(--text-dark);">S&amp;OP runs on stale, contested numbers</div>
-          <div style="font-size:0.68rem;color:var(--text-gray);line-height:1.35;">Days of prep, an hour reconciling, thirty minutes of actual decisions.</div>
+        <div style="background:#FFFFFF;border:1px solid var(--border-card);border-left:3px solid var(--sf-blue);border-radius:0 8px 8px 0;padding:0.5rem 0.75rem;">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--text-dark);">S&amp;OP runs on stale, contested numbers</div>
+          <div style="font-size:0.7rem;color:var(--text-gray);line-height:1.4;">Days of prep, an hour reconciling, thirty minutes of actual decisions.</div>
         </div>
-        <div style="background:#FFFFFF;border:1px solid var(--border-card);border-left:3px solid var(--sf-blue);border-radius:0 8px 8px 0;padding:0.45rem 0.7rem;">
-          <div style="font-size:0.76rem;font-weight:700;color:var(--text-dark);">Demand AI never leaves pilot</div>
-          <div style="font-size:0.68rem;color:var(--text-gray);line-height:1.35;">A model can only reason over what it can reach. Reaching one system at a time is why pilots stall.</div>
+        <div style="background:#FFFFFF;border:1px solid var(--border-card);border-left:3px solid var(--sf-blue);border-radius:0 8px 8px 0;padding:0.5rem 0.75rem;">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--text-dark);">Demand AI never leaves pilot</div>
+          <div style="font-size:0.7rem;color:var(--text-gray);line-height:1.4;">A model can only reason over what it can reach. Reaching one system at a time is why pilots stall.</div>
         </div>
-        <div style="background:#FFFFFF;border:1px solid var(--border-card);border-left:3px solid #D97706;border-radius:0 8px 8px 0;padding:0.45rem 0.7rem;">
-          <div style="font-size:0.76rem;font-weight:700;color:var(--text-dark);">CSRD and DPP have nothing to draw on</div>
-          <div style="font-size:0.68rem;color:var(--text-gray);line-height:1.35;">Scope 3 and traceability need every system read together, with lineage. That connection doesn&rsquo;t exist yet.</div>
+        <div style="background:#FFFFFF;border:1px solid var(--border-card);border-left:3px solid #D97706;border-radius:0 8px 8px 0;padding:0.5rem 0.75rem;">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--text-dark);">CSRD and DPP have nothing to draw on</div>
+          <div style="font-size:0.7rem;color:var(--text-gray);line-height:1.4;">Scope 3 and traceability need every system read together, with lineage. That connection doesn&rsquo;t exist yet.</div>
         </div>
       </div>
 
     </div>
 
-    <!-- Stats row: the scale of the problem -->
-    <div style="margin-top:0.7rem;display:grid;grid-template-columns:repeat(4,1fr);gap:0.6rem;">
-      <div style="background:#FFFFFF;border:1px solid var(--border-card);border-radius:9px;padding:0.5rem 0.7rem;text-align:center;">
-        <div style="font-size:1.2rem;font-weight:900;color:var(--sf-mid);line-height:1;">15&ndash;25%</div>
-        <div style="font-size:0.64rem;color:var(--text-gray);line-height:1.3;margin-top:0.15rem;">of revenue in trade spend, planned without supply visibility</div>
+    <!-- The gap message (revealed on click 3) -->
+    <div data-reveal="3" style="margin-top:0.85rem;background:rgba(220,38,38,0.04);border:1.5px dashed rgba(220,38,38,0.3);border-radius:8px;padding:0.5rem 0.8rem;text-align:center;">
+      <div style="font-size:0.8rem;font-weight:800;color:#DC2626;margin-bottom:0.12rem;">&#9888;&nbsp; Nothing connects them</div>
+      <div style="font-size:0.7rem;color:var(--text-gray);line-height:1.4;">No shared definitions. No shared governance. Nowhere for a person or a model to see all six at once.</div>
+    </div>
+
+    <!-- Stats row (revealed on click 4) -->
+    <div data-reveal="4" style="margin-top:0.85rem;display:grid;grid-template-columns:repeat(4,1fr);gap:0.7rem;">
+      <div style="background:#FFFFFF;border:1px solid var(--border-card);border-radius:10px;padding:0.6rem 0.8rem;">
+        <div style="font-size:1.25rem;font-weight:900;color:var(--sf-mid);line-height:1;">15&ndash;25%</div>
+        <div style="font-size:0.67rem;color:var(--text-gray);line-height:1.35;margin-top:0.2rem;">of revenue in trade spend, planned without supply visibility</div>
       </div>
-      <div style="background:#FFFFFF;border:1px solid var(--border-card);border-radius:9px;padding:0.5rem 0.7rem;text-align:center;">
-        <div style="font-size:1.2rem;font-weight:900;color:var(--sf-blue);line-height:1;">1 in 5</div>
-        <div style="font-size:0.64rem;color:var(--text-gray);line-height:1.3;margin-top:0.15rem;">demand AI pilots reach production</div>
+      <div style="background:#FFFFFF;border:1px solid var(--border-card);border-radius:10px;padding:0.6rem 0.8rem;">
+        <div style="font-size:1.25rem;font-weight:900;color:var(--sf-blue);line-height:1;">1 in 5</div>
+        <div style="font-size:0.67rem;color:var(--text-gray);line-height:1.35;margin-top:0.2rem;">demand AI pilots reach production</div>
       </div>
-      <div style="background:#FFFFFF;border:1px solid var(--border-card);border-radius:9px;padding:0.5rem 0.7rem;text-align:center;">
-        <div style="font-size:1.2rem;font-weight:900;color:#DC2626;line-height:1;">3%</div>
-        <div style="font-size:0.64rem;color:var(--text-gray);line-height:1.3;margin-top:0.15rem;">OTIF penalty per failed invoice (Walmart)</div>
+      <div style="background:#FFFFFF;border:1px solid var(--border-card);border-radius:10px;padding:0.6rem 0.8rem;">
+        <div style="font-size:1.25rem;font-weight:900;color:#DC2626;line-height:1;">3%</div>
+        <div style="font-size:0.67rem;color:var(--text-gray);line-height:1.35;margin-top:0.2rem;">OTIF penalty per failed invoice (Walmart)</div>
       </div>
-      <div style="background:#FFFFFF;border:1px solid var(--border-card);border-radius:9px;padding:0.5rem 0.7rem;text-align:center;">
-        <div style="font-size:1.2rem;font-weight:900;color:#0d9488;line-height:1;">20&ndash;35%</div>
-        <div style="font-size:0.64rem;color:var(--text-gray);line-height:1.3;margin-top:0.15rem;">excess safety stock held against data uncertainty, not demand risk</div>
+      <div style="background:#FFFFFF;border:1px solid var(--border-card);border-radius:10px;padding:0.6rem 0.8rem;">
+        <div style="font-size:1.25rem;font-weight:900;color:#0d9488;line-height:1;">20&ndash;35%</div>
+        <div style="font-size:0.67rem;color:var(--text-gray);line-height:1.35;margin-top:0.2rem;">excess safety stock held against data uncertainty, not demand risk</div>
       </div>
     </div>
-    <p style="font-size:0.64rem;color:var(--text-light);margin-top:0.35rem;max-width:100%;">Sources: McKinsey &amp; Company, AI in Supply Chain 2024 &middot; IHL Group Retail Compliance Study &middot; Walmart supplier OTIF policy. Pilot-to-production rate is an industry-wide figure across AI use cases, not CPG demand sensing specifically.</p>
+    <p data-reveal="4" style="font-size:0.66rem;color:var(--text-light);margin-top:0.45rem;max-width:100%;">Sources: McKinsey &amp; Company, AI in Supply Chain 2024 &middot; IHL Group Retail Compliance Study &middot; Walmart supplier OTIF policy. Pilot-to-production rate is an industry-wide figure across AI use cases, not CPG demand sensing specifically.</p>
 
   </div>
   <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
@@ -522,7 +523,7 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
 <div class="slide" id="slide-9">
   <div class="slide-bg bg-white"></div>
   <div class="slide-content" style="padding-top:1.6rem;padding-bottom:1.1rem;">
-    <h3 class="label purple">CHAPTER 3 &middot; HOW</h3>
+    <h3 class="label purple">HOW</h3>
     <h2>Four Things Make That Possible. <span class="highlight-purple">None of Them Move Your Systems.</span></h2>
     <div class="divider-purple"></div>
     <p style="font-size:0.86rem;margin-bottom:0.8rem;max-width:1000px;">You have four reasonable questions about what you just saw. Each has a specific answer &mdash; and the four answers together are the platform.</p>
@@ -583,7 +584,7 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
 <div class="slide" id="slide-10">
   <div class="slide-bg bg-ice"></div>
   <div class="slide-content" style="padding-top:1.6rem;padding-bottom:1rem;">
-    <h3 class="label purple">CHAPTER 3 &middot; WHAT IT ASKS OF YOU</h3>
+    <h3 class="label purple">WHAT IT ASKS OF YOU</h3>
     <h2>Start Additive. <span class="highlight-purple">Extend, Then Rationalise &mdash; On Your Timetable.</span></h2>
     <div class="divider-purple"></div>
     <p style="font-size:0.87rem;margin-bottom:0.85rem;max-width:1000px;">The entry point asks nothing of your estate. What follows is entirely your choice, and most customers end up simplifying rather than adding.</p>
@@ -1479,15 +1480,55 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
 const TOTAL = 24;
 const SPINE_END = 14;
 let current = 0;
+let revealState = 0;
+const REVEAL_SLIDE = 5; // slide 6 (0-indexed = 5)
+const REVEAL_MAX = 4;   // 4 reveal levels on slide 6
+
+function updateReveals() {
+  var slide = document.getElementById('slide-' + (REVEAL_SLIDE + 1));
+  if (!slide) return;
+  slide.querySelectorAll('[data-reveal]').forEach(function(el) {
+    var level = parseInt(el.getAttribute('data-reveal'));
+    if (level <= revealState) {
+      el.style.opacity = '1';
+      el.style.pointerEvents = 'auto';
+    } else {
+      el.style.opacity = '0';
+      el.style.pointerEvents = 'none';
+    }
+  });
+}
+
 function goTo(index) {
   document.querySelectorAll('.slide').forEach(function(s) { s.classList.remove('active'); });
   document.getElementById('slide-' + (index+1)).classList.add('active');
   document.getElementById('progressBar').style.width = (index < SPINE_END ? ((index+1)/SPINE_END*100) : 100) + '%';
   document.getElementById('slideSelect').value = index + 1;
   current = index;
+  // Reset reveal state when entering/leaving the reveal slide
+  if (current === REVEAL_SLIDE) {
+    revealState = 0;
+    updateReveals();
+  } else {
+    revealState = 0;
+  }
 }
-function nextSlide() { if (current < SPINE_END - 1) goTo(current + 1); }
-function prevSlide() { if (current > 0 && current < SPINE_END) goTo(current - 1); }
+function nextSlide() {
+  if (current === REVEAL_SLIDE && revealState < REVEAL_MAX) {
+    revealState++;
+    updateReveals();
+    return;
+  }
+  if (current < SPINE_END - 1) goTo(current + 1);
+}
+function prevSlide() {
+  if (current === REVEAL_SLIDE && revealState > 0) {
+    revealState--;
+    updateReveals();
+    return;
+  }
+  if (current > 0 && current < SPINE_END) goTo(current - 1);
+}
 document.addEventListener('keydown', function(e) {
   if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
   if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
