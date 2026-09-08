@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snowflake Pharmaceutical: Metrics That Matter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sf-blue: #249EDC; --sf-mid: #11567F; --sf-deep: #042130; --sf-ice: #F6F9FA; --sf-star: #71D3DC; --sf-orange: #FF9F36; --sf-white: #FFFFFF;
+  --text-dark: #111827; --text-gray: #4B5568; --text-light: #6B7280; --border-card: rgba(204,204,204,0.5); --green: #16a34a;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', sans-serif; background: #FFFFFF; }
+.deck { width: 100vw; height: 100vh; position: relative; }
+.slide { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1); overflow: hidden; }
+.slide.active { opacity: 1; pointer-events: all; }
+.slide-bg { position: absolute; inset: 0; z-index: 0; }
+.bg-white { background: #FFFFFF; }
+.bg-ice { background: var(--sf-ice); }
+.slide-content { position: relative; z-index: 10; width: 88%; max-width: 1200px; padding: 2.2rem 2rem; }
+h3.label { font-size: clamp(0.65rem, 1vw, 0.8rem); font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sf-blue); margin-bottom: 0.7rem; }
+h3.label.purple { color: var(--sf-mid); }
+h3.label.white { color: rgba(255,255,255,0.7); }
+h1 { font-size: clamp(2.4rem, 5vw, 4.5rem); font-weight: 900; line-height: 1.05; color: var(--text-dark); letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.5rem, 2.8vw, 2.5rem); font-weight: 800; line-height: 1.1; color: var(--text-dark); letter-spacing: -0.01em; margin-bottom: 0.5rem; }
+.slide.dark-slide h1, .slide.dark-slide h2 { color: #FFFFFF; }
+.slide.dark-slide p { color: rgba(255,255,255,0.85); }
+.highlight { color: var(--sf-blue); }
+.highlight-purple { color: var(--sf-mid); }
+.highlight-green { color: var(--green); }
+.divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--sf-blue), var(--sf-star)); margin: 0.75rem 0 0.9rem 0; border-radius: 2px; }
+.divider-purple { width: 60px; height: 3px; background: linear-gradient(90deg, var(--sf-mid), var(--sf-blue)); margin: 0.75rem 0 0.9rem 0; border-radius: 2px; }
+p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.6; color: var(--text-gray); max-width: 750px; margin-bottom: 0.4rem; }
+.metric-card { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 12px; padding: 1rem 1.1rem; display: flex; flex-direction: column; }
+.metric-card.blue { border-color: rgba(36,158,220,0.4); }
+.metric-card.purple { border-color: rgba(17,86,127,0.35); }
+.metric-card.green { border-color: rgba(22,163,74,0.35); }
+.metric-card.teal { border-color: rgba(113,211,220,0.45); }
+.metric-name { font-size: 1rem; font-weight: 900; color: var(--sf-mid); letter-spacing: -0.01em; margin-bottom: 0.1rem; }
+.metric-full { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-light); margin-bottom: 0.45rem; }
+.metric-body { font-size: 0.78rem; color: var(--text-gray); line-height: 1.5; margin-bottom: 0.5rem; flex: 1; }
+.metric-snowflake { display: flex; align-items: flex-start; gap: 0.4rem; background: linear-gradient(90deg,rgba(36,158,220,0.07),rgba(113,211,220,0.04)); border: 1px solid rgba(36,158,220,0.2); border-radius: 7px; padding: 0.42rem 0.6rem; margin-top: auto; }
+.metric-snowflake p { font-size: 0.72rem; color: var(--sf-mid); font-weight: 500; margin: 0; max-width: 100%; }
+.metric-snowflake svg { flex-shrink: 0; margin-top: 0.05rem; }
+.benchmark { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.2rem 0.55rem; border-radius: 999px; margin-bottom: 0.4rem; }
+.benchmark.avg { background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.4); color: #92400E; }
+.benchmark.target { background: rgba(22,163,74,0.08); border: 1px solid rgba(22,163,74,0.3); color: var(--green); }
+.pos-card { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 12px; padding: 1.1rem 1.3rem; }
+.pos-card.blue { border-color: rgba(36,158,220,0.4); }
+.pos-card.purple { border-color: rgba(17,86,127,0.35); }
+.pos-card p { font-size: 0.84rem; max-width: 100%; margin: 0; }
+.framework-cell { background: #FFFFFF; border-radius: 12px; padding: 1rem 1.1rem; border: 1.5px solid rgba(204,204,204,0.5); }
+.pill { display: inline-block; background: rgba(36,158,220,0.1); border: 1px solid rgba(36,158,220,0.3); border-radius: 999px; padding: 0.25rem 0.75rem; font-size: 0.72rem; font-weight: 600; color: var(--sf-blue); letter-spacing: 0.05em; text-transform: uppercase; margin: 0.15rem; }
+.pill.purple { background: rgba(17,86,127,0.08); border-color: rgba(17,86,127,0.3); color: var(--sf-mid); }
+.pill.green { background: rgba(22,163,74,0.08); border-color: rgba(22,163,74,0.3); color: var(--green); }
+.proof-bar { background: linear-gradient(90deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05)); border: 1px solid rgba(36,158,220,0.25); border-radius: 10px; padding: 0.65rem 1.2rem; }
+.proof-bar p { font-size: 0.79rem; color: var(--text-gray); margin: 0; max-width: 100%; }
+.slide-number { position: absolute; bottom: 1.5rem; right: 1.8rem; font-size: 0.72rem; color: var(--text-light); font-weight: 500; letter-spacing: 0.08em; z-index: 20; }
+.slide.dark-slide .slide-number { color: rgba(255,255,255,0.4); }
+.snowflake-logo { position: absolute; bottom: 1.2rem; right: 5.5rem; z-index: 20; opacity: 0.85; display: flex; align-items: center; height: 32px; }
+.progress-bar-wrap { position: fixed; top: 0; left: 0; width: 100%; height: 3px; z-index: 100; background: rgba(0,0,0,0.06); }
+.progress-bar { height: 100%; background: linear-gradient(90deg, var(--sf-mid), var(--sf-blue)); transition: width 0.5s ease; }
+.controls { position: fixed; bottom: 2.2rem; left: 50%; transform: translateX(-50%); display: flex; gap: 0.8rem; z-index: 100; align-items: center; }
+.controls button { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 999px; padding: 0.5rem 1.3rem; color: var(--text-gray); font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.controls button:hover { background: var(--sf-ice); border-color: var(--sf-blue); color: var(--sf-mid); }
+.controls select { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 999px; padding: 0.5rem 1.1rem; color: var(--text-gray); font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; outline: none; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:12.5%"></div></div>
+
+<!-- Controls -->
+<div class="controls">
+  <button onclick="prevSlide()">&#8592; Prev</button>
+  <select id="slideSelect" onchange="goTo(this.value-1)">
+    <option value="1">01 &middot; Title</option>
+    <option value="2">02 &middot; Business Imperative</option>
+    <option value="3">03 &middot; Value Framework</option>
+    <option value="4">04 &middot; Quality &amp; Compliance</option>
+    <option value="5">05 &middot; Cold Chain &amp; Serialisation</option>
+    <option value="6">06 &middot; Inventory &amp; Working Capital</option>
+    <option value="7">07 &middot; Manufacturing Excellence</option>
+    <option value="8">08 &middot; Financial Impact</option>
+  </select>
+  <button onclick="nextSlide()">Next &#8594;</button>
+</div>
+
+<div class="deck">
+
+<!-- ============================================================ SLIDE 01 ============================================================ -->
+<div class="slide dark-slide active" id="slide-1">
+  <div class="slide-bg">
+    <img src="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=1920&q=80" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,33,48,0.88) 0%,rgba(17,86,127,0.80) 50%,rgba(4,33,48,0.92) 100%);"></div>
+  </div>
+  <div class="slide-content" style="display:flex;flex-direction:column;justify-content:center;min-height:60vh;">
+    <h3 class="label white">SNOWFLAKE · PHARMACEUTICAL</h3>
+    <div style="margin-top:1.2rem;">
+      <h1 style="color:var(--sf-star);font-size:clamp(3rem,7vw,6.5rem);line-height:1;">METRICS</h1>
+      <h1 style="color:#FFFFFF;font-size:clamp(3rem,7vw,6.5rem);line-height:1;">THAT MATTER</h1>
+    </div>
+    <div class="divider" style="margin-top:1.4rem;"></div>
+    <p style="color:rgba(255,255,255,0.8);font-size:clamp(0.9rem,1.4vw,1.15rem);font-weight:300;max-width:680px;margin-top:0.5rem;">Connecting Snowflake capabilities to the KPIs that move boards, CFOs, and supply chain leaders in pharmaceutical</p>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;filter:brightness(0) invert(1);"></div>
+  <div class="slide-number">01 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 02 ============================================================ -->
+<div class="slide bg-white" id="slide-2">
+  <div class="slide-content" style="padding-top:1.6rem;padding-bottom:4rem;">
+    <h3 class="label purple">WHY NOW</h3>
+    <h2>The Business Imperative for <span class="highlight-purple">Pharmaceutical Companies</span></h2>
+    <div class="divider-purple"></div>
+    <div style="display:grid;grid-template-columns:1.15fr 1fr;gap:1.2rem;margin-top:0.6rem;">
+      <!-- Left column -->
+      <div style="display:flex;flex-direction:column;gap:0.9rem;">
+        <div class="pos-card purple" style="padding:0.9rem 1.1rem;">
+          <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.5rem;">The Problem</div>
+          <p style="font-size:0.78rem;margin-bottom:0.6rem;">Pharmaceutical companies face a permanent compliance and intelligence gap: QMS, MES, LIMS, ERP, and cold chain systems each own a fragment of the batch record, but no system joins them into one auditable view. Supply chain costs represent <strong>25–40% of revenue</strong> for most pharma companies, and regulatory exposure from data fragmentation is measured in batch recall costs, FDA warning letters, and product withdrawals.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.55rem;margin-top:0.2rem;">
+            <div style="background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:0.55rem 0.7rem;">
+              <div style="font-size:0.63rem;font-weight:700;color:#dc2626;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.35rem;">Without Snowflake</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✕ QMS, MES, LIMS, ERP in silos. Batch genealogy requires 72+ hours of manual trace</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✕ Cold chain IoT data never integrated with batch records or ERP</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✕ GxP AI pilots fail. Data lacks lineage and 21 CFR Part 11 compliance</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;">✕ Pre-inspection data assembly takes 2 weeks and is still incomplete</div>
+            </div>
+            <div style="background:rgba(36,158,220,0.05);border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.55rem 0.7rem;">
+              <div style="font-size:0.63rem;font-weight:700;color:var(--sf-mid);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.35rem;">With Snowflake</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✓ GxP-governed unified platform: batch genealogy in one query, audit-ready</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✓ Cold chain AI detects excursions before batches reach rejection thresholds</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✓ 21 CFR Part 11 compliant AI that passes FDA audit; not just fast but defensible</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;">✓ Pre-inspection self-service queries: inspection prep shifts from 2 weeks to hours</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Right column -->
+      <div style="display:flex;flex-direction:column;gap:0.9rem;">
+        <div class="pos-card blue" style="padding:0.9rem 1.1rem;">
+          <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.5rem;">The Snowflake Platform for Pharmaceutical</div>
+          <p style="font-size:0.78rem;margin-bottom:0.7rem;">The AI Data Cloud is the only platform that unifies QMS, MES, LIMS, ERP, and cold chain IoT data into a GxP-compliant, AI-ready foundation — without moving data or replacing existing systems. It transforms supply chain from reactive batch investigation to proactive, audit-ready intelligence.</p>
+          <div style="margin-bottom:0.7rem;">
+            <span class="pill">GxP-Govern</span>
+            <span class="pill">AI-Detect</span>
+            <span class="pill">Trace &amp; Release</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;">
+            <div style="background:linear-gradient(135deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05));border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.6rem 0.7rem;text-align:center;">
+              <div style="font-size:1.3rem;font-weight:900;color:var(--sf-mid);line-height:1;">72h→4h</div>
+              <div style="font-size:0.62rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-top:0.2rem;">Recall Trace</div>
+              <div style="font-size:0.6rem;color:var(--text-light);margin-top:0.1rem;">Roche on Snowflake</div>
+            </div>
+            <div style="background:linear-gradient(135deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05));border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.6rem 0.7rem;text-align:center;">
+              <div style="font-size:1.3rem;font-weight:900;color:var(--sf-mid);line-height:1;">28%</div>
+              <div style="font-size:0.62rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-top:0.2rem;">MAPE Improvement</div>
+              <div style="font-size:0.6rem;color:var(--text-light);margin-top:0.1rem;">Sanofi on Snowflake</div>
+            </div>
+            <div style="background:linear-gradient(135deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05));border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.6rem 0.7rem;text-align:center;">
+              <div style="font-size:1.3rem;font-weight:900;color:var(--sf-mid);line-height:1;">$40M+</div>
+              <div style="font-size:0.62rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-top:0.2rem;">Regulatory Risk Reduction</div>
+              <div style="font-size:0.6rem;color:var(--text-light);margin-top:0.1rem;">Roche on Snowflake</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">02 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 03 ============================================================ -->
+<div class="slide bg-ice" id="slide-3">
+  <div class="slide-content" style="padding-top:1.6rem;padding-bottom:4rem;">
+    <h3 class="label">THE VALUE FRAMEWORK</h3>
+    <h2>Five Value Categories. <span class="highlight">One Connected Platform.</span></h2>
+    <div class="divider"></div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0.7rem;margin-top:0.6rem;">
+      <div class="framework-cell" style="border-color:rgba(17,86,127,0.4);">
+        <div style="font-size:0.62rem;font-weight:700;color:var(--sf-mid);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">01</div>
+        <div style="font-size:0.85rem;font-weight:800;color:var(--sf-mid);line-height:1.2;margin-bottom:0.45rem;">Quality &amp; Compliance</div>
+        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">Batch Rejection % · OTIF · Batch Right-First-Time · Recall Trace Time · Audit Finding Rate</div>
+        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:var(--sf-mid);letter-spacing:0.04em;">→ Slide 04</div>
+      </div>
+      <div class="framework-cell" style="border-color:rgba(36,158,220,0.4);">
+        <div style="font-size:0.62rem;font-weight:700;color:var(--sf-blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">02</div>
+        <div style="font-size:0.85rem;font-weight:800;color:var(--sf-blue);line-height:1.2;margin-bottom:0.45rem;">Cold Chain &amp; Serialisation</div>
+        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">Cold Chain Excursion Rate · Serialisation Coverage % · Lot Trace Time · CAPA Cycle Time · Pre-Inspection Prep</div>
+        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:var(--sf-blue);letter-spacing:0.04em;">→ Slide 05</div>
+      </div>
+      <div class="framework-cell" style="border-color:rgba(13,148,136,0.4);">
+        <div style="font-size:0.62rem;font-weight:700;color:#0d9488;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">03</div>
+        <div style="font-size:0.85rem;font-weight:800;color:#0d9488;line-height:1.2;margin-bottom:0.45rem;">Inventory &amp; Working Capital</div>
+        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">Days on Hand · Inventory Turns · Safety Stock · Near-Expiry % · API Supply Buffer</div>
+        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:#0d9488;letter-spacing:0.04em;">→ Slide 06</div>
+      </div>
+      <div class="framework-cell" style="border-color:rgba(22,163,74,0.35);">
+        <div style="font-size:0.62rem;font-weight:700;color:var(--green);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">04</div>
+        <div style="font-size:0.85rem;font-weight:800;color:var(--green);line-height:1.2;margin-bottom:0.45rem;">Manufacturing Excellence</div>
+        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">OEE · Batch Right-First-Time % · Batch Cycle Time · Schedule Attainment · Deviation Rate</div>
+        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:var(--green);letter-spacing:0.04em;">→ Slide 07</div>
+      </div>
+      <div class="framework-cell" style="border-color:rgba(180,83,9,0.35);">
+        <div style="font-size:0.62rem;font-weight:700;color:#B45309;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">05</div>
+        <div style="font-size:0.85rem;font-weight:800;color:#B45309;line-height:1.2;margin-bottom:0.45rem;">Financial Impact</div>
+        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">Cost per Batch · Regulatory Risk ($) · Gross Margin · SC Cost % Revenue · Batch Failure Cost</div>
+        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:#B45309;letter-spacing:0.04em;">→ Slide 08</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.7rem;">
+      <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:10px;padding:0.75rem 1rem;">
+        <div style="font-size:0.63rem;font-weight:700;color:var(--sf-blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">Data Foundation</div>
+        <div style="font-size:0.72rem;color:var(--text-gray);line-height:1.5;">Unified QMS (Veeva Vault) · MES (Opcenter) · LIMS · ERP (SAP/Oracle) · DSCSA Serialisation · Cold Chain IoT in one GxP-governed semantic layer</div>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:10px;padding:0.75rem 1rem;">
+        <div style="font-size:0.63rem;font-weight:700;color:var(--sf-blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">AI Intelligence</div>
+        <div style="font-size:0.72rem;color:var(--text-gray);line-height:1.5;">Cortex AI · Cortex Analyst · Snowpipe IoT Streaming · Snowflake Marketplace (IQVIA, hospital purchasing, supplier risk data)</div>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:10px;padding:0.75rem 1rem;">
+        <div style="font-size:0.63rem;font-weight:700;color:var(--sf-blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">Compliance By Design</div>
+        <div style="font-size:0.72rem;color:var(--text-gray);line-height:1.5;">21 CFR Part 11 · GxP audit trails · RBAC &amp; masking native · Every AI answer traceable to source row · FDA audit-ready</div>
+      </div>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">03 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 04 ============================================================ -->
+<div class="slide bg-white" id="slide-4">
+  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
+    <h3 class="label purple">CATEGORY 01</h3>
+    <h2>Quality &amp; <span class="highlight-purple">Compliance Metrics</span></h2>
+    <div class="divider-purple"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.5rem;">
+
+      <div class="metric-card purple">
+        <div class="metric-name">Batch Rejection Rate</div>
+        <div class="metric-full">% of Batches Rejected Before or After Release</div>
+        <span class="benchmark avg">Industry avg: 2–5% of batches rejected</span>
+        <span class="benchmark target">Target: &lt;1% for established products</span>
+        <div class="metric-body">The primary quality and cost KPI for pharmaceutical manufacturing. Every rejected batch is a direct loss: manufacturing cost, API destroyed, supply gap, and a potential regulatory event. Root cause investigation is typically manual, taking days to weeks across QMS, MES, and LIMS. For a company manufacturing $500M of product, a 1-point rejection rate improvement is $5M+ in direct savings.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Snowflake unifies QMS deviations, MES execution data, and LIMS results in real time. Cortex AI detects rejection risk patterns before batch release, enabling intervention rather than investigation.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">OTIF to Hospital/Pharmacy</div>
+        <div class="metric-full">On Time In Full to Regulated Channels</div>
+        <span class="benchmark avg">Hospital/pharmacy OTIF target: 99%+</span>
+        <span class="benchmark target">Patient supply: zero tolerance for stockout</span>
+        <div class="metric-body">OTIF failures in pharmaceutical carry consequences beyond revenue loss: drug shortages are reported to the FDA, and repeated failures can trigger enforcement action. For critical medicines with no substitute, a supply failure has direct patient impact. Root cause is nearly always demand uncertainty combined with batch scheduling disconnected from channel demand signals.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>IQVIA prescribing data, hospital purchasing signals, and payer formulary changes from Snowflake Marketplace connected to internal supply plan. OTIF risk detected weeks in advance, not when the order is already late.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Batch Right-First-Time %</div>
+        <div class="metric-full">% Batches Released Without Rework or Investigation</div>
+        <span class="benchmark avg">Industry avg: 85–92% right-first-time</span>
+        <span class="benchmark target">Target: 97%+ for established products</span>
+        <div class="metric-body">Right-first-time is the manufacturing quality metric that most directly drives batch release cycle time and COGS. Each batch requiring investigation or rework adds 3–21 days of hold time, delaying revenue and consuming quality resource. Cross-system root cause analysis is the bottleneck.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI connects batch process parameters, in-process QMS checks, LIMS results, and historical deviation patterns. Predictive quality scoring flags at-risk batches before release hold, enabling proactive intervention.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Batch Recall Trace Time</div>
+        <div class="metric-full">Hours to Complete Chain-of-Custody Trace</div>
+        <span class="benchmark avg">Industry avg: 72+ hours manually</span>
+        <span class="benchmark target">Target: &lt;4 hours (FDA expectation)</span>
+        <div class="metric-body">When an FDA recall or suspect product notice is issued, the manufacturer must provide a complete chain of custody for all affected lots within hours, not days. For most pharma companies, this requires manually extracting records from QMS, MES, ERP, and serialisation systems. Every hour of delay increases regulatory exposure and patient risk.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Roche reduced batch recall trace time from 72 hours to 4 hours after unifying QMS, MES, and ERP on Snowflake. Batch genealogy query spans every system in one GxP-governed query. FDA audit passed with Snowflake as system of record.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Regulatory Audit Finding Rate</div>
+        <div class="metric-full">Critical &amp; Major Findings per FDA/EMA Audit</div>
+        <span class="benchmark target">Target: 0 critical findings &middot; &lt;2 major/audit</span>
+        <div class="metric-body">FDA warning letters and consent decrees directly impact product supply and market value. Critical and major audit findings typically trace to data integrity failures: records that can't be reconstructed, audit trails that are incomplete, or data from multiple systems that contradict each other. GxP-compliant data governance is the root cause fix.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>21 CFR Part 11-compliant audit trails, immutable lineage, and RBAC are native in Snowflake. Pre-inspection self-service query shifts audit prep from a 2-week data assembly sprint to hours.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Cold Chain Compliance %</div>
+        <div class="metric-full">% of Batches with Complete Temperature Records</div>
+        <span class="benchmark avg">Biologics/vaccines: 2–8°C · CGT: −196°C cryogenic</span>
+        <span class="benchmark target">Target: 100% documented compliance</span>
+        <div class="metric-body">For biologics, vaccines, and cell therapies, cold chain compliance is non-optional. A temperature excursion that is not documented and responded to in time results in batch rejection, regulatory event notification, and potential patient harm. Cold chain IoT generates massive data volumes that existing systems cannot integrate with batch records.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Snowpipe streams cold chain IoT sensor data into Snowflake in real time. Cortex AI anomaly detection fires before batches reach excursion thresholds, not after. Novartis prevented 3 cryogenic batch losses in 6 months, each worth $400K+.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="proof-bar" style="margin-top:0.7rem;">
+      <p>Roche: batch recall trace 72h &rarr; 4h · $40M+ regulatory risk reduction · FDA audit passed with Snowflake as system of record &nbsp;&middot;&nbsp; Novartis: prevented 3 cryogenic batch losses in 6 months ($400K+ each)</p>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">04 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 05 ============================================================ -->
+<div class="slide bg-ice" id="slide-5">
+  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
+    <h3 class="label">CATEGORY 02</h3>
+    <h2>Cold Chain &amp; <span class="highlight">Serialisation Metrics</span></h2>
+    <div class="divider"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.5rem;">
+
+      <div class="metric-card blue">
+        <div class="metric-name">Cold Chain Excursion Rate</div>
+        <div class="metric-full">% of Shipments with Temperature Deviations</div>
+        <span class="benchmark avg">Industry: cold chain failures cost $35B/yr (WHO)</span>
+        <span class="benchmark target">Target: &lt;0.5% of shipments with excursions</span>
+        <div class="metric-body">Cold chain excursions are among the highest-cost supply chain events in pharmaceutical. For biologics at 2–8°C, a single excursion destroys the batch. For cell therapies at −196°C, it may harm the patient. IoT sensor data from 3PL sites, aircraft, and distribution points generates millions of data points that existing systems cannot aggregate, let alone detect anomalies in.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Snowpipe streams IoT cold chain sensor data in real time into Snowflake. Cortex AI anomaly detection fires before excursion thresholds are crossed, enabling intervention before the batch is lost.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Serialisation Coverage %</div>
+        <div class="metric-full">% of Products with Complete DSCSA Serialisation</div>
+        <span class="benchmark target">DSCSA: 100% serialisation compliance required</span>
+        <div class="metric-body">DSCSA (US) and EU FMD require every prescription drug unit to carry a unique identifier with a traceable chain of custody from manufacturer to pharmacy dispense. Compliance gaps are not a risk to manage — they are a barrier to market. Serialisation data typically lives in a purpose-built compliance system completely disconnected from QMS, ERP, and cold chain records.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>DSCSA serialisation hub, QMS batch records, and cold chain data unified on Snowflake. Lot trace from manufacturer to pharmacy dispense in minutes, not hours. Cortex Analyst: "Show me all lots shipped to McKesson in the last 90 days with full chain of custody" in seconds.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Lot Trace Time</div>
+        <div class="metric-full">Hours to Complete Chain-of-Custody for a Specific Lot</div>
+        <span class="benchmark avg">Industry avg without Snowflake: 8–48 hours</span>
+        <span class="benchmark target">FDA expectation: &lt;4 hours for suspect product</span>
+        <div class="metric-body">The operational measure of recall readiness. When the FDA issues a suspect or illegitimate product notice, the manufacturer has a 24-hour window to respond with complete lot disposition data. Most manufacturers miss this window because serialisation, QMS, and ERP are not connected in one system, requiring manual extraction from each.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>GxP-governed semantic layer unifies serialisation, batch records, and distribution data. Lot trace drops from 48+ hours to under 4. Roche demonstrated this capability to the FDA and passed a consent decree inspection.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">CAPA Cycle Time</div>
+        <div class="metric-full">Days to Close a Corrective &amp; Preventive Action</div>
+        <span class="benchmark avg">Industry avg: 45–90 days per CAPA</span>
+        <span class="benchmark target">Target: &lt;30 days for critical CAPAs</span>
+        <div class="metric-body">Open CAPAs are the single largest driver of regulatory audit findings. A CAPA that stays open for 90+ days signals to FDA that the root cause is not understood or is not being addressed. Root cause identification is the bottleneck: tracing a deviation across QMS, MES, LIMS, and ERP manually takes 2–4 weeks before the CAPA can even be written.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI correlates deviations with process parameters, ingredient lots, and equipment conditions across all systems. Root cause investigation drops from weeks to hours. CAPA cycle time improvement is a direct audit finding rate reduction.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Pre-Inspection Prep Time</div>
+        <div class="metric-full">Days to Prepare Data for FDA/EMA Inspection</div>
+        <span class="benchmark avg">Industry avg: 2–4 weeks of data assembly</span>
+        <span class="benchmark target">Target: self-service &lt;4 hours</span>
+        <div class="metric-body">The hidden cost of regulatory compliance in pharmaceutical: every FDA or EMA inspection is preceded by weeks of manual data extraction, reconciliation, and presentation across multiple systems. Quality and IT teams are consumed by this work rather than running the business. And the result is still incomplete, with inconsistencies between systems found by the auditor.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex Analyst: "Show me all deviations for Facility A in the last 12 months with CAPA status and batch impact" answered in seconds from live GxP-governed data. Inspection prep shifts from fire drill to self-service query.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Forecast Accuracy (MAPE)</div>
+        <div class="metric-full">Demand Forecasting Accuracy by Molecule/Channel</div>
+        <span class="benchmark avg">Pharma channel MAPE: avg 35–45% without sensing</span>
+        <span class="benchmark target">Target: &lt;20% MAPE at molecule/channel</span>
+        <div class="metric-body">Pharmaceutical demand is uniquely difficult: hospital formulary decisions are episodic and bulk, generic competition can collapse brand demand 80% in a week, and specialty pharmacy adds another unpredictable layer. MAPE improvement requires integrating IQVIA prescribing data, hospital purchasing, and payer formulary changes — all available on Snowflake Marketplace.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Sanofi improved MAPE 28% by integrating IQVIA prescribing data from Snowflake Marketplace with internal EDI, creating a unified multi-channel demand view that reaches the supply plan in real time.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="proof-bar" style="margin-top:0.7rem;">
+      <p>Sanofi: MAPE improved 28% with IQVIA prescribing data from Marketplace &nbsp;&middot;&nbsp; Roche: lot trace 72h → 4h &middot; FDA audit passed &nbsp;&middot;&nbsp; Novartis: cold chain AI prevented 3 batch losses in 6 months</p>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">05 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 06 ============================================================ -->
+<div class="slide bg-white" id="slide-6">
+  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
+    <h3 class="label purple">CATEGORY 03</h3>
+    <h2>Inventory &amp; <span class="highlight-purple">Working Capital Metrics</span></h2>
+    <div class="divider-purple"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.5rem;">
+
+      <div class="metric-card blue">
+        <div class="metric-name">Days on Hand (DOH)</div>
+        <div class="metric-full">Average Inventory / Average Daily Usage</div>
+        <span class="benchmark avg">Branded pharma: 90–180 days · Generics: 60–120 days</span>
+        <div class="metric-body">Pharmaceutical DOH is high by design: regulatory-mandated safety stock, long manufacturing cycle times, and batch yield variability all force conservative inventory positioning. Reducing DOH without compromising patient supply requires precise demand sensing by channel. Every 10-day reduction in DOH on $500M inventory frees ~$14M in working capital.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>IQVIA and hospital purchasing demand signals from Snowflake Marketplace improve demand accuracy, enabling DOH reduction without compromising patient supply SLAs.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Inventory Turns</div>
+        <div class="metric-full">COGS ÷ Average Inventory Value</div>
+        <span class="benchmark avg">Branded pharma: 2–4x · Generics: 4–8x</span>
+        <div class="metric-body">Lower than most industries due to mandated safety stock and long cycle times. Improving turns requires both better demand accuracy and shorter batch release cycle times. For pharma, inventory turns improvement is directly linked to batch right-first-time rate and CAPA cycle time.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Unified demand + batch release data enables better inventory positioning and faster batch-to-stock cycle, directly improving turns without compromising quality standards.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Safety Stock by Channel</div>
+        <div class="metric-full">Buffer Inventory Split by Clinical vs Commercial</div>
+        <span class="benchmark avg">Most pharma hold 30–50% more safety stock than demand risk requires</span>
+        <div class="metric-body">Pharmaceutical safety stock is sized against demand uncertainty that Snowflake can materially reduce. Clinical trial supply and commercial inventory are managed in entirely separate systems, causing chronic imbalances. Right-sizing requires channel-specific demand signals — hospital formulary, specialty pharmacy, and direct distribution each need separate models.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI models channel-specific demand variability from IQVIA and hospital purchasing data. Hold more where clinical trial supply is uncertain; hold less where commercial demand is predictable. Safety stock right-sized to actual risk.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Near-Expiry Stock %</div>
+        <div class="metric-full">Inventory Within 12 Months of Shelf-Life Expiry</div>
+        <span class="benchmark avg">Industry avg: 8–15% of inventory near-expiry</span>
+        <span class="benchmark target">Target: &lt;5%</span>
+        <div class="metric-body">Near-expiry pharmaceutical inventory has limited recovery options: expedited channel promotion, donation, or write-off. Unlike CPG, there is no mark-down pricing for branded pharma. Write-offs are P&amp;L events. Root cause is almost always inaccurate demand forecasting by channel, combined with late visibility into batch expiry dates across multiple warehouses and 3PLs.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI detects approaching expiry risk by product-location-channel combination before write-offs materialise. Unified WMS and ERP data identifies transfer or expedite opportunities to consume at-risk stock before expiry.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">API Supply Buffer Days</div>
+        <div class="metric-full">Active Pharmaceutical Ingredient Days of Coverage</div>
+        <span class="benchmark avg">Target: 90–180 days API buffer for critical products</span>
+        <div class="metric-body">API supply is the critical path for pharmaceutical manufacturing. API shortages, particularly from single-source suppliers in Asia, create batch schedule failures that cannot be recovered within the planning horizon. Visibility into API supplier capacity, quality status, and lead time requires connecting procurement, QMS, and supply planning data.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Snowflake Marketplace delivers supplier risk signals, geopolitical indicators, and port/logistics data. Cortex AI scores API supply risk 6–8 weeks before production impact, enabling proactive sourcing rather than emergency response.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Cash-to-Cash Cycle Time</div>
+        <div class="metric-full">DIO + DSO − DPO</div>
+        <span class="benchmark avg">Branded pharma: 120–200 days</span>
+        <span class="benchmark target">Target: reduce 10–20%</span>
+        <div class="metric-body">The CFO's primary pharmaceutical supply chain metric. Long manufacturing cycles, batch release hold times, and distribution complexity make pharma cash conversion inherently long. A 20-day improvement on a $2B pharma business frees ~$110M in working capital. Better demand accuracy and faster batch release are the two levers most directly connected to Snowflake.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Snowflake connects supply chain and financial data in one GxP-governed platform. Batch release cycle time reduction and DOH optimisation both flow directly to cash-to-cash improvement, with full financial traceability.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="proof-bar" style="margin-top:0.7rem;">
+      <p>Sanofi: multi-channel demand sensing improved MAPE 28% · Roche: recall trace 72h → 4h · Forrester TEI 2024: average 25% reduction in inventory carrying costs in Snowflake supply chain deployments</p>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">06 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 07 ============================================================ -->
+<div class="slide bg-ice" id="slide-7">
+  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
+    <h3 class="label">CATEGORY 04</h3>
+    <h2>Manufacturing <span class="highlight">Excellence Metrics</span></h2>
+    <div class="divider"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.5rem;">
+
+      <div class="metric-card purple">
+        <div class="metric-name">OEE</div>
+        <div class="metric-full">Overall Equipment Effectiveness</div>
+        <span class="benchmark avg">Pharma avg: 55–75%</span>
+        <span class="benchmark target">World-class: 85%+</span>
+        <div class="metric-body">In pharmaceutical batch manufacturing, OEE loss comes from equipment changeovers, cleaning validation, unplanned stoppages from QC hold decisions, and yield losses from in-process deviation. Every 1% OEE improvement on a high-volume injectable line adds capacity without capex. Detecting OEE degradation early requires correlating SCADA, MES, and QMS data in real time.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI detects OEE degradation patterns in MES and SCADA data streams in real time. Anomaly detected before it impacts batch yield. Unified data enables root cause correlation to ingredient lots, process parameters, or equipment cycles.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Batch Cycle Time</div>
+        <div class="metric-full">Time from Batch Start to Batch Release</div>
+        <span class="benchmark avg">Industry avg: 14–90 days (depends on modality)</span>
+        <span class="benchmark target">Target: reduce 20% via data-driven QC</span>
+        <div class="metric-body">Batch cycle time determines how much working capital is tied up in WIP and how quickly supply can respond to demand changes. Quality hold times are the primary driver of long cycles, and most holds are caused by incomplete in-process data rather than genuine product risk. Reducing cycle time requires connecting QC test results in real time to batch status decisions.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Snowflake unifies LIMS test results, MES batch records, and QMS status in real time. QC hold decisions accelerate when all data is available immediately, not when it arrives from the slowest system.</p>
+        </div>
+      </div>
+
+      <div class="metric-card teal">
+        <div class="metric-name">Deviation Rate</div>
+        <div class="metric-full">Deviations per 1,000 Batch Records</div>
+        <span class="benchmark avg">Industry avg: varies widely by complexity</span>
+        <span class="benchmark target">Target: continuous reduction via AI trend detection</span>
+        <div class="metric-body">Pharmaceutical deviations are compliance events with direct cost: investigation time, CAPA, potential batch rejection, and regulatory reporting for critical deviations. Root cause analysis across QMS, MES, and LIMS is the bottleneck. Systemic deviation patterns (repeat deviations from the same root cause) are identifiable only when data from all systems is unified.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI identifies repeat deviation patterns across batches, products, and sites. Systemic root cause visible in Snowflake before the deviation is filed, enabling preventive action rather than repeated corrective cycles.</p>
+        </div>
+      </div>
+
+      <div class="metric-card teal">
+        <div class="metric-name">Schedule Attainment %</div>
+        <div class="metric-full">Actual Production vs Planned Schedule</div>
+        <span class="benchmark avg">Industry avg: 75–88%</span>
+        <span class="benchmark target">Target: 95%+</span>
+        <div class="metric-body">In pharmaceutical, schedule attainment failures cascade: a missed batch creates a supply gap that often cannot be recovered within the demand planning horizon, because batch cycle times are weeks not days. Root cause is almost always a data disconnect: API availability, equipment status, and demand signal changes not reaching the production scheduler in time.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Live API availability, equipment maintenance schedules, and demand signals unified in one Snowflake query. Cortex AI flags schedule risk before the batch is cancelled, not after the supply gap opens.</p>
+        </div>
+      </div>
+
+      <div class="metric-card teal">
+        <div class="metric-name">Batch Release Cycle Time</div>
+        <div class="metric-full">QC Testing Completion to Final Product Release</div>
+        <span class="benchmark avg">Industry avg: 7–28 days for biologics</span>
+        <span class="benchmark target">Target: reduce 30% via data availability</span>
+        <div class="metric-body">Batch release cycle time directly determines revenue timing and DOH. Most release delays are caused by data availability, not product risk: lab results in LIMS not synchronised with QMS, certificate of analysis assembly requiring manual extraction, or reviewer queues caused by data completeness issues. All are data infrastructure problems.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>LIMS, QMS, and ERP data unified on Snowflake means reviewers have all batch record data available immediately. Cortex Analyst enables "Show me all in-process QC results for Batch X" in seconds, from a GxP-auditable source.</p>
+        </div>
+      </div>
+
+      <div class="metric-card teal">
+        <div class="metric-name">Capacity Utilisation</div>
+        <div class="metric-full">Actual Output vs Rated Batch Capacity</div>
+        <span class="benchmark avg">Target: 70–80% sustainable for pharma batch lines</span>
+        <div class="metric-body">Pharmaceutical capacity planning is complicated by modality constraints (dedicated suites for biologics, aseptic fill-finish bottlenecks), variable batch cycle times, and clinical trial supply requirements competing with commercial demand. Optimising across clinical and commercial on constrained assets requires unified demand forecast and batch scheduling data.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Snowflake unifies clinical and commercial demand plans with MES capacity data and batch scheduling constraints. Cortex AI enables scenario modelling: "Can we accommodate the clinical supply request if we reschedule these commercial batches?" answered in seconds.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="proof-bar" style="margin-top:0.7rem;">
+      <p>Roche: FDA audit passed with Snowflake as system of record &middot; Batch genealogy across QMS, MES and ERP · Novartis: cold chain AI in production · Forrester TEI: productivity gains among top 3 value drivers</p>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">07 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 08 ============================================================ -->
+<div class="slide bg-white" id="slide-8">
+  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
+    <h3 class="label purple">CATEGORY 05 · THE CFO VIEW</h3>
+    <h2>Financial <span class="highlight-purple">Impact Metrics</span></h2>
+    <div class="divider-purple"></div>
+    <div style="display:grid;grid-template-columns:1.1fr 0.9fr;gap:1.2rem;margin-top:0.6rem;">
+      <!-- Left: 2x2 metric grid -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;">
+
+        <div class="metric-card purple">
+          <div class="metric-name">Regulatory Risk Reduction</div>
+          <div class="metric-full">Avoided Costs from Compliance Failures</div>
+          <span class="benchmark avg">Average pharma recall: $100M+ in direct costs (FDA)</span>
+          <div class="metric-body">The regulatory risk business case is pre-built by the FDA. A product recall averages $100M+ in direct costs, not including brand damage and market withdrawal. An FDA warning letter can shut manufacturing for 12+ months. Each avoided cold chain batch failure saves $400K–2M. DSCSA non-compliance = potential market withdrawal. Snowflake makes the compliance case fundable.</div>
+          <div class="metric-snowflake">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <p>Roche: $40M+ annual regulatory risk reduction from GxP-compliant batch genealogy on Snowflake. FDA audit passed with Snowflake as system of record. The regulation is the business case; you don't have to build it.</p>
+          </div>
+        </div>
+
+        <div class="metric-card purple">
+          <div class="metric-name">Batch Failure Cost</div>
+          <div class="metric-full">Direct P&amp;L Impact per Rejected Batch</div>
+          <span class="benchmark avg">Biologic batch failure: $0.5M–$5M+ per event</span>
+          <div class="metric-body">Pharmaceutical batch failures are direct P&amp;L events: API destroyed, manufacturing cost sunk, supply gap opened, potential regulatory notification. For advanced biologics and cell therapies, a single batch can be worth millions. Root cause investigation to prevent recurrence is the critical multiplier — a repeat failure of the same root cause is both a P&amp;L event and a regulatory finding.</div>
+          <div class="metric-snowflake">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <p>Cortex AI connects batch process parameters, LIMS results, and QMS deviations. Predictive quality scoring flags at-risk batches before failure. Root cause in hours, not weeks, preventing recurrence.</p>
+          </div>
+        </div>
+
+        <div class="metric-card blue">
+          <div class="metric-name">Gross Margin</div>
+          <div class="metric-full">Revenue − COGS ÷ Revenue</div>
+          <span class="benchmark avg">Branded pharma: 60–80% · Generics: 30–55%</span>
+          <div class="metric-body">Pharmaceutical gross margins are among the highest of any industry, which makes every percentage point of waste, rework, or failed batch highly visible as a margin degradation. Batch right-first-time improvement, DOH reduction, and faster batch release cycle all flow directly to gross margin. Snowflake connects the data that drives each of these.</div>
+          <div class="metric-snowflake">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <p>Unified QMS/MES/ERP data enables batch cost tracking end-to-end. Cortex AI anomaly detection reduces rejection rates. Both flow directly to gross margin improvement.</p>
+          </div>
+        </div>
+
+        <div class="metric-card blue">
+          <div class="metric-name">SC Cost as % Revenue</div>
+          <div class="metric-full">Total SC Cost ÷ Net Revenue</div>
+          <span class="benchmark avg">Pharma average: 15–25%</span>
+          <div class="metric-body">Pharmaceutical supply chains are cost-intensive: cold chain logistics, 3PL specialisation, serialisation infrastructure, quality overhead, and high safety stock. A 1-point improvement on a $2B pharma company = $20M annual saving. Driven by DOH reduction, batch release cycle improvement, cold chain excursion prevention, and quality overhead reduction.</div>
+          <div class="metric-snowflake">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <p>Unified data eliminates duplicate reconciliation costs, reduces batch investigation labour, and enables right-sizing of cold chain infrastructure investment.</p>
+          </div>
+        </div>
+
+      </div>
+      <!-- Right: Forrester ROI + customers -->
+      <div style="display:flex;flex-direction:column;gap:0.75rem;">
+        <div style="background:linear-gradient(135deg,rgba(17,86,127,0.06),rgba(36,158,220,0.04));border:1px solid rgba(17,86,127,0.2);border-radius:12px;padding:1rem 1.1rem;">
+          <div style="font-size:0.63rem;font-weight:700;color:var(--sf-mid);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.6rem;">Named Customer Proof</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;margin-bottom:0.7rem;">
+            <div style="text-align:center;">
+              <div style="font-size:1.6rem;font-weight:900;color:var(--sf-mid);line-height:1;">72h→4h</div>
+              <div style="font-size:0.6rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;margin-top:0.15rem;">Recall Trace</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:1.6rem;font-weight:900;color:var(--sf-mid);line-height:1;">$40M+</div>
+              <div style="font-size:0.6rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;margin-top:0.15rem;">Reg. Risk Reduction</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:1.6rem;font-weight:900;color:var(--sf-mid);line-height:1;">28%</div>
+              <div style="font-size:0.6rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;margin-top:0.15rem;">MAPE Improvement</div>
+            </div>
+          </div>
+          <p style="font-size:0.69rem;color:var(--text-light);line-height:1.45;max-width:100%;margin:0;">Roche: $40M+ regulatory risk reduction · FDA audit passed with Snowflake as system of record · Batch recall trace 72h → 4h. Sanofi: MAPE improved 28% integrating IQVIA from Marketplace. Novartis: prevented 3 cryogenic batch losses in 6 months.</p>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:0.55rem;">
+          <div class="proof-bar" style="padding:0.6rem 0.85rem;">
+            <div style="font-size:0.67rem;font-weight:700;color:var(--sf-mid);margin-bottom:0.2rem;">Roche</div>
+            <p style="font-size:0.69rem;color:var(--text-gray);margin:0;max-width:100%;">Unified QMS, MES, and ERP on Snowflake for GxP-compliant batch genealogy. Recall trace time: 72h &rarr; 4h. $40M+ annual regulatory risk reduction. FDA audit passed with Snowflake as system of record.</p>
+          </div>
+          <div class="proof-bar" style="padding:0.6rem 0.85rem;">
+            <div style="font-size:0.67rem;font-weight:700;color:var(--sf-mid);margin-bottom:0.2rem;">Novartis</div>
+            <p style="font-size:0.69rem;color:var(--text-gray);margin:0;max-width:100%;">Patient-matched cryogenic cold chain monitoring on Snowflake. Real-time temperature excursion detection via Cortex AI. Prevented 3 batch losses in first 6 months &mdash; each worth $400K+.</p>
+          </div>
+          <div class="proof-bar" style="padding:0.6rem 0.85rem;">
+            <div style="font-size:0.67rem;font-weight:700;color:var(--sf-mid);margin-bottom:0.2rem;">Sanofi</div>
+            <p style="font-size:0.69rem;color:var(--text-gray);margin:0;max-width:100%;">Multi-channel demand sensing across hospital, specialty pharmacy, and home health. Forecast MAPE improved 28% by integrating IQVIA prescribing data from Marketplace alongside internal EDI.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">08 / 08</div>
+</div>
+
+</div><!-- end deck -->
+
+<script>
+const TOTAL = 8;
+let current = 0;
+function goTo(index) {
+  document.querySelectorAll('.slide').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('slide-' + (index+1)).classList.add('active');
+  document.getElementById('progressBar').style.width = ((index+1)/TOTAL*100) + '%';
+  document.getElementById('slideSelect').value = index + 1;
+  current = index;
+}
+function nextSlide() { if (current < TOTAL - 1) goTo(current + 1); }
+function prevSlide() { if (current > 0) goTo(current - 1); }
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+});
+goTo(0);
+</script>
+</body>
+</html>
