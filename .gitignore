@@ -4,3 +4,11 @@
 PHOTO-*.jpg
 .DS_Store
 .snowflake/
+
+# Large local working folders — not part of the published site
+demo-control-centre/
+snowplan/
+snowplan-vectron/
+*.wav
+*.aiff
+extracted_*.txt

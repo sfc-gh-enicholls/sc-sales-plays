@@ -5,241 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="snowflake-source" content="cortex-agent-authored" />
   <title>Supply Chain Sales Plays — Snowflake</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
-      background: #F6F8FA;
-      color: #1e293b;
-    }
-
-    /* ═══ SNOWFLAKE HEADER (compact) ═══ */
-    .site-header {
-      background: #0E2240;
-      padding: 20px 32px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      border-bottom: 3px solid #29B5E8;
-    }
-    .site-header .sf-mark { flex-shrink: 0; }
-    .site-header h1 {
-      font-size: 17px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.01em;
-    }
-    .site-header p {
-      font-size: 12px;
-      color: rgba(255,255,255,0.5);
-      margin-top: 2px;
-    }
-    /* Snowflake blue accent dot separator */
-    .sf-sep {
-      width: 1px;
-      height: 32px;
-      background: rgba(255,255,255,0.15);
-      flex-shrink: 0;
-    }
-
-    /* ═══ MAIN ═══ */
-    main {
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 36px 24px 72px;
-    }
-
-    /* ═══ INDUSTRY BLOCK ═══ */
-    .industry { margin-bottom: 40px; }
-
-    /* Photo banner */
-    .industry-banner {
-      border-radius: 12px 12px 0 0;
-      min-height: 130px;
-      display: flex;
-      align-items: flex-end;
-      padding: 0 28px 22px;
-      position: relative;
-      overflow: hidden;
-      background: #0E2240 center/cover no-repeat; /* fallback colour */
-    }
-    /* Dark gradient overlay so text is always readable */
-    .industry-banner::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, rgba(14,34,64,0.25) 0%, rgba(14,34,64,0.75) 100%);
-      pointer-events: none;
-    }
-    /* Snowflake blue top-left accent stripe */
-    .industry-banner::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 4px; height: 100%;
-      background: #29B5E8;
-      z-index: 2;
-    }
-    .banner-text {
-      position: relative;
-      z-index: 3;
-    }
-    .banner-text h2 {
-      font-size: 20px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.015em;
-      margin-bottom: 4px;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
-    }
-    .banner-text p {
-      font-size: 12.5px;
-      color: rgba(255,255,255,0.78);
-      line-height: 1.5;
-      max-width: 560px;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-    }
-    /* "Coming soon" dim overlay for placeholders */
-    .industry-banner.placeholder-banner::after {
-      background: linear-gradient(to bottom, rgba(14,34,64,0.55) 0%, rgba(14,34,64,0.85) 100%);
-    }
-    .coming-soon-chip {
-      position: absolute;
-      top: 14px; right: 14px;
-      z-index: 3;
-      background: rgba(41,181,232,0.25);
-      border: 1px solid rgba(41,181,232,0.5);
-      color: #29B5E8;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 99px;
-    }
-
-    /* Industry-specific photo backgrounds */
-    .bg-enablement { background: linear-gradient(135deg, #0E2240 0%, #11567F 60%, #29B5E8 100%); }
-    .bg-cpg        { background-image: url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1400&q=75&fit=crop&crop=center'); }
-    .bg-grocery    { background-image: url('https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=1400&q=75&fit=crop&crop=center'); }
-    .bg-mfg        { background-image: url('https://images.unsplash.com/photo-1567818735868-e71b99932e29?w=1400&q=75&fit=crop&crop=center'); }
-    .bg-fashion    { background-image: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1400&q=75&fit=crop&crop=center'); }
-    .bg-lifesci    { background-image: url('https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=1400&q=75&fit=crop&crop=center'); }
-
-    /* ═══ CARD GRID ═══ */
-    .card-grid {
-      background: #fff;
-      border: 1px solid #e2e8f0;
-      border-top: none;
-      border-radius: 0 0 12px 12px;
-      padding: 18px 18px 22px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
-      gap: 12px;
-    }
-
-    .card {
-      display: flex;
-      flex-direction: column;
-      text-decoration: none;
-      color: #1e293b;
-      border: 1px solid #e8edf4;
-      border-radius: 8px;
-      padding: 14px 14px 16px;
-      background: #F6F8FA;
-      transition: transform 0.13s ease, box-shadow 0.13s ease, border-color 0.13s ease, background 0.13s ease;
-    }
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(14,34,64,0.10);
-      border-color: #29B5E8;
-      background: #fff;
-    }
-
-    /* Snowflake-blue top border on hover */
-    .card {
-      border-top: 2px solid transparent;
-    }
-    .card:hover {
-      border-top-color: #29B5E8;
-    }
-
-    .type-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      padding: 3px 8px;
-      border-radius: 4px;
-      margin-bottom: 9px;
-      width: fit-content;
-    }
-    .badge-reference { background: #FFF3CD; color: #7A4F00; }
-    .badge-present   { background: #DDEEFF; color: #0E2240; }
-    .badge-homepage  { background: #E6F7FF; color: #005C80; }
-    .badge-icp       { background: #F0EEFF; color: #3D1F8F; }
-    .badge-sdr       { background: #FFF0E6; color: #7A3500; }
-    .badge-fmd       { background: #E6FAFF; color: #004D66; }
-    .badge-metrics   { background: #E6FBF0; color: #005930; }
-    .badge-comingsoon { background: #EEF2F7; color: #64748b; }
-
-    .card-name {
-      font-size: 13px;
-      font-weight: 600;
-      line-height: 1.35;
-      color: #0E2240;
-    }
-    .card-desc {
-      font-size: 11.5px;
-      color: #94a3b8;
-      margin-top: 4px;
-      line-height: 1.45;
-    }
-    .start-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 10px;
-      font-weight: 700;
-      color: #fff;
-      background: #29B5E8;
-      border-radius: 4px;
-      padding: 3px 8px;
-      margin-top: 10px;
-      width: fit-content;
-      letter-spacing: 0.02em;
-    }
-
-    /* Placeholder card */
-    .card.placeholder {
-      opacity: 0.55;
-      pointer-events: none;
-      border-style: dashed;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- COMPACT SNOWFLAKE HEADER -->
   <header class="site-header">
-    <div class="sf-mark">
-      <svg width="32" height="32" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <line x1="27" y1="4"  x2="27" y2="50" stroke="#29B5E8" stroke-width="5" stroke-linecap="round"/>
-        <line x1="46" y1="16" x2="8"  y2="38" stroke="#29B5E8" stroke-width="5" stroke-linecap="round"/>
-        <line x1="8"  y1="16" x2="46" y2="38" stroke="#29B5E8" stroke-width="5" stroke-linecap="round"/>
-        <line x1="20" y1="15" x2="34" y2="15" stroke="#29B5E8" stroke-width="3" stroke-linecap="round"/>
-        <line x1="20" y1="39" x2="34" y2="39" stroke="#29B5E8" stroke-width="3" stroke-linecap="round"/>
-        <line x1="16" y1="19" x2="22" y2="30" stroke="#29B5E8" stroke-width="3" stroke-linecap="round"/>
-        <line x1="32" y1="24" x2="38" y2="35" stroke="#29B5E8" stroke-width="3" stroke-linecap="round"/>
-        <line x1="38" y1="19" x2="32" y2="30" stroke="#29B5E8" stroke-width="3" stroke-linecap="round"/>
-        <line x1="22" y1="24" x2="16" y2="35" stroke="#29B5E8" stroke-width="3" stroke-linecap="round"/>
-        <circle cx="27" cy="27" r="4.5" fill="#29B5E8"/>
-      </svg>
-    </div>
+    <img class="sf-logo" src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" alt="Snowflake" />
     <div class="sf-sep"></div>
     <div>
       <h1>Supply Chain Sales Plays</h1>
@@ -248,201 +19,52 @@
   </header>
 
   <main>
+    <div class="tile-grid">
 
-    <!-- FIELD ENABLEMENT -->
-    <div class="industry">
-      <div class="industry-banner bg-enablement">
-        <div class="banner-text">
-          <h2>Field Enablement</h2>
-          <p>Full supply chain narrative, positioning, and personas. Start with the reference guide.</p>
+      <a class="tile bg-enablement" href="field-enablement.html">
+        <div class="tile-body">
+          <h3>Field Enablement</h3>
+          <span>Start here — 2 assets</span>
         </div>
-      </div>
-      <div class="card-grid">
-        <a class="card" href="sc-field-enablement-REFERENCE.html">
-          <span class="type-badge badge-reference">📖 Reference</span>
-          <div class="card-name">SC Field Enablement Reference</div>
-          <div class="card-desc">Narrative, positioning &amp; personas</div>
-          <span class="start-pill">★ Start here</span>
-        </a>
-        <a class="card" href="sc-field-enablement-PRESENT.html">
-          <span class="type-badge badge-present">🎯 Presentation</span>
-          <div class="card-name">SC Field Enablement</div>
-          <div class="card-desc">Internal enablement deck — SC101</div>
-        </a>
-      </div>
+      </a>
+
+      <a class="tile bg-cpg" href="cpg.html">
+        <div class="tile-body">
+          <h3>Consumer Packaged Goods</h3>
+          <span>5 assets</span>
+        </div>
+      </a>
+
+      <a class="tile bg-grocery" href="grocery-retail.html">
+        <div class="tile-body">
+          <h3>Grocery Retail</h3>
+          <span>5 assets</span>
+        </div>
+      </a>
+
+      <a class="tile bg-mfg" href="discrete-mfg.html">
+        <div class="tile-body">
+          <h3>Discrete Manufacturing</h3>
+          <span>5 assets</span>
+        </div>
+      </a>
+
+      <a class="tile bg-fashion" href="fashion-retail.html">
+        <div class="tile-body">
+          <h3>Fashion Retail</h3>
+          <span>2 assets</span>
+        </div>
+      </a>
+
+      <a class="tile bg-lifesci tile-placeholder" href="life-sciences.html">
+        <span class="tile-chip">Coming soon</span>
+        <div class="tile-body">
+          <h3>Life Sciences</h3>
+          <span>In development</span>
+        </div>
+      </a>
+
     </div>
-
-    <!-- CPG -->
-    <div class="industry">
-      <div class="industry-banner bg-cpg">
-        <div class="banner-text">
-          <h2>Consumer Packaged Goods</h2>
-          <p>Demand sensing, supplier collaboration, and on-shelf availability plays.</p>
-        </div>
-      </div>
-      <div class="card-grid">
-        <a class="card" href="CPG%20Homepage.html">
-          <span class="type-badge badge-homepage">🏠 Homepage</span>
-          <div class="card-name">CPG Homepage</div>
-          <div class="card-desc">Industry overview &amp; narrative</div>
-        </a>
-        <a class="card" href="CPG%20ICP.html">
-          <span class="type-badge badge-icp">🎯 ICP</span>
-          <div class="card-name">Ideal Customer Profile</div>
-          <div class="card-desc">Who to target and why</div>
-        </a>
-        <a class="card" href="CPG%20SDR%20Cheat%20Sheet.html">
-          <span class="type-badge badge-sdr">📋 SDR</span>
-          <div class="card-name">SDR Cheat Sheet</div>
-          <div class="card-desc">Talk tracks &amp; objections</div>
-        </a>
-        <a class="card" href="CPG%20FMD.html">
-          <span class="type-badge badge-fmd">📊 FMD</span>
-          <div class="card-name">First Meeting Deck</div>
-          <div class="card-desc">Customer-ready opening deck</div>
-        </a>
-        <a class="card" href="CPG%20metrics%20that%20matter.html">
-          <span class="type-badge badge-metrics">📈 Metrics</span>
-          <div class="card-name">Metrics That Matter</div>
-          <div class="card-desc">KPIs &amp; business outcomes</div>
-        </a>
-      </div>
-    </div>
-
-    <!-- GROCERY RETAIL -->
-    <div class="industry">
-      <div class="industry-banner bg-grocery">
-        <div class="banner-text">
-          <h2>Grocery Retail</h2>
-          <p>Inventory optimisation, supplier analytics, and fresh waste reduction plays.</p>
-        </div>
-      </div>
-      <div class="card-grid">
-        <a class="card" href="Grocery%20Retail%20Homepage.html">
-          <span class="type-badge badge-homepage">🏠 Homepage</span>
-          <div class="card-name">Grocery Retail Homepage</div>
-          <div class="card-desc">Industry overview &amp; narrative</div>
-        </a>
-        <a class="card" href="Grocery%20Retail%20ICP.html">
-          <span class="type-badge badge-icp">🎯 ICP</span>
-          <div class="card-name">Ideal Customer Profile</div>
-          <div class="card-desc">Who to target and why</div>
-        </a>
-        <a class="card" href="Grocery%20Retail%20SDR%20Cheat%20Sheet.html">
-          <span class="type-badge badge-sdr">📋 SDR</span>
-          <div class="card-name">SDR Cheat Sheet</div>
-          <div class="card-desc">Talk tracks &amp; objections</div>
-        </a>
-        <a class="card" href="Grocery%20Retail%20FMD.html">
-          <span class="type-badge badge-fmd">📊 FMD</span>
-          <div class="card-name">First Meeting Deck</div>
-          <div class="card-desc">Customer-ready opening deck</div>
-        </a>
-        <a class="card" href="Grocery%20Retail%20metrics%20that%20matter.html">
-          <span class="type-badge badge-metrics">📈 Metrics</span>
-          <div class="card-name">Metrics That Matter</div>
-          <div class="card-desc">KPIs &amp; business outcomes</div>
-        </a>
-      </div>
-    </div>
-
-    <!-- DISCRETE MANUFACTURING -->
-    <div class="industry">
-      <div class="industry-banner bg-mfg">
-        <div class="banner-text">
-          <h2>Discrete Manufacturing</h2>
-          <p>Supply chain visibility, production planning, and MRO analytics plays.</p>
-        </div>
-      </div>
-      <div class="card-grid">
-        <a class="card" href="Discreet%20Mfg%20Homepage.html">
-          <span class="type-badge badge-homepage">🏠 Homepage</span>
-          <div class="card-name">Discrete Mfg Homepage</div>
-          <div class="card-desc">Industry overview &amp; narrative</div>
-        </a>
-        <a class="card" href="Discreet%20Mfg%20ICP.html">
-          <span class="type-badge badge-icp">🎯 ICP</span>
-          <div class="card-name">Ideal Customer Profile</div>
-          <div class="card-desc">Who to target and why</div>
-        </a>
-        <a class="card" href="Discreet%20Mfg%20SDR%20Cheat%20Sheet.html">
-          <span class="type-badge badge-sdr">📋 SDR</span>
-          <div class="card-name">SDR Cheat Sheet</div>
-          <div class="card-desc">Talk tracks &amp; objections</div>
-        </a>
-        <a class="card" href="Discreet%20Mfg%20FMD.html">
-          <span class="type-badge badge-fmd">📊 FMD</span>
-          <div class="card-name">First Meeting Deck</div>
-          <div class="card-desc">Customer-ready opening deck</div>
-        </a>
-        <a class="card" href="Discreet%20Mfg%20metrics%20that%20matter.html">
-          <span class="type-badge badge-metrics">📈 Metrics</span>
-          <div class="card-name">Metrics That Matter</div>
-          <div class="card-desc">KPIs &amp; business outcomes</div>
-        </a>
-      </div>
-    </div>
-
-    <!-- FASHION RETAIL -->
-    <div class="industry">
-      <div class="industry-banner bg-fashion">
-        <div class="banner-text">
-          <h2>Fashion Retail</h2>
-          <p>Trend forecasting, assortment optimisation, and returns analytics plays.</p>
-        </div>
-      </div>
-      <div class="card-grid">
-        <a class="card" href="Fashion%20Retail%20Homepage.html">
-          <span class="type-badge badge-homepage">🏠 Homepage</span>
-          <div class="card-name">Fashion Retail Homepage</div>
-          <div class="card-desc">Industry overview &amp; narrative</div>
-        </a>
-        <a class="card" href="Fashion%20Retail%20FMD.html">
-          <span class="type-badge badge-fmd">📊 FMD</span>
-          <div class="card-name">First Meeting Deck</div>
-          <div class="card-desc">Customer-ready opening deck</div>
-        </a>
-      </div>
-    </div>
-
-    <!-- LIFE SCIENCES (placeholder) -->
-    <div class="industry">
-      <div class="industry-banner bg-lifesci placeholder-banner">
-        <span class="coming-soon-chip">Coming soon</span>
-        <div class="banner-text">
-          <h2>Life Sciences</h2>
-          <p>Clinical supply chain, cold chain compliance, and serialisation plays — in development.</p>
-        </div>
-      </div>
-      <div class="card-grid">
-        <div class="card placeholder">
-          <span class="type-badge badge-comingsoon">Homepage</span>
-          <div class="card-name">Life Sciences Homepage</div>
-          <div class="card-desc">In development</div>
-        </div>
-        <div class="card placeholder">
-          <span class="type-badge badge-comingsoon">ICP</span>
-          <div class="card-name">Ideal Customer Profile</div>
-          <div class="card-desc">In development</div>
-        </div>
-        <div class="card placeholder">
-          <span class="type-badge badge-comingsoon">SDR</span>
-          <div class="card-name">SDR Cheat Sheet</div>
-          <div class="card-desc">In development</div>
-        </div>
-        <div class="card placeholder">
-          <span class="type-badge badge-comingsoon">FMD</span>
-          <div class="card-name">First Meeting Deck</div>
-          <div class="card-desc">In development</div>
-        </div>
-        <div class="card placeholder">
-          <span class="type-badge badge-comingsoon">Metrics</span>
-          <div class="card-name">Metrics That Matter</div>
-          <div class="card-desc">In development</div>
-        </div>
-      </div>
-    </div>
-
   </main>
 
 </body>
