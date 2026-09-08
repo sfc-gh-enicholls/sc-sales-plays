@@ -800,48 +800,48 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
     <div style="display:grid;grid-template-columns:0.85fr 1.6fr;gap:1.1rem;align-items:stretch;">
 
       <!-- LHS: 7-step vertical timeline -->
-      <div style="display:flex;flex-direction:column;">
+      <div style="display:flex;flex-direction:column;position:relative;">
 
         <div style="display:flex;gap:0.7rem;align-items:flex-start;padding:0.6rem 0.7rem;border-bottom:1px solid var(--border-card);">
           <div style="font-size:1.05rem;font-weight:900;color:var(--sf-blue);line-height:1.1;min-width:0.9rem;">1</div>
           <div style="font-size:0.78rem;color:var(--text-gray);line-height:1.35;">Demonstration of Snowflake supply chain capabilities<span style="color:var(--sf-blue);font-weight:700;">*</span></div>
         </div>
 
-        <!-- Step 2 — highlighted as current focus -->
-        <div style="display:flex;gap:0.7rem;align-items:flex-start;padding:0.7rem 0.7rem;background:var(--sf-deep);border-radius:6px;margin:0.15rem 0;">
+        <!-- Step 2 — highlighted, extends across the gap to join the panel -->
+        <div style="display:flex;gap:0.7rem;align-items:flex-start;padding:0.7rem 0.7rem;background:var(--sf-deep);border-radius:6px 0 0 6px;margin-right:-1.1rem;padding-right:1.1rem;position:relative;z-index:2;">
           <div style="font-size:1.05rem;font-weight:900;color:var(--sf-star);line-height:1.1;min-width:0.9rem;">2</div>
           <div style="font-size:0.78rem;color:#FFFFFF;font-weight:700;line-height:1.35;">Supply chain data discovery workshop</div>
         </div>
 
-        <div style="display:flex;gap:0.7rem;align-items:flex-start;padding:0.6rem 0.7rem;border-bottom:1px solid var(--border-card);">
+        <div style="display:flex;gap:0.7rem;align-items:flex-start;padding:0.6rem 0.7rem;border-bottom:1px solid var(--border-card);border-top:1px solid var(--border-card);">
           <div style="font-size:1.05rem;font-weight:900;color:var(--sf-blue);line-height:1.1;min-width:0.9rem;">3</div>
           <div style="font-size:0.78rem;color:var(--text-gray);line-height:1.35;">Review findings and business case with executive sponsor<span style="color:var(--sf-blue);font-weight:700;">*</span></div>
         </div>
 
         <div style="display:flex;gap:0.7rem;align-items:flex-start;padding:0.6rem 0.7rem;border-bottom:1px solid var(--border-card);">
           <div style="font-size:1.05rem;font-weight:900;color:var(--sf-blue);line-height:1.1;min-width:0.9rem;">4</div>
-          <div style="font-size:0.78rem;color:var(--text-gray);line-height:1.35;">Proof of concept on your live data</div>
+          <div style="font-size:0.78rem;color:var(--text-gray);line-height:1.35;">Present<br>proposal</div>
         </div>
 
         <div style="display:flex;gap:0.7rem;align-items:flex-start;padding:0.6rem 0.7rem;border-bottom:1px solid var(--border-card);">
           <div style="font-size:1.05rem;font-weight:900;color:var(--sf-blue);line-height:1.1;min-width:0.9rem;">5</div>
-          <div style="font-size:0.78rem;color:var(--text-gray);line-height:1.35;">Present proposal and commercial model<span style="color:var(--sf-blue);font-weight:700;">*</span></div>
+          <div style="font-size:0.78rem;color:var(--text-gray);line-height:1.35;">Negotiate and<br>sign agreements<span style="color:var(--sf-blue);font-weight:700;">*</span></div>
         </div>
 
         <div style="display:flex;gap:0.7rem;align-items:flex-start;padding:0.6rem 0.7rem;border-bottom:1px solid var(--border-card);">
           <div style="font-size:1.05rem;font-weight:900;color:var(--sf-blue);line-height:1.1;min-width:0.9rem;">6</div>
-          <div style="font-size:0.78rem;color:var(--text-gray);line-height:1.35;">Onboarding, enablement &amp; first use case in production</div>
+          <div style="font-size:0.78rem;color:var(--text-gray);line-height:1.35;">Onboarding, enablement &amp; first use case kickoff</div>
         </div>
 
         <div style="display:flex;gap:0.7rem;align-items:flex-start;padding:0.6rem 0.7rem;">
           <div style="font-size:1.05rem;font-weight:900;color:#16a34a;line-height:1.1;min-width:0.9rem;">7</div>
-          <div style="font-size:0.78rem;color:var(--text-gray);line-height:1.35;">Scale across demand, supply and compliance</div>
+          <div style="font-size:0.78rem;color:var(--text-gray);line-height:1.35;">Success with<br>Snowflake</div>
         </div>
 
       </div>
 
-      <!-- RHS: detail panel for step 2 -->
-      <div style="background:var(--sf-deep);border-radius:12px;padding:1.1rem 1.3rem;display:flex;flex-direction:column;">
+      <!-- RHS: detail panel for step 2 — square left edge so the tab flows in -->
+      <div style="background:var(--sf-deep);border-radius:0 12px 12px 0;padding:1.1rem 1.3rem;display:flex;flex-direction:column;position:relative;z-index:1;">
 
         <div style="font-size:0.8rem;font-weight:800;color:#FFFFFF;margin-bottom:0.3rem;">Participants</div>
         <p style="font-size:0.76rem;color:rgba(255,255,255,0.78);margin:0 0 0.8rem;max-width:100%;line-height:1.5;">Key stakeholders from supply chain, IT/data, and commercial (e.g. demand planning, S&amp;OP, finance) across management and operational layers.</p>
