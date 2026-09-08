@@ -57,6 +57,9 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
 /* Scene card */
 .scene-card { background: #FFFFFF; border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.6rem; margin-bottom: 1.2rem; }
 .scene-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sf-blue); margin-bottom: 0.9rem; padding-bottom: 0.6rem; border-bottom: 1px solid rgba(36,158,220,0.15); }
+.scene-card.proof-scene { border: 1.5px solid rgba(217,119,6,0.35); }
+.scene-card.proof-scene .scene-title { color: var(--amber); border-bottom-color: rgba(217,119,6,0.2); }
+.proof-badge { display: inline-block; background: rgba(217,119,6,0.1); border: 1px solid rgba(217,119,6,0.3); border-radius: 4px; padding: 0.1rem 0.45rem; font-size: 0.6rem; font-weight: 700; color: var(--amber); letter-spacing: 0.1em; margin-left: 0.5rem; vertical-align: middle; }
 
 /* Scene row */
 .scene-row { display: grid; grid-template-columns: 120px 1fr; gap: 0.8rem; margin-bottom: 0.8rem; align-items: start; }
@@ -65,12 +68,15 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
 .scene-content { font-size: 0.85rem; color: var(--text-gray); line-height: 1.55; }
 .scene-content ul { padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.3rem; }
 .scene-content li { font-size: 0.85rem; color: var(--text-gray); }
+.scene-content .q { font-style: italic; color: var(--sf-mid); }
 
 /* Highlight boxes */
 .aha-box { background: rgba(36,158,220,0.05); border-left: 3px solid var(--sf-blue); border-radius: 0 8px 8px 0; padding: 0.6rem 0.9rem; font-size: 0.85rem; color: var(--text-gray); line-height: 1.5; }
 .aha-box strong { color: var(--sf-mid); }
 .sowhat-box { background: rgba(22,163,74,0.05); border-left: 3px solid var(--green); border-radius: 0 8px 8px 0; padding: 0.6rem 0.9rem; font-size: 0.85rem; color: var(--text-gray); line-height: 1.5; }
 .sowhat-box strong { color: var(--green); }
+.compliance-box { background: rgba(217,119,6,0.06); border-left: 3px solid var(--amber); border-radius: 0 8px 8px 0; padding: 0.6rem 0.9rem; font-size: 0.85rem; color: var(--text-gray); line-height: 1.5; }
+.compliance-box strong { color: var(--amber); }
 
 /* Features table */
 .features-section { margin-top: 3rem; }
@@ -115,7 +121,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     </div>
     <div class="doc-label">Demo Script &middot; Fashion Retail</div>
     <div class="doc-title">Signal to Shelf Conceptual Demo Flow</div>
-    <p class="doc-subtitle">From Signal to Shelf &mdash; Fashion Retail scenario &mdash; EMEA Fashion &amp; Apparel</p>
+    <p class="doc-subtitle">Vertical fashion retail &mdash; one trend event, followed end to end across four planning personas &mdash; EMEA Fashion &amp; Apparel</p>
   </div>
 </div>
 
@@ -126,9 +132,10 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
   <div class="context-box">
     <h3>What we&rsquo;re doing &amp; how it relates to the play</h3>
     <p class="hook">&ldquo;Stop finding out a style is dying on the shelf the same week you're forced into a deep markdown.&rdquo;</p>
-    <p>This demo is the conceptual centrepiece for the &ldquo;Signal to Shelf&rdquo; Fashion Retail play. The play&rsquo;s premise: across EMEA fashion retail, every major trading theme &mdash; markdown pressure, terminal stock, trend-chasing, and CSRD/ESPR compliance &mdash; is fundamentally a data problem. Fragmented systems force buying and planning teams to react to sell-through after the fact; Snowflake collapses that into one governed platform so they see it live and act early.</p>
+    <p>This demo is the conceptual centrepiece for the &ldquo;Signal to Shelf&rdquo; Fashion Retail play. The play&rsquo;s premise: across EMEA fashion retail, every major trading theme &mdash; markdown pressure, terminal stock, trend-chasing, and CSRD/ESPR compliance &mdash; is fundamentally a data problem. Fragmented systems force buying and merchandising teams to react to sell-through after the fact; Snowflake collapses that into one governed platform so they see it live and act early.</p>
     <p><strong>Positioning:</strong> Signal to Shelf helps EMEA fashion retail leaders turn fragmented trading data into a single, trusted intelligence layer &mdash; so every decision, from chase to markdown to compliance, is made with days of runway, not hindsight.</p>
-    <p><strong>What this demo proves:</strong> one narrative event &mdash; a style unexpectedly trending on social media (chase opportunity) colliding with a core-range style falling behind plan (markdown risk) and a vendor capacity constraint (chase risk) &mdash; followed across four personas, all on Snowflake. It maps to the play&rsquo;s arc: Signal (AI surfaces live sell-through and flags the trend before it's obvious &mdash; S1&ndash;2) &rarr; Shelf (AI quantifies the markdown and chase decisions, runs optimised scenarios &mdash; S1, 3&ndash;4) &rarr; Proof (bridge: same platform underpins CSRD/ESPR traceability &mdash; not demonstrated below; add a closing slide).</p>
+    <p><strong>What this demo proves:</strong> a <em>single</em> trend event &mdash; skinny jeans losing share to flare jeans mid-season &mdash; followed through every consequence it triggers, across four personas, all on Snowflake. It maps to the play&rsquo;s arc: <strong>Signal</strong> (Cortex surfaces the trend before the planner goes looking &mdash; S1) &rarr; <strong>Shelf</strong> (the response propagates through MFP, assortment, OTB, forecast, markdown, replenishment and supply &mdash; S2&ndash;5, and forward into pre-season &mdash; S6) &rarr; <strong>Proof</strong> (S4c: supplier compliance is a live constraint on the chase, evidenced from the same governed data &mdash; not a separate reporting exercise).</p>
+    <p><strong>A note on positioning the planning surfaces.</strong> This demo shows connected planning built natively on Snowflake &mdash; MFP, assortment, OTB, replenishment and supplier collaboration all computing over one governed data foundation. Position it as <em>what a connected planning layer looks like when every horizon shares one set of data</em>. It is deliberately <em>not</em> a claim that Snowflake replaces the customer&rsquo;s planning suite; where a suite is already in place, the same story lands as the intelligence and data layer beneath it that the suite cannot provide on its own.</p>
   </div>
 
   <!-- FICTIONAL COMPANY -->
@@ -137,119 +144,123 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
       <div>
         <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem;">Company</div>
-        <div style="font-size:0.88rem;font-weight:700;color:var(--text-dark);">Fictional mid-market EMEA fashion retailer</div>
-        <div style="font-size:0.78rem;color:var(--text-gray);">Multi-channel apparel business trading across owned stores, e-commerce, and select wholesale.</div>
+        <div style="font-size:0.88rem;font-weight:700;color:var(--text-dark);">Calla</div>
+        <div style="font-size:0.78rem;color:var(--text-gray);">Premium contemporary <strong>vertical</strong> fashion retailer (COS / Arket tier). Designs, develops and sells its own garments across ~400 global stores and a growing DTC e-commerce channel.</div>
       </div>
       <div>
         <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem;">Trading Model</div>
-        <div style="font-size:0.78rem;color:var(--text-gray);">OTB committed months ahead of season, seasonal buying cycles, vendor lead times, and a live e-commerce channel that surfaces trend signal early.</div>
+        <div style="font-size:0.78rem;color:var(--text-gray);">Because Calla controls the full product lifecycle from design to shop floor it has more levers than a wholesale buyer &mdash; but it also carries the stock risk. Supplier lead times stretch 9&ndash;12 months.</div>
       </div>
       <div>
         <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem;">Planning Context</div>
-        <div style="font-size:0.78rem;color:var(--text-gray);">Trend volatility, size-curve complexity, and in-season chase windows create persistent markdown and terminal stock risk.</div>
+        <div style="font-size:0.78rem;color:var(--text-gray);">Three horizons managed simultaneously: in-season reaction, pre-season buying commitment, and long-lead supplier capacity. Trend windows are 3&ndash;4 weeks.</div>
       </div>
     </div>
   </div>
 
   <!-- NARRATIVE EVENT -->
   <div class="narrative-event">
-    <h3>The Narrative Event &mdash; Multiple Pressures Converging</h3>
+    <h3>The Narrative Event &mdash; One Trend Shift, Four Consequences</h3>
     <div class="event-item">
       <div class="event-dot blue"></div>
-      <div class="event-text"><strong>Demand upside:</strong> A style has started trending on social media, creating a short window to chase stock and capture a season-defining sales spike</div>
+      <div class="event-text"><strong>The signal:</strong> Flare jeans &mdash; historically a minor SKU in Calla&rsquo;s denim assortment &mdash; start selling at 2.4x the seasonal baseline. Skinny jeans, the core volume driver, fall away.</div>
     </div>
     <div class="event-item">
       <div class="event-dot red"></div>
-      <div class="event-text"><strong>Markdown risk:</strong> A core-range style is running well behind plan, heading toward heavy terminal stock at season end if nothing changes</div>
+      <div class="event-text"><strong>Markdown exposure:</strong> Skinny is now tracking 34% below plan with committed inventory and open replenishment orders still landing &mdash; terminal stock unless it is cleared early and shallow.</div>
     </div>
     <div class="event-item">
-      <div class="event-dot red"></div>
-      <div class="event-text"><strong>Supply risk:</strong> The vendor for the trending style has limited spare capacity, creating a race against the chase window before the trend cools</div>
+      <div class="event-dot blue"></div>
+      <div class="event-text"><strong>Chase opportunity:</strong> Flare is 67% above plan and stocking out across the London, Amsterdam and Stockholm cluster. Capturing it means new supply inside the trend window.</div>
+    </div>
+    <div class="event-item">
+      <div class="event-dot amber"></div>
+      <div class="event-text"><strong>Compliance constraint:</strong> The primary flare vendor has no spare capacity. The alternatives that <em>can</em> deliver in time are the ones Calla has vetted least &mdash; and any garment they make carries CSDDD due-diligence, ESPR/Digital Product Passport and restricted-substance obligations into 400 stores.</div>
     </div>
   </div>
 
   <!-- SECTION 1 -->
   <div class="section-block">
     <div class="section-header">
-      <h2>Section 1 &mdash; Trading Health &amp; Alerts</h2>
-      <div class="section-persona">Persona: Commercial Director</div>
+      <h2>Section 1 &mdash; Connected Planning &amp; the Trend Signal</h2>
+      <div class="section-persona">Persona: Category Planner</div>
     </div>
 
     <div class="scene-card">
-      <div class="scene-title">Scene 1a &middot; Trading Health Overview</div>
+      <div class="scene-title">Scene 1a &middot; Connected Retail Planning Homepage</div>
       <div class="scene-row">
         <div class="scene-label">Setup</div>
-        <div class="scene-content">The Commercial Director starts the trading meeting in a single control tower dashboard &mdash; no more pulling exports from store POS, e-commerce, and planning separately.</div>
+        <div class="scene-content">The Category Planner starts their day in Calla&rsquo;s planning homepage &mdash; a single connected view across merchandise financial planning (MFP), assortment planning, and supply chain planning. Every KPI is computed by Dynamic Tables refreshing incrementally as overnight store sales, DC movements and web orders land.</div>
       </div>
       <div class="scene-row">
         <div class="scene-label">What to show</div>
         <div class="scene-content">
           <ul>
-            <li>Control tower with at-a-glance KPIs: full-price sell-through, OTB variance, terminal stock risk</li>
-            <li>Real-time AI insights surfacing the styles that need a decision today</li>
-            <li>Customizable alert thresholds (only the styles that matter show up)</li>
+            <li>Connected planning homepage in Streamlit in Snowflake: MFP actuals vs. plan, assortment performance by class, and supply chain health (stock coverage, in-transit, open POs) &mdash; all querying Snowflake live</li>
+            <li>No switching between systems &mdash; the same data that feeds finance feeds the planner&rsquo;s view, eliminating the reconciliation that historically consumed Monday mornings</li>
+            <li>Role-based layout: the Category Planner sees the denim category; a different role sees a different scope &mdash; governed by row-level security, not by three separate logins</li>
           </ul>
         </div>
       </div>
       <div class="scene-row">
         <div class="scene-label">Aha moment</div>
-        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> AI-driven dashboard eliminates manual export reconciliation. The Commercial Director isn&rsquo;t waiting for Monday's report &mdash; they're managing by exception, today.</div></div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> One application, one data platform. MFP, assortment and supply chain have historically lived in separate tools at most retailers. Here the planner doesn&rsquo;t open three systems to understand their category.</div></div>
       </div>
       <div class="scene-row">
         <div class="scene-label">So what</div>
-        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Proactive vs. reactive trading management. Hours saved on report assembly, redirected to decisions.</div></div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Complete situational awareness at the start of every planning day. For planners managing global line plans across hundreds of SKUs, this is the difference between spending Monday on reporting and spending it on decisions.</div></div>
       </div>
     </div>
 
     <div class="scene-card">
-      <div class="scene-title">Scene 1b &middot; Key Alerts</div>
+      <div class="scene-title">Scene 1b &middot; AI Insight &mdash; The Flare Jeans Trend Signal</div>
       <div class="scene-row">
         <div class="scene-label">Setup</div>
-        <div class="scene-content">The system has flagged two critical developments overnight:</div>
+        <div class="scene-content">The planner hasn&rsquo;t gone looking for this. Cortex has surfaced it &mdash; and has already cross-referenced POS sell-through acceleration, search and social trend data from the Snowflake Marketplace, and the store-level stockout pattern, all joined without any ETL.</div>
       </div>
       <div class="scene-row">
         <div class="scene-label">What to show</div>
         <div class="scene-content">
           <ul>
-            <li>AI-powered alert feed, personalized and prioritized by margin impact</li>
-            <li>System auto-quantifies risk in financial terms: &ldquo;&pound;XXk of margin at risk if this style isn't marked down within 2 weeks&rdquo;</li>
-            <li>Instant visibility into the financial consequence of inaction on both the chase opportunity and the markdown risk</li>
+            <li>Cortex ML anomaly detection flags flare jeans as an outlier: sell-through in the last three weeks running 2.4x the seasonal baseline, surfaced as a Snowflake Alert on the planner&rsquo;s homepage</li>
+            <li>A simultaneous supply-side signal: store-level stockout network view showing flare stockouts spreading across the London, Amsterdam and Stockholm cluster &mdash; fed by live DC allocation data</li>
+            <li>Third-party trend data from the Snowflake Marketplace joined directly to Calla&rsquo;s item-level sell-through &mdash; Cortex has already correlated the external trend lift with the in-store stockout pattern and written a plain-English insight card</li>
           </ul>
         </div>
       </div>
       <div class="scene-row">
         <div class="scene-label">Aha moment</div>
-        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The system doesn&rsquo;t just flag styles &mdash; it puts pound values on the decision so the trading team can prioritise fast.</div></div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The insight is not a report the planner ran. Anomaly detection spotted the signal, enriched it with external trend data from the Marketplace, and pushed it as an actionable alert. The planner didn&rsquo;t go looking &mdash; the platform came to them.</div></div>
       </div>
       <div class="scene-row">
         <div class="scene-label">So what</div>
-        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Leadership is always informed of trading risk and understands the margin impact before it compounds into deep clearance.</div></div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> In vertical fashion the trend window is short. This is a two-to-three week advantage over competitors still running weekly reporting cycles &mdash; and that window is the difference between capturing a trend and missing it.</div></div>
       </div>
     </div>
 
     <div class="scene-card">
-      <div class="scene-title">Scene 1c &middot; Scenario Comparison</div>
+      <div class="scene-title">Scene 1c &middot; Spin Up a Scenario &mdash; Flare Jeans Demand Response</div>
       <div class="scene-row">
         <div class="scene-label">Setup</div>
-        <div class="scene-content">Given the chase opportunity and markdown risk, the Commercial Director wants to evaluate options quickly.</div>
+        <div class="scene-content">The planner spins up a planning scenario in place, to model Calla&rsquo;s response to the flare phenomenon.</div>
       </div>
       <div class="scene-row">
         <div class="scene-label">What to show</div>
         <div class="scene-content">
           <ul>
-            <li>Copy from base trading plan, modify parameters, add comments &mdash; collaborative workflow creation</li>
-            <li>Automated workflow assigns tasks to buying, planning, and finance</li>
-            <li>Side-by-side scenario comparison on key metrics: revenue, margin, terminal stock impact</li>
+            <li>Scenario branches off the current base plan &mdash; the base plan is the source, and the branch recomputes impacted metrics (revenue, margin, cover, OTB) incrementally as parameters change</li>
+            <li>Scenario named &ldquo;Flare Jean Trend Response Q2&rdquo;, stored as a first-class object, versioned, and immediately visible to every downstream persona &mdash; no export, no share, no copy</li>
+            <li>Snowflake Tasks notify the demand planner and inventory planner that a scenario is in progress &mdash; the handoff is in the platform, not in someone&rsquo;s inbox</li>
           </ul>
         </div>
       </div>
       <div class="scene-row">
         <div class="scene-label">Aha moment</div>
-        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Workflow creation is automated and linked to scenario creation &mdash; no manual task assignment, no delays. Comments route to the right owner immediately.</div></div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Scenario branching doesn&rsquo;t copy a spreadsheet &mdash; it creates an incremental computation branch. Every downstream plan that references the scenario (OTB, assortment, replenishment) recomputes automatically when its parameters change.</div></div>
       </div>
       <div class="scene-row">
         <div class="scene-label">So what</div>
-        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Faster decisions, better decisions &mdash; full margin impact visibility, cross-functional alignment built into the workflow.</div></div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Multi-persona planning on a single scenario, in real time, without version-control risk. This is the operating model most retailers are still trying to reach by emailing Excel files.</div></div>
       </div>
     </div>
   </div>
@@ -257,61 +268,113 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
   <!-- SECTION 2 -->
   <div class="section-block">
     <div class="section-header">
-      <h2>Section 2 &mdash; Sell-Through &amp; Chase Opportunity</h2>
-      <div class="section-persona">Persona: Merchandising Director</div>
+      <h2>Section 2 &mdash; Merchant Command Centre</h2>
+      <div class="section-persona">Persona: Category Planner (cont.)</div>
     </div>
 
     <div class="scene-card">
-      <div class="scene-title">Scene 2a &middot; The Live WSSI</div>
+      <div class="scene-title">Scene 2a &middot; Underperforming vs. Overperforming Items</div>
       <div class="scene-row">
         <div class="scene-label">Setup</div>
-        <div class="scene-content">The Merchandising Director needs a WSSI that reflects live sell-through, without rebuilding it by hand each week from POS and e-commerce exports.</div>
+        <div class="scene-content">The planner moves to the Merchant Command Centre &mdash; the item-level performance view &mdash; to confirm with transaction data what the AI insight signalled.</div>
       </div>
       <div class="scene-row">
         <div class="scene-label">What to show</div>
         <div class="scene-content">
           <ul>
-            <li>Live sell-through dashboard by style, size, and channel with &ldquo;auto-selected&rdquo; best fit trend model highlighted</li>
-            <li>Reforecast contribution metric &mdash; highlights where planner input improves accuracy vs. hurts it</li>
-            <li>Focuses planner time on the styles that actually need judgement</li>
+            <li>Item performance view: skinny jeans tracking 34% below the target sales plan; flare 67% above &mdash; both against live POS actuals streamed from store tills and the e-commerce platform</li>
+            <li>Cortex Analyst takes the question in plain English &mdash; <span class="q">&ldquo;Show me the last four weeks of sell-through for skinny vs. flare jeans across all regions&rdquo;</span> &mdash; and answers it from the item and store tables in seconds</li>
+            <li>Crossover chart: the exact point at which flare overtook skinny in units sold, computed automatically, no manual pivot</li>
           </ul>
         </div>
       </div>
       <div class="scene-row">
         <div class="scene-label">Aha moment</div>
-        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> AI continuously updates the sell-through reforecast. The planner only intervenes where they add value, as measured against the model. It prevents interventions that reduce accuracy.</div></div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> A business question in plain English, answered from live data. No analyst request, no overnight query, no spreadsheet export.</div></div>
       </div>
       <div class="scene-row">
         <div class="scene-label">So what</div>
-        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Higher reforecast accuracy with less manual effort. Planner time freed for scenario modelling and chase decisions.</div></div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> The trend signal is confirmed with actual transaction data. The planner is now confident in the scenario &mdash; and has the evidence to justify the decisions to their Merchandising Director.</div></div>
       </div>
     </div>
 
     <div class="scene-card">
-      <div class="scene-title">Scene 2b &middot; Chase Opportunity Review</div>
+      <div class="scene-title">Scene 2b &middot; MFP Update &mdash; In-Season vs. Actual</div>
       <div class="scene-row">
         <div class="scene-label">Setup</div>
-        <div class="scene-content">The trending style creates a new chase scenario to model. The planner needs to quantify volume and margin impact of chasing more stock quickly.</div>
+        <div class="scene-content">The planner updates the Merchandise Financial Plan to reflect the new reality: uplift the flare sales plan, reduce skinny.</div>
       </div>
       <div class="scene-row">
         <div class="scene-label">What to show</div>
         <div class="scene-content">
           <ul>
-            <li>Scenario planning dashboard with real-time margin impact visualisation</li>
-            <li>AI agent surfaces relevant historical trend scenarios with related assumptions for the planner to build from</li>
-            <li>Planner tweaks chase parameters (quantity, timing, size curve, vendor)</li>
-            <li>Comparison chart: revenue/margin impact vs. current OTB targets</li>
-            <li>Immediate cross-functional task assignment to buying and finance</li>
+            <li>MFP in-season vs. actual: current plan against actuals side by side, with variance flagged by anomaly detection rather than eyeballed</li>
+            <li>The planner adjusts flare up and skinny down within the scenario &mdash; the MFP recomputes revenue, margin and sell-through rate incrementally across every remaining week of the season</li>
+            <li>The update propagates: the OTB calculation and assortment coverage metrics move in the same computation chain, and the knock-on effect is visible in the same view</li>
           </ul>
         </div>
       </div>
       <div class="scene-row">
         <div class="scene-label">Aha moment</div>
-        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The AI agent enhances scenario modelling with insights from past trend events. Immediate revenue/margin visibility into the chase decision.</div></div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> MFP changes propagate downstream automatically. The planner doesn&rsquo;t manually update OTB and assortment after adjusting the financial plan &mdash; every dependent metric recomputes.</div></div>
       </div>
       <div class="scene-row">
         <div class="scene-label">So what</div>
-        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Early identification of the trend enables an evidence-backed chase decision while there's still season left to sell it. Enables cross-functional alignment with buying and finance before the order is placed.</div></div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> The &ldquo;connected plan&rdquo; retailers have chased for years. One change in MFP ripples correctly through OTB and assortment &mdash; no broken spreadsheet formula, no overnight batch.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 2c &middot; Assortment Update &mdash; Shift 20% from Skinny to Flare</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The planner moves 20% of the denim slot allocation from skinny to flare &mdash; and critically, this needs to flow through to future seasons, not just patch in-season.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Cluster-level assortment grid: current denim slot allocation by store cluster (fashion-forward urban vs. suburban mainstream)</li>
+            <li>The planner reallocates 20% across the relevant clusters &mdash; assortment cover, option count and space productivity recompute instantly</li>
+            <li><strong>Multi-season propagation:</strong> because assortment is modelled as a computation chain, the reallocation flows automatically through Q3, Q4 and into pre-season &mdash; the planner toggles forward and sees the impact on future seasons without opening another system</li>
+            <li>Cluster variation driven by Cortex ML segmentation on historical style preference: London and Stockholm take a larger flare allocation than suburban clusters</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The assortment change reaches pre-season with no manual update in a separate planning horizon. This is the &ldquo;black hole&rdquo; between in-season and pre-season, closed.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Calla isn&rsquo;t just fixing today &mdash; it&rsquo;s shaping next season. Competitors working in disconnected tools will place their pre-season buys without knowing what in-season data is telling them.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 2d &middot; OTB &mdash; Scenario Analysis</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The planner now needs to reallocate Open-to-Buy to fund the increased flare receipts, taking budget from a lower-priority category that still has unspent OTB.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>OTB scenario view: remaining OTB by category with planned vs. actual receipts and end-of-period inventory</li>
+            <li>The planner increases OTB for the jeans class and reduces it for a category with remaining budget and lower urgency (e.g. jersey tops) &mdash; the OTB balance and receipt plan recompute immediately</li>
+            <li>OTB extends into pre-season: the position is visible all the way forward, not just for the current month</li>
+            <li>Cortex Analyst: <span class="q">&ldquo;Which categories have the most uncommitted OTB remaining this season?&rdquo;</span> &mdash; answered straight from the financial tables</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> OTB is usually a monthly meeting run in spreadsheets. Here it&rsquo;s a live query &mdash; every category&rsquo;s position at any moment, and reallocations modelled in real time with downstream impact shown.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> MFP, assortment and OTB adjusted in one connected scenario. The handoff to demand and inventory planning carries no reconciliation risk &mdash; everyone is on the same data.</div></div>
       </div>
     </div>
   </div>
@@ -319,62 +382,60 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
   <!-- SECTION 3 -->
   <div class="section-block">
     <div class="section-header">
-      <h2>Section 3 &mdash; Markdown &amp; Terminal Stock Risk</h2>
-      <div class="section-persona">Persona: Buying Director</div>
+      <h2>Section 3 &mdash; Demand Response &amp; Markdown</h2>
+      <div class="section-persona">Persona: Demand Planner</div>
     </div>
 
     <div class="scene-card">
-      <div class="scene-title">Scene 3a &middot; Markdown Risk Review</div>
+      <div class="scene-title">Scene 3a &middot; Analytics &amp; AI Forecast Impact</div>
       <div class="scene-row">
         <div class="scene-label">Setup</div>
-        <div class="scene-content">The system has already identified the underperforming core-range style (feeding from the alerts in Section 1). Two specific risk drivers are surfaced:</div>
+        <div class="scene-content">The demand planner picks up the Task-triggered notification that the scenario is ready for demand input, and opens the analytics view to see how the trend shift has broken the existing forecasts.</div>
       </div>
       <div class="scene-row">
         <div class="scene-label">What to show</div>
         <div class="scene-content">
           <ul>
-            <li>Solver re-runs automatically across store and channel sell-through for two scenarios (early shallow markdown vs. wait and see)</li>
-            <li>Markdown risk dashboard showing projected terminal stock over time with respective drivers by store</li>
-            <li>Initiative tracking: mitigation actions, their margin impact, and ROI for management decisions</li>
-            <li>AI-powered recommendations and drill-down ranking for markdown depth and timing</li>
+            <li>Cortex ML forecast vs. actuals for skinny and flare, showing exactly where the statistical model has diverged from the trend</li>
+            <li>Model selection in the UI: the planner shifts both styles from a standard seasonal model to a higher-reactivity trend-following model &mdash; a configuration change, not a project</li>
+            <li>The re-forecast computes in place, and the updated weekly demand curve appears side by side with current inventory cover</li>
           </ul>
         </div>
       </div>
       <div class="scene-row">
         <div class="scene-label">Aha moment</div>
-        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> AI-driven optimisation reduces manual effort. Early risk identification provides more runway to act with a shallower markdown. The system prioritises and recommends drill-down actions to minimise terminal stock and maximise recovered margin.</div></div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> No rebuilding a model, no offline script. The planner changes the algorithm setting and Cortex ML retrains and re-forecasts in the platform &mdash; and the result is instantly visible to the category and inventory planners. No file exchange.</div></div>
       </div>
       <div class="scene-row">
         <div class="scene-label">So what</div>
-        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Minimises terminal stock and deep clearance. Accelerates decision-making and enables an early, shallow markdown instead of a late, deep one.</div></div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Demand model changes propagate across the planning team immediately. There is one forecast, and everyone is working off it.</div></div>
       </div>
     </div>
 
     <div class="scene-card">
-      <div class="scene-title">Scene 3b &middot; Store-Level Drill-Down</div>
+      <div class="scene-title">Scene 3b &middot; Activate a Promotion on Skinny Jeans</div>
       <div class="scene-row">
         <div class="scene-label">Setup</div>
-        <div class="scene-content">The underperformance is concentrated in specific stores and regions. The Buying Director drills into this from the markdown risk overview.</div>
+        <div class="scene-content">Too much skinny inventory against a weakening trend. The demand planner needs a promotion to accelerate sell-through and free up space and OTB for flare &mdash; early and shallow, before it becomes late and deep.</div>
       </div>
       <div class="scene-row">
         <div class="scene-label">What to show</div>
         <div class="scene-content">
           <ul>
-            <li>Store-level drill-down dashboard: sell-through by location, inventory position, local promotional activity</li>
-            <li>Buyer identifies that inter-store transfer to higher-performing locations resolves some of the excess (requires management sign-off with trade-off evaluation)</li>
-            <li>ROI/cost/investment impact evaluations for trade-offs: transfer cost vs. margin recovered vs. markdown avoided</li>
-            <li>Targeted local markdown bridges the remaining risk at a shallower discount than a blanket markdown</li>
-            <li>Both actions auto-documented as drafts, triggering action owners to review and financially evaluate</li>
+            <li>Promotion planning: the planner selects skinny, models a markdown, and sees the demand uplift estimate from Cortex ML price elasticity modelling</li>
+            <li>The promotion scenario returns expected sell-through acceleration, revised end-of-period inventory and margin impact &mdash; all recomputed in the same chain</li>
+            <li>Cortex suggests depth and duration from Calla&rsquo;s own historical promotion response &mdash; e.g. <span class="q">&ldquo;a 25% markdown in Week 14 is projected to clear 68% of remaining stock within two weeks&rdquo;</span> &mdash; with the resulting gross margin shown alongside</li>
+            <li>The decision triggers a Task notifying the inventory planner and DC team that skinny is entering a promo period, so open POs can be reviewed before they land</li>
           </ul>
         </div>
       </div>
       <div class="scene-row">
         <div class="scene-label">Aha moment</div>
-        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Store-level visibility is automated &mdash; real-time monitoring. Decision trade-offs are quantified for management.</div></div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The recommendation isn&rsquo;t a planner&rsquo;s intuition. Cortex is reading Calla&rsquo;s full historical promotion response and applying elasticity modelling to produce an evidence-based depth and timing.</div></div>
       </div>
       <div class="scene-row">
         <div class="scene-label">So what</div>
-        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Maximises margin recovery by reallocating stock to where it will sell. Aligns store-level decisions with strategic and financial trade-offs. Ensures company-wide optimisation.</div></div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Promotions right-sized from the start &mdash; not so deep that margin is destroyed, not so shallow that stock doesn&rsquo;t clear. And the downstream teams know the moment it is activated.</div></div>
       </div>
     </div>
   </div>
@@ -382,60 +443,194 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
   <!-- SECTION 4 -->
   <div class="section-block">
     <div class="section-header">
-      <h2>Section 4 &mdash; Vendor Chase Sourcing</h2>
-      <div class="section-persona">Persona: Buying Director</div>
+      <h2>Section 4 &mdash; Inventory, Supply &amp; Supplier Compliance</h2>
+      <div class="section-persona">Persona: Inventory Planner</div>
     </div>
 
     <div class="scene-card">
-      <div class="scene-title">Scene 4a &middot; Vendor Capacity Drill-Down</div>
+      <div class="scene-title">Scene 4a &middot; Replenishment Planning &mdash; Skinny Jeans in Promo</div>
       <div class="scene-row">
         <div class="scene-label">Setup</div>
-        <div class="scene-content">The vendor for the trending style has limited spare capacity, threatening the chase window. Cascading effects are expected on delivery timing over the coming weeks. The buyer analyses volume at risk and defines mitigation actions:</div>
+        <div class="scene-content">The inventory planner is notified that skinny is entering a promotion period, and opens replenishment planning to review alerts and adjust ordering behaviour before stock lands into a markdown.</div>
       </div>
       <div class="scene-row">
         <div class="scene-label">What to show</div>
         <div class="scene-content">
           <ul>
-            <li>Sourcing drill-down dashboard: primary vendor constraints, at-risk chase order volumes</li>
-            <li>Vendor performance scorecard comparing primary and backup vendors on OTIF, capacity, and compliance</li>
-            <li>Financial trade-off comparison: cost of splitting the chase order across two vendors vs. delay risk from a single vendor</li>
+            <li>Alerts flagging skinny replenishment orders scheduled <em>before</em> the promo was activated &mdash; now creating overstock risk</li>
+            <li>The planner works the alert queue: which orders to suppress, which to reduce, given promo-driven sell-through acceleration</li>
+            <li>Cortex Analyst: <span class="q">&ldquo;Show me all open replenishment orders for skinny jeans in the next four weeks and their expected stock cover post-promo&rdquo;</span> &mdash; answered from the inventory and order tables in seconds</li>
           </ul>
         </div>
       </div>
       <div class="scene-row">
         <div class="scene-label">Aha moment</div>
-        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Proactive vendor risk detection enables early mitigation. Scenario modelling quantifies the financial impact of splitting the order to protect the chase window.</div></div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The promotion activation itself triggered the replenishment review. The inventory planner didn&rsquo;t have to monitor the demand planner&rsquo;s actions separately &mdash; the platform connected the events.</div></div>
       </div>
       <div class="scene-row">
         <div class="scene-label">So what</div>
-        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Enhances chase reliability through improved vendor visibility and proactive risk management. Protects the trend window by securing supply ahead of potential delay.</div></div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Avoids the classic retail error of replenishing <em>into</em> a promotion and creating a post-promo overstock problem out of the markdown that was meant to fix it.</div></div>
       </div>
     </div>
 
     <div class="scene-card">
-      <div class="scene-title">Scene 4b &middot; Trading Plan Review (Updated)</div>
+      <div class="scene-title">Scene 4b &middot; DC Inventory Planning &mdash; Firm vs. Cancellable POs</div>
       <div class="scene-row">
         <div class="scene-label">Setup</div>
-        <div class="scene-content">The Commercial Director reviews all newly created mitigation initiatives, categorised by scenario. Each scenario outlines specific actions from the chase, markdown, and vendor analyses.</div>
+        <div class="scene-content">The planner reviews the wider DC position for skinny &mdash; specifically, which supplier purchase orders can still be cancelled or reduced, and which are already firm.</div>
       </div>
       <div class="scene-row">
         <div class="scene-label">What to show</div>
         <div class="scene-content">
           <ul>
-            <li>Trading plan dashboard with prioritised initiatives per scenario</li>
-            <li>Side-by-side scenario comparison: margin and revenue impact</li>
-            <li>Approval workflow module for streamlined management decision-making</li>
-            <li>All chase and markdown actions aggregated into structured, actionable initiatives</li>
+            <li>Open PO list for skinny with lead-time status: which POs sit inside the supplier cut-off window (firm) and which can still be cancelled or quantity-reduced</li>
+            <li>Cortex segments the list automatically: <span class="q">&ldquo;the next five POs are firm; POs 6&ndash;12 can be modified&rdquo;</span> &mdash; with new requirements already calculated from the revised forecast and promo sell-through</li>
+            <li>The requirement calculation runs in the chain: revised demand + promo sell-through projection &minus; current inventory = updated order requirement by week</li>
+            <li>Supplier lead-time data refreshes directly from EDI feeds &mdash; no manually maintained lead-time table going stale in a corner</li>
           </ul>
         </div>
       </div>
       <div class="scene-row">
         <div class="scene-label">Aha moment</div>
-        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Seamless transition to executive decision-making. All actions aggregated and ready for the trading meeting.</div></div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Firm vs. cancellable is computed from live lead-time data &mdash; no manual calendar check, no email to procurement. The planner sees exactly what they can change, with the revised quantities already calculated.</div></div>
       </div>
       <div class="scene-row">
         <div class="scene-label">So what</div>
-        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Provides a structured approach for resolving both the chase and the markdown, ensuring cross-team alignment. Enables data-driven trading decisions, optimising margin across the full range.</div></div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Calla stops landing inventory it can&rsquo;t sell. In vertical fashion, where the retailer owns the stock risk, cancelling the right POs at the right time is directly accretive to margin.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card proof-scene">
+      <div class="scene-title">Scene 4c &middot; Flare Chase &mdash; Segment Change, Supplier Compliance &amp; Collaboration <span class="proof-badge">PROOF</span></div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">Flare is outperforming and supply has to increase fast. Cortex ML has already reclassified the product from a B-Y segment (moderate volume, slow replenishment) to A-X (high volume, fast replenishment), which changes how it is replenished and allocated. But the primary vendor has no spare capacity inside the trend window &mdash; so the planner has to bring alternative supply online in weeks. <strong>That is the moment compliance stops being a reporting exercise and becomes a constraint on a revenue decision.</strong></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">The tension</div>
+        <div class="scene-content"><div class="compliance-box"><strong>Say this out loud:</strong> the vendors who can turn a chase order fastest are usually the ones Calla has vetted least. Under CSDDD due-diligence duties, the ESPR Digital Product Passport regime, and restricted-substance obligations, a garment made in an unvetted facility &mdash; or by an undisclosed subcontractor of a vetted one &mdash; is a liability Calla puts into 400 stores at its own risk. The chase decision and the compliance decision are <em>the same decision</em>, made in the same week, by the same person.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li><strong>Segment reclassification:</strong> flare moves B-Y &rarr; A-X automatically, as Cortex ML re-runs the ABC/XYZ segmentation on updated sell-through &mdash; and lead time for flare production is shown directly from the supply table, so the planner knows how fast Calla <em>can</em> respond</li>
+            <li><strong>The sourcing question, asked honestly.</strong> Cortex Analyst: <span class="q">&ldquo;Which of our active suppliers for woven bottoms has available capacity in the next six weeks &mdash; and of those, which have a current social audit, no unapproved subcontracting flags, and material composition data complete enough for a Digital Product Passport?&rdquo;</span> One question, answered against capacity and compliance in the same query, because they live in the same place</li>
+            <li><strong>Vendor scorecard with compliance alongside commercials:</strong> OTIF and capacity next to audit currency and grade, subcontractor disclosure status, restricted-substance (REACH / ZDHC) certificates, and traceability depth &mdash; tier 1, tier 2, or back to fibre</li>
+            <li><strong>The trade-off surfaces before the order, not after the shipment.</strong> The fastest-responding vendor has capacity but an audit expiring in three weeks and only tier-1 traceability. Flagged automatically as a condition on the chase, with the remediation cost and the delay cost of the compliant alternative quantified side by side</li>
+            <li><strong>Compliance evidence is data, not a filing cabinet.</strong> Audit reports, test certificates and supplier declarations arrive as documents &mdash; AI_EXTRACT and Cortex Search parse them and join them to the <em>same</em> supplier keys as capacity and OTIF. One supplier record carries both the commercial and the compliance truth, and Snowflake&rsquo;s governance (tagging, masking, lineage) lets the buyer and the sustainability team work from it without either team maintaining a private copy</li>
+            <li><strong>Collaboration carries the obligation with the order.</strong> Snowflake Data Sharing publishes the revised demand signal and order requirement straight into the chosen vendor&rsquo;s own Snowflake account &mdash; and the same share defines the DPP and traceability fields the vendor must return against that order. No email attachment, no portal upload, no chasing evidence six months later at reporting time</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Compliance isn&rsquo;t a workflow running weeks behind the buy &mdash; it&rsquo;s a predicate in the sourcing query. Capacity without compliance was never available capacity; it just looked like it, because the two sat in different systems. And because the evidence is captured <em>at the point of the order</em>, CSRD and ESPR reporting later is a query against the commercial data rather than a retrospective data-collection project.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Calla captures the trend without buying a compliance liability &mdash; speed to supply <em>and</em> defensible sourcing, from one decision. Data Sharing removes the communication lag that costs sales when a trend window is three or four weeks, and the traceability that regulation will ask for is a by-product of how the order was placed, not a project someone funds in Q4.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">If challenged</div>
+        <div class="scene-content"><div class="compliance-box"><strong>Handling &ldquo;our compliance team owns that&rdquo;:</strong> agree &mdash; and that&rsquo;s the point. Today the compliance team owns evidence the buying team can&rsquo;t see at the moment of decision, and the buying team commits volume the compliance team learns about afterwards. Neither team is doing anything wrong; the data is in two places. Put it in one and the gate closes before the order, not after the shipment.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 5 &mdash; Plan Review &amp; Approval</h2>
+      <div class="section-persona">Persona: Senior Merchandiser</div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 5a &middot; Review Scenarios, Approve the New Plan</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The Senior Merchandiser reviews the full scenario built across the category, demand and inventory planners &mdash; including the sourcing condition attached to the flare chase &mdash; all in one place.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Senior review dashboard: MFP targets vs. revised plan across the scenario &mdash; revenue, margin, sell-through rate, inventory cover &mdash; queried live</li>
+            <li>Scenario comparison: original plan vs. &ldquo;Flare Jean Trend Response Q2&rdquo;, side by side</li>
+            <li>The sourcing decision surfaces here too: which vendor the chase is placed with, and on what compliance condition &mdash; so the approval is a commercial <em>and</em> a governance sign-off in one gate</li>
+            <li>Cortex Analyst for exec-level Q&amp;A: <span class="q">&ldquo;What is the total margin impact of approving this scenario vs. holding the current plan?&rdquo;</span> &mdash; answered in seconds, no analyst prep</li>
+            <li>One-click approval promotes the scenario to the active plan, updates every downstream computation (OTB, assortment, replenishment), and confirms out to all relevant planners</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The approval isn&rsquo;t a meeting, it&rsquo;s a workflow. When the Senior Merchandiser approves, the whole planning cascade updates &mdash; nobody re-applies the new plan by hand in three separate systems.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Governance and speed together. There is a formal gate before the plan changes &mdash; and once through it, execution is immediate and consistent across the team.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 5b &middot; Homepage &mdash; Updated KPIs for the Approved Plan</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">Loop back to the connected planning homepage from Scene 1a. The approved scenario is now the live plan.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Every KPI now reflects the approved scenario: flare coverage improved, skinny markdown active, OTB rebalanced, supplier collaboration initiated with the compliance condition attached</li>
+            <li>Before and after in a single view &mdash; the scenario that was a branch two hours ago is the operating plan</li>
+            <li>Pre-season outlook already shows the in-season changes carried forward</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The homepage wasn&rsquo;t refreshed or rebuilt. It&rsquo;s a live application over live computation &mdash; the plan changed, so the KPIs changed. The planner is looking at exactly what their MD will see this afternoon.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> One version of the plan, visible to everyone, the moment it is approved. No &ldquo;which deck is current?&rdquo;</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 6 &mdash; Pre-Season Propagation (the payoff)</h2>
+      <div class="section-persona">Persona: Category Planner (return)</div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 6a &middot; Pre-Season Update &mdash; Changes Flow Forward</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The closing scene is the payoff of a connected planning model: the in-season trend response doesn&rsquo;t just fix Q2 &mdash; it informs pre-season planning for Q3, Q4 and Q1 next year without anyone rebuilding anything.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Pre-season planning view: the 20% skinny-to-flare reallocation has already propagated into the pre-season option plan &mdash; updated slot allocation for future seasons, no manual work</li>
+            <li>Attribute-level trend forecast: <span class="q">&ldquo;What is the projected denim silhouette mix &mdash; skinny, straight, flare, wide-leg &mdash; for Q1 next year?&rdquo;</span> &mdash; computed from historical sell-through, segmentation trends and third-party fashion trend indices from the Marketplace</li>
+            <li>The planner reviews and approves the propagated changes, triggering a notification to the design team that line-plan slot allocation has moved and placeholder briefs need adjusting</li>
+            <li>The supplier picture travels forward too: the vendors that met the compliance bar under chase pressure are the ones now carried into the pre-season sourcing plan &mdash; the emergency decision has improved the standing supply base rather than quietly degrading it</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> This is the &ldquo;black hole&rdquo; solved. Q3, Q4 and pre-season plans have historically sat untouched while in-season actuals diverged from them. Here the in-season learning updates the forward plan automatically &mdash; the planner reviews and approves, rather than manually rebuilding.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Calla&rsquo;s pre-season buying decisions for Q1 next year are informed by what is actually trending in Q2 this year &mdash; not by what was trending in Q2 <em>last</em> year, which is how most retailers plan. That is the competitive advantage.</div></div>
       </div>
     </div>
   </div>
@@ -445,86 +640,137 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     <h2>Snowflake Features Powering Each Scene</h2>
 
     <div class="feature-row">
-      <div class="feature-scene">Scene 1a &mdash; Trading Health Overview</div>
+      <div class="feature-scene">Scene 1a &mdash; Connected Planning Homepage</div>
       <div class="feature-tags">
-        <span class="feature-tag">Streamlit in Snowflake (control tower)</span>
+        <span class="feature-tag">Streamlit in Snowflake</span>
         <span class="feature-tag">Dynamic Tables (incremental KPIs)</span>
-        <span class="feature-tag">Snowpipe Streaming</span>
-        <span class="feature-tag">Cortex ML anomaly detection</span>
-        <span class="feature-tag">Snowflake Alerts</span>
+        <span class="feature-tag">Snowpipe Streaming (POS, DC, web)</span>
         <span class="feature-tag">Row-Level Security</span>
       </div>
     </div>
     <div class="feature-row">
-      <div class="feature-scene">Scene 1b &mdash; Key Alerts</div>
+      <div class="feature-scene">Scene 1b &mdash; Flare Trend Signal</div>
       <div class="feature-tags">
         <span class="feature-tag">Cortex ML anomaly detection</span>
-        <span class="feature-tag">Cortex AI (&pound; quantification + insight cards)</span>
-        <span class="feature-tag">Snowflake Marketplace (social trend/weather signals)</span>
-        <span class="feature-tag">Alerts + Notification Integrations</span>
+        <span class="feature-tag">Snowflake Alerts</span>
+        <span class="feature-tag">Snowflake Marketplace (search/social trend indices)</span>
+        <span class="feature-tag">Cortex AI (insight cards)</span>
+        <span class="feature-tag">Streamlit (stockout network view)</span>
       </div>
     </div>
     <div class="feature-row">
-      <div class="feature-scene">Scene 1c &mdash; Scenario Comparison</div>
+      <div class="feature-scene">Scene 1c &mdash; Spin Up a Scenario</div>
       <div class="feature-tags">
         <span class="feature-tag">Dynamic Tables (scenario branch)</span>
-        <span class="feature-tag">Snowflake Tasks (task assignment)</span>
-        <span class="feature-tag">Notification Integrations</span>
-        <span class="feature-tag">Cortex Analyst</span>
-      </div>
-    </div>
-    <div class="feature-row">
-      <div class="feature-scene">Scene 2a &mdash; The Live WSSI</div>
-      <div class="feature-tags">
-        <span class="feature-tag">Cortex ML Forecasting (auto best-fit model)</span>
-        <span class="feature-tag">Dynamic Tables (reforecast recompute)</span>
-        <span class="feature-tag">Streamlit</span>
-      </div>
-    </div>
-    <div class="feature-row">
-      <div class="feature-scene">Scene 2b &mdash; Chase Opportunity Review</div>
-      <div class="feature-tags">
-        <span class="feature-tag">Cortex Agents / Cortex Search (historical trend scenarios)</span>
-        <span class="feature-tag">Dynamic Tables (real-time impact)</span>
         <span class="feature-tag">Snowflake Tasks</span>
+        <span class="feature-tag">Notification Integrations</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 2a &mdash; Merchant Command Centre</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex Analyst (plain-English Q&amp;A)</span>
+        <span class="feature-tag">Snowpipe Streaming</span>
+        <span class="feature-tag">Streamlit (crossover chart)</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 2b &mdash; MFP Update</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Dynamic Tables (MFP &rarr; OTB &rarr; assortment chain)</span>
+        <span class="feature-tag">Cortex ML anomaly detection (variance)</span>
         <span class="feature-tag">Streamlit</span>
       </div>
     </div>
     <div class="feature-row">
-      <div class="feature-scene">Scene 3a &mdash; Markdown Risk Review</div>
+      <div class="feature-scene">Scene 2c &mdash; Assortment Shift</div>
       <div class="feature-tags">
-        <span class="feature-tag">Snowpark (solver)</span>
-        <span class="feature-tag">Dynamic Tables (auto re-run)</span>
-        <span class="feature-tag">Cortex ML (recommendations/ranking)</span>
-        <span class="feature-tag">Streamlit</span>
+        <span class="feature-tag">Dynamic Tables (multi-season propagation)</span>
+        <span class="feature-tag">Cortex ML cluster segmentation</span>
+        <span class="feature-tag">Streamlit (assortment grid)</span>
       </div>
     </div>
     <div class="feature-row">
-      <div class="feature-scene">Scene 3b &mdash; Store-Level Drill-Down</div>
+      <div class="feature-scene">Scene 2d &mdash; OTB Scenario Analysis</div>
       <div class="feature-tags">
-        <span class="feature-tag">Streamlit</span>
-        <span class="feature-tag">Dynamic Tables (ROI/trade-off)</span>
-        <span class="feature-tag">Snowflake Tasks (draft actions)</span>
+        <span class="feature-tag">Dynamic Tables (OTB recompute)</span>
         <span class="feature-tag">Cortex Analyst</span>
-      </div>
-    </div>
-    <div class="feature-row">
-      <div class="feature-scene">Scene 4a &mdash; Vendor Capacity Drill-Down</div>
-      <div class="feature-tags">
-        <span class="feature-tag">Snowflake Marketplace (trend/vendor risk data)</span>
-        <span class="feature-tag">Data Sharing (to vendor's Snowflake)</span>
-        <span class="feature-tag">Streamlit (vendor network view)</span>
-        <span class="feature-tag">Cortex ML</span>
-        <span class="feature-tag">Snowpark</span>
-      </div>
-    </div>
-    <div class="feature-row">
-      <div class="feature-scene">Scene 4b &mdash; Trading Plan Review (Updated)</div>
-      <div class="feature-tags">
-        <span class="feature-tag">Dynamic Tables (aggregate initiatives)</span>
-        <span class="feature-tag">Snowflake Tasks + Notification Integrations (approval)</span>
         <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 3a &mdash; Forecast Impact</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex ML Forecasting (model selection/retrain)</span>
+        <span class="feature-tag">Dynamic Tables</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 3b &mdash; Skinny Promotion</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex ML (price elasticity)</span>
+        <span class="feature-tag">Dynamic Tables (margin/EOP recompute)</span>
+        <span class="feature-tag">Snowflake Tasks + Notification Integrations</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 4a &mdash; Replenishment in Promo</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Snowflake Alerts</span>
         <span class="feature-tag">Cortex Analyst</span>
+        <span class="feature-tag">Dynamic Tables</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 4b &mdash; Firm vs. Cancellable POs</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Snowpipe (supplier EDI lead times)</span>
+        <span class="feature-tag">Dynamic Tables (requirement calc)</span>
+        <span class="feature-tag">Cortex AI (PO segmentation)</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene"><strong style="color:var(--amber);">Scene 4c &mdash; Chase, Compliance &amp; Supplier Collaboration</strong></div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex ML (ABC/XYZ re-segmentation)</span>
+        <span class="feature-tag">Cortex Analyst (capacity + compliance in one query)</span>
+        <span class="feature-tag">AI_EXTRACT (audit reports, test certificates)</span>
+        <span class="feature-tag">Cortex Search (supplier declarations, policy docs)</span>
+        <span class="feature-tag">Object Tagging + Masking (audit evidence governance)</span>
+        <span class="feature-tag">Access History / Lineage (defensible evidence trail)</span>
+        <span class="feature-tag">Data Sharing (demand signal + DPP fields to vendor)</span>
+        <span class="feature-tag">Snowflake Marketplace (ESG &amp; supplier risk data)</span>
+        <span class="feature-tag">Streamlit (vendor scorecard)</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 5a &mdash; Review &amp; Approve</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Dynamic Tables (scenario comparison)</span>
+        <span class="feature-tag">Snowflake Tasks (promote to active plan)</span>
+        <span class="feature-tag">Notification Integrations</span>
+        <span class="feature-tag">Cortex Analyst (exec Q&amp;A)</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 5b &mdash; Updated Homepage</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Streamlit in Snowflake</span>
+        <span class="feature-tag">Dynamic Tables (live KPIs)</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 6a &mdash; Pre-Season Propagation</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Dynamic Tables (multi-horizon chain)</span>
+        <span class="feature-tag">Cortex ML Forecasting (attribute/silhouette mix)</span>
+        <span class="feature-tag">Snowflake Marketplace (fashion trend indices)</span>
+        <span class="feature-tag">Snowflake Tasks (notify design)</span>
+        <span class="feature-tag">Streamlit</span>
       </div>
     </div>
   </div>
