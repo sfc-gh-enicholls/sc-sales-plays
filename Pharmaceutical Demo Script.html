@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pharmaceutical &mdash; Supply Chain Compliance &amp; Intelligence Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sf-blue: #249EDC;
+  --sf-mid: #11567F;
+  --sf-deep: #042130;
+  --sf-ice: #F6F9FA;
+  --sf-star: #71D3DC;
+  --text-dark: #111827;
+  --text-gray: #4B5568;
+  --text-light: #6B7280;
+  --border: rgba(204,204,204,0.5);
+  --red: #DC2626;
+  --green: #16a34a;
+  --amber: #d97706;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color: var(--text-dark); line-height: 1.6; }
+
+/* Header */
+.doc-header {
+  background: linear-gradient(135deg, var(--sf-deep) 0%, var(--sf-mid) 60%, rgba(36,158,220,0.85) 100%);
+  padding: 2.5rem 3rem 2rem;
+}
+.header-inner { max-width: 900px; margin: 0 auto; }
+.header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+.internal-tag { background: rgba(220,38,38,0.2); border: 1px solid rgba(220,38,38,0.4); border-radius: 5px; padding: 0.3rem 0.8rem; font-size: 0.62rem; font-weight: 700; color: rgba(255,120,120,0.9); letter-spacing: 0.1em; text-transform: uppercase; }
+.doc-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(113,211,220,0.8); margin-bottom: 0.4rem; }
+.doc-title { font-size: 2.2rem; font-weight: 900; color: #FFFFFF; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+.doc-subtitle { font-size: 1rem; color: rgba(255,255,255,0.65); font-weight: 300; max-width: 600px; line-height: 1.6; }
+
+/* Body */
+.doc-body { max-width: 900px; margin: 0 auto; padding: 2.5rem 3rem 4rem; }
+
+/* Context box */
+.context-box { background: linear-gradient(135deg, rgba(17,86,127,0.06), rgba(36,158,220,0.04)); border: 1.5px solid rgba(17,86,127,0.2); border-radius: 14px; padding: 1.5rem 1.8rem; margin-bottom: 2.5rem; }
+.context-box h3 { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--sf-mid); margin-bottom: 0.8rem; }
+.context-box p { font-size: 0.9rem; color: var(--text-gray); margin-bottom: 0.6rem; line-height: 1.6; }
+.context-box p:last-child { margin-bottom: 0; }
+.context-box strong { color: var(--text-dark); }
+.context-box .hook { font-size: 1rem; font-weight: 700; color: var(--sf-mid); font-style: italic; margin-bottom: 0.5rem; }
+
+/* Section heading */
+.section-block { margin-bottom: 3rem; }
+.section-header { background: linear-gradient(90deg, var(--sf-mid), rgba(36,158,220,0.8)); border-radius: 10px; padding: 0.9rem 1.4rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+.section-header h2 { font-size: 1rem; font-weight: 800; color: #FFFFFF; }
+.section-persona { font-size: 0.7rem; font-weight: 600; color: rgba(255,255,255,0.7); letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* Scene card */
+.scene-card { background: #FFFFFF; border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.6rem; margin-bottom: 1.2rem; }
+.scene-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sf-blue); margin-bottom: 0.9rem; padding-bottom: 0.6rem; border-bottom: 1px solid rgba(36,158,220,0.15); }
+
+/* Scene row */
+.scene-row { display: grid; grid-template-columns: 120px 1fr; gap: 0.8rem; margin-bottom: 0.8rem; align-items: start; }
+.scene-row:last-child { margin-bottom: 0; }
+.scene-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); padding-top: 0.1rem; }
+.scene-content { font-size: 0.85rem; color: var(--text-gray); line-height: 1.55; }
+.scene-content ul { padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.3rem; }
+.scene-content li { font-size: 0.85rem; color: var(--text-gray); }
+
+/* Highlight boxes */
+.aha-box { background: rgba(36,158,220,0.05); border-left: 3px solid var(--sf-blue); border-radius: 0 8px 8px 0; padding: 0.6rem 0.9rem; font-size: 0.85rem; color: var(--text-gray); line-height: 1.5; }
+.aha-box strong { color: var(--sf-mid); }
+.sowhat-box { background: rgba(22,163,74,0.05); border-left: 3px solid var(--green); border-radius: 0 8px 8px 0; padding: 0.6rem 0.9rem; font-size: 0.85rem; color: var(--text-gray); line-height: 1.5; }
+.sowhat-box strong { color: var(--green); }
+
+/* Features table */
+.features-section { margin-top: 3rem; }
+.features-section h2 { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--sf-mid); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(17,86,127,0.15); }
+.feature-row { display: grid; grid-template-columns: 200px 1fr; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid rgba(204,204,204,0.3); align-items: start; font-size: 0.82rem; }
+.feature-row:last-child { border-bottom: none; }
+.feature-scene { font-weight: 700; color: var(--text-dark); }
+.feature-tags { color: var(--text-gray); }
+.feature-tag { display: inline-block; background: rgba(36,158,220,0.08); border: 1px solid rgba(36,158,220,0.2); border-radius: 4px; padding: 0.1rem 0.45rem; font-size: 0.72rem; font-weight: 600; color: var(--sf-mid); margin: 0.1rem 0.15rem 0.1rem 0; }
+
+/* Narrative event callout */
+.narrative-event { background: linear-gradient(135deg, rgba(220,38,38,0.04), rgba(217,119,6,0.04)); border: 1.5px solid rgba(220,38,38,0.2); border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 2rem; }
+.narrative-event h3 { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); margin-bottom: 0.6rem; }
+.event-item { display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.45rem; }
+.event-item:last-child { margin-bottom: 0; }
+.event-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 0.35rem; }
+.event-dot.red { background: var(--red); }
+.event-dot.amber { background: var(--amber); }
+.event-dot.blue { background: var(--sf-blue); }
+.event-text { font-size: 0.87rem; color: var(--text-gray); line-height: 1.5; }
+.event-text strong { color: var(--text-dark); }
+
+/* Footer */
+.doc-footer { background: var(--sf-deep); padding: 1.2rem 3rem; text-align: center; }
+.doc-footer p { font-size: 0.68rem; color: rgba(255,255,255,0.35); }
+
+@media (max-width: 700px) {
+  .doc-header, .doc-body { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .scene-row { grid-template-columns: 1fr; }
+  .feature-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="doc-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.95;filter:brightness(0) invert(1);">
+      <div class="internal-tag">Internal Only &mdash; Do Not Share</div>
+    </div>
+    <div class="doc-label">Demo Script &middot; Pharmaceutical</div>
+    <div class="doc-title">Supply Chain Compliance &amp; Intelligence Demo</div>
+    <p class="doc-subtitle">From Compliance to Confidence &mdash; Pharmaceutical scenario &mdash; Batch Genealogy &middot; Cold Chain AI &middot; Demand Intelligence</p>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="doc-body">
+
+  <!-- CONTEXT -->
+  <div class="context-box">
+    <h3>What we&rsquo;re doing &amp; how it relates to the play</h3>
+    <p class="hook">&ldquo;The regulation is the business case. You don&rsquo;t have to build it.&rdquo;</p>
+    <p>This demo is the conceptual centrepiece for the &ldquo;From Compliance to Confidence&rdquo; Pharmaceutical play. The play&rsquo;s premise: across pharmaceutical supply chain, every major challenge &mdash; DSCSA/GxP compliance, cold chain reliability, batch quality, and demand sensing &mdash; is fundamentally a data fragmentation problem. Disconnected QMS, MES, LIMS, ERP, and cold chain IoT force teams to react to batch failures and compliance events after the fact; Snowflake unifies them into one GxP-governed platform so teams predict and prevent.</p>
+    <p><strong>Positioning:</strong> From Compliance to Confidence helps pharmaceutical leaders unify batch records, cold chain, and demand data on a single GxP-governed platform &mdash; so every batch decision, compliance event, and demand forecast is made with confidence, not guesswork.</p>
+    <p><strong>What this demo proves:</strong> one narrative event &mdash; a cold chain temperature anomaly (batch risk) colliding with a competitor drug shortage (demand upside) and an FDA suspect product notification (compliance urgency) &mdash; followed across four personas on Snowflake. It maps to the play arc: Compliance (batch genealogy + DSCSA &mdash; S1&ndash;2) &rarr; Intelligence (cold chain AI + demand sensing &mdash; S3&ndash;4) &rarr; Confidence (GxP-governed AI in production, FDA audit-ready).</p>
+  </div>
+
+  <!-- FICTIONAL COMPANY -->
+  <div style="background:#FFFFFF;border:1px solid var(--border);border-radius:12px;padding:1.3rem 1.6rem;margin-bottom:2rem;">
+    <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.8rem;">Fictional Company &mdash; Demo Context</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+      <div>
+        <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem;">Company</div>
+        <div style="font-size:0.88rem;font-weight:700;color:var(--text-dark);">Fictional large global pharmaceutical manufacturer</div>
+        <div style="font-size:0.78rem;color:var(--text-gray);">Multi-market branded pharma business with biologics and small molecule products across Global markets. Subject to DSCSA, EU FMD, and GxP/21 CFR Part 11 compliance obligations.</div>
+      </div>
+      <div>
+        <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem;">Supply Chain</div>
+        <div style="font-size:0.78rem;color:var(--text-gray);">Complex regulated manufacturing with QMS, MES, LIMS, ERP, and DSCSA serialisation systems. Biologics portfolio requires cryogenic cold chain across 3PL partners globally.</div>
+      </div>
+      <div>
+        <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem;">Planning Context</div>
+        <div style="font-size:0.78rem;color:var(--text-gray);">Batch manufacturing cycles of 14&ndash;60 days, DSCSA compliance obligations, and multi-channel demand from hospital, specialty pharmacy, and home health create persistent compliance and supply risk.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NARRATIVE EVENT -->
+  <div class="narrative-event">
+    <h3>The Narrative Event &mdash; Three Simultaneous Pressures</h3>
+    <div class="event-item">
+      <div class="event-dot red"></div>
+      <div class="event-text"><strong>Quality &amp; compliance risk:</strong> A temperature excursion alert at a 3PL site may have compromised a biologics shipment. DSCSA requires suspect product response within 24 hours</div>
+    </div>
+    <div class="event-item">
+      <div class="event-dot red"></div>
+      <div class="event-text"><strong>Batch deviation flagged:</strong> A deviation was raised in QMS for a batch manufactured last week. Root cause trace requires records from QMS, MES, LIMS, and ERP</div>
+    </div>
+    <div class="event-item">
+      <div class="event-dot blue"></div>
+      <div class="event-text"><strong>Demand upside:</strong> A competitor drug shortage has been announced, creating an opportunity to capture hospital formulary contracts and specialty pharmacy channel volume</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 1 &mdash; Supply Chain &amp; Compliance Health</h2>
+      <div class="section-persona">Persona: VP Supply Chain / Head of Manufacturing</div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 1a &middot; Compliance &amp; Supply Health Overview</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The VP starts their day in a unified GxP control tower &mdash; batch status, cold chain compliance, DSCSA serialisation, and demand signals in one view. No more pulling reports from QMS, MES, and ERP separately.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Control tower with at-a-glance KPIs: batch rejection rate, cold chain compliance %, DSCSA coverage, OTIF to hospital/pharmacy</li>
+            <li>Real-time AI insights surfacing the compliance events that need attention today</li>
+            <li>Customisable alert thresholds with GxP audit trail for every threshold change</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> This is the first time the VP has seen batch quality, cold chain, and demand on the same screen with a single GxP-auditable data source. No batch status lives in 3 different systems anymore.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Proactive compliance management. Hours saved on batch status reporting. FDA audit-ready at any time.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 1b &middot; Cold Chain Excursion Alert</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The system has surfaced a temperature anomaly at a 3PL warehouse affecting a biologics shipment. Cortex AI detected the pattern before the batch crossed the excursion threshold.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Cold chain anomaly alert with real-time IoT temperature chart (showing deviation trend before threshold breach)</li>
+            <li>AI-powered risk score: probability of excursion, estimated batch value at risk ($400K+ per batch)</li>
+            <li>One-click quarantine recommendation with regulatory notification template auto-populated</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The AI detected this before the batch was compromised &mdash; not after the 3PL filed a deviation report. That&rsquo;s the difference between a contained risk and a $400K+ batch loss plus regulatory notification.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Batch loss prevented. Patient supply protected. Regulatory notification avoided. Estimated saving: $400K+ per event.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 1c &middot; Batch Genealogy &amp; Root Cause Trace</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">A deviation was flagged in QMS for a batch manufactured last week. The VP needs a complete root cause trace across QMS, MES, LIMS, and ERP in one query. Previously this took 72 hours.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Cortex Analyst query: &ldquo;Show me the complete batch genealogy for Lot X including process parameters, QC results, and chain of custody&rdquo;</li>
+            <li>Full batch record from API lot, through MES process execution, LIMS QC results, to DSCSA serialisation &mdash; in one GxP-auditable view</li>
+            <li>Root cause correlation: Cortex AI flags the specific process parameter deviation and the ingredient lot linked to the deviation</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> This query just did what 72 hours of manual extraction used to do, and it&rsquo;s GxP-auditable. Every step has a lineage trace that an FDA inspector can follow. Roche does this today.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Recall trace: 72 hours &rarr; &lt;4 hours. Root cause identified before CAPA is written. FDA audit-ready answer available on demand.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 2 &mdash; DSCSA Compliance &amp; Serialisation</h2>
+      <div class="section-persona">Persona: Head of Serialisation / Quality</div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 2a &middot; DSCSA Serialisation Compliance Dashboard</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">Head of Serialisation opens their DSCSA compliance dashboard to check lot coverage ahead of a routine FDA inspection. The suspect product alert from Section 1 needs a full lot trace.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>DSCSA compliance dashboard: serialisation coverage %, lot genealogy completeness, open suspect product notifications</li>
+            <li>Cortex Analyst query: &ldquo;Show me all lots shipped to McKesson and Henry Schein in the last 90 days with full chain of custody&rdquo;</li>
+            <li>Complete lot trace in seconds: manufacturer &rarr; 3PL &rarr; distributor &rarr; pharmacy dispense with GxP audit trail</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> That query just traced 90 days of lot genealogy through McKesson and Henry Schein in seconds. The same query took 8+ hours before Snowflake. And every step of the trace has a GxP-compliant audit log.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> FDA suspect product response delivered within the 24-hour window. DSCSA compliance demonstrably met. Pre-inspection data ready in hours not weeks.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 2b &middot; Pre-Inspection Audit Preparation</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">FDA inspection scheduled for next week. Normally 2 weeks of data assembly. With Snowflake, the QA lead runs self-service compliance queries on demand.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Cortex Analyst query: &ldquo;Show me all open deviations at Facility A in the last 12 months with CAPA status and associated batch numbers&rdquo;</li>
+            <li>Complete deviation register with CAPA cycle times, linked batch records, and resolution evidence</li>
+            <li>One-click inspection report generation with GxP audit trail for each data element</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> This used to be a 2-week sprint. The QA team would manually pull from QMS, MES, and LIMS. Now it&rsquo;s a self-service query. Roche passed a consent decree inspection with Snowflake as the system of record.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Inspection preparation time: 2 weeks &rarr; hours. Audit finding rate reduced. $40M+ annual regulatory risk reduction at Roche.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 3 &mdash; Hospital &amp; Channel Demand Sensing</h2>
+      <div class="section-persona">Persona: Head of S&amp;OP / VP Commercial Operations</div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 3a &middot; Multi-Channel Demand Intelligence</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The competitor drug shortage creates a demand upside opportunity. The Head of S&amp;OP needs to quantify it from hospital purchasing signals and prescribing data &mdash; before it shows up in orders.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>IQVIA prescribing trend data from Snowflake Marketplace: competitor drug volumes dropping in hospital and specialty pharmacy channels</li>
+            <li>Cortex AI model: &ldquo;Estimate incremental volume uplift by channel from competitor shortage&rdquo;</li>
+            <li>Side-by-side: hospital channel, specialty pharmacy, and home health demand uplift with confidence intervals</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> This demand signal came from IQVIA prescribing data on Snowflake Marketplace &mdash; connected to the internal supply plan in minutes. Sanofi saw 28% MAPE improvement by doing exactly this.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Demand upside quantified 4–6 weeks before hospital orders arrive. Supply plan updated to capture the opportunity before manufacturing lead time closes.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 3b &middot; API Supply Risk &amp; Batch Scheduling</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">To capture the demand upside, manufacturing needs to increase batch volume. Head of S&amp;OP checks API supply coverage and batch scheduling capacity before committing.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>API supply coverage dashboard: current DOH by molecule vs. increased demand requirement</li>
+            <li>Cortex AI: &ldquo;What is the API supply risk for Molecule X if we increase batch volume by 20%?&rdquo;</li>
+            <li>Supplier risk signals from Snowflake Marketplace (geopolitical, logistics, single-source API exposure)</li>
+            <li>Batch scheduling overlay: available manufacturing capacity vs. projected demand uplift</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The supply constraint analysis, API coverage check, and demand uplift are all on the same platform. The S&amp;OP team can commit to the hospital formulary opportunity with full supply confidence.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Demand upside captured with supply confidence. Hospital formulary contract secured. API risk flagged before it becomes a manufacturing constraint.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 4 &mdash; Closing: The GxP Platform &amp; Business Case</h2>
+      <div class="section-persona">Persona: CSCO / VP Supply Chain</div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 4a &middot; External Ingredient Sourcing Drill-Down</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">Drought conditions have disrupted the supply of a critical raw ingredient (e.g. hops, barley, or CO₂). Cascading effects are expected on the primary ingredient supplier in coming weeks/months. Planner analyses volume at risk and defines mitigation actions:</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Sourcing drill-down dashboard: primary supplier constraints, at-risk order volumes</li>
+            <li>Upstream volume requirement analysis of the critical ingredient, visualised via ingredient supply chain network chart (from raw agricultural source through to finished product)</li>
+            <li>Financial trade-off comparison: cost of securing additional supply vs. supply assurance benefits</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Proactive risk detection enables early mitigation. Scenario modelling quantifies the financial impact of securing additional inventory and stockpiling critical ingredients.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Enhances supply chain resilience through improved visibility and proactive risk management. Ensures demand fulfilment by securing supply ahead of potential disruptions.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 4b &middot; Cortex Analyst Live Q&amp;A</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">Close with a live Cortex Analyst session to demonstrate natural-language queries across the unified GxP platform &mdash; the kind of self-service that makes AI reach production in pharma.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>&ldquo;Show me the complete chain of custody for lot batch X from API supplier to hospital dispensing&rdquo;</li>
+            <li>&ldquo;What is the cold chain compliance rate for our biologics shipments to McKesson in the last 30 days?&rdquo;</li>
+            <li>&ldquo;What is the forecast MAPE for Molecule Y in the hospital channel this quarter vs last year?&rdquo;</li>
+            <li>Each answer is GxP-governed: source data, lineage, and audit trail visible in one click</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> These are questions your QA team, supply chain team, and head of S&amp;OP asked this week. They can now answer them themselves, from GxP-compliant live data, without filing an IT request or waiting for a report.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Self-service compliance and intelligence across every persona. From CSCO to Head of Serialisation, every user gets GxP-auditable answers from the same unified platform.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SNOWFLAKE FEATURES -->
+  <div class="features-section">
+    <h2>Snowflake Features Powering Each Scene</h2>
+
+    <div class="feature-row">
+      <div class="feature-scene">Scene 1a &mdash; Compliance Health Overview</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Streamlit in Snowflake (GxP control tower)</span>
+        <span class="feature-tag">Dynamic Tables (incremental KPIs)</span>
+        <span class="feature-tag">Snowpipe Streaming (cold chain IoT)</span>
+        <span class="feature-tag">Cortex ML anomaly detection</span>
+        <span class="feature-tag">Row-Level Security + Audit Trail</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 1b &mdash; Cold Chain Excursion</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex AI anomaly detection</span>
+        <span class="feature-tag">Snowpipe Streaming (IoT sensor data)</span>
+        <span class="feature-tag">Snowflake Alerts + Notification Integrations</span>
+        <span class="feature-tag">21 CFR Part 11 audit trail</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 1c &mdash; Batch Genealogy</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex Analyst (natural language query)</span>
+        <span class="feature-tag">GxP-governed Semantic Layer</span>
+        <span class="feature-tag">Data Lineage (full audit trail)</span>
+        <span class="feature-tag">Zero-copy QMS / MES / LIMS / ERP join</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 2a &mdash; DSCSA Serialisation</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex Analyst (lot trace query)</span>
+        <span class="feature-tag">Zero-copy DSCSA serialisation hub join</span>
+        <span class="feature-tag">21 CFR Part 11 audit trail</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 2b &mdash; Demand Opportunity Review</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex Agents / Cortex Search (historical scenarios)</span>
+        <span class="feature-tag">Dynamic Tables (real-time impact)</span>
+        <span class="feature-tag">Snowflake Tasks</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 3a &mdash; Supply Gap Review</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Snowpark (solver)</span>
+        <span class="feature-tag">Dynamic Tables (auto re-run)</span>
+        <span class="feature-tag">Cortex ML (recommendations/ranking)</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 3b &mdash; Internal Bottleneck Drill-Down</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Streamlit</span>
+        <span class="feature-tag">Dynamic Tables (ROI/trade-off)</span>
+        <span class="feature-tag">Snowflake Tasks (draft actions)</span>
+        <span class="feature-tag">Cortex Analyst</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 4a &mdash; External Ingredient Sourcing</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Snowflake Marketplace (weather/agri data)</span>
+        <span class="feature-tag">Data Sharing (to supplier's Snowflake)</span>
+        <span class="feature-tag">Streamlit (network chart)</span>
+        <span class="feature-tag">Cortex ML</span>
+        <span class="feature-tag">Snowpark</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 4b &mdash; Supply Gap Review (Updated)</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Dynamic Tables (aggregate initiatives)</span>
+        <span class="feature-tag">Snowflake Tasks + Notification Integrations (approval)</span>
+        <span class="feature-tag">Streamlit</span>
+        <span class="feature-tag">Cortex Analyst</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <p>Pharmaceutical Supply Chain &mdash; Demo Script &mdash; Internal Only &mdash; Snowflake Global</p>
+</div>
+
+</body>
+</html>
