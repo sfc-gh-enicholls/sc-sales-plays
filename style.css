@@ -49,7 +49,7 @@ body {
 
 /* ═══ MAIN ═══ */
 main {
-  max-width: 1080px;
+  max-width: 1240px;
   margin: 0 auto;
   padding: 32px 24px 64px;
 }
@@ -58,7 +58,7 @@ main {
 .tile-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 20px;
 }
 @media (max-width: 760px) {
   .tile-grid { grid-template-columns: repeat(2, 1fr); }
@@ -71,13 +71,17 @@ main {
   position: relative;
   display: flex;
   align-items: flex-end;
-  min-height: 190px;
-  border-radius: 12px;
+  min-height: 280px;
+  border-radius: 14px;
   overflow: hidden;
   text-decoration: none;
-  padding: 18px;
+  padding: 24px;
   background: #0E2240 center/cover no-repeat;
   transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.tile-wide {
+  grid-column: 1 / -1;
+  min-height: 160px;
 }
 .tile:hover {
   transform: translateY(-3px);
@@ -99,7 +103,7 @@ main {
 }
 .tile-body { position: relative; z-index: 3; }
 .tile-body h3 {
-  font-size: 16.5px;
+  font-size: 20px;
   font-weight: 700;
   color: #fff;
   letter-spacing: -0.01em;
@@ -107,8 +111,8 @@ main {
 }
 .tile-body span {
   display: block;
-  margin-top: 4px;
-  font-size: 11px;
+  margin-top: 5px;
+  font-size: 12.5px;
   color: rgba(255,255,255,0.75);
   text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
