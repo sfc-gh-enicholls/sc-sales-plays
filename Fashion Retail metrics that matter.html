@@ -191,7 +191,7 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
       <div class="framework-cell" style="border-color:rgba(36,158,220,0.4);">
         <div style="font-size:0.62rem;font-weight:700;color:var(--sf-blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">02</div>
         <div style="font-size:0.85rem;font-weight:800;color:var(--sf-blue);line-height:1.2;margin-bottom:0.45rem;">Buying &amp; Assortment</div>
-        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">OTB Accuracy &middot; Markdown % of Revenue &middot; Terminal Stock &middot; Vendor OTIF &middot; Chase Cycle Time</div>
+        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">OTB Accuracy &middot; WSSI Cycle Time &middot; Markdown % of Revenue &middot; Terminal Stock &middot; Vendor OTIF</div>
         <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:var(--sf-blue);letter-spacing:0.04em;">&rarr; Slide 05</div>
       </div>
       <div class="framework-cell" style="border-color:rgba(13,148,136,0.4);">
@@ -373,6 +373,18 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <p>Cortex AI ranks vendor delivery reliability and compliance history, so chase orders route to vendors who can actually deliver in time.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">WSSI Cycle Time &amp; Accuracy</div>
+        <div class="metric-full">Weekly Sales, Stock &amp; Intake &mdash; Build Time and Variance to Actual</div>
+        <span class="benchmark avg">Typical build: 1&ndash;3 days of manual export and reconciliation</span>
+        <span class="benchmark target">Target: live, same-day</span>
+        <div class="metric-body">The WSSI is the central weekly artefact of fashion merchandising &mdash; it drives intake phasing, OTB reforecast, and markdown timing. In most retailers it's hand-built in Excel from exports across planning, store, and e-commerce systems, so by the time it's ready the sell-through it describes is already days stale.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Snowflake's governed semantic layer defines sell-through, stock, and intake once, so the WSSI becomes a live view rather than a weekly rebuild. Merchandisers trade off it instead of assembling it.</p>
         </div>
       </div>
 
