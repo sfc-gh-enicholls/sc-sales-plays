@@ -134,6 +134,33 @@ main {
   border-radius: 99px;
 }
 
+/* Two-link tile (Homepage + Cheat Sheet) */
+.tile-links {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.tile-link {
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 7px 12px;
+  border-radius: 6px;
+  transition: transform 0.13s ease, background 0.13s ease;
+}
+.tile-link:hover { transform: translateY(-1px); }
+.tile-link-primary {
+  background: #29B5E8;
+  color: #fff;
+}
+.tile-link-primary:hover { background: #1c9fce; }
+.tile-link-secondary {
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.35);
+  color: #fff;
+}
+.tile-link-secondary:hover { background: rgba(255,255,255,0.24); }
+
 /* Industry photo backgrounds (shared by tiles + banners) */
 .bg-enablement { background: linear-gradient(135deg, #0E2240 0%, #11567F 60%, #29B5E8 100%); }
 .bg-cpg        { background-image: url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1400&q=75&fit=crop&crop=center'); }
