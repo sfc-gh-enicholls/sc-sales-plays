@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fashion Retail — Signal to Shelf Conceptual Demo Flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sf-blue: #249EDC;
+  --sf-mid: #11567F;
+  --sf-deep: #042130;
+  --sf-ice: #F6F9FA;
+  --sf-star: #71D3DC;
+  --text-dark: #111827;
+  --text-gray: #4B5568;
+  --text-light: #6B7280;
+  --border: rgba(204,204,204,0.5);
+  --red: #DC2626;
+  --green: #16a34a;
+  --amber: #d97706;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color: var(--text-dark); line-height: 1.6; }
+
+/* Header */
+.doc-header {
+  background: linear-gradient(135deg, var(--sf-deep) 0%, var(--sf-mid) 60%, rgba(36,158,220,0.85) 100%);
+  padding: 2.5rem 3rem 2rem;
+}
+.header-inner { max-width: 900px; margin: 0 auto; }
+.header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+.internal-tag { background: rgba(220,38,38,0.2); border: 1px solid rgba(220,38,38,0.4); border-radius: 5px; padding: 0.3rem 0.8rem; font-size: 0.62rem; font-weight: 700; color: rgba(255,120,120,0.9); letter-spacing: 0.1em; text-transform: uppercase; }
+.doc-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(113,211,220,0.8); margin-bottom: 0.4rem; }
+.doc-title { font-size: 2.2rem; font-weight: 900; color: #FFFFFF; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+.doc-subtitle { font-size: 1rem; color: rgba(255,255,255,0.65); font-weight: 300; max-width: 600px; line-height: 1.6; }
+
+/* Body */
+.doc-body { max-width: 900px; margin: 0 auto; padding: 2.5rem 3rem 4rem; }
+
+/* Context box */
+.context-box { background: linear-gradient(135deg, rgba(17,86,127,0.06), rgba(36,158,220,0.04)); border: 1.5px solid rgba(17,86,127,0.2); border-radius: 14px; padding: 1.5rem 1.8rem; margin-bottom: 2.5rem; }
+.context-box h3 { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--sf-mid); margin-bottom: 0.8rem; }
+.context-box p { font-size: 0.9rem; color: var(--text-gray); margin-bottom: 0.6rem; line-height: 1.6; }
+.context-box p:last-child { margin-bottom: 0; }
+.context-box strong { color: var(--text-dark); }
+.context-box .hook { font-size: 1rem; font-weight: 700; color: var(--sf-mid); font-style: italic; margin-bottom: 0.5rem; }
+
+/* Section heading */
+.section-block { margin-bottom: 3rem; }
+.section-header { background: linear-gradient(90deg, var(--sf-mid), rgba(36,158,220,0.8)); border-radius: 10px; padding: 0.9rem 1.4rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+.section-header h2 { font-size: 1rem; font-weight: 800; color: #FFFFFF; }
+.section-persona { font-size: 0.7rem; font-weight: 600; color: rgba(255,255,255,0.7); letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* Scene card */
+.scene-card { background: #FFFFFF; border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.6rem; margin-bottom: 1.2rem; }
+.scene-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sf-blue); margin-bottom: 0.9rem; padding-bottom: 0.6rem; border-bottom: 1px solid rgba(36,158,220,0.15); }
+
+/* Scene row */
+.scene-row { display: grid; grid-template-columns: 120px 1fr; gap: 0.8rem; margin-bottom: 0.8rem; align-items: start; }
+.scene-row:last-child { margin-bottom: 0; }
+.scene-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); padding-top: 0.1rem; }
+.scene-content { font-size: 0.85rem; color: var(--text-gray); line-height: 1.55; }
+.scene-content ul { padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.3rem; }
+.scene-content li { font-size: 0.85rem; color: var(--text-gray); }
+
+/* Highlight boxes */
+.aha-box { background: rgba(36,158,220,0.05); border-left: 3px solid var(--sf-blue); border-radius: 0 8px 8px 0; padding: 0.6rem 0.9rem; font-size: 0.85rem; color: var(--text-gray); line-height: 1.5; }
+.aha-box strong { color: var(--sf-mid); }
+.sowhat-box { background: rgba(22,163,74,0.05); border-left: 3px solid var(--green); border-radius: 0 8px 8px 0; padding: 0.6rem 0.9rem; font-size: 0.85rem; color: var(--text-gray); line-height: 1.5; }
+.sowhat-box strong { color: var(--green); }
+
+/* Features table */
+.features-section { margin-top: 3rem; }
+.features-section h2 { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--sf-mid); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(17,86,127,0.15); }
+.feature-row { display: grid; grid-template-columns: 200px 1fr; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid rgba(204,204,204,0.3); align-items: start; font-size: 0.82rem; }
+.feature-row:last-child { border-bottom: none; }
+.feature-scene { font-weight: 700; color: var(--text-dark); }
+.feature-tags { color: var(--text-gray); }
+.feature-tag { display: inline-block; background: rgba(36,158,220,0.08); border: 1px solid rgba(36,158,220,0.2); border-radius: 4px; padding: 0.1rem 0.45rem; font-size: 0.72rem; font-weight: 600; color: var(--sf-mid); margin: 0.1rem 0.15rem 0.1rem 0; }
+
+/* Narrative event callout */
+.narrative-event { background: linear-gradient(135deg, rgba(220,38,38,0.04), rgba(217,119,6,0.04)); border: 1.5px solid rgba(220,38,38,0.2); border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 2rem; }
+.narrative-event h3 { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); margin-bottom: 0.6rem; }
+.event-item { display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.45rem; }
+.event-item:last-child { margin-bottom: 0; }
+.event-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 0.35rem; }
+.event-dot.red { background: var(--red); }
+.event-dot.amber { background: var(--amber); }
+.event-dot.blue { background: var(--sf-blue); }
+.event-text { font-size: 0.87rem; color: var(--text-gray); line-height: 1.5; }
+.event-text strong { color: var(--text-dark); }
+
+/* Footer */
+.doc-footer { background: var(--sf-deep); padding: 1.2rem 3rem; text-align: center; }
+.doc-footer p { font-size: 0.68rem; color: rgba(255,255,255,0.35); }
+
+@media (max-width: 700px) {
+  .doc-header, .doc-body { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .scene-row { grid-template-columns: 1fr; }
+  .feature-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="doc-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.95;filter:brightness(0) invert(1);">
+      <div class="internal-tag">Internal Only &mdash; Do Not Share</div>
+    </div>
+    <div class="doc-label">Demo Script &middot; Fashion Retail</div>
+    <div class="doc-title">Signal to Shelf Conceptual Demo Flow</div>
+    <p class="doc-subtitle">From Signal to Shelf &mdash; Fashion Retail scenario &mdash; EMEA Fashion &amp; Apparel</p>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="doc-body">
+
+  <!-- CONTEXT -->
+  <div class="context-box">
+    <h3>What we&rsquo;re doing &amp; how it relates to the play</h3>
+    <p class="hook">&ldquo;Stop finding out a style is dying on the shelf the same week you're forced into a deep markdown.&rdquo;</p>
+    <p>This demo is the conceptual centrepiece for the &ldquo;Signal to Shelf&rdquo; Fashion Retail play. The play&rsquo;s premise: across EMEA fashion retail, every major trading theme &mdash; markdown pressure, terminal stock, trend-chasing, and CSRD/ESPR compliance &mdash; is fundamentally a data problem. Fragmented systems force buying and planning teams to react to sell-through after the fact; Snowflake collapses that into one governed platform so they see it live and act early.</p>
+    <p><strong>Positioning:</strong> Signal to Shelf helps EMEA fashion retail leaders turn fragmented trading data into a single, trusted intelligence layer &mdash; so every decision, from chase to markdown to compliance, is made with days of runway, not hindsight.</p>
+    <p><strong>What this demo proves:</strong> one narrative event &mdash; a style unexpectedly trending on social media (chase opportunity) colliding with a core-range style falling behind plan (markdown risk) and a vendor capacity constraint (chase risk) &mdash; followed across four personas, all on Snowflake. It maps to the play&rsquo;s arc: Signal (AI surfaces live sell-through and flags the trend before it's obvious &mdash; S1&ndash;2) &rarr; Shelf (AI quantifies the markdown and chase decisions, runs optimised scenarios &mdash; S1, 3&ndash;4) &rarr; Proof (bridge: same platform underpins CSRD/ESPR traceability &mdash; not demonstrated below; add a closing slide).</p>
+  </div>
+
+  <!-- FICTIONAL COMPANY -->
+  <div style="background:#FFFFFF;border:1px solid var(--border);border-radius:12px;padding:1.3rem 1.6rem;margin-bottom:2rem;">
+    <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.8rem;">Fictional Company &mdash; Demo Context</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+      <div>
+        <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem;">Company</div>
+        <div style="font-size:0.88rem;font-weight:700;color:var(--text-dark);">Fictional mid-market EMEA fashion retailer</div>
+        <div style="font-size:0.78rem;color:var(--text-gray);">Multi-channel apparel business trading across owned stores, e-commerce, and select wholesale.</div>
+      </div>
+      <div>
+        <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem;">Trading Model</div>
+        <div style="font-size:0.78rem;color:var(--text-gray);">OTB committed months ahead of season, seasonal buying cycles, vendor lead times, and a live e-commerce channel that surfaces trend signal early.</div>
+      </div>
+      <div>
+        <div style="font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem;">Planning Context</div>
+        <div style="font-size:0.78rem;color:var(--text-gray);">Trend volatility, size-curve complexity, and in-season chase windows create persistent markdown and terminal stock risk.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NARRATIVE EVENT -->
+  <div class="narrative-event">
+    <h3>The Narrative Event &mdash; Multiple Pressures Converging</h3>
+    <div class="event-item">
+      <div class="event-dot blue"></div>
+      <div class="event-text"><strong>Demand upside:</strong> A style has started trending on social media, creating a short window to chase stock and capture a season-defining sales spike</div>
+    </div>
+    <div class="event-item">
+      <div class="event-dot red"></div>
+      <div class="event-text"><strong>Markdown risk:</strong> A core-range style is running well behind plan, heading toward heavy terminal stock at season end if nothing changes</div>
+    </div>
+    <div class="event-item">
+      <div class="event-dot red"></div>
+      <div class="event-text"><strong>Supply risk:</strong> The vendor for the trending style has limited spare capacity, creating a race against the chase window before the trend cools</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 1 &mdash; Trading Health &amp; Alerts</h2>
+      <div class="section-persona">Persona: Chief Trading Officer</div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 1a &middot; Trading Health Overview</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The Chief Trading Officer starts the trading meeting in a single control tower dashboard &mdash; no more pulling exports from store POS, e-commerce, and planning separately.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Control tower with at-a-glance KPIs: full-price sell-through, OTB variance, terminal stock risk</li>
+            <li>Real-time AI insights surfacing the styles that need a decision today</li>
+            <li>Customizable alert thresholds (only the styles that matter show up)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> AI-driven dashboard eliminates manual export reconciliation. The Chief Trading Officer isn&rsquo;t waiting for Monday's report &mdash; they're managing by exception, today.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Proactive vs. reactive trading management. Hours saved on report assembly, redirected to decisions.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 1b &middot; Key Alerts</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The system has flagged two critical developments overnight:</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>AI-powered alert feed, personalized and prioritized by margin impact</li>
+            <li>System auto-quantifies risk in financial terms: &ldquo;&pound;XXk of margin at risk if this style isn't marked down within 2 weeks&rdquo;</li>
+            <li>Instant visibility into the financial consequence of inaction on both the chase opportunity and the markdown risk</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The system doesn&rsquo;t just flag styles &mdash; it puts pound values on the decision so the trading team can prioritise fast.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Leadership is always informed of trading risk and understands the margin impact before it compounds into deep clearance.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 1c &middot; Scenario Comparison</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">Given the chase opportunity and markdown risk, the Chief Trading Officer wants to evaluate options quickly.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Copy from base trading plan, modify parameters, add comments &mdash; collaborative workflow creation</li>
+            <li>Automated workflow assigns tasks to buying, planning, and finance</li>
+            <li>Side-by-side scenario comparison on key metrics: revenue, margin, terminal stock impact</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Workflow creation is automated and linked to scenario creation &mdash; no manual task assignment, no delays. Comments route to the right owner immediately.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Faster decisions, better decisions &mdash; full margin impact visibility, cross-functional alignment built into the workflow.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 2 &mdash; Sell-Through &amp; Chase Opportunity</h2>
+      <div class="section-persona">Persona: Head of Planning</div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 2a &middot; Live Sell-Through Reforecast</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The Head of Planning needs to keep the in-season reforecast current without drowning in manual exports from POS and e-commerce.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Live sell-through dashboard by style, size, and channel with &ldquo;auto-selected&rdquo; best fit trend model highlighted</li>
+            <li>Reforecast contribution metric &mdash; highlights where planner input improves accuracy vs. hurts it</li>
+            <li>Focuses planner time on the styles that actually need judgement</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> AI continuously updates the sell-through reforecast. The planner only intervenes where they add value, as measured against the model. It prevents interventions that reduce accuracy.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Higher reforecast accuracy with less manual effort. Planner time freed for scenario modelling and chase decisions.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 2b &middot; Chase Opportunity Review</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The trending style creates a new chase scenario to model. The planner needs to quantify volume and margin impact of chasing more stock quickly.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Scenario planning dashboard with real-time margin impact visualisation</li>
+            <li>AI agent surfaces relevant historical trend scenarios with related assumptions for the planner to build from</li>
+            <li>Planner tweaks chase parameters (quantity, timing, size curve, vendor)</li>
+            <li>Comparison chart: revenue/margin impact vs. current OTB targets</li>
+            <li>Immediate cross-functional task assignment to buying and finance</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> The AI agent enhances scenario modelling with insights from past trend events. Immediate revenue/margin visibility into the chase decision.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Early identification of the trend enables an evidence-backed chase decision while there's still season left to sell it. Enables cross-functional alignment with buying and finance before the order is placed.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 3 &mdash; Markdown &amp; Terminal Stock Risk</h2>
+      <div class="section-persona">Persona: Head of Buying</div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 3a &middot; Markdown Risk Review</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The system has already identified the underperforming core-range style (feeding from the alerts in Section 1). Two specific risk drivers are surfaced:</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Solver re-runs automatically across store and channel sell-through for two scenarios (early shallow markdown vs. wait and see)</li>
+            <li>Markdown risk dashboard showing projected terminal stock over time with respective drivers by store</li>
+            <li>Initiative tracking: mitigation actions, their margin impact, and ROI for management decisions</li>
+            <li>AI-powered recommendations and drill-down ranking for markdown depth and timing</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> AI-driven optimisation reduces manual effort. Early risk identification provides more runway to act with a shallower markdown. The system prioritises and recommends drill-down actions to minimise terminal stock and maximise recovered margin.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Minimises terminal stock and deep clearance. Accelerates decision-making and enables an early, shallow markdown instead of a late, deep one.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 3b &middot; Store-Level Drill-Down</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The underperformance is concentrated in specific stores and regions. The Head of Buying drills into this from the markdown risk overview.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Store-level drill-down dashboard: sell-through by location, inventory position, local promotional activity</li>
+            <li>Buyer identifies that inter-store transfer to higher-performing locations resolves some of the excess (requires management sign-off with trade-off evaluation)</li>
+            <li>ROI/cost/investment impact evaluations for trade-offs: transfer cost vs. margin recovered vs. markdown avoided</li>
+            <li>Targeted local markdown bridges the remaining risk at a shallower discount than a blanket markdown</li>
+            <li>Both actions auto-documented as drafts, triggering action owners to review and financially evaluate</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Store-level visibility is automated &mdash; real-time monitoring. Decision trade-offs are quantified for management.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Maximises margin recovery by reallocating stock to where it will sell. Aligns store-level decisions with strategic and financial trade-offs. Ensures company-wide optimisation.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Section 4 &mdash; Vendor Chase Sourcing</h2>
+      <div class="section-persona">Persona: Head of Buying</div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 4a &middot; Vendor Capacity Drill-Down</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The vendor for the trending style has limited spare capacity, threatening the chase window. Cascading effects are expected on delivery timing over the coming weeks. The buyer analyses volume at risk and defines mitigation actions:</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Sourcing drill-down dashboard: primary vendor constraints, at-risk chase order volumes</li>
+            <li>Vendor performance scorecard comparing primary and backup vendors on OTIF, capacity, and compliance</li>
+            <li>Financial trade-off comparison: cost of splitting the chase order across two vendors vs. delay risk from a single vendor</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Proactive vendor risk detection enables early mitigation. Scenario modelling quantifies the financial impact of splitting the order to protect the chase window.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Enhances chase reliability through improved vendor visibility and proactive risk management. Protects the trend window by securing supply ahead of potential delay.</div></div>
+      </div>
+    </div>
+
+    <div class="scene-card">
+      <div class="scene-title">Scene 4b &middot; Trading Plan Review (Updated)</div>
+      <div class="scene-row">
+        <div class="scene-label">Setup</div>
+        <div class="scene-content">The Chief Trading Officer reviews all newly created mitigation initiatives, categorised by scenario. Each scenario outlines specific actions from the chase, markdown, and vendor analyses.</div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">What to show</div>
+        <div class="scene-content">
+          <ul>
+            <li>Trading plan dashboard with prioritised initiatives per scenario</li>
+            <li>Side-by-side scenario comparison: margin and revenue impact</li>
+            <li>Approval workflow module for streamlined management decision-making</li>
+            <li>All chase and markdown actions aggregated into structured, actionable initiatives</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">Aha moment</div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Seamless transition to executive decision-making. All actions aggregated and ready for the trading meeting.</div></div>
+      </div>
+      <div class="scene-row">
+        <div class="scene-label">So what</div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Provides a structured approach for resolving both the chase and the markdown, ensuring cross-team alignment. Enables data-driven trading decisions, optimising margin across the full range.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SNOWFLAKE FEATURES -->
+  <div class="features-section">
+    <h2>Snowflake Features Powering Each Scene</h2>
+
+    <div class="feature-row">
+      <div class="feature-scene">Scene 1a &mdash; Trading Health Overview</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Streamlit in Snowflake (control tower)</span>
+        <span class="feature-tag">Dynamic Tables (incremental KPIs)</span>
+        <span class="feature-tag">Snowpipe Streaming</span>
+        <span class="feature-tag">Cortex ML anomaly detection</span>
+        <span class="feature-tag">Snowflake Alerts</span>
+        <span class="feature-tag">Row-Level Security</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 1b &mdash; Key Alerts</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex ML anomaly detection</span>
+        <span class="feature-tag">Cortex AI (&pound; quantification + insight cards)</span>
+        <span class="feature-tag">Snowflake Marketplace (social trend/weather signals)</span>
+        <span class="feature-tag">Alerts + Notification Integrations</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 1c &mdash; Scenario Comparison</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Dynamic Tables (scenario branch)</span>
+        <span class="feature-tag">Snowflake Tasks (task assignment)</span>
+        <span class="feature-tag">Notification Integrations</span>
+        <span class="feature-tag">Cortex Analyst</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 2a &mdash; Live Sell-Through Reforecast</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex ML Forecasting (auto best-fit model)</span>
+        <span class="feature-tag">Dynamic Tables (reforecast recompute)</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 2b &mdash; Chase Opportunity Review</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Cortex Agents / Cortex Search (historical trend scenarios)</span>
+        <span class="feature-tag">Dynamic Tables (real-time impact)</span>
+        <span class="feature-tag">Snowflake Tasks</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 3a &mdash; Markdown Risk Review</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Snowpark (solver)</span>
+        <span class="feature-tag">Dynamic Tables (auto re-run)</span>
+        <span class="feature-tag">Cortex ML (recommendations/ranking)</span>
+        <span class="feature-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 3b &mdash; Store-Level Drill-Down</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Streamlit</span>
+        <span class="feature-tag">Dynamic Tables (ROI/trade-off)</span>
+        <span class="feature-tag">Snowflake Tasks (draft actions)</span>
+        <span class="feature-tag">Cortex Analyst</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 4a &mdash; Vendor Capacity Drill-Down</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Snowflake Marketplace (trend/vendor risk data)</span>
+        <span class="feature-tag">Data Sharing (to vendor's Snowflake)</span>
+        <span class="feature-tag">Streamlit (vendor network view)</span>
+        <span class="feature-tag">Cortex ML</span>
+        <span class="feature-tag">Snowpark</span>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-scene">Scene 4b &mdash; Trading Plan Review (Updated)</div>
+      <div class="feature-tags">
+        <span class="feature-tag">Dynamic Tables (aggregate initiatives)</span>
+        <span class="feature-tag">Snowflake Tasks + Notification Integrations (approval)</span>
+        <span class="feature-tag">Streamlit</span>
+        <span class="feature-tag">Cortex Analyst</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <p>Fashion Retail &mdash; Demo Script &mdash; Internal Only &mdash; Snowflake EMEA</p>
+</div>
+
+</body>
+</html>

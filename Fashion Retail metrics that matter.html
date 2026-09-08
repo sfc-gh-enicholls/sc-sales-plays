@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snowflake Fashion Retail: Metrics That Matter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sf-blue: #249EDC; --sf-mid: #11567F; --sf-deep: #042130; --sf-ice: #F6F9FA; --sf-star: #71D3DC; --sf-orange: #FF9F36; --sf-white: #FFFFFF;
+  --text-dark: #111827; --text-gray: #4B5568; --text-light: #6B7280; --border-card: rgba(204,204,204,0.5); --green: #16a34a;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', sans-serif; background: #FFFFFF; }
+.deck { width: 100vw; height: 100vh; position: relative; }
+.slide { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1); overflow: hidden; }
+.slide.active { opacity: 1; pointer-events: all; }
+.slide-bg { position: absolute; inset: 0; z-index: 0; }
+.bg-white { background: #FFFFFF; }
+.bg-ice { background: var(--sf-ice); }
+.slide-content { position: relative; z-index: 10; width: 88%; max-width: 1200px; padding: 2.2rem 2rem; }
+h3.label { font-size: clamp(0.65rem, 1vw, 0.8rem); font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sf-blue); margin-bottom: 0.7rem; }
+h3.label.purple { color: var(--sf-mid); }
+h3.label.white { color: rgba(255,255,255,0.7); }
+h1 { font-size: clamp(2.4rem, 5vw, 4.5rem); font-weight: 900; line-height: 1.05; color: var(--text-dark); letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.5rem, 2.8vw, 2.5rem); font-weight: 800; line-height: 1.1; color: var(--text-dark); letter-spacing: -0.01em; margin-bottom: 0.5rem; }
+.slide.dark-slide h1, .slide.dark-slide h2 { color: #FFFFFF; }
+.slide.dark-slide p { color: rgba(255,255,255,0.85); }
+.highlight { color: var(--sf-blue); }
+.highlight-purple { color: var(--sf-mid); }
+.highlight-green { color: var(--green); }
+.divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--sf-blue), var(--sf-star)); margin: 0.75rem 0 0.9rem 0; border-radius: 2px; }
+.divider-purple { width: 60px; height: 3px; background: linear-gradient(90deg, var(--sf-mid), var(--sf-blue)); margin: 0.75rem 0 0.9rem 0; border-radius: 2px; }
+p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.6; color: var(--text-gray); max-width: 750px; margin-bottom: 0.4rem; }
+.metric-card { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 12px; padding: 1rem 1.1rem; display: flex; flex-direction: column; }
+.metric-card.blue { border-color: rgba(36,158,220,0.4); }
+.metric-card.purple { border-color: rgba(17,86,127,0.35); }
+.metric-card.green { border-color: rgba(22,163,74,0.35); }
+.metric-card.teal { border-color: rgba(113,211,220,0.45); }
+.metric-name { font-size: 1rem; font-weight: 900; color: var(--sf-mid); letter-spacing: -0.01em; margin-bottom: 0.1rem; }
+.metric-full { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-light); margin-bottom: 0.45rem; }
+.metric-body { font-size: 0.78rem; color: var(--text-gray); line-height: 1.5; margin-bottom: 0.5rem; flex: 1; }
+.metric-snowflake { display: flex; align-items: flex-start; gap: 0.4rem; background: linear-gradient(90deg,rgba(36,158,220,0.07),rgba(113,211,220,0.04)); border: 1px solid rgba(36,158,220,0.2); border-radius: 7px; padding: 0.42rem 0.6rem; margin-top: auto; }
+.metric-snowflake p { font-size: 0.72rem; color: var(--sf-mid); font-weight: 500; margin: 0; max-width: 100%; }
+.metric-snowflake svg { flex-shrink: 0; margin-top: 0.05rem; }
+.benchmark { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.2rem 0.55rem; border-radius: 999px; margin-bottom: 0.4rem; }
+.benchmark.avg { background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.4); color: #92400E; }
+.benchmark.target { background: rgba(22,163,74,0.08); border: 1px solid rgba(22,163,74,0.3); color: var(--green); }
+.pos-card { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 12px; padding: 1.1rem 1.3rem; }
+.pos-card.blue { border-color: rgba(36,158,220,0.4); }
+.pos-card.purple { border-color: rgba(17,86,127,0.35); }
+.pos-card p { font-size: 0.84rem; max-width: 100%; margin: 0; }
+.framework-cell { background: #FFFFFF; border-radius: 12px; padding: 1rem 1.1rem; border: 1.5px solid rgba(204,204,204,0.5); }
+.pill { display: inline-block; background: rgba(36,158,220,0.1); border: 1px solid rgba(36,158,220,0.3); border-radius: 999px; padding: 0.25rem 0.75rem; font-size: 0.72rem; font-weight: 600; color: var(--sf-blue); letter-spacing: 0.05em; text-transform: uppercase; margin: 0.15rem; }
+.pill.purple { background: rgba(17,86,127,0.08); border-color: rgba(17,86,127,0.3); color: var(--sf-mid); }
+.pill.green { background: rgba(22,163,74,0.08); border-color: rgba(22,163,74,0.3); color: var(--green); }
+.proof-bar { background: linear-gradient(90deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05)); border: 1px solid rgba(36,158,220,0.25); border-radius: 10px; padding: 0.65rem 1.2rem; }
+.proof-bar p { font-size: 0.79rem; color: var(--text-gray); margin: 0; max-width: 100%; }
+.slide-number { position: absolute; bottom: 1.5rem; right: 1.8rem; font-size: 0.72rem; color: var(--text-light); font-weight: 500; letter-spacing: 0.08em; z-index: 20; }
+.slide.dark-slide .slide-number { color: rgba(255,255,255,0.4); }
+.snowflake-logo { position: absolute; bottom: 1.2rem; right: 5.5rem; z-index: 20; opacity: 0.85; display: flex; align-items: center; height: 32px; }
+.progress-bar-wrap { position: fixed; top: 0; left: 0; width: 100%; height: 3px; z-index: 100; background: rgba(0,0,0,0.06); }
+.progress-bar { height: 100%; background: linear-gradient(90deg, var(--sf-mid), var(--sf-blue)); transition: width 0.5s ease; }
+.controls { position: fixed; bottom: 2.2rem; left: 50%; transform: translateX(-50%); display: flex; gap: 0.8rem; z-index: 100; align-items: center; }
+.controls button { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 999px; padding: 0.5rem 1.3rem; color: var(--text-gray); font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.controls button:hover { background: var(--sf-ice); border-color: var(--sf-blue); color: var(--sf-mid); }
+.controls select { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 999px; padding: 0.5rem 1.1rem; color: var(--text-gray); font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; outline: none; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:12.5%"></div></div>
+
+<!-- Controls -->
+<div class="controls">
+  <button onclick="prevSlide()">&#8592; Prev</button>
+  <select id="slideSelect" onchange="goTo(this.value-1)">
+    <option value="1">01 &middot; Title</option>
+    <option value="2">02 &middot; Business Imperative</option>
+    <option value="3">03 &middot; Value Framework</option>
+    <option value="4">04 &middot; Demand &amp; Sell-Through</option>
+    <option value="5">05 &middot; Buying &amp; Assortment</option>
+    <option value="6">06 &middot; Inventory &amp; Working Capital</option>
+    <option value="7">07 &middot; Customer &amp; Personalisation</option>
+    <option value="8">08 &middot; Sustainability &amp; Compliance</option>
+  </select>
+  <button onclick="nextSlide()">Next &#8594;</button>
+</div>
+
+<div class="deck">
+
+<!-- ============================================================ SLIDE 01 ============================================================ -->
+<div class="slide dark-slide active" id="slide-1">
+  <div class="slide-bg">
+    <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1920&q=80" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,33,48,0.88) 0%,rgba(17,86,127,0.80) 50%,rgba(4,33,48,0.92) 100%);"></div>
+  </div>
+  <div class="slide-content" style="display:flex;flex-direction:column;justify-content:center;min-height:60vh;">
+    <h3 class="label white">SNOWFLAKE &middot; FASHION RETAIL</h3>
+    <div style="margin-top:1.2rem;">
+      <h1 style="color:var(--sf-star);font-size:clamp(3rem,7vw,6.5rem);line-height:1;">METRICS</h1>
+      <h1 style="color:#FFFFFF;font-size:clamp(3rem,7vw,6.5rem);line-height:1;">THAT MATTER</h1>
+    </div>
+    <div class="divider" style="margin-top:1.4rem;"></div>
+    <p style="color:rgba(255,255,255,0.8);font-size:clamp(0.9rem,1.4vw,1.15rem);font-weight:300;max-width:680px;margin-top:0.5rem;">Connecting Snowflake capabilities to the KPIs that move boards, CFOs, and trading leaders in fashion retail</p>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;filter:brightness(0) invert(1);"></div>
+  <div class="slide-number">01 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 02 ============================================================ -->
+<div class="slide bg-white" id="slide-2">
+  <div class="slide-content" style="padding-top:1.6rem;padding-bottom:4rem;">
+    <h3 class="label purple">WHY NOW</h3>
+    <h2>The Business Imperative for <span class="highlight-purple">Fashion Retail</span></h2>
+    <div class="divider-purple"></div>
+    <div style="display:grid;grid-template-columns:1.15fr 1fr;gap:1.2rem;margin-top:0.6rem;">
+      <!-- Left column -->
+      <div style="display:flex;flex-direction:column;gap:0.9rem;">
+        <div class="pos-card purple" style="padding:0.9rem 1.1rem;">
+          <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.5rem;">The Problem</div>
+          <p style="font-size:0.78rem;margin-bottom:0.6rem;">Fashion retailers commit OTB 6&ndash;9 months ahead of an uncertain trend, then have a narrow window to chase winners or markdown losers once the season starts. Planning tools, PLM, e-commerce, and store POS run in silos. Every trading decision starts with reconciliation. Terminal stock and markdown depth erode gross margin every cycle, yet buying and sell-through data are built in complete isolation from each other.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.55rem;margin-top:0.2rem;">
+            <div style="background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:0.55rem 0.7rem;">
+              <div style="font-size:0.63rem;font-weight:700;color:#dc2626;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.35rem;">Without Snowflake</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">&#10005; 4 systems, 4 truths. Sell-through data never reaches buying in time</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">&#10005; Terminal stock found at season end, not 6&ndash;8 weeks earlier when it could be chased or marked down early</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">&#10005; AI pilots fail. Ungoverned POS and e-commerce data is the root cause</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;">&#10005; Trading pack takes days to assemble before any decisions are made</div>
+            </div>
+            <div style="background:rgba(36,158,220,0.05);border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.55rem 0.7rem;">
+              <div style="font-size:0.63rem;font-weight:700;color:var(--sf-mid);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.35rem;">With Snowflake</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">&#10003; Unified trading platform: one semantic layer, one truth</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">&#10003; Proactive markdown signals weeks before the trading meeting, not after</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">&#10003; AI that reasons on governed trading data, so it reaches production</div>
+              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;">&#10003; Self-service trading analytics in seconds, so decisions get made in the meeting</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Right column -->
+      <div style="display:flex;flex-direction:column;gap:0.9rem;">
+        <div class="pos-card blue" style="padding:0.9rem 1.1rem;">
+          <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.5rem;">The Snowflake Platform for Fashion Retail</div>
+          <p style="font-size:0.78rem;margin-bottom:0.7rem;">The AI Data Cloud is the only platform that unifies planning tools, PLM, e-commerce, and store POS data into a governed, AI-ready foundation, without moving data or replacing existing systems. It transforms trading from reactive reconciliation to proactive, closed-loop intelligence.</p>
+          <div style="margin-bottom:0.7rem;">
+            <span class="pill">Unify &amp; Govern</span>
+            <span class="pill">Reason &amp; Predict</span>
+            <span class="pill">Decide &amp; Execute</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;">
+            <div style="background:linear-gradient(135deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05));border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.6rem 0.7rem;text-align:center;">
+              <div style="font-size:1.3rem;font-weight:900;color:var(--sf-mid);line-height:1;">354%</div>
+              <div style="font-size:0.62rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-top:0.2rem;">ROI</div>
+              <div style="font-size:0.6rem;color:var(--text-light);margin-top:0.1rem;">Forrester TEI 2024</div>
+            </div>
+            <div style="background:linear-gradient(135deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05));border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.6rem 0.7rem;text-align:center;">
+              <div style="font-size:1.3rem;font-weight:900;color:var(--sf-mid);line-height:1;">2&times;</div>
+              <div style="font-size:0.62rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-top:0.2rem;">More Sources Ingested</div>
+              <div style="font-size:0.6rem;color:var(--text-light);margin-top:0.1rem;">Urban Outfitters, at lower cost</div>
+            </div>
+            <div style="background:linear-gradient(135deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05));border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.6rem 0.7rem;text-align:center;">
+              <div style="font-size:1.3rem;font-weight:900;color:var(--sf-mid);line-height:1;">&lt;6mo</div>
+              <div style="font-size:0.62rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-top:0.2rem;">Payback Period</div>
+              <div style="font-size:0.6rem;color:var(--text-light);margin-top:0.1rem;">Forrester TEI 2024</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">02 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 03 ============================================================ -->
+<div class="slide bg-ice" id="slide-3">
+  <div class="slide-content" style="padding-top:1.6rem;padding-bottom:4rem;">
+    <h3 class="label">THE VALUE FRAMEWORK</h3>
+    <h2>Five Value Categories. <span class="highlight">One Connected Platform.</span></h2>
+    <div class="divider"></div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0.7rem;margin-top:0.6rem;">
+      <div class="framework-cell" style="border-color:rgba(17,86,127,0.4);">
+        <div style="font-size:0.62rem;font-weight:700;color:var(--sf-mid);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">01</div>
+        <div style="font-size:0.85rem;font-weight:800;color:var(--sf-mid);line-height:1.2;margin-bottom:0.45rem;">Demand &amp; Sell-Through</div>
+        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">Full-Price Sell-Through &middot; Forecast Accuracy &middot; Chase Response Time &middot; Size Curve Accuracy</div>
+        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:var(--sf-mid);letter-spacing:0.04em;">&rarr; Slide 04</div>
+      </div>
+      <div class="framework-cell" style="border-color:rgba(36,158,220,0.4);">
+        <div style="font-size:0.62rem;font-weight:700;color:var(--sf-blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">02</div>
+        <div style="font-size:0.85rem;font-weight:800;color:var(--sf-blue);line-height:1.2;margin-bottom:0.45rem;">Buying &amp; Assortment</div>
+        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">OTB Accuracy &middot; Markdown % of Revenue &middot; Terminal Stock &middot; Vendor OTIF &middot; Chase Cycle Time</div>
+        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:var(--sf-blue);letter-spacing:0.04em;">&rarr; Slide 05</div>
+      </div>
+      <div class="framework-cell" style="border-color:rgba(13,148,136,0.4);">
+        <div style="font-size:0.62rem;font-weight:700;color:#0d9488;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">03</div>
+        <div style="font-size:0.85rem;font-weight:800;color:#0d9488;line-height:1.2;margin-bottom:0.45rem;">Inventory &amp; Working Capital</div>
+        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">Stock Turn &middot; Days of Supply &middot; Cash-to-Cash &middot; E&amp;O &middot; Cross-Channel Accuracy</div>
+        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:#0d9488;letter-spacing:0.04em;">&rarr; Slide 06</div>
+      </div>
+      <div class="framework-cell" style="border-color:rgba(22,163,74,0.35);">
+        <div style="font-size:0.62rem;font-weight:700;color:var(--green);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">04</div>
+        <div style="font-size:0.85rem;font-weight:800;color:var(--green);line-height:1.2;margin-bottom:0.45rem;">Customer &amp; Personalisation</div>
+        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">Conversion Rate &middot; Personalisation Lift &middot; CLV &middot; Loyalty Engagement &middot; Return Rate</div>
+        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:var(--green);letter-spacing:0.04em;">&rarr; Slide 07</div>
+      </div>
+      <div class="framework-cell" style="border-color:rgba(180,83,9,0.35);">
+        <div style="font-size:0.62rem;font-weight:700;color:#B45309;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">05</div>
+        <div style="font-size:0.85rem;font-weight:800;color:#B45309;line-height:1.2;margin-bottom:0.45rem;">Sustainability &amp; Compliance</div>
+        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">CSRD Completeness &middot; Traceability Coverage &middot; ESPR/DPP Readiness &middot; Vendor Compliance</div>
+        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:#B45309;letter-spacing:0.04em;">&rarr; Slide 08</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.7rem;">
+      <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:10px;padding:0.75rem 1rem;">
+        <div style="font-size:0.63rem;font-weight:700;color:var(--sf-blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">Data Foundation</div>
+        <div style="font-size:0.72rem;color:var(--text-gray);line-height:1.5;">Unified planning tool &middot; PLM &middot; e-commerce &middot; store POS &middot; loyalty &middot; supplier/material data in one semantic layer</div>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:10px;padding:0.75rem 1rem;">
+        <div style="font-size:0.63rem;font-weight:700;color:var(--sf-blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">AI Intelligence</div>
+        <div style="font-size:0.72rem;color:var(--text-gray);line-height:1.5;">Cortex AI &middot; Cortex Analyst &middot; Snowflake Marketplace (3,600+ live datasets including trend and consumer data)</div>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:10px;padding:0.75rem 1rem;">
+        <div style="font-size:0.63rem;font-weight:700;color:var(--sf-blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">Closed-Loop Execution</div>
+        <div style="font-size:0.72rem;color:var(--text-gray);line-height:1.5;">One approval triggers markdown &middot; chase order &middot; allocation update simultaneously in &lt;2 seconds</div>
+      </div>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">03 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 04 ============================================================ -->
+<div class="slide bg-white" id="slide-4">
+  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
+    <h3 class="label purple">CATEGORY 01</h3>
+    <h2>Demand &amp; <span class="highlight-purple">Sell-Through Intelligence</span></h2>
+    <div class="divider-purple"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.5rem;">
+
+      <div class="metric-card purple">
+        <div class="metric-name">Full-Price Sell-Through %</div>
+        <div class="metric-full">% of Units Sold Before Markdown</div>
+        <span class="benchmark avg">Industry avg: 60&ndash;70%</span>
+        <span class="benchmark target">Target: 80%+</span>
+        <div class="metric-body">The primary trading KPI for fashion retail. Every point below target means deeper, earlier markdowns to clear the range. For a &pound;500M business, a 5-point improvement in full-price sell-through is worth tens of millions in protected gross margin.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Snowflake unifies store POS, e-commerce, and warehouse data in real time. Cortex Analyst enables "what is sell-through for style X this week?" in seconds, answered from live data, not next Monday's report.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Forecast Accuracy (MAPE)</div>
+        <div class="metric-full">Mean Absolute Percentage Error, by Style/Size</div>
+        <span class="benchmark avg">Style level: avg 35&ndash;50% MAPE</span>
+        <span class="benchmark target">Target: &lt;20% MAPE</span>
+        <div class="metric-body">The foundation metric for everything downstream. A 10-point MAPE improvement reduces terminal stock, emergency chase freight, and lost full-price sales by tens of millions. Most trend-sensing AI pilots fail because online behavioural and POS data are fragmented and never unified with planning.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI trend models retrain continuously on live signals: POS sell-through, site search/browse behaviour, and external market data from Snowflake Marketplace. Forecast accuracy compounds over time.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Chase Response Time</div>
+        <div class="metric-full">Signal to Chase Order Placed</div>
+        <span class="benchmark avg">Industry avg: 4&ndash;6 weeks</span>
+        <span class="benchmark target">Target: &lt;2 weeks</span>
+        <div class="metric-body">A winning style has a narrow window &mdash; typically 2&ndash;3 weeks &mdash; in which chasing more stock is still commercially worthwhile. Every week of delay from signal to order is lost full-price revenue that a competitor captures instead.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI flags outperforming styles against plan within hours of the sell-through shift, giving buying teams days rather than weeks of runway to act.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Size Curve Accuracy</div>
+        <div class="metric-full">Actual vs Planned Size Distribution of Sell-Through</div>
+        <span class="benchmark avg">Industry avg: 70&ndash;80% match</span>
+        <div class="metric-body">Getting the total units right but the size mix wrong is one of the most common and least visible causes of both lost sales (out-of-stock in core sizes) and terminal stock (overstock in tail sizes). Size-curve errors compound across every store and channel.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Store-and-channel-level size curve models built on unified POS history detect deviations from plan while there's still time to reallocate.</p>
+        </div>
+      </div>
+
+      <div class="metric-card teal">
+        <div class="metric-name">Online-to-Store Signal Lag</div>
+        <div class="metric-full">Time for Digital Behavioural Signal to Reach Planning</div>
+        <span class="benchmark avg">Industry avg: 2&ndash;4 weeks</span>
+        <span class="benchmark target">Target: same-day</span>
+        <div class="metric-body">Site search, browse, and cart behaviour surface trend shifts days or weeks before they show up in store POS. Most retailers can't get that signal to buying and planning fast enough to matter, missing the earliest and cheapest point to react.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Clickstream and POS data unified on Snowflake means the earliest trend signal reaches buying in hours, not weeks.</p>
+        </div>
+      </div>
+
+      <div class="metric-card teal">
+        <div class="metric-name">Return Rate (E-commerce)</div>
+        <div class="metric-full">Units Returned ÷ Units Sold Online</div>
+        <span class="benchmark avg">Fashion e-com avg: 25&ndash;35%</span>
+        <span class="benchmark target">Target: &lt;20%</span>
+        <div class="metric-body">Fashion has among the highest return rates in retail, driven largely by size and fit uncertainty. Returns processing, restocking, and lost peak-season selling days all carry real cost, and poor size-guide data is a leading cause.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Unified size/fit and return history on Snowflake powers better size-guide personalisation, reducing size-driven returns at the point of purchase.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="proof-bar" style="margin-top:0.7rem;">
+      <p>Tapestry: 4B+ rows processed daily from 100+ sources to pinpoint markdown candidates at the product level &nbsp;&middot;&nbsp; Urban Outfitters: 2&times; more data sources ingested at lower cost</p>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">04 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 05 ============================================================ -->
+<div class="slide bg-ice" id="slide-5">
+  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
+    <h3 class="label">CATEGORY 02</h3>
+    <h2>Buying &amp; <span class="highlight">Assortment Intelligence</span></h2>
+    <div class="divider"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.5rem;">
+
+      <div class="metric-card blue">
+        <div class="metric-name">OTB Accuracy</div>
+        <div class="metric-full">Actual Sales vs Open-to-Buy Plan</div>
+        <span class="benchmark avg">Industry avg error: 20&ndash;30%</span>
+        <span class="benchmark target">Target: &lt;10% error</span>
+        <div class="metric-body">OTB is committed 6&ndash;9 months ahead of the season with no live read on how the trend is landing. Getting it wrong in either direction is expensive: over-committing drives terminal stock, under-committing loses full-price sales to a competitor.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI reforecasts OTB against live sell-through throughout the season, alongside your existing planning tool rather than replacing it.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Markdown as % of Revenue</div>
+        <div class="metric-full">Forgone Revenue from Discounting</div>
+        <span class="benchmark avg">Industry avg: 8&ndash;12% of revenue</span>
+        <span class="benchmark target">Target: &lt;6%</span>
+        <div class="metric-body">Markdown depth compounds directly into gross margin. A retailer marking down 35% of range at an average 30% discount depth is forgoing roughly 10.5% of revenue on that stock &mdash; the earlier a weak style is flagged, the shallower the markdown needed to clear it.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI flags weak sell-through weeks before the trading meeting, so markdown decisions happen early and shallow instead of late and deep.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Terminal Stock %</div>
+        <div class="metric-full">Unsold Units at Season End ÷ Units Bought</div>
+        <span class="benchmark avg">Industry avg: 30&ndash;40%</span>
+        <span class="benchmark target">Target: &lt;20%</span>
+        <div class="metric-body">Terminal stock is the clearest signature of a buying and planning process working blind. It's discovered at season end, when the only remaining options &mdash; deep clearance, off-price channels, or write-off &mdash; are all margin-destructive.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Early terminal-stock risk scoring by style, weeks ahead of season end, gives buying and planning time to act while margin can still be protected.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Vendor OTIF</div>
+        <div class="metric-full">Vendor On Time In Full Delivery</div>
+        <span class="benchmark avg">Industry avg: 80&ndash;88%</span>
+        <span class="benchmark target">Target: 95%+</span>
+        <div class="metric-body">Chase orders are only worth placing if the vendor can actually deliver inside the sell-through window. Vendor reliability determines which chase opportunities are real and which are theoretical.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI ranks vendor delivery reliability and compliance history, so chase orders route to vendors who can actually deliver in time.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Chase Order Cycle Time</div>
+        <div class="metric-full">Sell-Through Signal to Chase Order Placed</div>
+        <span class="benchmark avg">Typical: 3&ndash;7 days of data assembly</span>
+        <div class="metric-body">In most fashion retailers, placing a chase order requires manually cross-checking sell-through, vendor capacity, and open-to-buy across three or four different systems. That delay alone can consume most of the window in which chasing still pays.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Snowflake's governed semantic layer ensures buying and planning read from the same defined sell-through and OTB numbers. Cortex Analyst generates the chase recommendation on demand.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Assortment Productivity</div>
+        <div class="metric-full">Revenue per SKU / Style Count</div>
+        <span class="benchmark avg">Varies widely by category</span>
+        <div class="metric-body">SKU proliferation without a corresponding sell-through gain dilutes buying budget and warehouse capacity across too many low-performing styles. Identifying which styles genuinely earn their shelf space requires unified sell-through data across the full range.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex Analyst: "Which styles in this category are below revenue-per-SKU threshold this season?", answered from live data in seconds.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="proof-bar" style="margin-top:0.7rem;">
+      <p>Under Armour: unified demand and supply chain data supporting faster, more informed buying decisions &nbsp;&middot;&nbsp; Markdown math: 35% of range at 30% average discount depth &asymp; 10.5% of revenue forgone</p>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">05 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 06 ============================================================ -->
+<div class="slide bg-white" id="slide-6">
+  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
+    <h3 class="label purple">CATEGORY 03</h3>
+    <h2>Inventory &amp; <span class="highlight-purple">Working Capital</span></h2>
+    <div class="divider-purple"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.5rem;">
+
+      <div class="metric-card blue">
+        <div class="metric-name">Stock Turn</div>
+        <div class="metric-full">COGS &divide; Average Inventory Value</div>
+        <span class="benchmark avg">Fast fashion: 6&ndash;10x &middot; Department/luxury: 2&ndash;4x</span>
+        <div class="metric-body">Higher turn means less capital tied up in stock and less exposure to terminal stock risk. Stock turn in fashion is highly sensitive to buying and markdown discipline. A turns improvement of 0.5x on a &pound;300M inventory base frees meaningful working capital.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Unified sell-through and buying signals drive better turns through more accurate inventory positioning by style, store, and channel.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Days of Supply</div>
+        <div class="metric-full">Inventory on Hand &divide; Average Daily Sales</div>
+        <span class="benchmark avg">Varies significantly by category and season</span>
+        <div class="metric-body">Direct measure of how much capital is locked in inventory at any point in the season. For seasonal fashion product, days of supply should decline predictably as the season progresses; when it doesn't, that's the earliest signal of a terminal-stock problem forming.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI-driven sell-through sensing reduces the uncertainty that forces excess days of supply held as a buffer against poor visibility.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Cross-Channel Inventory Accuracy</div>
+        <div class="metric-full">System-of-Record vs Actual Available Inventory</div>
+        <span class="benchmark avg">Industry avg: 85&ndash;92%</span>
+        <span class="benchmark target">Target: 98%+</span>
+        <div class="metric-body">When store, warehouse, and online inventory records disagree, retailers either oversell (cancelled online orders, poor customer experience) or undersell (stock sits unavailable to the channel that could move it).</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Store POS, warehouse, and e-commerce inventory unified in one governed platform for a single, trusted cross-channel availability view.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Excess &amp; Obsolete Inventory</div>
+        <div class="metric-full">E&amp;O as % of Total Inventory Value</div>
+        <span class="benchmark avg">Industry avg: 8&ndash;15%</span>
+        <span class="benchmark target">Best-in-class: &lt;4%</span>
+        <div class="metric-body">E&amp;O in fashion is largely terminal stock discovered too late to chase or discount early. An average &pound;500M fashion retailer writes off a significant share of margin annually to end-of-season clearance and disposal.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI detects at-risk terminal stock by style weeks before season end, opening options (early markdown, inter-store transfer) that disappear once the season closes.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Cash-to-Cash Cycle Time</div>
+        <div class="metric-full">DIO + DSO &minus; DPO</div>
+        <span class="benchmark avg">Industry avg: 40&ndash;70 days</span>
+        <span class="benchmark target">Target: reduce 10&ndash;20%</span>
+        <div class="metric-body">The CFO's primary supply chain metric. Fashion cash conversion is uniquely affected by seasonal buying commitments made months before revenue is realised, so faster sell-through and disciplined markdown directly shorten the cycle.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Snowflake connects trading and financial data in one platform, enabling real-time cash-to-cash tracking and scenario modelling for working capital decisions.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Inventory Carrying Cost</div>
+        <div class="metric-full">20&ndash;30% of Annual Inventory Value</div>
+        <span class="benchmark avg">Carrying cost rate: 20&ndash;30%/yr</span>
+        <div class="metric-body">The true cost of holding fashion inventory: capital cost + storage + handling + markdown risk. Reducing average inventory held, without increasing stock-outs, saves meaningfully before even counting the freed working capital.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Better demand/buying matching through unified Snowflake data and Cortex AI directly reduces average inventory held across the season.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="proof-bar" style="margin-top:0.7rem;">
+      <p>River Island: unified retail data foundation on Snowflake's Retail Data Cloud supporting faster, more accurate trading decisions &nbsp;&middot;&nbsp; Forrester TEI 2024: average 25% reduction in inventory carrying costs across Snowflake retail deployments</p>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">06 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 07 ============================================================ -->
+<div class="slide bg-ice" id="slide-7">
+  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
+    <h3 class="label">CATEGORY 04</h3>
+    <h2>Customer &amp; <span class="highlight">Personalisation</span></h2>
+    <div class="divider"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.5rem;">
+
+      <div class="metric-card purple">
+        <div class="metric-name">Online Conversion Rate</div>
+        <div class="metric-full">Orders &divide; Site Sessions</div>
+        <span class="benchmark avg">Fashion e-com avg: 1.5&ndash;2.5%</span>
+        <span class="benchmark target">Best-in-class: 4%+</span>
+        <div class="metric-body">The primary digital revenue lever. Search relevance, inventory-accurate availability, and personalised recommendations all drive conversion, but each requires unified data most e-commerce platforms don't natively provide.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex AI powers recommendation and personalisation models on governed, first-party customer data, independent of e-commerce platform.</p>
+        </div>
+      </div>
+
+      <div class="metric-card purple">
+        <div class="metric-name">Personalisation Lift</div>
+        <div class="metric-full">Revenue Lift from Personalised vs Generic Experience</div>
+        <span class="benchmark avg">Industry avg: 10&ndash;15% uplift</span>
+        <div class="metric-body">Personalisation depends on unifying browsing behaviour, purchase history, and loyalty data, data that's typically split across separate CDP, e-commerce, and loyalty systems with no shared customer identity.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Snowflake unifies loyalty, purchase history, and behavioural data into one governed customer record that personalisation models can trust.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Customer Lifetime Value</div>
+        <div class="metric-full">Projected Net Revenue over Customer Relationship</div>
+        <span class="benchmark avg">Highly variable by segment and channel</span>
+        <div class="metric-body">Multi-channel customers (store + online) are consistently more valuable than single-channel customers, but identifying and nurturing them requires a unified view across every touchpoint.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Product-level analytics surface multi-channel customers and their behaviour, enabling targeted retention strategies built on a single customer view.</p>
+        </div>
+      </div>
+
+      <div class="metric-card blue">
+        <div class="metric-name">Loyalty Program Engagement</div>
+        <div class="metric-full">Active Loyalty Members &divide; Total Customer Base</div>
+        <span class="benchmark avg">Industry avg: 20&ndash;35% active</span>
+        <div class="metric-body">Loyalty data is a first-party asset that becomes more valuable when connected to sell-through and personalisation, closing the loop between marketing spend and trading decisions.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Loyalty, POS, and e-commerce data unified on Snowflake, so trading and marketing teams see the same customer engagement signal.</p>
+        </div>
+      </div>
+
+      <div class="metric-card teal">
+        <div class="metric-name">Return Rate by Channel</div>
+        <div class="metric-full">Returns &divide; Units Sold, by Channel</div>
+        <span class="benchmark avg">Online typically 2&ndash;3&times; store rate</span>
+        <div class="metric-body">Return behaviour differs meaningfully by channel and by customer segment. Understanding which products, sizes, and customer segments drive returns enables targeted fixes: better size guides, imagery, or fit-prediction.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Unified return, size, and product data enables Cortex AI to flag high-return styles and segments before they scale into a margin problem.</p>
+        </div>
+      </div>
+
+      <div class="metric-card teal">
+        <div class="metric-name">Basket / Attachment Rate</div>
+        <div class="metric-full">Units per Transaction, Cross-Sell Effectiveness</div>
+        <span class="benchmark avg">Varies by category and channel</span>
+        <div class="metric-body">Recommending complementary styles at the point of purchase depends on a trusted product and customer graph &mdash; without it, recommendations are generic and attachment rate stays flat.</div>
+        <div class="metric-snowflake">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <p>Cortex Analyst: "Which styles are most frequently bought together with this SKU?", answered from live transaction data in seconds.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="proof-bar" style="margin-top:0.7rem;">
+      <p>Urban Outfitters: 2&times; more data sources ingested at lower cost, unifying supply chain, product, and customer data &nbsp;&middot;&nbsp; River Island: unified digital and store data powering faster, more accurate customer decisions</p>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">07 / 08</div>
+</div>
+
+<!-- ============================================================ SLIDE 08 ============================================================ -->
+<div class="slide bg-white" id="slide-8">
+  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
+    <h3 class="label purple">CATEGORY 05 &middot; THE CFO &amp; COMPLIANCE VIEW</h3>
+    <h2>Sustainability &amp; <span class="highlight-purple">Compliance</span></h2>
+    <div class="divider-purple"></div>
+    <div style="display:grid;grid-template-columns:1.1fr 0.9fr;gap:1.2rem;margin-top:0.6rem;">
+      <!-- Left: 2x2 metric grid -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;">
+
+        <div class="metric-card purple">
+          <div class="metric-name">CSRD Disclosure Completeness</div>
+          <div class="metric-full">% of Required Disclosures with Auditable Data</div>
+          <span class="benchmark avg">Highly variable by retailer maturity</span>
+          <div class="metric-body">CSRD requires auditable, traceable disclosures on an annual cycle with real regulatory deadlines. Most retailers assemble this manually from supplier PDFs and spreadsheets today, a process that doesn't scale and doesn't satisfy an auditor.</div>
+          <div class="metric-snowflake">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <p>Product, material, and supplier data already unified for trading purposes extends directly into CSRD reporting, with built-in lineage for auditability.</p>
+          </div>
+        </div>
+
+        <div class="metric-card purple">
+          <div class="metric-name">Supplier Traceability Coverage</div>
+          <div class="metric-full">% of Suppliers with Digitised Material/Origin Data</div>
+          <span class="benchmark avg">Industry avg: well under half for most retailers</span>
+          <div class="metric-body">ESPR and the coming Digital Product Passport mandate require material origin and composition data at the product level. Traceability coverage today is limited mainly by fragmented supplier documentation, not by lack of regulatory clarity.</div>
+          <div class="metric-snowflake">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <p>Compliance scorecards surface directly to buyers during the buying process, building traceability coverage as a byproduct of normal trading, not a separate compliance project.</p>
+          </div>
+        </div>
+
+        <div class="metric-card blue">
+          <div class="metric-name">ESPR / DPP Readiness</div>
+          <div class="metric-full">Composite Readiness Score Against Enforcement Dates</div>
+          <span class="benchmark avg">Enforcement dates fixed by regulation, not by IT capacity</span>
+          <div class="metric-body">ESPR ecodesign requirements and the Digital Product Passport mandate arrive on a fixed regulatory timetable. Retailers who start building the data foundation now avoid a costly last-minute scramble against a deadline they cannot move.</div>
+          <div class="metric-snowflake">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <p>A governed data foundation built once for trading and buying is the fastest path to ESPR and DPP readiness, reused rather than rebuilt for compliance.</p>
+          </div>
+        </div>
+
+        <div class="metric-card blue">
+          <div class="metric-name">Vendor Compliance Rate</div>
+          <div class="metric-full">% of Vendors Meeting Sustainability/Compliance Standards</div>
+          <span class="benchmark avg">Increasingly a buying gate, not just a checkbox</span>
+          <div class="metric-body">Sustainability and compliance data is moving from an annual audit exercise to a point-of-decision gate in the buying process itself, which requires it to be available at the moment a buyer places an order, not months later.</div>
+          <div class="metric-snowflake">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <p>Vendor compliance scorecards, built from the same unified supplier data, surface in real time wherever buying decisions happen.</p>
+          </div>
+        </div>
+
+      </div>
+      <!-- Right: Forrester ROI + customers -->
+      <div style="display:flex;flex-direction:column;gap:0.75rem;">
+        <div style="background:linear-gradient(135deg,rgba(17,86,127,0.06),rgba(36,158,220,0.04));border:1px solid rgba(17,86,127,0.2);border-radius:12px;padding:1rem 1.1rem;">
+          <div style="font-size:0.63rem;font-weight:700;color:var(--sf-mid);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.6rem;">Forrester Total Economic Impact</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;margin-bottom:0.7rem;">
+            <div style="text-align:center;">
+              <div style="font-size:1.6rem;font-weight:900;color:var(--sf-mid);line-height:1;">354%</div>
+              <div style="font-size:0.6rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;margin-top:0.15rem;">ROI</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:1.6rem;font-weight:900;color:var(--sf-mid);line-height:1;">&lt;6mo</div>
+              <div style="font-size:0.6rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;margin-top:0.15rem;">Payback</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:1.6rem;font-weight:900;color:var(--sf-mid);line-height:1;">$17.4M</div>
+              <div style="font-size:0.6rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;margin-top:0.15rem;">NPV</div>
+            </div>
+          </div>
+          <p style="font-size:0.69rem;color:var(--text-light);line-height:1.45;max-width:100%;margin:0;">Based on a composite organisation of Snowflake retail customers. Benefits include: productivity gains from unified data, reduction in data management costs, elimination of point solution licensing, and trading performance improvements.</p>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:0.55rem;">
+          <div class="proof-bar" style="padding:0.6rem 0.85rem;">
+            <div style="font-size:0.67rem;font-weight:700;color:var(--sf-mid);margin-bottom:0.2rem;">Tapestry</div>
+            <p style="font-size:0.69rem;color:var(--text-gray);margin:0;max-width:100%;">4B+ rows processed daily from 100+ sources spanning supply chain, product, and customer data &middot; Product-level analytics pinpoint markdown candidates and surface multi-channel customers</p>
+          </div>
+          <div class="proof-bar" style="padding:0.6rem 0.85rem;">
+            <div style="font-size:0.67rem;font-weight:700;color:var(--sf-mid);margin-bottom:0.2rem;">River Island</div>
+            <p style="font-size:0.69rem;color:var(--text-gray);margin:0;max-width:100%;">Unified retail data foundation on Snowflake's Retail Data Cloud &middot; Faster, more accurate trading and customer decisions across store and digital channels</p>
+          </div>
+          <div class="proof-bar" style="padding:0.6rem 0.85rem;">
+            <div style="font-size:0.67rem;font-weight:700;color:var(--sf-mid);margin-bottom:0.2rem;">Forrester TEI 2024</div>
+            <p style="font-size:0.69rem;color:var(--text-gray);margin:0;max-width:100%;">354% ROI over 3 years, &lt;6 month payback &middot; $17.4M 3-year net present value &middot; Based on composite Snowflake retail customer organisation</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
+  <div class="slide-number">08 / 08</div>
+</div>
+
+</div><!-- end deck -->
+
+<script>
+const TOTAL = 8;
+let current = 0;
+function goTo(index) {
+  document.querySelectorAll('.slide').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('slide-' + (index+1)).classList.add('active');
+  document.getElementById('progressBar').style.width = ((index+1)/TOTAL*100) + '%';
+  document.getElementById('slideSelect').value = index + 1;
+  current = index;
+}
+function nextSlide() { if (current < TOTAL - 1) goTo(current + 1); }
+function prevSlide() { if (current > 0) goTo(current - 1); }
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+});
+goTo(0);
+</script>
+</body>
+</html>
