@@ -288,28 +288,28 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     </div>
 
     <div class="scene-card">
-      <div class="scene-title">Scene 2b &middot; MFP Update &mdash; In-Season vs. Actual</div>
+      <div class="scene-title">Scene 2b &middot; Unified Trading Review &mdash; MFP and WSSI vs. Actual</div>
       <div class="scene-row">
         <div class="scene-label">Setup</div>
-        <div class="scene-content">The planner updates the Merchandise Financial Plan (MFP) to reflect the new reality: uplift the sales plan for flare jeans, reduce the plan for skinny.</div>
+        <div class="scene-content">The planner opens the unified trading review to update the Merchandise Financial Plan (MFP) and live WSSI to reflect the new reality: uplift the sales plan for flare jeans, reduce the plan for skinny.</div>
       </div>
       <div class="scene-row">
         <div class="scene-label">What to show</div>
         <div class="scene-content">
           <ul>
-            <li>MFP in-season vs. actual view in Streamlit in Snowflake: current plan vs. actuals side by side, with variance flagged by Cortex ML anomaly detection</li>
+            <li>Unified trading review in Streamlit in Snowflake: current MFP and WSSI vs. actuals side by side, with variance flagged by Cortex ML anomaly detection</li>
             <li>Planner adjusts the flare jeans sales plan upward and the skinny plan downward within the scenario &mdash; the MFP Dynamic Table recomputes the financial impact (revenue, margin, sell-through rate) incrementally across all remaining weeks of the season</li>
-            <li>The MFP update automatically propagates downstream: the OTB calculation and assortment coverage metrics update in the same Dynamic Table chain &mdash; the planner can see the knock-on effect immediately in the same view</li>
+            <li>The MFP and WSSI update automatically propagate downstream: the OTB calculation and assortment coverage metrics update in the same Dynamic Table chain &mdash; the planner can see the knock-on effect immediately in the same view</li>
           </ul>
         </div>
       </div>
       <div class="scene-row">
         <div class="scene-label">Aha moment</div>
-        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> MFP changes propagate downstream automatically via Dynamic Tables &mdash; the planner doesn't need to manually update OTB and assortment after adjusting the financial plan. The computation chain runs in Snowflake and every dependent metric recomputes.</div></div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> MFP and WSSI changes propagate downstream automatically via Dynamic Tables &mdash; the planner doesn't need to manually update OTB and assortment after adjusting the financial plan. The computation chain runs in Snowflake and every dependent metric recomputes.</div></div>
       </div>
       <div class="scene-row">
         <div class="scene-label">So what</div>
-        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> This is the "connected plan" that retailers have been trying to achieve for years. One change in MFP ripples correctly through OTB and assortment &mdash; no broken formula in a spreadsheet, no overnight batch job needed.</div></div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> This is the "connected plan" that retailers have been trying to achieve for years. One change in the unified trading review ripples correctly through OTB and assortment &mdash; no broken formula in a spreadsheet, no overnight batch job needed.</div></div>
       </div>
     </div>
 
@@ -493,13 +493,13 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
       <div class="scene-title">Scene 4c &middot; Flare Jeans &mdash; Segment Change &amp; Supplier Collaboration</div>
       <div class="scene-row">
         <div class="scene-label">Setup</div>
-        <div class="scene-content">With flares outperforming, the inventory planner needs to increase supply urgently. The product has been reclassified by Cortex ML from a B-Y segment (moderate volume, slow replenishment) to an A-X segment (high volume, fast replenishment) &mdash; which changes how it's managed in replenishment and allocation.</div>
+        <div class="scene-content">With flares outperforming, the inventory planner needs to increase supply urgently. The style has moved from a slow core replenishment posture to a chase-priority trend style &mdash; which changes how it's managed in replenishment and allocation.</div>
       </div>
       <div class="scene-row">
         <div class="scene-label">What to show</div>
         <div class="scene-content">
           <ul>
-            <li>Segmentation dashboard in Streamlit in Snowflake: flare jeans segment reclassification from B-Y to A-X &mdash; driven by Cortex ML automatically re-running the ABC/XYZ segmentation model on updated sell-through data in Snowflake</li>
+            <li>Segmentation dashboard in Streamlit in Snowflake: flare jeans reclassified from low-priority replenishment to chase-priority trend style &mdash; driven by Cortex ML re-running demand velocity, margin and lead-time scoring on updated sell-through data in Snowflake</li>
             <li>Lead time visibility: supplier lead time for flare jean production shown directly from the Snowflake supply table &mdash; critical for understanding how quickly Calla can respond</li>
             <li>Supplier collaboration module: the inventory planner uses Snowflake Data Sharing to publish the updated demand signal and revised order requirements directly to Calla's supplier's Snowflake account &mdash; no email attachment, no portal upload. The supplier sees the revised flare jean demand in their own Snowflake environment in real time</li>
             <li>Cortex Analyst query: "Which of our active suppliers for woven bottoms has available capacity within the next 6 weeks?" &mdash; answered from Snowflake's supplier capacity data</li>
@@ -699,7 +699,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     <div class="feature-row">
       <div class="feature-scene">Scene 4c</div>
       <div class="feature-tags">
-        <span class="feature-tag">Cortex ML (ABC/XYZ segmentation)</span>
+        <span class="feature-tag">Cortex ML (demand velocity and chase prioritisation)</span>
         <span class="feature-tag">Data Sharing (supplier collaboration)</span>
         <span class="feature-tag">Cortex Analyst</span>
         <span class="feature-tag">Streamlit</span>

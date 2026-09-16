@@ -330,13 +330,13 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
 
       <div class="metric-card blue">
         <div class="metric-name">OTB Accuracy</div>
-        <div class="metric-full">Actual Sales vs Open-to-Buy Plan</div>
+        <div class="metric-full">Actual Receipts and Commitments vs Open-to-Buy Budget</div>
         <span class="benchmark avg">Industry avg error: 20&ndash;30%</span>
         <span class="benchmark target">Target: &lt;10% error</span>
-        <div class="metric-body">OTB is committed 6&ndash;9 months ahead of the season with no live read on how the trend is landing. Getting it wrong in either direction is expensive: over-committing drives terminal stock, under-committing loses full-price sales to a competitor.</div>
+        <div class="metric-body">OTB sets the buying budget and receipt phasing before the season, then needs to be actively reforecasted against live sell-through, intake and stock cover as the season unfolds. Getting it wrong in either direction is expensive: over-committing drives terminal stock, under-committing loses full-price sales to a competitor.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Cortex AI reforecasts OTB against live sell-through throughout the season, alongside your existing planning tool rather than replacing it.</p>
+          <p>Cortex AI and a live WSSI reforecast OTB against live sell-through, stock and intake throughout the season, alongside your existing planning tool rather than replacing it.</p>
         </div>
       </div>
 
@@ -401,7 +401,7 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
 
       <div class="metric-card purple">
         <div class="metric-name">Assortment Productivity</div>
-        <div class="metric-full">Revenue per SKU / Style Count</div>
+        <div class="metric-full">Revenue or Gross Margin per SKU / Style</div>
         <span class="benchmark avg">Varies widely by category</span>
         <div class="metric-body">SKU proliferation without a corresponding sell-through gain dilutes buying budget and warehouse capacity across too many low-performing styles. Identifying which styles genuinely earn their shelf space requires unified sell-through data across the full range.</div>
         <div class="metric-snowflake">
@@ -570,10 +570,10 @@ p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.
       </div>
 
       <div class="metric-card teal">
-        <div class="metric-name">Basket / Attachment Rate</div>
-        <div class="metric-full">Units per Transaction, Cross-Sell Effectiveness</div>
+        <div class="metric-name">Outfit Attachment Rate</div>
+        <div class="metric-full">Transactions with a Complementary Item ÷ Eligible Base-Style Transactions</div>
         <span class="benchmark avg">Varies by category and channel</span>
-        <div class="metric-body">Recommending complementary styles at the point of purchase depends on a trusted product and customer graph &mdash; without it, recommendations are generic and attachment rate stays flat.</div>
+        <div class="metric-body">For fashion, the more relevant measure is whether a dress sale also carries the jacket, knitwear or accessory it was meant to travel with. Tracking that uplift depends on a trusted product and customer graph; without it, recommendations stay generic and outfit attachment remains flat.</div>
         <div class="metric-snowflake">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <p>Cortex Analyst: "Which styles are most frequently bought together with this SKU?", answered from live transaction data in seconds.</p>
