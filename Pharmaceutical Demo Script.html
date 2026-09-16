@@ -383,28 +383,28 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     </div>
 
     <div class="scene-card">
-      <div class="scene-title">Scene 4a &middot; External Ingredient Sourcing Drill-Down</div>
+      <div class="scene-title">Scene 4a &middot; API &amp; Key Starting Material Sourcing Risk</div>
       <div class="scene-row">
         <div class="scene-label">Setup</div>
-        <div class="scene-content">Drought conditions have disrupted the supply of a critical raw ingredient (e.g. hops, barley, or CO₂). Cascading effects are expected on the primary ingredient supplier in coming weeks/months. Planner analyses volume at risk and defines mitigation actions:</div>
+        <div class="scene-content">A regulatory inspection observation has been raised at the sole qualified API supplier for a key molecule. Tracing the network upstream also reveals that most of the key starting material (KSM) for that API originates from two producers in a single province. The CSCO analyses volume at risk and defines mitigation actions:</div>
       </div>
       <div class="scene-row">
         <div class="scene-label">What to show</div>
         <div class="scene-content">
           <ul>
-            <li>Sourcing drill-down dashboard: primary supplier constraints, at-risk order volumes</li>
-            <li>Upstream volume requirement analysis of the critical ingredient, visualised via ingredient supply chain network chart (from raw agricultural source through to finished product)</li>
-            <li>Financial trade-off comparison: cost of securing additional supply vs. supply assurance benefits</li>
+            <li>Sourcing drill-down dashboard: single-source API constraint, open regulatory observation, at-risk confirmed order volumes</li>
+            <li>Upstream concentration analysis, visualised via supply network chart (KSM producers &rarr; API &rarr; drug substance &rarr; drug product fill &rarr; distribution) &mdash; exposure only visible when the network is traversed two tiers above the API</li>
+            <li>Financial trade-off comparison: qualifying a second-source API (complete protection, but arrives after the qualification lead time) vs. a strategic API stockpile (protective immediately, at a working-capital cost) vs. accepting the exposure</li>
           </ul>
         </div>
       </div>
       <div class="scene-row">
         <div class="scene-label">Aha moment</div>
-        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Proactive risk detection enables early mitigation. Scenario modelling quantifies the financial impact of securing additional inventory and stockpiling critical ingredients.</div></div>
+        <div class="scene-content"><div class="aha-box"><strong>Call out:</strong> Qualifying an alternate API source takes months, which is far longer than the days of cover on hand &mdash; so the mismatch, not a generic supplier-risk score, is the operational issue. The KSM concentration is invisible on a bill-of-materials view; it only appears when the network is traversed upstream.</div></div>
       </div>
       <div class="scene-row">
         <div class="scene-label">So what</div>
-        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Enhances supply chain resilience through improved visibility and proactive risk management. Ensures demand fulfilment by securing supply ahead of potential disruptions.</div></div>
+        <div class="scene-content"><div class="sowhat-box"><strong>Outcome:</strong> Structural single-source and geographic concentration risk quantified against confirmed order book and annual revenue. Both mitigations costed side by side, so the decision is a deliberate trade-off rather than a reaction after supply stops.</div></div>
       </div>
     </div>
 
@@ -478,7 +478,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
       </div>
     </div>
     <div class="feature-row">
-      <div class="feature-scene">Scene 2b &mdash; Demand Opportunity Review</div>
+      <div class="feature-scene">Scene 2b &mdash; Pre-Inspection Audit Preparation</div>
       <div class="feature-tags">
         <span class="feature-tag">Cortex Agents / Cortex Search (historical scenarios)</span>
         <span class="feature-tag">Dynamic Tables (real-time impact)</span>
@@ -487,7 +487,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
       </div>
     </div>
     <div class="feature-row">
-      <div class="feature-scene">Scene 3a &mdash; Supply Gap Review</div>
+      <div class="feature-scene">Scene 3a &mdash; Multi-Channel Demand Intelligence</div>
       <div class="feature-tags">
         <span class="feature-tag">Snowpark (solver)</span>
         <span class="feature-tag">Dynamic Tables (auto re-run)</span>
@@ -496,7 +496,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
       </div>
     </div>
     <div class="feature-row">
-      <div class="feature-scene">Scene 3b &mdash; Internal Bottleneck Drill-Down</div>
+      <div class="feature-scene">Scene 3b &mdash; API Supply Risk &amp; Batch Scheduling</div>
       <div class="feature-tags">
         <span class="feature-tag">Streamlit</span>
         <span class="feature-tag">Dynamic Tables (ROI/trade-off)</span>
@@ -505,17 +505,17 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
       </div>
     </div>
     <div class="feature-row">
-      <div class="feature-scene">Scene 4a &mdash; External Ingredient Sourcing</div>
+      <div class="feature-scene">Scene 4a &mdash; API &amp; KSM Sourcing Risk</div>
       <div class="feature-tags">
-        <span class="feature-tag">Snowflake Marketplace (weather/agri data)</span>
-        <span class="feature-tag">Data Sharing (to supplier's Snowflake)</span>
+        <span class="feature-tag">Snowflake Marketplace (supplier risk, trade & regulatory data)</span>
+        <span class="feature-tag">Data Sharing (to API supplier / CMO)</span>
         <span class="feature-tag">Streamlit (network chart)</span>
         <span class="feature-tag">Cortex ML</span>
         <span class="feature-tag">Snowpark</span>
       </div>
     </div>
     <div class="feature-row">
-      <div class="feature-scene">Scene 4b &mdash; Supply Gap Review (Updated)</div>
+      <div class="feature-scene">Scene 4b &mdash; Cortex Analyst Live Q&amp;A</div>
       <div class="feature-tags">
         <span class="feature-tag">Dynamic Tables (aggregate initiatives)</span>
         <span class="feature-tag">Snowflake Tasks + Notification Integrations (approval)</span>
