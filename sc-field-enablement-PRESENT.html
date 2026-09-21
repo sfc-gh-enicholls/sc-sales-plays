@@ -86,6 +86,26 @@ select.slide-sel{background:#FFFFFF;border:1px solid var(--border-card);border-r
 .s2-dots{position:absolute;bottom:5.5rem;left:50%;transform:translateX(-50%);display:flex;gap:.3rem;z-index:30;}
 .s2-dot{width:6px;height:6px;border-radius:50%;background:rgba(0,0,0,.15);cursor:pointer;transition:all .2s;}
 .s2-dot.on{background:var(--sf-mid);transform:scale(1.4);}
+#slide-2 .slide-content{overflow:visible;}
+#s2h{min-height:98px;font-size:40px;margin-bottom:0;}
+#s2viz{position:relative;isolation:isolate;}
+#s2viz .chain-node{box-shadow:0 5px 14px rgba(17,86,127,.07);border-width:1.5px;animation:none;}
+#s2viz .arr-wrap,#s2viz .callout-box{animation:none;}
+#s2viz .arr-line{background:linear-gradient(90deg,#cbd5e0,#7b9cb2);}
+#s2viz .arr-dashed .arr-line{background:none;}
+#s2systems{display:flex;align-items:center;gap:12px;border-top:1px solid #d8e2e9;padding-top:14px;min-height:85px;}
+.s2-system-label{flex:0 0 95px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--sf-mid);font-weight:700;}
+#s2system-list{display:flex;gap:8px;align-items:stretch;flex:1;}
+.s2-system{flex:1;min-width:0;border-top:3px solid var(--system-color);background:white;padding:8px 10px;box-shadow:0 4px 12px rgba(17,86,127,.06);}
+.s2-system strong{display:block;font-size:12px;color:var(--text-dark);}
+.s2-system small{display:block;font-size:10px;color:var(--text-gray);margin-top:3px;}
+.s2-system.is-new{background:#eef8fc;}
+.s2-empty{font-size:12px;color:var(--text-light);}
+#s2dots{gap:8px;bottom:61px;}
+#s2dots .s2-dot{border:0;width:24px;height:5px;border-radius:3px;}
+#s2dots .s2-dot.on{transform:none;background:var(--sf-blue);}
+#s2dots .s2-dot:focus-visible{outline:2px solid var(--sf-mid);outline-offset:5px;}
+@media(prefers-reduced-motion:reduce){#slide-2 *,#slide-2 *::before,#slide-2 *::after{animation:none!important;transition:none!important;}}
 </style>
 </head>
 <body>
@@ -121,6 +141,7 @@ select.slide-sel{background:#FFFFFF;border:1px solid var(--border-card);border-r
     <h2 id="s2h">Make it. Move it. <span class="hip">Sell it.</span></h2>
     <div class="divp"></div>
     <div id="s2viz" style="height:320px;display:flex;align-items:center;justify-content:center;overflow:hidden;"></div>
+    <div id="s2systems"><div class="s2-system-label">Your systems</div><div id="s2system-list" aria-live="polite"></div></div>
   </div>
   <div class="s2-dots" id="s2dots"></div>
   <div class="sf-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="24" style="opacity:0.85;"></div>
@@ -1080,31 +1101,38 @@ select.slide-sel{background:#FFFFFF;border:1px solid var(--border-card);border-r
         <div style="background:rgba(113,211,220,0.07);border:1.5px solid rgba(113,211,220,0.3);border-radius:12px;padding:0.85rem 1rem;margin-top:0.35rem;">
           <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.55rem;">
             <div style="width:7px;height:7px;border-radius:50%;background:var(--sf-star);flex-shrink:0;"></div>
-            <div style="font-size:0.7rem;font-weight:700;color:var(--sf-star);">With Snowflake — typical deal economics</div>
+            <div style="font-size:0.7rem;font-weight:700;color:var(--sf-star);">With Snowflake &mdash; illustrative investment</div>
           </div>
           <div style="display:flex;flex-direction:column;gap:0.22rem;margin-bottom:0.5rem;">
             <div style="display:grid;grid-template-columns:1fr auto;gap:0.5rem;font-size:0.78rem;">
-              <span style="color:rgba(255,255,255,0.6);">Snowflake platform (data + AI + governance)</span>
+              <span style="color:rgba(255,255,255,0.6);">Engineered solution</span>
               <span style="color:var(--sf-star);font-weight:700;text-align:right;">~$250k</span>
             </div>
             <div style="display:grid;grid-template-columns:1fr auto;gap:0.5rem;font-size:0.78rem;">
-              <span style="color:rgba(255,255,255,0.6);">Partner implementation &amp; build services</span>
+              <span style="color:rgba(255,255,255,0.6);">FDE</span>
               <span style="color:var(--sf-star);font-weight:700;text-align:right;">~$250k</span>
             </div>
             <div style="border-top:1px solid rgba(113,211,220,0.2);padding-top:0.22rem;display:grid;grid-template-columns:1fr auto;gap:0.5rem;font-size:0.82rem;">
-              <span style="color:rgba(255,255,255,0.75);font-weight:700;">Total investment (one-off)</span>
+              <span style="color:rgba(255,255,255,0.75);font-weight:700;">Subtotal before consumption</span>
               <span style="color:var(--sf-star);font-weight:800;text-align:right;">~$500k</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr auto;gap:0.5rem;font-size:0.78rem;">
+              <span style="color:rgba(255,255,255,0.6);">Snowflake consumption (assumed)</span>
+              <span style="color:var(--sf-star);font-weight:700;text-align:right;">~$500k</span>
+            </div>
+            <div style="border-top:1px solid rgba(113,211,220,0.2);padding-top:0.22rem;display:grid;grid-template-columns:1fr auto;gap:0.5rem;font-size:0.82rem;">
+              <span style="color:rgba(255,255,255,0.75);font-weight:700;">Total including assumed consumption</span>
+              <span style="color:var(--sf-star);font-weight:800;text-align:right;">~$1M</span>
             </div>
           </div>
           <div style="display:flex;flex-direction:column;gap:0.18rem;">
-          <div style="font-size:0.7rem;color:rgba(255,255,255,0.55);">&#x25B8; Partner-led deployment</div>
-            <div style="font-size:0.7rem;color:rgba(255,255,255,0.55);">&#x25B8; Open architecture — same platform powers every SC use case</div>
-            <div style="font-size:0.7rem;color:rgba(255,255,255,0.55);">&#x25B8; Cortex AI included — no separate AI licence needed</div>
+            <div style="font-size:0.7rem;color:rgba(255,255,255,0.55);">Representative proposition; solution scope and delivery to be agreed.</div>
+            <div style="font-size:0.7rem;color:rgba(255,255,255,0.55);">Consumption depends on workload and period; not a fixed quote.</div>
           </div>
         </div>
 
         <div style="margin-top:0.55rem;background:rgba(113,211,220,0.06);border-left:2.5px solid var(--sf-star);border-radius:0 6px 6px 0;padding:0.38rem 0.8rem;font-size:0.73rem;font-weight:600;color:var(--sf-star);">
-          Customer saving: &gt;90% of annual cost &middot; Vendor lock-in eliminated &middot; AI-ready from day 1
+          Illustrative first-year saving: ~$7.5M (~88%). Assumes $500k consumption over 12 months and $500k solution + FDE in year one; excludes other transition or ongoing costs.
         </div>
       </div>
 
@@ -1112,9 +1140,9 @@ select.slide-sel{background:#FFFFFF;border:1px solid var(--border-card);border-r
       <div style="display:flex;flex-direction:column;gap:0.7rem;">
 
         <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:0.9rem 1.1rem;text-align:center;">
-          <div style="font-size:clamp(1.8rem,3vw,2.6rem);font-weight:900;color:var(--sf-star);line-height:1;letter-spacing:-0.03em;">$500k</div>
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.55);margin-top:0.3rem;">typical total deal value — platform + services</div>
-          <div style="font-size:0.68rem;color:rgba(255,255,255,0.32);margin-top:0.12rem;">equivalent to a full acquisition quota in a single SC displacement</div>
+          <div style="font-size:clamp(1.8rem,3vw,2.6rem);font-weight:900;color:var(--sf-star);line-height:1;letter-spacing:-0.03em;">$1M</div>
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.55);margin-top:0.3rem;">illustrative total investment</div>
+          <div style="font-size:0.68rem;color:rgba(255,255,255,0.55);margin-top:0.12rem;">$500k solution + FDE &nbsp;+&nbsp; $500k assumed consumption</div>
         </div>
 
         <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:0.85rem 1rem;">
@@ -1653,18 +1681,77 @@ const S2_STEPS=[
 ];
 
 let s2step=0;
+const s2SystemCatalog=[
+  {id:'spreadsheet',stage:1,name:'Spreadsheet',purpose:'Stock & routes',color:'#6366f1'},
+  {id:'planning',stage:3,name:'Demand planning',purpose:'Forecast ahead',color:'#8b5cf6'},
+  {id:'erp',stage:3,name:'ERP',purpose:'Orders, stock & invoices',color:'#6366f1'},
+  {id:'wms',stage:4,name:'WMS',purpose:'Warehouse stock',color:'#f97316'},
+  {id:'tms',stage:4,name:'TMS',purpose:'Transport planning',color:'#b38308'},
+  {id:'edi',stage:4,name:'EDI',purpose:'Retailer messages',color:'#15803d'}
+];
+let s2RenderedStep=-1;
 function renderS2(){
   const step=S2_STEPS[s2step];
+  const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const viz=document.getElementById('s2viz');
+  const previousPositions=new Map();
+  const deckScale=document.getElementById('deck').getBoundingClientRect().width/1280;
+  viz.querySelectorAll('.chain-node').forEach(node=>previousPositions.set(node.textContent,node.getBoundingClientRect()));
+  const movingForward=s2step>s2RenderedStep;
   document.getElementById('s2lbl').textContent=step.lbl;
   document.getElementById('s2h').innerHTML=step.h;
-  const viz=document.getElementById('s2viz');
-  viz.style.opacity='0';viz.style.transition='opacity .2s ease';
-  setTimeout(()=>{viz.innerHTML='';step.build(viz);viz.style.opacity='1';},200);
-  // Dots
+  viz.replaceChildren();
+  step.build(viz);
+  viz.querySelectorAll('.badge-pill').forEach(badge=>badge.remove());
+  const diagram=viz.firstElementChild.firstElementChild;
+  const availableWidth=viz.clientWidth;
+  const diagramWidth=diagram.scrollWidth;
+  if(diagramWidth>availableWidth) diagram.style.transform=`scale(${availableWidth/diagramWidth})`;
+  if(!reducedMotion){
+    viz.querySelectorAll('.chain-node,.arr-wrap,.callout-box').forEach((node,index)=>{
+      const oldPosition=previousPositions.get(node.textContent);
+      const newPosition=node.getBoundingClientRect();
+      const retained=node.classList.contains('chain-node')&&oldPosition;
+      const start=retained
+        ? {transform:`translate(${(oldPosition.left-newPosition.left)/deckScale}px,${(oldPosition.top-newPosition.top)/deckScale}px)`,opacity:.8}
+        : {transform:node.classList.contains('arr-wrap')?'scaleX(0)':'translateY(16px) scale(.96)',opacity:0};
+      node.style.transformOrigin='left center';
+      node.animate([start,{transform:'none',opacity:1}],{duration:retained?540:420,delay:retained?0:Math.min(index*45,420),easing:'cubic-bezier(.22,1,.36,1)',fill:'backwards'});
+    });
+  }
+  const systems=document.getElementById('s2system-list');
+  systems.querySelectorAll('.s2-empty').forEach(node=>node.remove());
+  systems.querySelectorAll('[data-system]').forEach(node=>{
+    const system=s2SystemCatalog.find(entry=>entry.id===node.dataset.system);
+    if(system.stage>s2step) node.remove();
+    else node.classList.remove('is-new');
+  });
+  let introduced=0;
+  s2SystemCatalog.filter(system=>system.stage<=s2step).forEach(system=>{
+    if(systems.querySelector(`[data-system="${system.id}"]`)) return;
+    const chip=document.createElement('div');
+    chip.className='s2-system'+(movingForward?' is-new':'');
+    chip.dataset.system=system.id;
+    chip.style.setProperty('--system-color',system.color);
+    const name=document.createElement('strong');name.textContent=system.name;
+    const purpose=document.createElement('small');purpose.textContent=system.purpose;
+    chip.append(name,purpose);systems.appendChild(chip);
+    if(!reducedMotion&&movingForward) chip.animate([
+      {opacity:0,transform:'translateY(-32px) scale(.94)'},
+      {opacity:1,transform:'translateY(3px) scale(1.02)',offset:.75},
+      {opacity:1,transform:'none'}
+    ],{duration:600,delay:450+introduced*200,easing:'cubic-bezier(.22,1,.36,1)',fill:'backwards'});
+    introduced++;
+  });
+  if(!systems.children.length){
+    const empty=document.createElement('span');empty.className='s2-empty';empty.textContent='One van. You can keep it all in your head.';systems.appendChild(empty);
+  }
+  s2RenderedStep=s2step;
   const d=document.getElementById('s2dots');d.innerHTML='';
   S2_STEPS.forEach((_,i)=>{
-    const dot=document.createElement('div');dot.className='s2-dot'+(i===s2step?' on':'');
-    dot.onclick=()=>{s2step=i;renderS2();};d.appendChild(dot);
+    const dot=document.createElement('button');dot.type='button';dot.className='s2-dot'+(i===s2step?' on':'');
+    dot.setAttribute('aria-label',`Ice cream story: stage ${i+1}`);dot.setAttribute('aria-pressed',String(i===s2step));
+    dot.addEventListener('click',()=>{s2step=i;renderS2();});d.appendChild(dot);
   });
 }
 
