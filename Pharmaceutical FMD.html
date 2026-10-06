@@ -41,7 +41,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', 
 .onramp-card { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 12px; padding: 1.2rem; display: flex; flex-direction: column; }
 .onramp-card .onramp-quote { flex: 1; }
 @supports (grid-template-rows: subgrid) {
-  .onramp-grid { grid-template-rows: auto auto auto 1fr auto; }
+  .onramp-grid { grid-template-rows: auto auto 1fr auto; }
   .onramp-card { display: grid; grid-template-rows: subgrid; grid-row: 1 / -1; }
   .onramp-card .onramp-quote { flex: none; }
 }
@@ -269,7 +269,7 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
       </div>
     </div>
     <div class="proof-callout">
-      <p><span style="font-weight:700;color:var(--sf-mid);">Supporting detail:</span> capability deep-dives, the full platform architecture and deployment prerequisites are included after the main section, for whichever of them you want to go into today or return to afterwards.</p>
+      <p><span style="font-weight:700;color:var(--sf-mid);">Supporting detail:</span> deployment prerequisites and the full value-chain map are included after the main section, for whichever of them you want to go into today or return to afterwards.</p>
     </div>
   </div>
   <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
@@ -768,57 +768,54 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
     <h3 class="label">GETTING STARTED</h3>
     <h2>Most Pharmaceutical Supply Chain Journeys Begin at <span class="highlight">One of Three On-Ramps</span></h2>
     <div class="divider"></div>
-    <p style="font-size:0.88rem;color:var(--text-gray);margin-bottom:0.9rem;">Based on where the compliance and intelligence gap is most acute today. All three converge on the same GxP-governed destination.</p>
+    <p style="font-size:0.88rem;color:var(--text-gray);margin-bottom:0.9rem;">Each on-ramp is one capability. Pick the one that reflects where the pain is most acute today; the other two follow in sequence.</p>
     <div class="onramp-grid">
 
       <div class="onramp-card" style="border-top:3px solid var(--sf-mid);">
-        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.3rem;">On-Ramp 01</div>
-        <div style="font-size:0.95rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.6rem;line-height:1.2;">Batch Genealogy &amp; GxP Compliance</div>
+        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.3rem;">On-Ramp 01 &middot; Capability 03</div>
+        <div style="font-size:0.95rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.6rem;line-height:1.2;">Visibility &amp; Control Tower</div>
         <div class="onramp-quote" style="background:rgba(17,86,127,0.05);border-radius:7px;padding:0.5rem 0.65rem;margin-bottom:0.65rem;">
           <div style="font-size:0.6rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">When to use this</div>
-          <p style="font-size:0.75rem;color:var(--text-dark);margin:0;max-width:100%;font-style:italic;">&ldquo;Our batch recall trace takes 72 hours because we&rsquo;re manually pulling records from QMS, MES, LIMS, and ERP. Inspection prep takes 2 weeks. This needs to change.&rdquo;</p>
+          <p style="font-size:0.75rem;color:var(--text-dark);margin:0;max-width:100%;font-style:italic;">&ldquo;Our batch recall trace takes 72 hours because we manually pull from QMS, MES, LIMS and ERP. Inspection prep takes two weeks, and cold chain excursions surface too late.&rdquo;</p>
         </div>
         <div style="display:flex;flex-direction:column;gap:0.28rem;">
-          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-mid);white-space:nowrap;">Start:</span><span style="color:var(--text-gray);">Unified QMS + MES + LIMS + ERP in GxP-governed semantic layer</span></div>
-          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-mid);white-space:nowrap;">Value:</span><span style="color:var(--text-gray);">First batch genealogy query across all systems; recall trace &lt;4 hours; inspection prep self-service</span></div>
+          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-mid);white-space:nowrap;">Start:</span><span style="color:var(--text-gray);">QMS, MES, LIMS, ERP and cold chain IoT unified in a GxP-governed semantic layer + Cortex agents for excursion detection and routing</span></div>
+          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-mid);white-space:nowrap;">Value:</span><span style="color:var(--text-gray);">Recall trace under 4 hours, inspection prep self-service, excursions caught before the batch rejection threshold</span></div>
           <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-mid);white-space:nowrap;">Leads:</span><span style="color:var(--text-gray);">CSCO + CIO/CDO</span></div>
         </div>
-        <div style="margin-top:auto;padding-top:0.5rem;border-top:1px solid var(--border-card);"><div style="font-size:0.58rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.32rem;">See this in detail</div><div style="display:flex;flex-wrap:wrap;gap:0.3rem;"><button onclick="goTo(14)" style="font-family:Inter,sans-serif;cursor:pointer;font-size:0.68rem;font-weight:600;background:rgba(17,86,127,0.08);border:1px solid rgba(17,86,127,0.35);color:var(--sf-mid);border-radius:999px;padding:0.24rem 0.7rem;">Batch Genealogy &amp; GxP &rarr;</button></div></div>
       </div>
 
       <div class="onramp-card" style="border-top:3px solid var(--sf-blue);">
-        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.3rem;">On-Ramp 02</div>
-        <div style="font-size:0.95rem;font-weight:800;color:var(--sf-blue);margin-bottom:0.6rem;line-height:1.2;">Cold Chain AI &amp; Batch Loss Prevention</div>
+        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.3rem;">On-Ramp 02 &middot; Capability 02</div>
+        <div style="font-size:0.95rem;font-weight:800;color:var(--sf-blue);margin-bottom:0.6rem;line-height:1.2;">Supply Optimisation &amp; Risk</div>
         <div class="onramp-quote" style="background:rgba(36,158,220,0.05);border-radius:7px;padding:0.5rem 0.65rem;margin-bottom:0.65rem;">
           <div style="font-size:0.6rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">When to use this</div>
-          <p style="font-size:0.75rem;color:var(--text-dark);margin:0;max-width:100%;font-style:italic;">&ldquo;We had cold chain excursions at 3PL sites that we found out about too late. Biologics and CGT products are too valuable to find out when the batch is already compromised.&rdquo;</p>
+          <p style="font-size:0.75rem;color:var(--text-dark);margin:0;max-width:100%;font-style:italic;">&ldquo;We write off near-expiry stock every quarter, and our API supply is concentrated in places we would rather it wasn&rsquo;t.&rdquo;</p>
         </div>
         <div style="display:flex;flex-direction:column;gap:0.28rem;">
-          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-blue);white-space:nowrap;">Start:</span><span style="color:var(--text-gray);">Snowpipe IoT streaming + Cortex AI cold chain anomaly detection</span></div>
-          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-blue);white-space:nowrap;">Value:</span><span style="color:var(--text-gray);">Temperature excursion detected before batch rejection threshold; batch loss prevention in production</span></div>
-          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-blue);white-space:nowrap;">Leads:</span><span style="color:var(--text-gray);">VP Manufacturing Ops + CSCO</span></div>
+          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-blue);white-space:nowrap;">Start:</span><span style="color:var(--text-gray);">Cortex AI scoring across batch shelf life, biologics safety stock and API supplier concentration</span></div>
+          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-blue);white-space:nowrap;">Value:</span><span style="color:var(--text-gray);">Right-sized safety stock on the highest-value SKUs, with near-expiry write-off and API concentration exposure quantified</span></div>
+          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-blue);white-space:nowrap;">Leads:</span><span style="color:var(--text-gray);">CSCO + CFO</span></div>
         </div>
-        <div style="margin-top:auto;padding-top:0.5rem;border-top:1px solid var(--border-card);"><div style="font-size:0.58rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.32rem;">See this in detail</div><div style="display:flex;flex-wrap:wrap;gap:0.3rem;"><button onclick="goTo(15)" style="font-family:Inter,sans-serif;cursor:pointer;font-size:0.68rem;font-weight:600;background:rgba(36,158,220,0.08);border:1px solid rgba(36,158,220,0.35);color:var(--sf-blue);border-radius:999px;padding:0.24rem 0.7rem;">Cold Chain Intelligence &rarr;</button><button onclick="goTo(16)" style="font-family:Inter,sans-serif;cursor:pointer;font-size:0.68rem;font-weight:600;background:rgba(36,158,220,0.06);border:1px solid rgba(36,158,220,0.25);color:var(--sf-blue);border-radius:999px;padding:0.24rem 0.7rem;">Manufacturing Excellence &rarr;</button></div></div>
       </div>
 
       <div class="onramp-card" style="border-top:3px solid #0d9488;">
-        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#0d9488;margin-bottom:0.3rem;">On-Ramp 03</div>
-        <div style="font-size:0.95rem;font-weight:800;color:#0d9488;margin-bottom:0.6rem;line-height:1.2;">GxP AI &amp; Demand Intelligence</div>
+        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#0d9488;margin-bottom:0.3rem;">On-Ramp 03 &middot; Capability 01</div>
+        <div style="font-size:0.95rem;font-weight:800;color:#0d9488;margin-bottom:0.6rem;line-height:1.2;">Demand Intelligence</div>
         <div class="onramp-quote" style="background:rgba(13,148,136,0.05);border-radius:7px;padding:0.5rem 0.65rem;margin-bottom:0.65rem;">
           <div style="font-size:0.6rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">When to use this</div>
-          <p style="font-size:0.75rem;color:var(--text-dark);margin:0;max-width:100%;font-style:italic;">&ldquo;We&rsquo;ve run AI pilots for demand sensing but they failed GxP validation. And we can&rsquo;t see hospital or prescribing demand until it shows up in orders. We need AI our QA team and regulators can trust.&rdquo;</p>
+          <p style="font-size:0.75rem;color:var(--text-dark);margin:0;max-width:100%;font-style:italic;">&ldquo;We can&rsquo;t see hospital or prescribing demand until it shows up in orders, and the AI pilots we ran failed GxP validation.&rdquo;</p>
         </div>
         <div style="display:flex;flex-direction:column;gap:0.28rem;">
-          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:#0d9488;white-space:nowrap;">Start:</span><span style="color:var(--text-gray);">GxP-governed semantic layer + Cortex AI on IQVIA/hospital purchasing data from Marketplace</span></div>
-          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:#0d9488;white-space:nowrap;">Value:</span><span style="color:var(--text-gray);">First GxP-compliant AI use case in production; 28%+ MAPE improvement; demand signals visible weeks early</span></div>
+          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:#0d9488;white-space:nowrap;">Start:</span><span style="color:var(--text-gray);">IQVIA and hospital purchasing data from Marketplace in the GxP-governed semantic layer + validated Cortex AI forecasting</span></div>
+          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:#0d9488;white-space:nowrap;">Value:</span><span style="color:var(--text-gray);">One consensus demand view that passes GxP validation, with 28%+ MAPE improvement and signals visible weeks early</span></div>
           <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:#0d9488;white-space:nowrap;">Leads:</span><span style="color:var(--text-gray);">CIO/CDO + CSCO</span></div>
         </div>
-        <div style="margin-top:auto;padding-top:0.5rem;border-top:1px solid var(--border-card);"><div style="font-size:0.58rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.32rem;">See this in detail</div><div style="display:flex;flex-wrap:wrap;gap:0.3rem;"><button onclick="goTo(18)" style="font-family:Inter,sans-serif;cursor:pointer;font-size:0.68rem;font-weight:600;background:rgba(13,148,136,0.08);border:1px solid rgba(13,148,136,0.35);color:#0d9488;border-radius:999px;padding:0.24rem 0.7rem;">Demand Intelligence &amp; GxP AI &rarr;</button><button onclick="goTo(14)" style="font-family:Inter,sans-serif;cursor:pointer;font-size:0.68rem;font-weight:600;background:rgba(13,148,136,0.06);border:1px solid rgba(13,148,136,0.25);color:#0d9488;border-radius:999px;padding:0.24rem 0.7rem;">Batch Genealogy &amp; GxP &rarr;</button><button onclick="goTo(19)" style="font-family:Inter,sans-serif;cursor:pointer;font-size:0.68rem;font-weight:600;background:rgba(13,148,136,0.06);border:1px solid rgba(13,148,136,0.25);color:#0d9488;border-radius:999px;padding:0.24rem 0.7rem;">Sovereign AI &amp; Flywheel &rarr;</button></div></div>
       </div>
 
     </div>
     <div style="margin-top:0.9rem;background:linear-gradient(90deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05));border:1px solid rgba(36,158,220,0.25);border-radius:10px;padding:0.65rem 1.2rem;">
-      <p style="font-size:0.8rem;color:var(--text-gray);margin:0;max-width:100%;"><span style="font-weight:700;color:var(--sf-mid);">All three on-ramps converge:</span> each starts with a GxP-governed data foundation and ends with closed-loop intelligence and compliance. The fastest path is the one that matches your most acute regulatory or supply chain pain today.</p>
+      <p style="font-size:0.8rem;color:var(--text-gray);margin:0;max-width:100%;"><span style="font-weight:700;color:var(--sf-mid);">All three sit on one GxP-governed foundation:</span> the same semantic layer serves every capability, so each on-ramp makes the next one cheaper. The fastest path is the one that matches your most acute regulatory or supply chain pain today.</p>
     </div>
   </div>
   <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
@@ -958,391 +955,11 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
 <!-- SLIDE 12: CAPABILITY 1 — DEMAND INTELLIGENCE -->
 <!-- ============================================================ -->
 
-<div class="slide" id="slide-15">
-  <button class="back-btn" onclick="goTo(11)">&larr; Return to slide 12</button>
-  <div class="slide-bg bg-white"></div>
-  
-  <div class="slide-content" style="padding-top:2.2rem;padding-bottom:1.4rem;">
-    <h3 class="label purple">CAPABILITY 01</h3>
-    <h2>Batch Genealogy &amp; <span class="highlight-purple">GxP Compliance</span></h2>
-    <div class="divider-purple"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:0.5rem;align-items:start;">
-      <div>
-        <p style="font-size:0.84rem;margin-bottom:0.7rem;">The batch record problem in pharmaceutical is not a shortage of data. It&rsquo;s that QMS, MES, LIMS, and ERP each hold a fragment &mdash; and nothing joins them into one GxP-auditable view that regulators, quality teams, or AI models can reason across.</p>
-        <div style="display:flex;flex-direction:column;gap:0.32rem;margin-bottom:0.7rem;">
-          <div style="display:flex;align-items:flex-start;gap:0.45rem;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.18);border-radius:7px;padding:0.42rem 0.6rem;"><span style="color:#DC2626;font-weight:700;font-size:0.72rem;flex-shrink:0;">&#10005;</span><span style="font-size:0.74rem;color:var(--text-gray);">Batch recall trace requires manual extraction from 4&ndash;6 separate systems &mdash; averaging 72+ hours</span></div>
-          <div style="display:flex;align-items:flex-start;gap:0.45rem;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.18);border-radius:7px;padding:0.42rem 0.6rem;"><span style="color:#DC2626;font-weight:700;font-size:0.72rem;flex-shrink:0;">&#10005;</span><span style="font-size:0.74rem;color:var(--text-gray);">Pre-inspection data assembly takes 2 weeks across QMS, MES, LIMS, and ERP</span></div>
-          <div style="display:flex;align-items:flex-start;gap:0.45rem;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.18);border-radius:7px;padding:0.42rem 0.6rem;"><span style="color:#DC2626;font-weight:700;font-size:0.72rem;flex-shrink:0;">&#10005;</span><span style="font-size:0.74rem;color:var(--text-gray);">Serialisation and verification records disconnected from QMS and cold-chain evidence</span></div>
-          <div style="display:flex;align-items:flex-start;gap:0.45rem;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.18);border-radius:7px;padding:0.42rem 0.6rem;"><span style="color:#DC2626;font-weight:700;font-size:0.72rem;flex-shrink:0;">&#10005;</span><span style="font-size:0.74rem;color:var(--text-gray);">GxP AI stalls without governed lineage, documented controls, and validated intended use under EU GMP Annex 11</span></div>
-        </div>
-        <div style="background:linear-gradient(90deg,rgba(17,86,127,0.06),rgba(36,158,220,0.04));border:1px solid rgba(17,86,127,0.2);border-radius:10px;padding:0.7rem 1rem;">
-          <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.3rem;">The Snowflake Resolution</div>
-          <p style="font-size:0.77rem;max-width:100%;margin:0;">QMS, MES, LIMS, ERP, cold chain IoT, and serialisation data (TraceLink, rfxcel or similar) become one governed Snowflake data layer. Batch genealogy query across all systems in seconds, not hours. Roche regulatory audit response was supported by batch genealogy surfaced via Snowflake. Recall trace: 72h &rarr; 4h. Pre-inspection prep: 2 weeks &rarr; self-service query.</p>
-        </div>
-      </div>
-      <div>
-        <div class="query-mock">
-          <div class="query-label">Cortex Analyst &middot; Live Demo</div>
-          <div class="query-text">&ldquo;Show me the complete chain of custody for lot batch X &mdash; from API supplier through manufacturing, QC release, cold chain, and hospital dispense.&rdquo;</div>
-          <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:0.3rem;">Response Preview &middot; 3.1 seconds &middot; GxP Audit Trail: Active</div>
-          <div class="query-row"><span style="font-size:0.62rem;color:rgba(255,255,255,0.4);min-width:5.5rem;">API Lot A4821</span><span>Teva API &rarr; Released 2026-07-14 &middot; COA: <span class="risk-low">PASS</span></span></div>
-          <div class="query-row"><span style="font-size:0.62rem;color:rgba(255,255,255,0.4);min-width:5.5rem;">Mfg Batch B7723</span><span>Site CH-01 &middot; MES executed &middot; LIMS RFT: <span class="risk-low">PASS</span> &middot; Released 2026-07-28</span></div>
-          <div class="query-row"><span style="font-size:0.62rem;color:rgba(255,255,255,0.4);min-width:5.5rem;">Cold Chain</span><span>DHL Frankfurt &rarr; Rotterdam &middot; Temp range: <span class="risk-low">2.1&ndash;7.8&deg;C COMPLIANT</span></span></div>
-          <div class="query-row"><span style="font-size:0.62rem;color:rgba(255,255,255,0.4);min-width:5.5rem;">Verification</span><span><strong>European Union Falsified Medicines Directive</strong>: Alliance Healthcare PO 991234 &middot; 5,000 packs uploaded through EMVO and verified via the relevant national system &middot; Chain of custody: <span class="risk-low">COMPLETE</span></span></div>
-          <div class="query-action">Full audit trail exportable for EMA, MHRA or national competent authority submission. Data lineage traceable to source row in each system.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">SUPPORTING DETAIL</div>
-</div>
-
-<!-- ============================================================ -->
-<!-- SLIDE 13: CONNECTED RETAIL INTELLIGENCE -->
-<!-- ============================================================ -->
-
-<div class="slide" id="slide-16">
-  <button class="back-btn" onclick="goTo(11)">&larr; Return to slide 12</button>
-  <div class="slide-bg bg-ice"></div>
-  
-  <div class="slide-content" style="padding-top:2.2rem;padding-bottom:1.4rem;">
-    <h3 class="label">CAPABILITY 01 &middot; EXTENDED</h3>
-    <h2>Cold Chain &amp; <span class="highlight">Serialisation Intelligence</span></h2>
-    <div class="divider"></div>
-    <p style="font-size:0.84rem;max-width:820px;margin-bottom:0.9rem;">This is where Snowflake wins where QMS vendors and cold-chain monitoring point solutions cannot. No single system can stream IoT temperature data, join it to batch records, apply GxP-governed AI anomaly detection, and trace full pack-status evidence across the <strong>European Union Falsified Medicines Directive</strong>, Italian Bollino, and UK workflows in one query. Snowflake does all of this natively.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.9rem;">
-      <div style="background:#FFFFFF;border:1.5px solid rgba(17,86,127,0.25);border-radius:14px;padding:1.05rem 1.15rem;display:flex;flex-direction:column;">
-        <div style="width:40px;height:40px;background:linear-gradient(135deg,rgba(17,86,127,0.12),rgba(36,158,220,0.07));border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:0.65rem;flex-shrink:0;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sf-mid)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </div>
-        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.2rem;">01 &middot; Snowpipe IoT Streaming</div>
-        <div style="font-size:0.88rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.4rem;line-height:1.2;">Cold Chain Data, Continuously</div>
-        <p style="font-size:0.77rem;max-width:100%;margin-bottom:0.6rem;flex:1;">Temperature sensors across 3PL sites, aircraft, and distribution points stream into Snowflake via Snowpipe in real time. Millions of IoT events per day, all joined to batch records and serialisation evidence without custom pipelines.</p>
-        <div style="display:flex;flex-wrap:wrap;gap:0.22rem;"><span class="pill purple" style="font-size:0.6rem;">Snowpipe Streaming</span><span class="pill purple" style="font-size:0.6rem;">IoT Sensors</span><span class="pill purple" style="font-size:0.6rem;">3PL Visibility</span></div>
-      </div>
-      <div style="background:#FFFFFF;border:1.5px solid rgba(36,158,220,0.3);border-radius:14px;padding:1.05rem 1.15rem;display:flex;flex-direction:column;">
-        <div style="width:40px;height:40px;background:linear-gradient(135deg,rgba(36,158,220,0.12),rgba(113,211,220,0.07));border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:0.65rem;flex-shrink:0;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        </div>
-        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.2rem;">02 &middot; Cortex AI Excursion Detection</div>
-        <div style="font-size:0.88rem;font-weight:800;color:var(--sf-blue);margin-bottom:0.4rem;line-height:1.2;">Before the Batch is Lost</div>
-        <p style="font-size:0.77rem;max-width:100%;margin-bottom:0.6rem;flex:1;">Cortex AI detects temperature anomaly patterns before the batch crosses rejection thresholds. Alert fires with batch identity, affected units, and regulatory notification template pre-populated. Novartis prevented 3 cryogenic batch losses in 6 months &mdash; each worth $400K+.</p>
-        <div style="display:flex;flex-wrap:wrap;gap:0.22rem;"><span class="pill" style="font-size:0.6rem;">Cortex AI</span><span class="pill" style="font-size:0.6rem;">Anomaly Detection</span><span class="pill" style="font-size:0.6rem;">Pre-Threshold Alert</span></div>
-      </div>
-      <div style="background:#FFFFFF;border:1.5px solid rgba(113,211,220,0.4);border-radius:14px;padding:1.05rem 1.15rem;display:flex;flex-direction:column;">
-        <div style="width:40px;height:40px;background:linear-gradient(135deg,rgba(113,211,220,0.16),rgba(36,158,220,0.07));border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:0.65rem;flex-shrink:0;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-        </div>
-        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#0d9488;margin-bottom:0.2rem;">03 &middot; Multi-Regime Serialisation</div>
-        <div style="font-size:0.88rem;font-weight:800;color:#0d9488;margin-bottom:0.4rem;line-height:1.2;">Lot Trace in Seconds</div>
-        <p style="font-size:0.77rem;max-width:100%;margin-bottom:0.6rem;flex:1;">Serialisation hub data, QMS batch records, and cold-chain data unify in one GxP-governed query. Lot trace from manufacturer to pharmacy dispense in minutes. Suspect-product and falsification response runs to the company&rsquo;s internal SLA, while competent-authority notification is handled without delay where required.</p>
-        <div style="display:flex;flex-wrap:wrap;gap:0.22rem;"><span class="pill teal" style="font-size:0.6rem;">European Union Falsified Medicines Directive</span><span class="pill teal" style="font-size:0.6rem;">Lot Genealogy</span><span class="pill teal" style="font-size:0.6rem;">MHRA / Bollino</span></div>
-      </div>
-    </div>
-    <div style="margin-top:0.7rem;background:linear-gradient(90deg,rgba(17,86,127,0.06),rgba(36,158,220,0.04));border:1px solid rgba(17,86,127,0.18);border-radius:10px;padding:0.5rem 1.1rem;text-align:center;">
-      <span style="font-size:0.78rem;font-weight:700;color:var(--sf-mid);">This is why Snowflake wins where QMS vendors and cold chain point solutions cannot: one GxP-governed platform connects compliance, quality, and supply data into a single intelligence layer.</span>
-    </div>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">SUPPORTING DETAIL</div>
-</div>
-
-<!-- ============================================================ -->
-<!-- SLIDE 14: CAPABILITY 2 — SUPPLY ORCHESTRATION -->
-<!-- ============================================================ -->
-
-<div class="slide" id="slide-17">
-  <button class="back-btn" onclick="goTo(11)">&larr; Return to slide 12</button>
-  <div class="slide-bg bg-ice"></div>
-  
-  <div class="slide-content" style="padding-top:2.2rem;padding-bottom:1.4rem;">
-    <h3 class="label">CAPABILITY 02</h3>
-    <h2>Manufacturing <span class="highlight">Excellence</span></h2>
-    <div class="divider"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:0.5rem;align-items:start;">
-      <div>
-        <p style="font-size:0.84rem;margin-bottom:0.65rem;">Pharmaceutical manufacturing faces the same fragmentation problem as the batch record: QMS captures deviations, MES captures process execution, LIMS captures QC results, and ERP captures costs &mdash; but nothing joins them for real-time manufacturing intelligence. OEE improvement, batch right-first-time, and CAPA cycle time all require unified visibility across all four.</p>
-        <div style="background:linear-gradient(90deg,rgba(36,158,220,0.06),rgba(113,211,220,0.03));border:1px solid rgba(36,158,220,0.2);border-radius:10px;padding:0.65rem 0.95rem;margin-bottom:0.65rem;">
-          <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.28rem;">The Snowflake Resolution</div>
-          <p style="font-size:0.77rem;max-width:100%;margin:0;">Cortex AI monitors process parameters from Snowpipe-streamed MES/SCADA data continuously. Batch right-first-time risk scored before QC release. CAPA root cause investigation that took 2 weeks of manual data gathering drops to hours. Batch release cycle time reduced as QA reviewers have all records available immediately in one GxP-governed query.</p>
-        </div>
-        <div style="display:flex;align-items:center;gap:0.6rem;background:rgba(17,86,127,0.06);border:1px solid rgba(17,86,127,0.2);border-radius:9px;padding:0.55rem 0.9rem;">
-          <div style="text-align:center;min-width:3.5rem;"><div style="font-size:1.05rem;font-weight:900;color:var(--sf-mid);">2&ndash;4 wks</div><div style="font-size:0.58rem;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;">CAPA trace</div></div>
-          <div style="font-size:1.2rem;color:var(--sf-blue);">&#8594;</div>
-          <div style="text-align:center;min-width:3.5rem;"><div style="font-size:1.05rem;font-weight:900;color:var(--sf-blue);">hours</div><div style="font-size:0.58rem;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;">With Snowflake</div></div>
-          <div style="width:1px;height:26px;background:var(--border-card);"></div>
-          <div style="text-align:center;min-width:2rem;"><div style="font-size:1.05rem;font-weight:900;color:var(--sf-mid);">4</div><div style="font-size:0.58rem;color:var(--text-light);">Systems</div></div>
-          <div style="font-size:1.2rem;color:var(--sf-blue);">&#8594;</div>
-          <div style="text-align:center;min-width:2rem;"><div style="font-size:1.05rem;font-weight:900;color:var(--sf-blue);">1</div><div style="font-size:0.58rem;color:var(--text-light);">Query</div></div>
-        </div>
-      </div>
-      <div>
-        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.45rem;">Manufacturing Intelligence Timeline Comparison</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.55rem;">
-          <div>
-            <div style="font-size:0.62rem;font-weight:700;color:#DC2626;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.28rem;">&#10005; Without Snowflake</div>
-            <div class="timeline-col">
-              <div class="tl-row bad"><div class="tl-week">Day 0</div><div>Batch deviation raised in QMS</div></div>
-              <div class="tl-row bad"><div class="tl-week">Day 3</div><div>QA manually pulls MES process data</div></div>
-              <div class="tl-row bad"><div class="tl-week">Day 7</div><div>LIMS QC results retrieved separately</div></div>
-              <div class="tl-row bad"><div class="tl-week">Day 14</div><div>Root cause identified &mdash; CAPA written</div></div>
-            </div>
-            <div style="margin-top:0.35rem;font-size:0.68rem;color:#DC2626;font-weight:600;">2 weeks before CAPA starts</div>
-          </div>
-          <div>
-            <div style="font-size:0.62rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.28rem;">&#10003; With Snowflake</div>
-            <div class="timeline-col">
-              <div class="tl-row good"><div class="tl-week tl-week good">Minute 1</div><div>Cortex Analyst: batch genealogy in one query</div></div>
-              <div class="tl-row good"><div class="tl-week tl-week good">Minute 15</div><div>Process parameters, QC results, supplier lot correlated</div></div>
-              <div class="tl-row good"><div class="tl-week tl-week good">Hour 4</div><div>Root cause identified. CAPA drafted.</div></div>
-              <div class="tl-row good"><div class="tl-week tl-week good">Day 1</div><div>CAPA opened, corrective action in progress</div></div>
-            </div>
-            <div style="margin-top:0.35rem;font-size:0.68rem;color:#16a34a;font-weight:600;">Root-cause investigation and CAPA initiation: 2 weeks &rarr; hours.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">SUPPORTING DETAIL</div>
-</div>
-
-<!-- ============================================================ -->
-<!-- SLIDE 15: CAPABILITY 2 — INVENTORY OPTIMISATION -->
-<!-- ============================================================ -->
-
-<div class="slide" id="slide-18">
-  <button class="back-btn" onclick="goTo(11)">&larr; Return to slide 12</button>
-  <div class="slide-bg bg-white"></div>
-  
-  <div class="slide-content" style="padding-top:2.2rem;padding-bottom:1.4rem;">
-    <h3 class="label purple">CAPABILITY 02 &middot; INVENTORY</h3>
-    <h2>Right-Size Pharmaceutical <span class="highlight-purple">Inventory &amp; Supply</span></h2>
-    <div class="divider-purple"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;margin-top:0.7rem;">
-      <div style="background:#FFFFFF;border:1.5px solid rgba(17,86,127,0.2);border-radius:12px;padding:0.95rem 1.05rem;">
-        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.3rem;">Safety Stock by Channel</div>
-        <div style="font-size:1.5rem;font-weight:900;color:var(--sf-mid);margin-bottom:0.15rem;">30&ndash;50%</div>
-        <div style="font-size:0.68rem;color:var(--text-light);margin-bottom:0.45rem;">more pharma safety stock than demand risk requires</div>
-        <p style="font-size:0.76rem;max-width:100%;margin-bottom:0.5rem;">Pharma safety stock is sized against data uncertainty that channel-specific demand sensing reduces. A 20-day DOH reduction for a €500M annual COGS pharmaceutical business frees ~€27M. Right-sizing requires IQVIA + hospital purchasing signals joined to supply plan.</p>
-        <div style="background:rgba(17,86,127,0.06);border:1px solid rgba(17,86,127,0.15);border-radius:7px;padding:0.38rem 0.6rem;"><p style="font-size:0.7rem;max-width:100%;color:var(--sf-mid);font-weight:500;margin:0;">Cortex AI models channel-specific demand variability using IQVIA prescribing data, enabling DOH reduction without compromising patient supply SLAs.</p></div>
-      </div>
-      <div style="background:#FFFFFF;border:1.5px solid rgba(36,158,220,0.25);border-radius:12px;padding:0.95rem 1.05rem;">
-        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.3rem;">Near-Expiry &amp; API Risk</div>
-        <div style="font-size:1.5rem;font-weight:900;color:var(--sf-blue);margin-bottom:0.15rem;">8&ndash;15%</div>
-        <div style="font-size:0.68rem;color:var(--text-light);margin-bottom:0.45rem;">of pharma inventory near-expiry at any time</div>
-        <p style="font-size:0.76rem;max-width:100%;margin-bottom:0.5rem;">Near-expiry pharma has tightly constrained recovery options and often ends in write-off. Root cause is demand forecast inaccuracy by channel. Where product and market rules allow, inter-DC transfer, priority allocation, or donation may still reduce loss before expiry. API supply buffer monitoring via Snowflake Marketplace supplier risk signals adds the upstream view.</p>
-        <div style="background:rgba(36,158,220,0.06);border:1px solid rgba(36,158,220,0.15);border-radius:7px;padding:0.38rem 0.6rem;"><p style="font-size:0.7rem;max-width:100%;color:var(--sf-blue);font-weight:500;margin:0;">Cortex AI detects near-expiry risk and inter-DC transfer opportunities. API supplier risk scored 6&ndash;8 weeks before production impact.</p></div>
-      </div>
-      <div style="background:#FFFFFF;border:1.5px solid rgba(22,163,74,0.25);border-radius:12px;padding:0.95rem 1.05rem;">
-        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#16a34a;margin-bottom:0.3rem;">Cash-to-Cash Improvement</div>
-        <div style="font-size:1.5rem;font-weight:900;color:#16a34a;margin-bottom:0.15rem;">~€14M</div>
-        <div style="font-size:0.68rem;color:var(--text-light);margin-bottom:0.45rem;">freed per 10-day DOH reduction for a €500M annual COGS pharmaceutical business</div>
-        <p style="font-size:0.76rem;max-width:100%;margin-bottom:0.5rem;">Better channel demand accuracy, faster batch release cycle, and right-sized API buffers all compound into cash-to-cash improvement, with no patient supply impact. Snowflake connects supply chain and financial data for real-time CFO visibility.</p>
-        <div style="background:rgba(22,163,74,0.06);border:1px solid rgba(22,163,74,0.15);border-radius:7px;padding:0.38rem 0.6rem;"><p style="font-size:0.7rem;max-width:100%;color:#16a34a;font-weight:500;margin:0;">Sanofi: 28% MAPE improvement via IQVIA demand integration &mdash; driving DOH reduction and improved supply plan accuracy.</p></div>
-      </div>
-    </div>
-    <div class="proof-callout"><p><strong style="color:var(--sf-mid);">Roche:</strong> $40M+ annual regulatory risk reduction &nbsp;&middot;&nbsp; <strong style="color:var(--sf-mid);">Sanofi:</strong> 28% MAPE improvement, multi-channel demand sensing &nbsp;&middot;&nbsp; <strong style="color:var(--sf-mid);">Novartis:</strong> 3 batch losses prevented ($400K+ each)</p></div>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">SUPPORTING DETAIL</div>
-</div>
-
-<!-- ============================================================ -->
-<!-- SLIDE 16: CAPABILITY 3 — COMMERCIAL, COMPLIANCE & SUSTAINABILITY -->
-<!-- ============================================================ -->
-
-<div class="slide" id="slide-19">
-  <button class="back-btn" onclick="goTo(11)">&larr; Return to slide 12</button>
-  <div class="slide-bg bg-ice"></div>
-  
-  <div class="slide-content" style="padding-top:2rem;padding-bottom:1.2rem;">
-    <h3 class="label">CAPABILITY 03 &middot; PROOF</h3>
-    <h2>Demand Intelligence <span class="highlight">&amp; GxP AI</span></h2>
-    <div class="divider"></div>
-    <p style="font-size:0.84rem;max-width:820px;margin-bottom:0.8rem;">This is Snowflake&rsquo;s most differentiated capability for pharmaceutical. No QMS vendor or planning tool can connect IQVIA prescribing data, hospital purchasing signals, and payer formulary changes on the same GxP-governed data layer as your internal supply plan. Snowflake does, because every channel intelligence problem is a data integration problem.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.85rem;">
-      <div style="background:#FFFFFF;border:1.5px solid rgba(113,211,220,0.4);border-radius:14px;padding:1.05rem 1.15rem;display:flex;flex-direction:column;">
-        <div style="width:40px;height:40px;background:linear-gradient(135deg,rgba(113,211,220,0.18),rgba(36,158,220,0.07));border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:0.65rem;flex-shrink:0;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </div>
-        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#0d9488;margin-bottom:0.2rem;">Multi-Channel Demand Sensing</div>
-        <div style="font-size:0.88rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.4rem;line-height:1.2;">Hospital. Specialty Rx. Home Health.</div>
-        <p style="font-size:0.76rem;max-width:100%;margin-bottom:0.55rem;flex:1;">IQVIA prescribing data, Symphony Health, hospital purchasing, and payer formulary changes available directly from Snowflake Marketplace &mdash; no bespoke data contracts. Connected to the supply plan in weeks. Sanofi: MAPE improved 28% by integrating IQVIA alongside internal EDI.</p>
-        <div class="query-mock" style="padding:0.7rem 0.9rem;">
-          <div class="query-label" style="font-size:0.54rem;">Cortex Analyst</div>
-          <div class="query-text" style="font-size:0.72rem;margin-bottom:0.45rem;">&ldquo;What is the hospital channel demand shift for Molecule X in the Northeast this quarter vs last year?&rdquo;</div>
-          <div class="query-row" style="font-size:0.7rem;"><span style="min-width:4rem;font-size:0.6rem;color:rgba(255,255,255,0.4);">IQVIA Rx</span><span>Hospital vol: <span class="risk-low">+34%</span> &middot; Specialty Rx: <span class="risk-low">+18%</span></span></div>
-          <div class="query-action" style="font-size:0.68rem;">Recommend: increase supply plan by 28% for NE hospital channel. Update batch schedule by Friday to meet demand.</div>
-        </div>
-      </div>
-      <div style="background:#FFFFFF;border:1.5px solid rgba(22,163,74,0.3);border-radius:14px;padding:1.05rem 1.15rem;display:flex;flex-direction:column;">
-        <div style="width:40px;height:40px;background:linear-gradient(135deg,rgba(22,163,74,0.14),rgba(36,158,220,0.06));border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:0.65rem;flex-shrink:0;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#16a34a;margin-bottom:0.2rem;">GxP-Compliant AI</div>
-        <div style="font-size:0.88rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.4rem;line-height:1.2;">AI That Supports Validated GxP Use</div>
-        <p style="font-size:0.76rem;max-width:100%;margin-bottom:0.55rem;flex:1;">EU GMP Annex 11-aligned audit trails, RBAC, and data lineage are native in Snowflake. Every AI answer traces back to the source row, which supports a GxP validation package. Roche surfaced batch genealogy on Snowflake for regulatory audit response. This is why GxP AI reaches production on Snowflake where it failed on raw data lakes: the platform provides the controls, and the customer validates the configured use case.</p>
-        <div style="background:rgba(22,163,74,0.06);border:1px solid rgba(22,163,74,0.2);border-radius:8px;padding:0.5rem 0.75rem;margin-bottom:0.5rem;">
-          <div style="font-size:0.68rem;font-weight:700;color:#16a34a;margin-bottom:0.15rem;">What GxP-compliant AI delivers:</div>
-          <div style="font-size:0.72rem;color:var(--text-gray);line-height:1.4;">Batch right-first-time prediction &nbsp;&middot;&nbsp; Demand sensing to hospital channel &nbsp;&middot;&nbsp; CAPA root cause AI &nbsp;&middot;&nbsp; Cold chain excursion detection</div>
-        </div>
-        <div style="display:flex;flex-wrap:wrap;gap:0.22rem;"><span class="pill green" style="font-size:0.58rem;">GxP Controls</span><span class="pill green" style="font-size:0.58rem;">GxP Audit Trail</span><span class="pill green" style="font-size:0.58rem;">Validation in Scope</span></div>
-      </div>
-      <div style="background:#FFFFFF;border:1.5px solid rgba(17,86,127,0.25);border-radius:14px;padding:1.05rem 1.15rem;display:flex;flex-direction:column;">
-        <div style="width:40px;height:40px;background:linear-gradient(135deg,rgba(17,86,127,0.14),rgba(36,158,220,0.07));border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:0.65rem;flex-shrink:0;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sf-mid)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><polyline points="7 8 12 13 17 8"/></svg>
-        </div>
-        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.2rem;">Healthcare Distribution Network</div>
-        <div style="font-size:0.88rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.4rem;line-height:1.2;">Alliance Healthcare. PHOENIX Group. Comifar Distribuzione. Cofares.</div>
-        <p style="font-size:0.76rem;max-width:100%;margin-bottom:0.55rem;flex:1;">Zero-copy sharing with healthcare distributors where data is already on Snowflake: share demand forecasts, receive purchasing signal back. No bespoke API. The medicines-verification record and the demand signal both live on the same governed Snowflake platform.</p>
-        <div style="background:rgba(17,86,127,0.06);border:1px solid rgba(17,86,127,0.18);border-radius:8px;padding:0.5rem 0.75rem;margin-bottom:0.5rem;">
-          <div style="font-size:0.68rem;font-weight:700;color:var(--sf-mid);margin-bottom:0.15rem;">What healthcare distribution collaboration delivers:</div>
-          <div style="font-size:0.72rem;color:var(--text-gray);line-height:1.4;">Distributor demand signal in &nbsp;&middot;&nbsp; medicines-verification evidence shared &nbsp;&middot;&nbsp; Supply commitment confidence</div>
-        </div>
-        <div style="display:flex;flex-wrap:wrap;gap:0.22rem;"><span class="pill purple" style="font-size:0.58rem;">Zero-Copy Sharing</span><span class="pill purple" style="font-size:0.58rem;">Medicines Verification</span><span class="pill purple" style="font-size:0.58rem;">OTIF Intelligence</span></div>
-      </div>
-    </div>
-    <div style="margin-top:0.7rem;background:linear-gradient(90deg,rgba(17,86,127,0.06),rgba(36,158,220,0.04));border:1px solid rgba(17,86,127,0.18);border-radius:10px;padding:0.5rem 1.1rem;text-align:center;">
-      <span style="font-size:0.78rem;font-weight:700;color:var(--sf-mid);">Compliance, Intelligence and Confidence on the same GxP-governed data. No silos. No parallel compliance and analytics processes. The regulation is the business case.</span>
-    </div>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">SUPPORTING DETAIL</div>
-</div>
-
-<!-- ============================================================ -->
-<!-- SLIDE: SOVEREIGN AI & DECISION FLYWHEEL -->
-<!-- ============================================================ -->
-
-<div class="slide" id="slide-20">
-  <button class="back-btn" onclick="goTo(11)">&larr; Return to slide 12</button>
-  <div class="slide-bg bg-ice"></div>
-  <div class="slide-content" style="padding-top:1.8rem;padding-bottom:1.4rem;">
-    <h3 class="label" style="color:#0d9488;">SOVEREIGN AI</h3>
-    <h2>The Supply Chain That <span style="color:#0d9488;">Learns.</span> Inside Your Own Boundary.</h2>
-    <div style="width:60px;height:3px;background:linear-gradient(90deg,#0d9488,rgba(13,148,136,0.3));margin:0.9rem 0;border-radius:2px;"></div>
-    <p style="font-size:0.84rem;color:var(--text-gray);margin-bottom:1rem;max-width:960px;">Three things are required for AI that compounds over time on proprietary supply chain data. Snowflake delivers all three natively &mdash; inside your existing GxP controls, inside your EU data residency boundary, without ingesting your data into a separate platform first.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;align-items:stretch;">
-
-      <!-- LEFT: Three requirements -->
-      <div style="display:flex;flex-direction:column;gap:0.65rem;">
-
-        <div style="background:#FFFFFF;border:1px solid rgba(13,148,136,0.2);border-left:3px solid #0d9488;border-radius:10px;padding:0.75rem 0.95rem;">
-          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#0d9488;margin-bottom:0.3rem;">01 &middot; Governed operational layer</div>
-          <p style="font-size:0.78rem;color:var(--text-gray);margin:0;max-width:100%;">QMS, MES, LIMS, ERP, cold chain IoT, and serialisation data unified in one GxP-governed layer, inside your Snowflake account. The governed layer is already there &mdash; it is what the previous slides describe.</p>
-        </div>
-
-        <div style="background:#FFFFFF;border:1px solid rgba(13,148,136,0.2);border-left:3px solid #0d9488;border-radius:10px;padding:0.75rem 0.95rem;">
-          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#0d9488;margin-bottom:0.3rem;">02 &middot; Decision capture with rationale + outcome</div>
-          <p style="font-size:0.78rem;color:var(--text-gray);margin:0;max-width:100%;">Every CAPA investigation, batch release call, cold chain excursion response, and demand adjustment becomes a structured, searchable, replayable decision record on the same platform. No separate capture tool. No manual transcription. The decision, the data that drove it, and the outcome it produced are all one record.</p>
-        </div>
-
-        <div style="background:#FFFFFF;border:1px solid rgba(13,148,136,0.2);border-left:3px solid #0d9488;border-radius:10px;padding:0.75rem 0.95rem;">
-          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#0d9488;margin-bottom:0.3rem;">03 &middot; Model that trains inside your own boundary</div>
-          <p style="font-size:0.78rem;color:var(--text-gray);margin:0;max-width:100%;">Cortex AI and Cortex Fine-Tuning run inside your Snowflake account. Your proprietary data never leaves. Model training uses your operational history &mdash; the decisions above &mdash; and deploys inside the same GxP controls regulators already inspect.</p>
-        </div>
-
-      </div>
-
-      <!-- RIGHT: Decision flywheel -->
-      <div style="background:#FFFFFF;border:1.5px solid rgba(13,148,136,0.2);border-radius:14px;padding:1.1rem 1.2rem;display:flex;flex-direction:column;">
-        <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.7rem;">The Pharma Decision Flywheel</div>
-        <div style="display:flex;flex-direction:column;gap:0;flex:1;">
-          <div style="display:flex;align-items:flex-start;gap:0.6rem;padding-bottom:0.55rem;border-bottom:1px dashed rgba(13,148,136,0.2);">
-            <div style="width:28px;height:28px;border-radius:50%;background:rgba(13,148,136,0.1);border:1.5px solid #0d9488;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#0d9488;flex-shrink:0;">1</div>
-            <div><div style="font-size:0.72rem;font-weight:700;color:var(--text-dark);margin-bottom:0.1rem;">Quality event detected</div><div style="font-size:0.68rem;color:var(--text-gray);">Cortex AI agent fires. Cold chain excursion, batch deviation, or CAPA trigger surfaced with context.</div></div>
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.55rem 0;border-bottom:1px dashed rgba(13,148,136,0.2);">
-            <div style="width:28px;height:28px;border-radius:50%;background:rgba(13,148,136,0.1);border:1.5px solid #0d9488;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#0d9488;flex-shrink:0;">2</div>
-            <div><div style="font-size:0.72rem;font-weight:700;color:var(--text-dark);margin-bottom:0.1rem;">Quality professional decides and logs rationale</div><div style="font-size:0.68rem;color:var(--text-gray);">The decision, the evidence, and the outcome written back to Snowflake as structured data.</div></div>
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.55rem 0;border-bottom:1px dashed rgba(13,148,136,0.2);">
-            <div style="width:28px;height:28px;border-radius:50%;background:rgba(13,148,136,0.1);border:1.5px solid #0d9488;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#0d9488;flex-shrink:0;">3</div>
-            <div><div style="font-size:0.72rem;font-weight:700;color:var(--text-dark);margin-bottom:0.1rem;">Cortex AI learns the pattern</div><div style="font-size:0.68rem;color:var(--text-gray);">The same class of event detected earlier at lower threshold next time. Institutional knowledge becomes model knowledge.</div></div>
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:0.6rem;padding-top:0.55rem;">
-            <div style="width:28px;height:28px;border-radius:50%;background:rgba(13,148,136,0.15);border:2px solid #0d9488;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#0d9488;flex-shrink:0;">&#8635;</div>
-            <div><div style="font-size:0.72rem;font-weight:700;color:#0d9488;margin-bottom:0.1rem;">Compounds with every decision</div><div style="font-size:0.68rem;color:var(--text-gray);">The quality team&rsquo;s expertise doesn&rsquo;t walk out the door when people move. It accumulates inside the governed boundary.</div></div>
-          </div>
-        </div>
-        <div style="margin-top:0.75rem;background:rgba(13,148,136,0.05);border:1px solid rgba(13,148,136,0.2);border-radius:8px;padding:0.5rem 0.75rem;">
-          <p style="font-size:0.68rem;color:var(--text-gray);margin:0;max-width:100%;">The model onboards junior quality staff faster, propagates key learnings across sites, and shortens every future CAPA investigation &mdash; without anyone writing a playbook.</p>
-        </div>
-      </div>
-
-    </div>
-    <div style="margin-top:0.85rem;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.2);border-radius:10px;padding:0.6rem 1.1rem;">
-      <p style="font-size:0.76rem;color:var(--text-gray);margin:0;max-width:100%;"><strong style="color:#DC2626;">The question to ask any alternative:</strong> if a platform forces you into a second application silo before its AI can reason across GxP data, you have introduced another governed environment to validate and operate. Snowflake keeps source systems in place, lands required streams under governed controls, and runs the AI inside the same Snowflake boundary as the curated data model.</p>
-    </div>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">SUPPORTING DETAIL</div>
-</div>
-
-<!-- ============================================================ -->
-<!-- SLIDE 17: CUSTOMER PROOF — KRAFT HEINZ -->
-<!-- ============================================================ -->
-
-<div class="slide" id="slide-21">
-  <button class="back-btn" onclick="goTo(9)">&larr; Return to slide 10</button>
-  <div class="slide-bg bg-ice"></div>
-  <div class="slide-content" style="padding-top:1.8rem;padding-bottom:1.2rem;">
-    <h3 class="label">THE SNOWFLAKE LAYER</h3>
-    <h2>One GxP-Governed Layer. <span class="highlight">Everything Connected.</span></h2>
-    <div class="divider"></div>
-    <!-- Hub visualization: 3-column layout -->
-    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:center;margin-top:0.6rem;">
-
-      <!-- LEFT: Source systems -->
-      <div style="display:flex;flex-direction:column;gap:0.45rem;padding-right:0.5rem;">
-        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.2rem;">Your Existing GxP Systems</div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="background:#FFFFFF;border:1.5px solid rgba(17,86,127,0.3);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:var(--sf-mid);">SAP / Oracle ERP</div><div style="font-size:0.62rem;color:var(--text-light);">Orders &middot; Financials &middot; Materials</div></div><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="background:#FFFFFF;border:1.5px solid rgba(36,158,220,0.3);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:var(--sf-blue);">Veeva Vault QMS</div><div style="font-size:0.62rem;color:var(--text-light);">Deviations &middot; CAPAs &middot; SOP library</div></div><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="background:#FFFFFF;border:1.5px solid rgba(217,119,6,0.3);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:#D97706;">Siemens Opcenter MES</div><div style="font-size:0.62rem;color:var(--text-light);">Batch execution &middot; OEE &middot; SCADA</div></div><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="background:#FFFFFF;border:1.5px solid rgba(113,211,220,0.35);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:#0d9488;">LabVantage LIMS</div><div style="font-size:0.62rem;color:var(--text-light);">QC results &middot; Stability &middot; Spec data</div></div><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="background:#FFFFFF;border:1.5px solid var(--border-card);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:var(--text-dark);">Cold Chain IoT</div><div style="font-size:0.62rem;color:var(--text-light);">Temperature &middot; Humidity &middot; GPS sensors</div></div><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="background:#FFFFFF;border:1.5px solid rgba(22,163,74,0.3);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:#16a34a;">Serialisation Hub (European Union Falsified Medicines Directive / UK / Italy)</div><div style="font-size:0.62rem;color:var(--text-light);">Lot trace &middot; Chain of custody &middot; pack-status evidence</div></div><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div></div>
-      </div>
-
-      <!-- CENTER: Snowflake Hub -->
-      <div style="background:linear-gradient(160deg,rgba(4,33,48,0.95),rgba(17,86,127,0.9));border:2px solid rgba(36,158,220,0.5);border-radius:20px;padding:1.4rem 1.6rem;text-align:center;min-width:220px;position:relative;box-shadow:0 8px 32px rgba(17,86,127,0.3);">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="24" style="display:block;margin:0 auto 0.6rem;opacity:0.9;filter:brightness(0) invert(1);">
-        <div style="font-size:0.7rem;font-weight:800;color:#FFFFFF;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.8rem;">AI Data Cloud</div>
-        <div style="display:flex;flex-direction:column;gap:0.4rem;">
-          <div style="background:rgba(17,86,127,0.5);border:1px solid rgba(36,158,220,0.35);border-radius:7px;padding:0.35rem 0.5rem;"><div style="font-size:0.65rem;font-weight:700;color:rgba(113,211,220,0.9);text-transform:uppercase;letter-spacing:0.1em;">COMPLIANCE</div><div style="font-size:0.62rem;color:rgba(255,255,255,0.65);">Batch Genealogy &amp; GxP Audit</div></div>
-          <div style="background:rgba(36,158,220,0.25);border:1px solid rgba(36,158,220,0.4);border-radius:7px;padding:0.35rem 0.5rem;"><div style="font-size:0.65rem;font-weight:700;color:var(--sf-star);text-transform:uppercase;letter-spacing:0.1em;">INTELLIGENCE</div><div style="font-size:0.62rem;color:rgba(255,255,255,0.65);">Cortex AI &amp; Cold Chain Detection</div></div>
-          <div style="background:rgba(22,163,74,0.2);border:1px solid rgba(22,163,74,0.4);border-radius:7px;padding:0.35rem 0.5rem;"><div style="font-size:0.65rem;font-weight:700;color:#4ade80;text-transform:uppercase;letter-spacing:0.1em;">CONFIDENCE</div><div style="font-size:0.62rem;color:rgba(255,255,255,0.65);">GxP AI &amp; Demand Intelligence</div></div>
-        </div>
-        <div style="margin-top:0.7rem;padding-top:0.6rem;border-top:1px solid rgba(255,255,255,0.12);">
-          <div style="font-size:0.58rem;color:rgba(255,255,255,0.45);text-align:center;line-height:1.4;">Zero-copy where shareable &nbsp;&middot;&nbsp; EU GMP Annex 11 audit trail &nbsp;&middot;&nbsp; IQVIA on Marketplace</div>
-        </div>
-      </div>
-
-      <!-- RIGHT: Business outcomes -->
-      <div style="display:flex;flex-direction:column;gap:0.45rem;padding-left:0.5rem;">
-        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.2rem;">Business Outcomes</div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div><div style="background:#FFFFFF;border:1.5px solid rgba(17,86,127,0.25);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:var(--sf-mid);">Batch Genealogy</div><div style="font-size:0.62rem;color:var(--text-light);">72h trace &rarr; 4h. Audit evidence ready.</div></div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div><div style="background:#FFFFFF;border:1.5px solid rgba(36,158,220,0.25);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:var(--sf-blue);">Cold Chain Intelligence</div><div style="font-size:0.62rem;color:var(--text-light);">Excursion detected before batch rejection.</div></div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div><div style="background:#FFFFFF;border:1.5px solid rgba(36,158,220,0.25);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:var(--sf-blue);">Serialisation Compliance</div><div style="font-size:0.62rem;color:var(--text-light);">Pack-status and lot trace across EU, UK and Italy.</div></div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div><div style="background:#FFFFFF;border:1.5px solid rgba(113,211,220,0.3);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:#0d9488;">GxP AI at Scale</div><div style="font-size:0.62rem;color:var(--text-light);">Cortex AI with lineage, controls, and customer validation.</div></div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div><div style="background:#FFFFFF;border:1.5px solid rgba(22,163,74,0.25);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:#16a34a;">Demand Intelligence</div><div style="font-size:0.62rem;color:var(--text-light);">IQVIA &amp; hospital channel. 28% MAPE improvement.</div></div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div><div style="background:#FFFFFF;border:1.5px solid rgba(17,86,127,0.2);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:var(--sf-mid);">Inspection Readiness</div><div style="font-size:0.62rem;color:var(--text-light);">2-week data prep &rarr; self-service query.</div></div></div>
-      </div>
-
-    </div>
-    <div style="text-align:center;margin-top:0.7rem;font-size:0.75rem;font-weight:700;color:var(--sf-mid);">Your existing GxP systems stay exactly where they are. Snowflake is the intelligence layer on top, not a replacement. We bring GxP-compliant AI, analytics, and collaboration <em>to</em> the data, not the other way around.</div>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">SUPPORTING DETAIL</div>
-</div>
-
 <!-- ============================================================ -->
 <!-- SLIDE 09: THE AGENTIC SHIFT — VISUAL PROCESS COMPARISON -->
 <!-- ============================================================ -->
 
-<div class="slide" id="slide-22">
+<div class="slide" id="slide-15">
   <div class="slide-bg bg-ice"></div>
   <div class="slide-content" style="padding-top:1.8rem;padding-bottom:1.8rem;">
     <h3 class="label">APPENDIX A</h3>
@@ -1399,10 +1016,10 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
 </div>
 
 <!-- ============================================================ -->
-<!-- APPENDIX B: AE CUSTOMISATION GUIDE (CPG) -->
+<!-- APPENDIX B: AE CUSTOMISATION GUIDE (PHARMACEUTICAL) -->
 <!-- ============================================================ -->
 
-<div class="slide" id="slide-23">
+<div class="slide" id="slide-16">
   <div class="slide-bg" style="background:var(--sf-deep);"></div>
   <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,rgba(4,33,48,0.4),rgba(17,86,127,0.3));"></div>
   <div class="slide-content" style="position:relative;z-index:10;padding-top:1.8rem;padding-bottom:1.8rem;">
@@ -1439,7 +1056,7 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
     <div style="margin-top:0.8rem;display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;">
       <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:0.7rem 0.9rem;">
         <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-star);margin-bottom:0.3rem;">How the deck is structured</div>
-        <p style="font-size:0.72rem;color:rgba(255,255,255,0.7);margin:0;max-width:100%;line-height:1.55;">Slides 1&ndash;14 are the presented flow. Arrow keys and Next stop at 14. Slides 15&ndash;21 are supporting detail, reached from the picker or the links on slide 12, each with a return button. Customise slides 5, 7 and 11 only. Leave 3, 6, 8, 9 and 10 as written.</p>
+        <p style="font-size:0.72rem;color:rgba(255,255,255,0.7);margin:0;max-width:100%;line-height:1.55;">Slides 1&ndash;14 are the presented flow. Arrow keys and Next stop at 14. Slides 15&ndash;17 are the appendices, reachable from the picker. On slide 12, each on-ramp is exactly one capability &mdash; Visibility &amp; Control Tower, then Supply Optimisation &amp; Risk, then Demand Intelligence &mdash; and all three run on the same GxP-governed foundation. Customise slides 5, 7 and 11 only. Leave 3, 6, 8, 9 and 10 as written.</p>
       </div>
       <div style="background:rgba(217,119,6,0.1);border:1px solid rgba(255,200,0,0.35);border-radius:10px;padding:0.7rem 0.9rem;">
         <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,200,0,0.9);margin-bottom:0.3rem;">&#9888; Internal proof references</div>
@@ -1454,7 +1071,7 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
 <!-- APPENDIX C: WHERE SNOWFLAKE RUNS — PHARMA VALUE CHAIN -->
 <!-- ============================================================ -->
 
-<div class="slide" id="slide-24">
+<div class="slide" id="slide-17">
   <div class="slide-bg bg-ice"></div>
   <div class="slide-content" style="padding-top:1.8rem;padding-bottom:1.5rem;">
     <h3 class="label purple">APPENDIX C</h3>
@@ -1549,21 +1166,14 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
     <option value="12">12 &middot; Three On-Ramps</option>
     <option value="13">13 &middot; Next Steps</option>
     <option value="14">14 &middot; Thank You</option>
-    <option value="15">Detail &middot; Batch Genealogy &amp; GxP Compliance</option>
-    <option value="16">Detail &middot; Cold Chain &amp; Serialisation Intelligence</option>
-    <option value="17">Detail &middot; Manufacturing Excellence</option>
-    <option value="18">Detail &middot; Pharmaceutical Inventory &amp; Supply</option>
-    <option value="19">Detail &middot; Demand Intelligence &amp; GxP AI</option>
-    <option value="20">Detail &middot; Sovereign AI &amp; Decision Flywheel</option>
-    <option value="21">Detail &middot; Pharmaceutical Platform Layer</option>
-    <option value="22">Appendix A &middot; What You Need In Place</option>
-    <option value="23">Appendix B &middot; Presenter Guide (internal)</option>
-    <option value="24">Appendix C &middot; Where Snowflake Runs</option>
+    <option value="15">Appendix A &middot; What You Need In Place</option>
+    <option value="16">Appendix B &middot; Presenter Guide (internal)</option>
+    <option value="17">Appendix C &middot; Where Snowflake Runs</option>
   </select>
   <button onclick="nextSlide()">Next &#8594;</button>
 </div>
 <script>
-const TOTAL = 24;
+const TOTAL = 17;
 const SPINE_END = 14;
 let current = 0;
 let revealState = 0;

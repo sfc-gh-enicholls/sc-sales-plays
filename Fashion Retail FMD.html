@@ -41,7 +41,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', 
 .onramp-card { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 12px; padding: 1.2rem; display: flex; flex-direction: column; }
 .onramp-card .onramp-quote { flex: 1; }
 @supports (grid-template-rows: subgrid) {
-  .onramp-grid { grid-template-rows: auto auto auto 1fr auto; }
+  .onramp-grid { grid-template-rows: auto auto 1fr auto; }
   .onramp-card { display: grid; grid-template-rows: subgrid; grid-row: 1 / -1; }
   .onramp-card .onramp-quote { flex: none; }
 }
@@ -269,7 +269,7 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
       </div>
     </div>
     <div class="proof-callout">
-      <p><span style="font-weight:700;color:var(--sf-mid);">Supporting detail:</span> capability deep-dives, the full platform architecture and deployment prerequisites are included after the main section, for whichever of them you want to go into today or return to afterwards.</p>
+      <p><span style="font-weight:700;color:var(--sf-mid);">Supporting detail:</span> deployment prerequisites and the full value-chain map are included after the main section, for whichever of them you want to go into today or return to afterwards.</p>
     </div>
   </div>
   <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
@@ -769,57 +769,54 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
     <h3 class="label">GETTING STARTED</h3>
     <h2>Most Fashion Retail AI Journeys Begin at <span class="highlight">One of Three On-Ramps</span></h2>
     <div class="divider"></div>
-    <p style="font-size:0.88rem;color:var(--text-gray);margin-bottom:0.9rem;">Based on where the pain is greatest today. Pick the on-ramp that reflects your current reality. All three converge on the same destination.</p>
+    <p style="font-size:0.88rem;color:var(--text-gray);margin-bottom:0.9rem;">Each on-ramp is one capability. Pick the one that reflects where the pain is most acute today; the other two follow in sequence.</p>
     <div class="onramp-grid">
 
       <div class="onramp-card" style="border-top:3px solid var(--sf-mid);">
-        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.3rem;">On-Ramp 01</div>
-        <div style="font-size:0.95rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.6rem;line-height:1.2;">Speed &amp; Decision Intelligence</div>
+        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.3rem;">On-Ramp 01 &middot; Capability 01</div>
+        <div style="font-size:0.95rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.6rem;line-height:1.2;">Demand Intelligence</div>
         <div class="onramp-quote" style="background:rgba(17,86,127,0.05);border-radius:7px;padding:0.5rem 0.65rem;margin-bottom:0.65rem;">
+          <div style="font-size:0.6rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">When to use this</div>
+          <p style="font-size:0.75rem;color:var(--text-dark);margin:0;max-width:100%;font-style:italic;">&ldquo;We find out about a trend when the markdown is already forced. Sell-through isn&rsquo;t connected to our buy plan.&rdquo;</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.28rem;">
+          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-mid);white-space:nowrap;">Start:</span><span style="color:var(--text-gray);">Demand plan, channel sell-through and WSSI in one governed semantic layer + Cortex AI trend models</span></div>
+          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-mid);white-space:nowrap;">Value:</span><span style="color:var(--text-gray);">One consensus demand view that the buy plan and the WSSI actually run on</span></div>
+          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-mid);white-space:nowrap;">Leads:</span><span style="color:var(--text-gray);">Merchandising Director + Commercial Director</span></div>
+        </div>
+      </div>
+
+      <div class="onramp-card" style="border-top:3px solid var(--sf-blue);">
+        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.3rem;">On-Ramp 02 &middot; Capability 02</div>
+        <div style="font-size:0.95rem;font-weight:800;color:var(--sf-blue);margin-bottom:0.6rem;line-height:1.2;">Supply Optimisation &amp; Risk</div>
+        <div class="onramp-quote" style="background:rgba(36,158,220,0.05);border-radius:7px;padding:0.5rem 0.65rem;margin-bottom:0.65rem;">
+          <div style="font-size:0.6rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">When to use this</div>
+          <p style="font-size:0.75rem;color:var(--text-dark);margin:0;max-width:100%;font-style:italic;">&ldquo;Markdown is how we correct a buy that was wrong twelve weeks ago. Stock sits in the wrong channel and we discount our way out.&rdquo;</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.28rem;">
+          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-blue);white-space:nowrap;">Start:</span><span style="color:var(--text-gray);">Cortex AI demand-variability scoring across intake, stock, allocation and financial data</span></div>
+          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-blue);white-space:nowrap;">Value:</span><span style="color:var(--text-gray);">First right-sized intake and allocation position, with markdown exposure quantified</span></div>
+          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-blue);white-space:nowrap;">Leads:</span><span style="color:var(--text-gray);">Commercial Director + CFO</span></div>
+        </div>
+      </div>
+
+      <div class="onramp-card" style="border-top:3px solid #0d9488;">
+        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#0d9488;margin-bottom:0.3rem;">On-Ramp 03 &middot; Capability 03</div>
+        <div style="font-size:0.95rem;font-weight:800;color:#0d9488;margin-bottom:0.6rem;line-height:1.2;">Visibility &amp; Control Tower</div>
+        <div class="onramp-quote" style="background:rgba(13,148,136,0.05);border-radius:7px;padding:0.5rem 0.65rem;margin-bottom:0.65rem;">
           <div style="font-size:0.6rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">When to use this</div>
           <p style="font-size:0.75rem;color:var(--text-dark);margin:0;max-width:100%;font-style:italic;">&ldquo;We reconcile 3+ systems before every trading decision. The trading pack takes days to build and is already stale when we meet.&rdquo;</p>
         </div>
         <div style="display:flex;flex-direction:column;gap:0.28rem;">
-          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-mid);white-space:nowrap;">Start:</span><span style="color:var(--text-gray);">Unified data foundation + Cortex Analyst self-service</span></div>
-          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-mid);white-space:nowrap;">Value:</span><span style="color:var(--text-gray);">First live WSSI and trading review query from unified demand, stock &amp; financial data</span></div>
-          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-mid);white-space:nowrap;">Leads:</span><span style="color:var(--text-gray);">Commercial Director + CIO/CTO</span></div>
+          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:#0d9488;white-space:nowrap;">Start:</span><span style="color:var(--text-gray);">Unified trading, stock and channel data + Cortex agents for exception detection, triage and routing</span></div>
+          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:#0d9488;white-space:nowrap;">Value:</span><span style="color:var(--text-gray);">Live WSSI and trading review, with stock and markdown risk worked as an exception queue</span></div>
+          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:#0d9488;white-space:nowrap;">Leads:</span><span style="color:var(--text-gray);">Commercial Director + CIO/CTO</span></div>
         </div>
-        <div style="margin-top:auto;padding-top:0.5rem;border-top:1px solid var(--border-card);"><div style="font-size:0.58rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.32rem;">See this in detail</div><div style="display:flex;flex-wrap:wrap;gap:0.3rem;"><button onclick="goTo(14)" style="font-family:Inter,sans-serif;cursor:pointer;font-size:0.68rem;font-weight:600;background:rgba(17,86,127,0.08);border:1px solid rgba(17,86,127,0.35);color:var(--sf-mid);border-radius:999px;padding:0.24rem 0.7rem;">Unified Demand Intelligence &rarr;</button></div></div>
-      </div>
-
-      <div class="onramp-card" style="border-top:3px solid var(--sf-blue);">
-        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.3rem;">On-Ramp 02</div>
-        <div style="font-size:0.95rem;font-weight:800;color:var(--sf-blue);margin-bottom:0.6rem;line-height:1.2;">Trend Intelligence &amp; Markdown Control</div>
-        <div class="onramp-quote" style="background:rgba(36,158,220,0.05);border-radius:7px;padding:0.5rem 0.65rem;margin-bottom:0.65rem;">
-          <div style="font-size:0.6rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">When to use this</div>
-          <p style="font-size:0.75rem;color:var(--text-dark);margin:0;max-width:100%;font-style:italic;">&ldquo;We find out about a trend when the markdown is already forced. Sell-through isn&rsquo;t connected to our buy plan. We&rsquo;re always surprised.&rdquo;</p>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:0.28rem;">
-          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-blue);white-space:nowrap;">Start:</span><span style="color:var(--text-gray);">Demand + channel sell-through unification + Cortex AI trend models</span></div>
-          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-blue);white-space:nowrap;">Value:</span><span style="color:var(--text-gray);">Forecast improves each cycle; markdown risk visible 4&ndash;6 weeks ahead</span></div>
-          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:var(--sf-blue);white-space:nowrap;">Leads:</span><span style="color:var(--text-gray);">Merchandising Director + Commercial Director</span></div>
-        </div>
-        <div style="margin-top:auto;padding-top:0.5rem;border-top:1px solid var(--border-card);"><div style="font-size:0.58rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.32rem;">See this in detail</div><div style="display:flex;flex-wrap:wrap;gap:0.3rem;"><button onclick="goTo(15)" style="font-family:Inter,sans-serif;cursor:pointer;font-size:0.68rem;font-weight:600;background:rgba(36,158,220,0.08);border:1px solid rgba(36,158,220,0.35);color:var(--sf-blue);border-radius:999px;padding:0.24rem 0.7rem;">Connected Retail Intelligence &rarr;</button><button onclick="goTo(16)" style="font-family:Inter,sans-serif;cursor:pointer;font-size:0.68rem;font-weight:600;background:rgba(36,158,220,0.08);border:1px solid rgba(36,158,220,0.35);color:var(--sf-blue);border-radius:999px;padding:0.24rem 0.7rem;">Supply Orchestration &rarr;</button><button onclick="goTo(17)" style="font-family:Inter,sans-serif;cursor:pointer;font-size:0.68rem;font-weight:600;background:rgba(36,158,220,0.08);border:1px solid rgba(36,158,220,0.35);color:var(--sf-blue);border-radius:999px;padding:0.24rem 0.7rem;">Inventory Optimisation &rarr;</button></div></div>
-      </div>
-
-      <div class="onramp-card" style="border-top:3px solid #0d9488;">
-        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#0d9488;margin-bottom:0.3rem;">On-Ramp 03</div>
-        <div style="font-size:0.95rem;font-weight:800;color:#0d9488;margin-bottom:0.6rem;line-height:1.2;">AI That Reaches Production</div>
-        <div class="onramp-quote" style="background:rgba(13,148,136,0.05);border-radius:7px;padding:0.5rem 0.65rem;margin-bottom:0.65rem;">
-          <div style="font-size:0.6rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">When to use this</div>
-          <p style="font-size:0.75rem;color:var(--text-dark);margin:0;max-width:100%;font-style:italic;">&ldquo;We&rsquo;ve run personalisation AI pilots that didn&rsquo;t make it out of the lab. Data fragmentation and trust issues killed them. We need AI our teams actually use.&rdquo;</p>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:0.28rem;">
-          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:#0d9488;white-space:nowrap;">Start:</span><span style="color:var(--text-gray);">Governed semantic layer + Cortex AI on live demand and stock data</span></div>
-          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:#0d9488;white-space:nowrap;">Value:</span><span style="color:var(--text-gray);">First trusted AI use case in production, from demand sensing through to trading response</span></div>
-          <div style="display:flex;gap:0.45rem;font-size:0.72rem;"><span style="font-weight:700;color:#0d9488;white-space:nowrap;">Leads:</span><span style="color:var(--text-gray);">CIO/CTO + Commercial Director</span></div>
-        </div>
-        <div style="margin-top:auto;padding-top:0.5rem;border-top:1px solid var(--border-card);"><div style="font-size:0.58rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.32rem;">See this in detail</div><div style="display:flex;flex-wrap:wrap;gap:0.3rem;"><button onclick="goTo(18)" style="font-family:Inter,sans-serif;cursor:pointer;font-size:0.68rem;font-weight:600;background:rgba(13,148,136,0.08);border:1px solid rgba(13,148,136,0.35);color:#0d9488;border-radius:999px;padding:0.24rem 0.7rem;">Commercial &amp; Compliance &rarr;</button><button onclick="goTo(19)" style="font-family:Inter,sans-serif;cursor:pointer;font-size:0.68rem;font-weight:600;background:rgba(13,148,136,0.08);border:1px solid rgba(13,148,136,0.35);color:#0d9488;border-radius:999px;padding:0.24rem 0.7rem;">Platform Architecture &rarr;</button></div></div>
       </div>
 
     </div>
     <div style="margin-top:0.9rem;background:linear-gradient(90deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05));border:1px solid rgba(36,158,220,0.25);border-radius:10px;padding:0.65rem 1.2rem;">
-      <p style="font-size:0.8rem;color:var(--text-gray);margin:0;max-width:100%;"><span style="font-weight:700;color:var(--sf-mid);">All three on-ramps converge:</span> each starts with a governed data foundation and ends with closed-loop intelligence. The fastest path is the one that matches your most acute pain today.</p>
+      <p style="font-size:0.8rem;color:var(--text-gray);margin:0;max-width:100%;"><span style="font-weight:700;color:var(--sf-mid);">All three sit on one governed foundation:</span> the same semantic layer serves every capability, so each on-ramp makes the next one cheaper. The fastest path is the one that matches your most acute pain today.</p>
     </div>
   </div>
   <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
@@ -957,325 +954,10 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
 </div>
 
 <!-- ============================================================ -->
-<!-- SLIDE 12: CAPABILITY 1 — DEMAND INTELLIGENCE -->
-<!-- ============================================================ -->
-
-<div class="slide" id="slide-15">
-  <button class="back-btn" onclick="goTo(11)">&larr; Return to slide 12</button>
-  <div class="slide-bg bg-white"></div>
-  
-  <div class="slide-content" style="padding-top:2.2rem;padding-bottom:1.4rem;">
-    <h3 class="label purple">CAPABILITY 01</h3>
-    <h2>Unified Demand <span class="highlight-purple">Intelligence</span></h2>
-    <div class="divider-purple"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:0.5rem;align-items:start;">
-      <div>
-        <p style="font-size:0.84rem;margin-bottom:0.7rem;">The demand signal problem in fashion retail is not a shortage of data. It&rsquo;s that each source lives in a different system, trusted by nobody, and never unified in one place.</p>
-        <div style="display:flex;flex-direction:column;gap:0.32rem;margin-bottom:0.7rem;">
-          <div style="display:flex;align-items:flex-start;gap:0.45rem;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.18);border-radius:7px;padding:0.42rem 0.6rem;"><span style="color:#DC2626;font-weight:700;font-size:0.72rem;flex-shrink:0;">&#10005;</span><span style="font-size:0.74rem;color:var(--text-gray);">Statistical demand plan doesn&rsquo;t include in-season trend signal</span></div>
-          <div style="display:flex;align-items:flex-start;gap:0.45rem;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.18);border-radius:7px;padding:0.42rem 0.6rem;"><span style="color:#DC2626;font-weight:700;font-size:0.72rem;flex-shrink:0;">&#10005;</span><span style="font-size:0.74rem;color:var(--text-gray);">Buy plan doesn&rsquo;t reflect fulfilment constraints or historical sell-through</span></div>
-          <div style="display:flex;align-items:flex-start;gap:0.45rem;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.18);border-radius:7px;padding:0.42rem 0.6rem;"><span style="color:#DC2626;font-weight:700;font-size:0.72rem;flex-shrink:0;">&#10005;</span><span style="font-size:0.74rem;color:var(--text-gray);">Store POS arrives 1 week late, never integrated with internal planning</span></div>
-          <div style="display:flex;align-items:flex-start;gap:0.45rem;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.18);border-radius:7px;padding:0.42rem 0.6rem;"><span style="color:#DC2626;font-weight:700;font-size:0.72rem;flex-shrink:0;">&#10005;</span><span style="font-size:0.74rem;color:var(--text-gray);">Syndicated data (Kantar, Euromonitor) manually exported into spreadsheets</span></div>
-        </div>
-        <div style="background:linear-gradient(90deg,rgba(17,86,127,0.06),rgba(36,158,220,0.04));border:1px solid rgba(17,86,127,0.2);border-radius:10px;padding:0.7rem 1rem;">
-          <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.3rem;">The Snowflake Resolution</div>
-          <p style="font-size:0.77rem;max-width:100%;margin:0;">All demand signals unified in one governed semantic layer. Demand plan, buy plan, channel POS and syndicated data, all queried together in real time. Cortex AI builds trend response models from every historical event. Trading review becomes a decision forum, not a data reconciliation meeting.</p>
-        </div>
-      </div>
-      <div>
-        <div class="query-mock">
-          <div class="query-label">Cortex Analyst &middot; Live Demo</div>
-          <div class="query-text">&ldquo;What is the forecast vs. actuals gap for my top 10 styles at our flagship stores for the next 4 weeks, including the current trend signal?&rdquo;</div>
-          <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:0.3rem;">Response Preview &middot; 2.4 seconds</div>
-          <div class="query-row"><span style="font-size:0.62rem;color:rgba(255,255,255,0.4);min-width:5.5rem;">Style 4102 Trainer</span><span>Base 1,200 + Trend +450 = <strong style="color:#fff;">1,650</strong> · Stock: 1,420 · <span class="risk-high">GAP &minus;230</span></span></div>
-          <div class="query-row"><span style="font-size:0.62rem;color:rgba(255,255,255,0.4);min-width:5.5rem;">Style 4103 Trainer</span><span>Base 950 + Trend +300 = <strong style="color:#fff;">1,250</strong> · Stock: 1,280 · <span class="risk-low">OK +30</span></span></div>
-          <div class="query-row"><span style="font-size:0.62rem;color:rgba(255,255,255,0.4);min-width:5.5rem;">Style 4210 Jacket</span><span>Base 600 + Trend +200 = <strong style="color:#fff;">800</strong> · Stock: 650 · <span class="risk-high">GAP &minus;150</span></span></div>
-          <div class="query-action">&#9888; Recommended: Chase 2,400 units to distribution schedule weeks 14&ndash;16. Click to approve and update buy plan.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">SUPPORTING DETAIL</div>
-</div>
-
-<!-- ============================================================ -->
-<!-- SLIDE 13: CONNECTED RETAIL INTELLIGENCE -->
-<!-- ============================================================ -->
-
-<div class="slide" id="slide-16">
-  <button class="back-btn" onclick="goTo(11)">&larr; Return to slide 12</button>
-  <div class="slide-bg bg-ice"></div>
-  
-  <div class="slide-content" style="padding-top:2.2rem;padding-bottom:1.4rem;">
-    <h3 class="label">CAPABILITY 01 &middot; EXTENDED</h3>
-    <h2>Connected Retail <span class="highlight">Intelligence</span></h2>
-    <div class="divider"></div>
-    <p style="font-size:0.84rem;max-width:820px;margin-bottom:0.9rem;">This is what buying and planning tools don&rsquo;t do on their own. No single application gives you live consumer data from Kantar, zero-copy data sharing with your wholesale and franchise partners, and privacy-safe collaboration on loyalty data, all natively, alongside the planning tools you already run.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.9rem;">
-      <div style="background:#FFFFFF;border:1.5px solid rgba(17,86,127,0.25);border-radius:14px;padding:1.05rem 1.15rem;display:flex;flex-direction:column;">
-        <div style="width:40px;height:40px;background:linear-gradient(135deg,rgba(17,86,127,0.12),rgba(36,158,220,0.07));border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:0.65rem;flex-shrink:0;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sf-mid)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-        </div>
-        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.2rem;">01 &middot; Snowflake Marketplace</div>
-        <div style="font-size:0.88rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.4rem;line-height:1.2;">Consumer &amp; Trend Data, Instantly</div>
-        <p style="font-size:0.77rem;max-width:100%;margin-bottom:0.6rem;flex:1;">3,600+ live datasets without bespoke contracts. Kantar, Euromonitor, social trend indices and GlobalData, all in the same semantic layer as your internal planning data.</p>
-        <div style="display:flex;flex-wrap:wrap;gap:0.22rem;"><span class="pill purple" style="font-size:0.6rem;">Kantar</span><span class="pill purple" style="font-size:0.6rem;">Euromonitor</span><span class="pill purple" style="font-size:0.6rem;">Social Trend Signal</span><span class="pill purple" style="font-size:0.6rem;">Economic Signals</span></div>
-      </div>
-      <div style="background:#FFFFFF;border:1.5px solid rgba(36,158,220,0.3);border-radius:14px;padding:1.05rem 1.15rem;display:flex;flex-direction:column;">
-        <div style="width:40px;height:40px;background:linear-gradient(135deg,rgba(36,158,220,0.12),rgba(113,211,220,0.07));border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:0.65rem;flex-shrink:0;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
-        </div>
-        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.2rem;">02 &middot; Wholesale &amp; Franchise Data Collaboration</div>
-        <div style="font-size:0.88rem;font-weight:800;color:var(--sf-blue);margin-bottom:0.4rem;line-height:1.2;">Turn Partners Into Data Partners</div>
-        <p style="font-size:0.77rem;max-width:100%;margin-bottom:0.6rem;flex:1;">Zero-copy sharing: share demand forecasts with wholesale and franchise partners, receive sell-through data back. No data movement. No security risk. No bespoke API. The signal loop closes, and markdown risk disappears weeks earlier.</p>
-        <div style="display:flex;flex-wrap:wrap;gap:0.22rem;"><span class="pill" style="font-size:0.6rem;">Zero-Copy Sharing</span><span class="pill" style="font-size:0.6rem;">Demand Signal Out</span><span class="pill" style="font-size:0.6rem;">POS Signal Back</span></div>
-      </div>
-      <div style="background:#FFFFFF;border:1.5px solid rgba(113,211,220,0.4);border-radius:14px;padding:1.05rem 1.15rem;display:flex;flex-direction:column;">
-        <div style="width:40px;height:40px;background:linear-gradient(135deg,rgba(113,211,220,0.16),rgba(36,158,220,0.07));border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:0.65rem;flex-shrink:0;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        </div>
-        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#0d9488;margin-bottom:0.2rem;">03 &middot; Snowflake Clean Rooms</div>
-        <div style="font-size:0.88rem;font-weight:800;color:#0d9488;margin-bottom:0.4rem;line-height:1.2;">Collaborate Without Compromising</div>
-        <p style="font-size:0.77rem;max-width:100%;margin-bottom:0.6rem;flex:1;">Work with brands, marketplaces and media partners on loyalty data, basket analysis, and consumer identity without exposing raw records. Controlled queries over combined datasets, on your terms.</p>
-        <div style="display:flex;flex-wrap:wrap;gap:0.22rem;"><span class="pill teal" style="font-size:0.6rem;">Privacy-Safe</span><span class="pill teal" style="font-size:0.6rem;">Loyalty Analytics</span><span class="pill teal" style="font-size:0.6rem;">Identity Resolution</span></div>
-      </div>
-    </div>
-    <div style="margin-top:0.7rem;background:linear-gradient(90deg,rgba(17,86,127,0.06),rgba(36,158,220,0.04));border:1px solid rgba(17,86,127,0.18);border-radius:10px;padding:0.5rem 1.1rem;text-align:center;">
-      <span style="font-size:0.78rem;font-weight:700;color:var(--sf-mid);">This is what your planning tool alone doesn&rsquo;t do: your data network extends to every wholesale partner, supplier, and data provider in the ecosystem.</span>
-    </div>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">SUPPORTING DETAIL</div>
-</div>
-
-<!-- ============================================================ -->
-<!-- SLIDE 14: CAPABILITY 2 — SUPPLY ORCHESTRATION -->
-<!-- ============================================================ -->
-
-<div class="slide" id="slide-17">
-  <button class="back-btn" onclick="goTo(11)">&larr; Return to slide 12</button>
-  <div class="slide-bg bg-ice"></div>
-  
-  <div class="slide-content" style="padding-top:2.2rem;padding-bottom:1.4rem;">
-    <h3 class="label">CAPABILITY 02</h3>
-    <h2>Smarter Assortment &amp; <span class="highlight">Fulfilment Orchestration</span></h2>
-    <div class="divider"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:0.5rem;align-items:start;">
-      <div>
-        <p style="font-size:0.84rem;margin-bottom:0.65rem;">Fashion retail supply chains are built for a plan but face permanent trend volatility. Sell-through spikes arrive without warning. DC replenishment logic is calibrated to yesterday&rsquo;s buy plan. Every season cycles through the same pattern: stockout on hero styles, overstock on slow movers, markdown on the invoice.</p>
-        <div style="background:linear-gradient(90deg,rgba(36,158,220,0.06),rgba(113,211,220,0.03));border:1px solid rgba(36,158,220,0.2);border-radius:10px;padding:0.65rem 0.95rem;margin-bottom:0.65rem;">
-          <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.28rem;">The Snowflake Resolution</div>
-          <p style="font-size:0.77rem;max-width:100%;margin:0;">Cortex AI monitors markdown risk continuously across all style-store-DC combinations, ingesting ERP, WMS, and store/e-commerce data in real time. Risk is surfaced 4&ndash;6 weeks before the trend window closes. One approval triggers distribution schedule update + DC replenishment + supplier signal simultaneously, in under 2 seconds.</p>
-        </div>
-        <div style="display:flex;align-items:center;gap:0.6rem;background:rgba(17,86,127,0.06);border:1px solid rgba(17,86,127,0.2);border-radius:9px;padding:0.55rem 0.9rem;">
-          <div style="text-align:center;min-width:3.5rem;"><div style="font-size:1.05rem;font-weight:900;color:var(--sf-mid);">5 days</div><div style="font-size:0.58rem;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;">Without</div></div>
-          <div style="font-size:1.2rem;color:var(--sf-blue);">&#8594;</div>
-          <div style="text-align:center;min-width:3.5rem;"><div style="font-size:1.05rem;font-weight:900;color:var(--sf-blue);">&lt;2 sec</div><div style="font-size:0.58rem;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;">With Snowflake</div></div>
-          <div style="width:1px;height:26px;background:var(--border-card);"></div>
-          <div style="text-align:center;min-width:2rem;"><div style="font-size:1.05rem;font-weight:900;color:var(--sf-mid);">3</div><div style="font-size:0.58rem;color:var(--text-light);">Systems</div></div>
-          <div style="font-size:1.2rem;color:var(--sf-blue);">&#8594;</div>
-          <div style="text-align:center;min-width:2rem;"><div style="font-size:1.05rem;font-weight:900;color:var(--sf-blue);">0</div><div style="font-size:0.58rem;color:var(--text-light);">Re-entries</div></div>
-        </div>
-      </div>
-      <div>
-        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.45rem;">Fulfilment Response Timeline Comparison</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.55rem;">
-          <div>
-            <div style="font-size:0.62rem;font-weight:700;color:#DC2626;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.28rem;">&#10005; Without Snowflake</div>
-            <div class="timeline-col">
-              <div class="tl-row bad"><div class="tl-week">Wk &minus;2</div><div>Flare demand spike stays trapped in e-commerce data; skinny overbuy sits in a separate plan</div></div>
-              <div class="tl-row bad"><div class="tl-week">Wk &minus;1</div><div>Merch team rebuilds the WSSI manually to reconcile sell-through, stock and intake</div></div>
-              <div class="tl-row bad"><div class="tl-week">Wk 0</div><div>Review lands after the chase window narrows; flare shortfall and skinny excess finally surface</div></div>
-              <div class="tl-row bad"><div class="tl-week">Wk +1</div><div>Flare stockout. <strong style="color:#DC2626;">Skinny markdown forced.</strong></div></div>
-            </div>
-            <div style="margin-top:0.35rem;font-size:0.68rem;color:#DC2626;font-weight:600;">Damage found, not prevented</div>
-          </div>
-          <div>
-            <div style="font-size:0.62rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.28rem;">&#10003; With Snowflake</div>
-            <div class="timeline-col">
-              <div class="tl-row good"><div class="tl-week tl-week good">Wk &minus;6</div><div>Cortex AI detects markdown risk</div></div>
-              <div class="tl-row good"><div class="tl-week tl-week good">Wk &minus;5</div><div>Alert + impact surfaced. One-click approved.</div></div>
-              <div class="tl-row good"><div class="tl-week tl-week good">Wk &minus;4</div><div>Distribution + DC + supplier triggered</div></div>
-              <div class="tl-row good"><div class="tl-week tl-week good">Wk 0</div><div>Trend met. <strong style="color:#16a34a;">Full-price sell-through.</strong></div></div>
-            </div>
-            <div style="margin-top:0.35rem;font-size:0.68rem;color:#16a34a;font-weight:600;">Markdown avoided. Capital preserved.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">SUPPORTING DETAIL</div>
-</div>
-
-<!-- ============================================================ -->
-<!-- SLIDE 15: CAPABILITY 2 — INVENTORY OPTIMISATION -->
-<!-- ============================================================ -->
-
-<div class="slide" id="slide-18">
-  <button class="back-btn" onclick="goTo(11)">&larr; Return to slide 12</button>
-  <div class="slide-bg bg-white"></div>
-  
-  <div class="slide-content" style="padding-top:2.2rem;padding-bottom:1.4rem;">
-    <h3 class="label purple">CAPABILITY 02 &middot; INVENTORY</h3>
-    <h2>Right-Size Inventory. <span class="highlight-purple">Free Working Capital.</span></h2>
-    <div class="divider-purple"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;margin-top:0.7rem;">
-      <div style="background:#FFFFFF;border:1.5px solid rgba(17,86,127,0.2);border-radius:12px;padding:0.95rem 1.05rem;">
-        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.3rem;">The OTB Commitment Problem</div>
-        <div style="font-size:1.5rem;font-weight:900;color:var(--sf-mid);margin-bottom:0.15rem;">6&ndash;9 mo</div>
-        <div style="font-size:0.68rem;color:var(--text-light);margin-bottom:0.45rem;">ahead of the season, open-to-buy is locked in</div>
-        <p style="font-size:0.76rem;max-width:100%;margin-bottom:0.5rem;">The buy is committed on incomplete signal, months before the season starts. Get it wrong and there is no do-over until next season &mdash; only markdown or write-off.</p>
-        <div style="background:rgba(17,86,127,0.06);border:1px solid rgba(17,86,127,0.15);border-radius:7px;padding:0.38rem 0.6rem;"><p style="font-size:0.7rem;max-width:100%;color:var(--sf-mid);font-weight:500;margin:0;">Cortex AI updates OTB recommendations continuously as consumer signal firms up, closing the gap between commitment and demand.</p></div>
-      </div>
-      <div style="background:#FFFFFF;border:1.5px solid rgba(36,158,220,0.25);border-radius:12px;padding:0.95rem 1.05rem;">
-        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.3rem;">In-Season Chase Capability</div>
-        <div style="font-size:1.5rem;font-weight:900;color:var(--sf-blue);margin-bottom:0.15rem;">2&ndash;3 wks</div>
-        <div style="font-size:0.68rem;color:var(--text-light);margin-bottom:0.45rem;">trend window before the opportunity closes</div>
-        <p style="font-size:0.76rem;max-width:100%;margin-bottom:0.5rem;">When a style breaks out, the retailers who can reorder and redistribute within the window capture it. Most can&rsquo;t see the signal in time to act.</p>
-        <div style="background:rgba(36,158,220,0.06);border:1px solid rgba(36,158,220,0.15);border-radius:7px;padding:0.38rem 0.6rem;"><p style="font-size:0.7rem;max-width:100%;color:var(--sf-blue);font-weight:500;margin:0;">Cortex AI flags breakout styles and recommends chase quantities while the window is still open.</p></div>
-      </div>
-      <div style="background:#FFFFFF;border:1.5px solid rgba(22,163,74,0.25);border-radius:12px;padding:0.95rem 1.05rem;">
-        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#16a34a;margin-bottom:0.3rem;">Terminal Stock at Season End</div>
-        <div style="font-size:1.5rem;font-weight:900;color:#16a34a;margin-bottom:0.15rem;">30&ndash;40%</div>
-        <div style="font-size:0.68rem;color:var(--text-light);margin-bottom:0.45rem;">of range still unsold at season close</div>
-        <p style="font-size:0.76rem;max-width:100%;margin-bottom:0.5rem;">Terminal stock is sold at deep discount or written off entirely &mdash; the final, most expensive markdown of a style that never found its price.</p>
-        <div style="background:rgba(22,163,74,0.06);border:1px solid rgba(22,163,74,0.15);border-radius:7px;padding:0.38rem 0.6rem;"><p style="font-size:0.7rem;max-width:100%;color:#16a34a;font-weight:500;margin:0;">Cortex AI surfaces terminal stock risk early enough to redistribute or markdown selectively, before season-end clearance.</p></div>
-      </div>
-    </div>
-    <div class="proof-callout"><p><strong style="color:var(--sf-mid);">Forrester TEI 2024:</strong> 25% average reduction in inventory carrying costs across Snowflake retail deployments &nbsp;&middot;&nbsp; 354% ROI, &lt;6 month payback</p></div>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">SUPPORTING DETAIL</div>
-</div>
-
-<!-- ============================================================ -->
-<!-- SLIDE 16: CAPABILITY 3 — COMMERCIAL, COMPLIANCE & SUSTAINABILITY -->
-<!-- ============================================================ -->
-
-<div class="slide" id="slide-19">
-  <button class="back-btn" onclick="goTo(11)">&larr; Return to slide 12</button>
-  <div class="slide-bg bg-ice"></div>
-  
-  <div class="slide-content" style="padding-top:2rem;padding-bottom:1.2rem;">
-    <h3 class="label">CAPABILITY 03 &middot; PROOF</h3>
-    <h2>Commercial, Compliance <span class="highlight">&amp; Sustainability</span></h2>
-    <div class="divider"></div>
-    <p style="font-size:0.84rem;max-width:820px;margin-bottom:0.8rem;">This is Snowflake&rsquo;s most differentiated capability for EMEA fashion retail. No single planning application connects markdown ROI measurement, CSRD compliance reporting, and Digital Product Passport traceability on one governed data layer &mdash; Snowflake does, working alongside the planning and merchandising tools you already run.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.85rem;">
-      <div style="background:#FFFFFF;border:1.5px solid rgba(113,211,220,0.4);border-radius:14px;padding:1.05rem 1.15rem;display:flex;flex-direction:column;">
-        <div style="width:40px;height:40px;background:linear-gradient(135deg,rgba(113,211,220,0.18),rgba(36,158,220,0.07));border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:0.65rem;flex-shrink:0;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        </div>
-        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#0d9488;margin-bottom:0.2rem;">Markdown &amp; Trend Intelligence</div>
-        <div style="font-size:0.88rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.4rem;line-height:1.2;">Measure Markdown ROI</div>
-        <p style="font-size:0.76rem;max-width:100%;margin-bottom:0.55rem;flex:1;">30&ndash;40% of fashion inventory sells at markdown. Snowflake unifies buy plan spend, channel POS sell-through, and financial actuals. Every event measurable post-event in seconds.</p>
-        <div class="query-mock" style="padding:0.7rem 0.9rem;">
-          <div class="query-label" style="font-size:0.54rem;">Cortex Analyst</div>
-          <div class="query-text" style="font-size:0.72rem;margin-bottom:0.45rem;">&ldquo;Compare Q1 markdown depth for our outerwear range across 3 years&rdquo;</div>
-          <div class="query-row" style="font-size:0.7rem;"><span style="min-width:3rem;font-size:0.6rem;color:rgba(255,255,255,0.4);">Q1 2023</span><span>ROI <span class="risk-high">&minus;67%</span></span></div>
-          <div class="query-row" style="font-size:0.7rem;"><span style="min-width:3rem;font-size:0.6rem;color:rgba(255,255,255,0.4);">Q1 2025</span><span>ROI <span class="risk-low">&minus;17%</span> &#8593;</span></div>
-          <div class="query-action" style="font-size:0.68rem;">Recommend: reduce discount depth to 15%. Maintain display execution.</div>
-        </div>
-      </div>
-      <div style="background:#FFFFFF;border:1.5px solid rgba(22,163,74,0.3);border-radius:14px;padding:1.05rem 1.15rem;display:flex;flex-direction:column;">
-        <div style="width:40px;height:40px;background:linear-gradient(135deg,rgba(22,163,74,0.14),rgba(36,158,220,0.06));border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:0.65rem;flex-shrink:0;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#16a34a;margin-bottom:0.2rem;">CSRD &amp; Sustainability Reporting</div>
-        <div style="font-size:0.88rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.4rem;line-height:1.2;">Auditable ESG at Scale</div>
-        <p style="font-size:0.76rem;max-width:100%;margin-bottom:0.55rem;flex:1;">CSRD mandatory for large EMEA fashion retailers from 2025/26. Scope 1, 2, and 3 emissions; ESPR ecodesign and circularity compliance; social metrics. All of it requires a single, auditable data foundation with lineage and access controls.</p>
-        <div style="background:rgba(22,163,74,0.06);border:1px solid rgba(22,163,74,0.2);border-radius:8px;padding:0.5rem 0.75rem;margin-bottom:0.5rem;">
-          <div style="font-size:0.68rem;font-weight:700;color:#16a34a;margin-bottom:0.15rem;">What Snowflake delivers:</div>
-          <div style="font-size:0.72rem;color:var(--text-gray);line-height:1.4;">Automated Scope 3 from supplier data &nbsp;&middot;&nbsp; ESPR traceability &nbsp;&middot;&nbsp; Full data lineage &nbsp;&middot;&nbsp; Regulator-ready exports</div>
-        </div>
-        <div style="display:flex;flex-wrap:wrap;gap:0.22rem;"><span class="pill green" style="font-size:0.58rem;">CSRD</span><span class="pill green" style="font-size:0.58rem;">Scope 3</span><span class="pill green" style="font-size:0.58rem;">ESPR</span><span class="pill green" style="font-size:0.58rem;">Audit Trail</span></div>
-      </div>
-      <div style="background:#FFFFFF;border:1.5px solid rgba(17,86,127,0.25);border-radius:14px;padding:1.05rem 1.15rem;display:flex;flex-direction:column;">
-        <div style="width:40px;height:40px;background:linear-gradient(135deg,rgba(17,86,127,0.14),rgba(36,158,220,0.07));border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:0.65rem;flex-shrink:0;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sf-mid)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><polyline points="7 8 12 13 17 8"/></svg>
-        </div>
-        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.2rem;">Digital Product Passport &amp; Traceability</div>
-        <div style="font-size:0.88rem;font-weight:800;color:var(--sf-mid);margin-bottom:0.4rem;line-height:1.2;">Product-Level Transparency</div>
-        <p style="font-size:0.76rem;max-width:100%;margin-bottom:0.55rem;flex:1;">EU DPP and ESPR regulations require product-level transparency across the retail supply chain. Snowflake&rsquo;s Data Sharing enables cross-partner interoperability without brittle point-to-point integrations.</p>
-        <div style="background:rgba(17,86,127,0.06);border:1px solid rgba(17,86,127,0.18);border-radius:8px;padding:0.5rem 0.75rem;margin-bottom:0.5rem;">
-          <div style="font-size:0.68rem;font-weight:700;color:var(--sf-mid);margin-bottom:0.15rem;">What Snowflake delivers:</div>
-          <div style="font-size:0.72rem;color:var(--text-gray);line-height:1.4;">Fibre-to-shelf traceability &nbsp;&middot;&nbsp; Secure partner sharing &nbsp;&middot;&nbsp; Regulator and marketplace ready</div>
-        </div>
-        <div style="display:flex;flex-wrap:wrap;gap:0.22rem;"><span class="pill purple" style="font-size:0.58rem;">EU DPP</span><span class="pill purple" style="font-size:0.58rem;">ESPR</span><span class="pill purple" style="font-size:0.58rem;">Provenance</span></div>
-      </div>
-    </div>
-    <div style="margin-top:0.7rem;background:linear-gradient(90deg,rgba(17,86,127,0.06),rgba(36,158,220,0.04));border:1px solid rgba(17,86,127,0.18);border-radius:10px;padding:0.5rem 1.1rem;text-align:center;">
-      <span style="font-size:0.78rem;font-weight:700;color:var(--sf-mid);">Signal, Shelf and Proof on the same governed data. No silos. No parallel reporting processes.</span>
-    </div>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">SUPPORTING DETAIL</div>
-</div>
-
-<!-- ============================================================ -->
-<!-- SLIDE 17: CUSTOMER PROOF — KRAFT HEINZ -->
-<!-- ============================================================ -->
-
-<div class="slide" id="slide-20">
-  <button class="back-btn" onclick="goTo(11)">&larr; Return to slide 12</button>
-  <div class="slide-bg bg-ice"></div>
-  <div class="slide-content" style="padding-top:1.8rem;padding-bottom:1.2rem;">
-    <h3 class="label">THE SNOWFLAKE LAYER</h3>
-    <h2>One Intelligence Layer. <span class="highlight">Everything Connected.</span></h2>
-    <div class="divider"></div>
-    <!-- Hub visualization: 3-column layout -->
-    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:center;margin-top:0.6rem;">
-
-      <!-- LEFT: Source systems -->
-      <div style="display:flex;flex-direction:column;gap:0.45rem;padding-right:0.5rem;">
-        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.2rem;">Your Existing Systems</div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="background:#FFFFFF;border:1.5px solid rgba(17,86,127,0.3);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:var(--sf-mid);">SAP / Oracle ERP</div><div style="font-size:0.62rem;color:var(--text-light);">Orders · Inventory · Financials</div></div><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="background:#FFFFFF;border:1.5px solid rgba(36,158,220,0.3);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:var(--sf-blue);">MFP / Buying Tool</div><div style="font-size:0.62rem;color:var(--text-light);">Planning capabilities</div></div><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="background:#FFFFFF;border:1.5px solid rgba(217,119,6,0.3);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:#D97706;">E-commerce Platform</div><div style="font-size:0.62rem;color:var(--text-light);">DTC orders · basket · returns</div></div><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="background:#FFFFFF;border:1.5px solid rgba(113,211,220,0.35);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:#0d9488;">WMS / OMS</div><div style="font-size:0.62rem;color:var(--text-light);">DC Inventory · Fulfilment</div></div><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="background:#FFFFFF;border:1.5px solid var(--border-card);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:var(--text-dark);">POS &amp; Loyalty / Syndicated</div><div style="font-size:0.62rem;color:var(--text-light);">Kantar · Euromonitor · EDI</div></div><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="background:#FFFFFF;border:1.5px solid rgba(22,163,74,0.3);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:#16a34a;">ESG &amp; Supplier Data</div><div style="font-size:0.62rem;color:var(--text-light);">Scope 3 · Provenance · CSRD feeds</div></div><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div></div>
-      </div>
-
-      <!-- CENTER: Snowflake Hub -->
-      <div style="background:linear-gradient(160deg,rgba(4,33,48,0.95),rgba(17,86,127,0.9));border:2px solid rgba(36,158,220,0.5);border-radius:20px;padding:1.4rem 1.6rem;text-align:center;min-width:220px;position:relative;box-shadow:0 8px 32px rgba(17,86,127,0.3);">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="24" style="display:block;margin:0 auto 0.6rem;opacity:0.9;filter:brightness(0) invert(1);">
-        <div style="font-size:0.7rem;font-weight:800;color:#FFFFFF;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.8rem;">AI Data Cloud</div>
-        <div style="display:flex;flex-direction:column;gap:0.4rem;">
-          <div style="background:rgba(17,86,127,0.5);border:1px solid rgba(36,158,220,0.35);border-radius:7px;padding:0.35rem 0.5rem;"><div style="font-size:0.65rem;font-weight:700;color:rgba(113,211,220,0.9);text-transform:uppercase;letter-spacing:0.1em;">SIGNAL</div><div style="font-size:0.62rem;color:rgba(255,255,255,0.65);">Governed Demand Intelligence</div></div>
-          <div style="background:rgba(36,158,220,0.25);border:1px solid rgba(36,158,220,0.4);border-radius:7px;padding:0.35rem 0.5rem;"><div style="font-size:0.65rem;font-weight:700;color:var(--sf-star);text-transform:uppercase;letter-spacing:0.1em;">SHELF</div><div style="font-size:0.62rem;color:rgba(255,255,255,0.65);">Cortex AI &amp; Scenario Modelling</div></div>
-          <div style="background:rgba(22,163,74,0.2);border:1px solid rgba(22,163,74,0.4);border-radius:7px;padding:0.35rem 0.5rem;"><div style="font-size:0.65rem;font-weight:700;color:#4ade80;text-transform:uppercase;letter-spacing:0.1em;">PROOF</div><div style="font-size:0.62rem;color:rgba(255,255,255,0.65);">Governance, CSRD &amp; Traceability</div></div>
-        </div>
-        <div style="margin-top:0.7rem;padding-top:0.6rem;border-top:1px solid rgba(255,255,255,0.12);">
-          <div style="font-size:0.58rem;color:rgba(255,255,255,0.45);text-align:center;line-height:1.4;">Zero-copy &nbsp;&middot;&nbsp; Semantic layer &nbsp;&middot;&nbsp; 3,600+ Marketplace datasets</div>
-        </div>
-      </div>
-
-      <!-- RIGHT: Business outcomes -->
-      <div style="display:flex;flex-direction:column;gap:0.45rem;padding-left:0.5rem;">
-        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.2rem;">Business Outcomes</div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div><div style="background:#FFFFFF;border:1.5px solid rgba(17,86,127,0.25);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:var(--sf-mid);">Unified Trading Review</div><div style="font-size:0.62rem;color:var(--text-light);">Live WSSI, MFP, OTB and finance in one view.</div></div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div><div style="background:#FFFFFF;border:1.5px solid rgba(36,158,220,0.25);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:var(--sf-blue);">Trend Intelligence</div><div style="font-size:0.62rem;color:var(--text-light);">Markdown ROI visible on every event, post-event.</div></div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div><div style="background:#FFFFFF;border:1.5px solid rgba(36,158,220,0.25);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:var(--sf-blue);">Markdown Risk Intelligence</div><div style="font-size:0.62rem;color:var(--text-light);">Risk flagged 4&ndash;6 weeks ahead of the trend window closing.</div></div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div><div style="background:#FFFFFF;border:1.5px solid rgba(113,211,220,0.3);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:#0d9488;">Channel Collaboration</div><div style="font-size:0.62rem;color:var(--text-light);">POS data in. Demand signal out. Zero-copy.</div></div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div><div style="background:#FFFFFF;border:1.5px solid rgba(22,163,74,0.25);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:#16a34a;">CSRD &amp; Traceability</div><div style="font-size:0.62rem;color:var(--text-light);">Auditable. Defensible. Regulator-ready.</div></div></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;"><div style="font-size:1rem;color:var(--sf-blue);font-weight:700;">&#8594;</div><div style="background:#FFFFFF;border:1.5px solid rgba(17,86,127,0.2);border-radius:8px;padding:0.5rem 0.8rem;flex:1;"><div style="font-size:0.72rem;font-weight:700;color:var(--sf-mid);">AI at Scale</div><div style="font-size:0.62rem;color:var(--text-light);">Cortex AI on governed data. Reaches production.</div></div></div>
-      </div>
-
-    </div>
-    <div style="text-align:center;margin-top:0.7rem;font-size:0.75rem;font-weight:700;color:var(--sf-mid);">Your existing systems stay exactly where they are. Snowflake is the intelligence layer on top, not a replacement. We bring AI, analytics, and collaboration <em>to</em> the data, not the other way around.</div>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">SUPPORTING DETAIL</div>
-</div>
-
-<!-- ============================================================ -->
 <!-- SLIDE 09: THE AGENTIC SHIFT — VISUAL PROCESS COMPARISON -->
 <!-- ============================================================ -->
 
-<div class="slide" id="slide-21">
+<div class="slide" id="slide-15">
   <div class="slide-bg bg-ice"></div>
   <div class="slide-content" style="padding-top:1.8rem;padding-bottom:1.8rem;">
     <h3 class="label">APPENDIX A</h3>
@@ -1332,10 +1014,10 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
 </div>
 
 <!-- ============================================================ -->
-<!-- APPENDIX B: AE CUSTOMISATION GUIDE (CPG) -->
+<!-- APPENDIX B: AE CUSTOMISATION GUIDE (FASHION RETAIL) -->
 <!-- ============================================================ -->
 
-<div class="slide" id="slide-22">
+<div class="slide" id="slide-16">
   <div class="slide-bg" style="background:var(--sf-deep);"></div>
   <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,rgba(4,33,48,0.4),rgba(17,86,127,0.3));"></div>
   <div class="slide-content" style="position:relative;z-index:10;padding-top:1.8rem;padding-bottom:1.8rem;">
@@ -1372,7 +1054,7 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
     <div style="margin-top:0.8rem;display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;">
       <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:0.7rem 0.9rem;">
         <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-star);margin-bottom:0.3rem;">How the deck is structured</div>
-        <p style="font-size:0.72rem;color:rgba(255,255,255,0.7);margin:0;max-width:100%;line-height:1.55;">Slides 1&ndash;14 are the presented flow. Arrow keys and Next stop at 14. Slides 15&ndash;20 are supporting detail, reached from the links on slide 12 or the picker, each with a return button to slide 12. Customise slides 5, 7 and 11 only. Leave 3, 6, 8, 9 and 10 as written.</p>
+        <p style="font-size:0.72rem;color:rgba(255,255,255,0.7);margin:0;max-width:100%;line-height:1.55;">Slides 1&ndash;14 are the presented flow. Arrow keys and Next stop at 14. Slides 15&ndash;17 are the appendices, reachable from the picker. On slide 12, each on-ramp is exactly one capability &mdash; Demand Intelligence, then Supply Optimisation &amp; Risk, then Visibility &amp; Control Tower &mdash; and all three run on the same governed foundation. Customise slides 5, 7 and 11 only. Leave 3, 6, 8, 9 and 10 as written.</p>
       </div>
       <div style="background:rgba(217,119,6,0.1);border:1px solid rgba(255,200,0,0.35);border-radius:10px;padding:0.7rem 0.9rem;">
         <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,200,0,0.9);margin-bottom:0.3rem;">&#9888; Internal proof references</div>
@@ -1384,10 +1066,10 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
 </div>
 
 <!-- ============================================================ -->
-<!-- APPENDIX C: WHERE SNOWFLAKE RUNS — CPG VALUE CHAIN -->
+<!-- APPENDIX C: WHERE SNOWFLAKE RUNS — FASHION RETAIL VALUE CHAIN -->
 <!-- ============================================================ -->
 
-<div class="slide" id="slide-23">
+<div class="slide" id="slide-17">
   <div class="slide-bg bg-ice"></div>
   <div class="slide-content" style="padding-top:1.8rem;padding-bottom:1.5rem;">
     <h3 class="label purple">APPENDIX C</h3>
@@ -1482,20 +1164,14 @@ p { font-size: clamp(0.9rem, 1.15vw, 1.05rem); font-weight: 300; line-height: 1.
     <option value="12">12 &middot; Three On-Ramps</option>
     <option value="13">13 &middot; Next Steps</option>
     <option value="14">14 &middot; Thank You</option>
-    <option value="15">Detail &middot; Unified Demand Intelligence</option>
-    <option value="16">Detail &middot; Connected Retail Intelligence</option>
-    <option value="17">Detail &middot; Supply Orchestration</option>
-    <option value="18">Detail &middot; Inventory &amp; Working Capital</option>
-    <option value="19">Detail &middot; Commercial, Compliance &amp; Sustainability</option>
-    <option value="20">Detail &middot; Platform Architecture</option>
-    <option value="21">Appendix A &middot; What You Need In Place</option>
-    <option value="22">Appendix B &middot; Presenter Guide (internal)</option>
-    <option value="23">Appendix C &middot; Where Snowflake Runs</option>
+    <option value="15">Appendix A &middot; What You Need In Place</option>
+    <option value="16">Appendix B &middot; Presenter Guide (internal)</option>
+    <option value="17">Appendix C &middot; Where Snowflake Runs</option>
   </select>
   <button onclick="nextSlide()">Next &#8594;</button>
 </div>
 <script>
-const TOTAL = 23;
+const TOTAL = 17;
 const SPINE_END = 14;
 let current = 0;
 let revealState = 0;
