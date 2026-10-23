@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="snowflake-source" content="cortex-agent-authored">
+<title>Better supply-chain decisions, connected on Snowflake</title>
+<script type="application/json" id="snowflake-report-metadata">
+{
+  "generated": "2026-10-21",
+  "intent": "Executive SCOR use-case slide with the original layered layout restored after user review, and a supporting 35-category mapping",
+  "dataSources": [
+    {"type":"reference","url":"https://scor.ascm.org","pages":"2-5","title":"ASCM SCOR Digital Standard Quick Reference Guide, 2025"},
+    {"type":"file","path":"SCOR - Snowflake opportunity map.md","title":"Independent proposed solution mapping"},
+    {"type":"documentation","url":"https://docs.snowflake.com/en/user-guide/intro-key-concepts"},
+    {"type":"documentation","url":"https://docs.snowflake.com/en/user-guide/ml-functions/forecasting"},
+    {"type":"documentation","url":"https://docs.snowflake.com/en/guides-overview-ai-features"},
+    {"type":"documentation","url":"https://docs.snowflake.com/en/developer-guide/snowpark-container-services/overview"}
+  ],
+  "sections":[
+    {"id":"executive-slide","title":"Executive opportunity map","producerNotes":"Original qualitative diagram. Orchestrate is Level 0. Plan and the five operational panels are Level 1. Full-width Plan communicates scope, not a different hierarchy level. Examples are proposed applications, not packaged coverage or measured results. No quantitative data or benefit estimates. Visible footer qualification removed at user request; sources and boundaries remain in supporting notes."},
+    {"id":"reference-notes","title":"Sources and speaker notes","producerNotes":"Platform documentation verifies building blocks, not the proposed supply-chain applications. Full guide retains ASCM attribution; no source artwork copied. Review reuse before commercial publication."}
+  ]
+}
+</script>
+<style>
+:root {
+  color-scheme: light dark;
+  --blue: #29b5e8; --mid: #11567f; --star: #71d3dc; --winter: #24323d;
+  --page: light-dark(#eaf0f3, #10232d);
+  --surface: light-dark(#ffffff, #163240);
+  --ink: light-dark(#24323d, #f0f6f8);
+  --muted: light-dark(#466171, #bdd0da);
+  --accent: light-dark(#11567f, #71d3dc);
+  --tint: light-dark(#eaf7fc, #204758);
+  --rule: light-dark(#b8d2df, #426473);
+  --band: #11567f; --band-ink: #f0f8fc;
+  --font: 'Lato', 'Arial', sans-serif;
+  --headline: clamp(28px, 3.1vw, 45px);
+  --title: clamp(18px, 1.6vw, 23px);
+  --body: clamp(14px, 1.25vw, 18px);
+  --small: 12px; --space: 8px;
+}
+* {box-sizing:border-box;}
+body {margin:0;background:var(--page);color:var(--ink);font-family:var(--font);line-height:1.35;}
+a {color:var(--accent);text-underline-offset:3px;}
+button {font:inherit;cursor:pointer;color:var(--ink);background:var(--surface);border:1px solid var(--rule);padding:8px 16px;border-radius:4px;}
+button:focus-visible,a:focus-visible,summary:focus-visible {outline:3px solid var(--blue);outline-offset:4px;}
+.toolbar {max-width:1440px;margin:auto;padding:16px 24px;display:flex;gap:16px;align-items:center;justify-content:space-between;}
+.toolbar p {margin:0;font-size:var(--small);color:var(--muted);}
+.controls {display:flex;gap:8px;flex-wrap:wrap;}
+.slide {max-width:1440px;margin:0 auto;background:var(--surface);padding:32px 48px;}
+.eyebrow,.label,h2,.metric-label {text-transform:uppercase;letter-spacing:.08em;font-weight:700;}
+.eyebrow {font-size:var(--small);color:var(--accent);margin:0 0 16px;}
+h1 {font-size:var(--headline);line-height:1.06;letter-spacing:-.025em;text-transform:uppercase;margin:0 0 16px;font-weight:900;}
+h1 span {display:block;color:var(--accent);}
+.subtitle {font-size:var(--body);margin:0 0 24px;color:var(--muted);}
+.diagram {display:grid;gap:16px;}
+.orchestrate {background:var(--band);color:var(--band-ink);padding:16px 24px;border-top:4px solid var(--blue);}
+.row-title {display:flex;gap:16px;align-items:baseline;justify-content:space-between;margin-bottom:8px;}
+h2 {font-size:var(--body);margin:0;}
+.level {font-size:var(--small);letter-spacing:.04em;white-space:nowrap;}
+.orchestrate .examples {font-size:var(--title);font-weight:700;margin:0 0 8px;}
+.support {margin:0;font-size:var(--small);}
+.plan {background:var(--tint);padding:16px 24px;border-left:4px solid var(--blue);}
+.plan h2 {color:var(--accent);}
+.plan p {font-size:var(--title);font-weight:700;margin:0;}
+.processes {display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:24px;}
+.process {border-top:3px solid var(--blue);padding-top:16px;min-width:0;}
+.process h2 {color:var(--accent);margin-bottom:8px;}
+.process h3 {font-size:var(--title);line-height:1.2;margin:0 0 8px;}
+.process p {font-size:var(--body);margin:0;color:var(--muted);}
+.feedback {font-size:var(--small);color:var(--muted);border-bottom:1px solid var(--rule);padding-bottom:16px;margin:0;}
+.capabilities {display:grid;grid-template-columns:1fr 3fr;gap:24px;align-items:center;}
+.capabilities h2 {color:var(--accent);font-size:var(--small);}
+.capabilities p {font-size:var(--body);font-weight:700;margin:0;}
+.outcomes {border-top:1px solid var(--rule);padding-top:16px;display:grid;grid-template-columns:1fr 3fr;gap:24px;align-items:baseline;}
+.outcomes h2 {font-size:var(--small);color:var(--accent);}
+.outcomes p {margin:0;font-size:var(--small);}
+.delivery {margin-top:24px;display:flex;gap:24px;flex-wrap:wrap;font-size:var(--small);}
+.delivery span {display:block;}
+.delivery strong {color:var(--accent);letter-spacing:.06em;text-transform:uppercase;}
+.notes {max-width:1440px;margin:24px auto;padding:0 48px 32px;}
+summary {cursor:pointer;font-weight:700;}
+.notes p,.notes li {max-width:1000px;font-size:15px;line-height:1.6;}
+.notes h3 {font-size:18px;margin-top:24px;}
+@media(min-width:1200px) {.slide {min-height:810px;}}
+@media(max-width:800px) {
+  .slide {padding:24px;} .processes {grid-template-columns:repeat(2,minmax(0,1fr));}
+  .capabilities,.outcomes {grid-template-columns:1fr;gap:8px;}
+  .notes {padding:0 24px 24px;} .row-title {flex-wrap:wrap;gap:8px;}
+}
+@media(max-width:450px) {
+  .processes {grid-template-columns:1fr;} .toolbar {align-items:flex-start;flex-direction:column;}
+  .orchestrate,.plan {padding:16px;} .delivery {gap:16px;}
+}
+@media print {
+  @page {size:landscape;margin:8mm;}
+  :root {color-scheme:light !important;--headline:29px;--title:16px;--body:12px;--small:10px;}
+  body {background:var(--surface);-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .toolbar,.notes {display:none;} .slide {min-height:0;padding:8px 16px;max-width:none;}
+  .diagram {gap:12px;} .subtitle {margin-bottom:16px;} .eyebrow {margin-bottom:8px;}
+  .orchestrate,.plan {padding:12px 16px;} .process {padding-top:12px;}
+  .processes {gap:16px;} .delivery {margin-top:16px;}
+}
+</style>
+</head>
+<body>
+<nav class="toolbar" aria-label="Presentation controls">
+  <p>SCOR DIGITAL STANDARD / EXECUTIVE OPPORTUNITY MAP</p>
+  <div class="controls"><button id="theme" type="button" aria-label="Switch colour theme">Switch theme</button><button id="print" type="button">Print slide</button></div>
+</nav>
+<main>
+<article class="slide" id="executive-slide" aria-labelledby="slide-title">
+  <header>
+    <p class="eyebrow">Supply-chain decisions / Snowflake</p>
+    <h1 id="slide-title">Better supply-chain decisions, <span>connected on Snowflake</span></h1>
+    <p class="subtitle">A proposed use-case map across the SCOR Digital Standard</p>
+  </header>
+  <div class="diagram" aria-label="Orchestrate spans the supply chain at Level 0. Plan and five operational areas are Level 1. Snowflake capabilities support the proposed decision applications; outcomes must be measured.">
+    <section class="orchestrate" aria-labelledby="orchestrate-title">
+      <div class="row-title"><h2 id="orchestrate-title">Orchestrate</h2><span class="level">LEVEL 0 / CROSS-FUNCTIONAL</span></div>
+      <p class="examples">Strategy &amp; performance · Network &amp; risk · Business planning · Segmentation &amp; circularity</p>
+      <p class="support">Supporting enablers: business rules, data &amp; technology, people, contracts, compliance and ESG</p>
+    </section>
+    <section class="plan" aria-labelledby="plan-title">
+      <div class="row-title"><h2 id="plan-title">Plan</h2><span class="level">LEVEL 1 / ACROSS THE CHAIN</span></div>
+      <p>Demand forecasts · Constrained supply scenarios · Inventory &amp; capacity trade-offs</p>
+    </section>
+    <div class="processes" aria-label="Five further Level 1 process areas; these panels are not a fixed sequential workflow">
+      <section class="process"><h2>Order</h2><h3>Promise &amp; <br>allocation</h3><p>Compare availability and priorities before committing.</p></section>
+      <section class="process"><h2>Source</h2><h3>Supplier choice &amp; <br>inbound risk</h3><p>Connect cost, quality and delivery evidence.</p></section>
+      <section class="process"><h2>Transform</h2><h3>Yield, quality &amp; <br>asset health</h3><p>Identify losses and anticipate operating risks.</p></section>
+      <section class="process"><h2>Fulfill</h2><h3>Delivery risk &amp; <br>cost-to-serve</h3><p>Prioritise exceptions against customer commitments.</p></section>
+      <section class="process"><h2>Return</h2><h3>Disposition &amp; <br>value recovery</h3><p>Compare repair, reuse and recovery options.</p></section>
+    </div>
+    <p class="feedback">Feedback across the chain: return and delivery evidence informs sourcing, production and the next plan.</p>
+    <section class="capabilities" aria-labelledby="capabilities-title"><h2 id="capabilities-title">Shared Snowflake capabilities</h2><p>Data &amp; analytics · Forecasting &amp; AI · Custom models &amp; applications · Collaboration</p></section>
+    <section class="outcomes" aria-labelledby="outcomes-title"><h2 id="outcomes-title">Measure supply-chain outcomes</h2><p>Reliability · Responsiveness · Agility · Cost · Profitability · Asset management · Environmental · Social</p></section>
+  </div>
+  <footer>
+    <div class="delivery" aria-label="Three implementation routes, which may be combined">
+      <span><strong>Configure</strong> platform capabilities</span><span><strong>Build</strong> decision applications</span><span><strong>Connect</strong> approved actions to execution</span>
+    </div>
+  </footer>
+</article>
+<section class="notes" id="reference-notes" aria-label="Supporting reference and speaker notes">
+<details><summary>Speaker notes, detailed mapping and sources</summary>
+<h3>Talk track</h3>
+<p>SCOR gives us a common language for the supply chain. Snowflake can connect the evidence and run the analytics, models and applications that support decisions across it: what to promise, where to source, how to balance supply, which exceptions to address and how to recover value. We can enter through a particular business decision or through shared data needs. The detailed map distinguishes platform configuration, applications we build and actions we integrate with execution. Success is measured in supply-chain outcomes, not in how many boxes we colour in.</p>
+<h3>What this slide means</h3>
+<p>Orchestrate is Level 0. Plan, Order, Source, Transform, Fulfill and Return are Level 1. Plan spans the page to communicate its cross-process scope; it is not a higher hierarchy level. The aligned operational panels are not a mandatory sequence. Proposed applications use verified platform building blocks, but are not claims of turnkey SCOR functionality.</p>
+<p><a href="SCOR%20-%20Snowflake%20field%20guide.html">Open the detailed 35-category mapping</a> (interactive field guide).</p>
+<h3>Sources and boundaries</h3>
+<ul>
+<li>ASCM, <em>SCOR Digital Standard Quick Reference Guide</em>, 2025, supplied PDF, pp. 2–5. <a href="https://scor.ascm.org">Full SCOR standard</a>. Original source carries CC BY-NC-ND 4.0; no source artwork reproduced. Review reuse permissions before commercial publication.</li>
+<li><a href="https://docs.snowflake.com/en/user-guide/intro-key-concepts">Snowflake platform overview</a>: data, analytics, application and collaboration building blocks.</li>
+<li><a href="https://docs.snowflake.com/en/user-guide/ml-functions/forecasting">Snowflake forecasting</a>: time-series forecasts, features, evaluation and intervals provide a component for demand planning. End-to-end planning workflows, causal promotion measurement and constraint-based supply planning require additional application logic, analytical methods and business data, which can form part of a solution built on Snowflake.</li>
+<li><a href="https://docs.snowflake.com/en/guides-overview-ai-features">Snowflake AI and ML</a>: assistance and custom model capabilities; outputs need appropriate evaluation and oversight.</li>
+<li><a href="https://docs.snowflake.com/en/developer-guide/snowpark-container-services/overview">Snowpark Container Services</a>: runtime for custom applications and libraries; specialised optimisation models and solvers must be supplied and validated.</li>
+</ul>
+<p>No ROI, customer implementation or account-specific deployment is asserted. SCOR outcome attributes are strategic groupings, not individual metrics. The companion mapping names candidate measures without claiming official process-to-metric linkages.</p>
+</details>
+</section>
+</main>
+<script>
+const themeButton = document.getElementById('theme');
+themeButton.addEventListener('click', () => {
+  const root = document.documentElement;
+  const preferredDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const current = root.style.colorScheme || (preferredDark ? 'dark' : 'light');
+  root.style.colorScheme = current === 'dark' ? 'light' : 'dark';
+});
+document.getElementById('print').addEventListener('click', () => window.print());
+</script>
+</body>
+</html>

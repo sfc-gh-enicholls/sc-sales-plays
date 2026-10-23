@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="snowflake-source" content="cortex-agent-authored">
 <title>Supply Chain Sales Plays — Snowflake</title>
+<script type="application/json" id="snowflake-report-metadata">{"generated":"2026-10-23","intent":"Supply-chain resource hub with industry-agnostic resources before industry breakdowns","sections":[{"id":"core-resources","title":"Across every industry","dataSources":[{"type":"file","path":"SCOR - Snowflake executive slide.html"},{"type":"file","path":"SCOR - Snowflake field guide.html"},{"type":"file","path":"sc-field-enablement-PRESENT.html"}],"producerNotes":"Four navigation cards; demo library is an authenticated Snowflake destination. Existing industry deep dives preserved."}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
@@ -26,6 +27,11 @@
   --c-retail: #249EDC;
   --c-cpg: #B45309;
   --c-pharma: #0d9488;
+  --hub-ink: #f0f7fa;
+  --hub-muted: #b9d0dc;
+  --hub-card: #103448;
+  --hub-card-hover: #18485e;
+  --hub-rule: #386071;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:#FFFFFF;}
@@ -84,6 +90,36 @@ p{font-size:clamp(0.84rem,1.1vw,1rem);font-weight:300;line-height:1.65;color:var
 .hub-link-soon{font-size:0.64rem;font-weight:600;color:rgba(255,255,255,0.45);font-style:italic;margin-top:0.5rem;}
 .sc101-link{position:absolute;top:1.5rem;right:2rem;z-index:20;display:inline-flex;align-items:center;gap:0.5rem;font-size:0.88rem;font-weight:800;color:#FFFFFF;text-decoration:none;background:var(--sf-blue);border-radius:10px;padding:0.65rem 1.3rem;box-shadow:0 4px 14px rgba(36,158,220,0.4);transition:all 0.15s;}
 .sc101-link:hover{background:#1c88b8;transform:translateY(-1px);box-shadow:0 6px 18px rgba(36,158,220,0.5);}
+/* The landing page scrolls naturally; the existing deep dives remain slides. */
+body.hub-view{height:auto;overflow:auto;background:var(--sf-deep);}
+body.hub-view .deck{height:auto;min-height:100vh;}
+body.hub-view #slide-1{position:relative;min-height:100vh;align-items:flex-start;overflow:visible;}
+body.hub-view #slide-1>.slide-content{max-height:none;overflow:visible;width:100%;padding:48px 32px 80px;}
+.slide:not(.active){visibility:hidden;}
+.hub-intro{width:100%;text-align:left;margin-bottom:32px;}
+.hub-kicker{color:var(--sf-star);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:16px;}
+.hub-intro h1{color:var(--hub-ink);font-size:clamp(32px,4.2vw,56px);font-weight:800;line-height:1.08;letter-spacing:-.03em;max-width:800px;margin-bottom:16px;}
+.hub-intro p{color:var(--hub-muted);font-size:18px;max-width:680px;font-weight:400;}
+.core-resources{width:100%;text-align:left;margin-bottom:48px;}
+.resource-heading{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:16px;}
+.resource-heading h2,.industry-heading h2{color:var(--hub-ink);font-size:24px;margin:0;}
+.resource-heading p{font-size:14px;color:var(--hub-muted);font-weight:400;margin:0;}
+.resource-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;}
+.resource-card{display:flex;flex-direction:column;min-width:0;padding:24px;background:var(--hub-card);border:1px solid var(--hub-rule);border-top:3px solid var(--sf-star);border-radius:12px;color:var(--hub-ink);text-decoration:none;transition:background .18s,border-color .18s;}
+.resource-card:hover{background:var(--hub-card-hover);border-color:var(--sf-star);}
+.resource-card:focus-visible,.hub-jump:focus-visible{outline:3px solid var(--sf-star);outline-offset:4px;}
+.resource-kind{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sf-star);margin-bottom:24px;}
+.resource-card h3{font-size:22px;line-height:1.2;font-weight:700;margin-bottom:12px;}
+.resource-card p{font-size:14px;line-height:1.55;color:var(--hub-muted);font-weight:400;margin-bottom:24px;flex:1;}
+.resource-action{font-size:13px;font-weight:700;color:var(--hub-ink);display:flex;justify-content:space-between;gap:8px;}
+.resource-action span{color:var(--sf-star);}
+.industry-heading{width:100%;text-align:left;border-top:1px solid var(--hub-rule);padding-top:32px;margin-bottom:24px;scroll-margin-top:24px;}
+.industry-heading p{color:var(--hub-muted);font-size:16px;font-weight:400;margin-top:8px;}
+.hub-jump{display:inline-block;margin-top:16px;color:var(--sf-star);font-size:14px;text-underline-offset:4px;}
+.industry-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;width:100%;}
+@media(max-width:1000px){.resource-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:600px){body.hub-view #slide-1>.slide-content{padding:32px 16px 80px;}.resource-grid,.industry-grid{grid-template-columns:1fr;}.resource-heading{display:block;}.resource-heading p{margin-top:8px;}.resource-kind{margin-bottom:16px;}}
+@media(prefers-reduced-motion:reduce){.slide,.resource-card{transition:none;}}
 </style>
 </head>
 <body>
@@ -94,13 +130,20 @@ p{font-size:clamp(0.84rem,1.1vw,1rem);font-weight:300;line-height:1.65;color:var
 <!-- ══ SLIDE 1: INDUSTRY HUB ══ -->
 <div class="slide" id="slide-1" style="background:linear-gradient(160deg,#042130 0%,#0d3151 60%,#11567F 100%);">
   <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse at 70% 20%,rgba(113,211,220,0.12) 0%,transparent 60%);"></div>
-  <a class="sc101-link" href="sc-field-enablement-PRESENT.html">📊 SC101 Enablement Deck ↗</a>
   <div class="slide-content" style="text-align:center;display:flex;flex-direction:column;align-items:center;">
-    <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:rgba(113,211,220,0.7);margin-bottom:0.5rem;">SNOWFLAKE SUPPLY CHAIN · INTERNAL ENABLEMENT</div>
-    <h2 style="color:#FFFFFF;text-align:center;font-size:clamp(1.6rem,3vw,2.6rem);margin-bottom:0.25rem;">Industry Supply Chains</h2>
-    <p style="text-align:center;color:rgba(113,211,220,0.6);font-size:0.72rem;font-weight:600;font-style:italic;margin-bottom:0.8rem;">The play is the same across every vertical. The vocabulary changes.</p>
+    <header class="hub-intro"><div class="hub-kicker">Snowflake / Supply chain sales plays</div><h1>One supply-chain story.<br>A play for every industry.</h1><p>Frame the opportunity, explore the use cases and bring the conversation to life.</p><a class="hub-jump" href="#industry-plays">Jump to industry plays &darr;</a></header>
+    <section class="core-resources" id="core-resources" aria-labelledby="resources-title">
+      <div class="resource-heading"><h2 id="resources-title">Across every industry</h2><p>The shared toolkit for your next conversation.</p></div>
+      <div class="resource-grid">
+        <a class="resource-card" href="SCOR%20-%20Snowflake%20executive%20slide.html"><span class="resource-kind">Executive overview / One slide</span><h3>The SCOR opportunity</h3><p>Show where Snowflake can support decisions across the supply chain.</p><span class="resource-action">Open executive slide <span aria-hidden="true">&rarr;</span></span></a>
+        <a class="resource-card" href="SCOR%20-%20Snowflake%20field%20guide.html"><span class="resource-kind">Interactive guide / 35 mappings</span><h3>Explore the use cases</h3><p>Browse proposed applications, building blocks and what each solution needs.</p><span class="resource-action">Explore the mapping <span aria-hidden="true">&rarr;</span></span></a>
+        <a class="resource-card" href="sc-field-enablement-PRESENT.html"><span class="resource-kind">Field enablement / SC101</span><h3>Build your supply-chain story</h3><p>Get the language, discovery questions and commercial context for the conversation.</p><span class="resource-action">Open enablement deck <span aria-hidden="true">&rarr;</span></span></a>
+        <a class="resource-card" href="https://app.snowflake.com/sfcogsops/snowhouse_aws_us_west_2/#/streamlit-apps/TEMP.ENICHOLLS.DEMO_CATALOG"><span class="resource-kind">Demo library / Snowflake sign-in</span><h3>Make it tangible</h3><p>Find a demo to bring the use case to life. Requires access to the Snowflake app.</p><span class="resource-action">Browse demo library <span aria-hidden="true">&nearr;</span></span></a>
+      </div>
+    </section>
+    <header class="industry-heading" id="industry-plays"><h2>Find your industry play</h2><p>The play is the same across every vertical. The vocabulary changes.</p></header>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;width:100%;">
+    <div class="industry-grid">
 
       <!-- Manufacturing -->
       <div onclick="goTo(1)" style="cursor:pointer;background:rgba(255,255,255,0.04);border:1.5px solid rgba(124,58,237,0.35);border-radius:16px;overflow:hidden;text-align:left;transition:all 0.2s;" onmouseover="this.style.background='rgba(124,58,237,0.18)';this.style.borderColor='rgba(167,139,250,0.6)';" onmouseout="this.style.background='rgba(255,255,255,0.04)';this.style.borderColor='rgba(124,58,237,0.35)';">
@@ -707,12 +750,15 @@ function goTo(i){
   document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
   document.getElementById('slide-'+(i+1)).classList.add('active');
   cur=i;
+  document.body.classList.toggle('hub-view',i===0);
   document.getElementById('progressBar').style.width=((i+1)/TOTAL*100)+'%';
   const sel=document.getElementById('slideSelect');
   if(sel)sel.value=i+1;
 }
 function changeSlide(dir){goTo(cur+dir);}
 document.addEventListener('keydown',e=>{
+  if(e.target.closest('a,button,input,select,textarea'))return;
+  if(cur===0&&e.key===' ')return;
   if(e.key==='ArrowRight'||e.key===' ')changeSlide(1);
   else if(e.key==='ArrowLeft')changeSlide(-1);
   else if(e.key==='Home')goTo(0);
