@@ -97,6 +97,16 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
 .open-btn.outline-btn:hover { background: var(--sf-mid); color: var(--sf-white); }
 @media (max-width: 900px) { .onepager-preview { flex-basis: 11rem; } .onepager-preview img { max-width: 8rem; } }
 @media (max-width: 600px) { .onepager-card { flex-direction: column; } .onepager-preview { flex-basis: auto; border-right: none; border-bottom: 1px solid var(--border); padding: 1.2rem; } .onepager-preview img { max-width: 7rem; } .onepager-actions .open-btn { flex-basis: 100%; } }
+/* Film: the narrated 90-second "Can we say yes?" film, muted autoplay loop */
+.film-section { max-width: 1200px; margin: 0 auto; padding: 2.5rem 3rem 0; }
+.film-frame { position: relative; border-radius: 14px; overflow: hidden; background: var(--sf-deep); border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(4,33,48,0.18); aspect-ratio: 16 / 9; }
+.film-video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.film-sound { position: absolute; top: 0.9rem; right: 0.9rem; display: inline-flex; align-items: center; gap: 0.45rem; font: 600 0.75rem/1 'Inter', sans-serif; color: var(--sf-white); background: rgba(4,33,48,0.78); border: 1px solid rgba(113,211,220,0.45); border-radius: 999px; padding: 0.55rem 0.9rem; cursor: pointer; }
+.film-sound:hover { background: var(--sf-mid); }
+.film-sound:focus-visible { outline: 2px solid var(--sf-star); outline-offset: 2px; }
+.film-sound[hidden] { display: none; }
+.film-desc { font-size: 0.78rem; color: var(--text-gray); line-height: 1.55; margin-top: 0.7rem; max-width: 760px; }
+@media (max-width: 600px) { .film-section { padding: 1.5rem 1.5rem 0; } .film-frame { border-radius: 10px; } .film-sound { top: 0.5rem; right: 0.5rem; padding: 0.45rem 0.7rem; } }
 </style>
 </head>
 <body>
@@ -112,6 +122,19 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     <p class="play-subtitle">Help EMEA CPG leaders turn fragmented supply-chain data into a single, trusted intelligence layer, so every decision, from demand to compliance, is made with foresight, not hindsight.</p>
   </div>
 </header>
+
+<!-- ── FILM ── -->
+<section class="film-section" aria-labelledby="film-title">
+  <p class="section-heading" id="film-title">The Play in 90 Seconds &middot; Can We Say Yes?</p>
+  <div class="film-frame">
+    <video class="film-video" src="assets/film/cpg-say-yes.mp4" poster="assets/film/cpg-say-yes-poster.webp" width="1280" height="720" muted loop playsinline controls preload="metadata" aria-describedby="film-desc"></video>
+    <button type="button" class="film-sound" aria-label="Play from the start with voiceover">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>
+      Watch with voiceover
+    </button>
+  </div>
+  <p class="film-desc" id="film-desc">A retailer asks for 36k extra cases a week. Snowflake finds the two risks to that promise, a Cortex Agent in Snowflake CoWork recommends the fix, and the planner says yes with proof. Illustrative scenario.</p>
+</section>
 
 <!-- ── PURPOSE ── -->
 <section class="purpose-section">
@@ -413,5 +436,31 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
   </div>
 </footer>
 
+<script>
+/* Film: autoplay muted while on screen; respect reduced motion; one tap restarts with voiceover */
+(function () {
+  var v = document.querySelector('.film-video');
+  var btn = document.querySelector('.film-sound');
+  if (!v || !btn) return;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var userPaused = false;
+  v.addEventListener('pause', function () { if (!v.ended && document.visibilityState === 'visible' && v.dataset.auto !== '1') userPaused = true; v.dataset.auto = ''; });
+  v.addEventListener('play', function () { userPaused = false; });
+  v.addEventListener('volumechange', function () { btn.hidden = !v.muted; });
+  if (!reduce && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { if (!userPaused) v.play().catch(function () {}); }
+        else if (!v.paused) { v.dataset.auto = '1'; v.pause(); }
+      });
+    }, { threshold: 0.35 }).observe(v);
+  }
+  btn.addEventListener('click', function () {
+    v.muted = false; v.loop = false; v.currentTime = 0;
+    v.play().catch(function () {});
+  });
+  v.addEventListener('ended', function () { v.loop = true; });
+})();
+</script>
 </body>
 </html>
