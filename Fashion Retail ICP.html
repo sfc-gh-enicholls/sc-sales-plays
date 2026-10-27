@@ -1,756 +1,439 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Snowflake Fashion Retail: Ideal Customer Profile</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<style>
-:root {
-  --sf-blue: #249EDC;
-  --sf-mid: #11567F;
-  --sf-deep: #042130;
-  --sf-ice: #F6F9FA;
-  --sf-star: #71D3DC;
-  --sf-orange: #FF9F36;
-  --sf-white: #FFFFFF;
-  --text-dark: #111827;
-  --text-gray: #4B5568;
-  --text-light: #6B7280;
-  --border-card: rgba(204,204,204,0.5);
+<style>:root {
+  --ink: #07121C; --ink-2: #0E2231; --ink-3: #132C3E; --line: rgba(220,236,245,.14); --line-2: rgba(220,236,245,.26);
+  --text: #EEF4F7; --muted: #93A7B3; --blue: #29B5E8; --star: #71D3DC; --amber: #FFB25B; --red: #FF7A6B; --green: #6FDFA8;
+  --font: "Lato", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --rail: 272px;
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', sans-serif; background: #FFFFFF; }
-.deck { width: 100vw; height: 100vh; position: relative; }
-.slide { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1); overflow: hidden; }
-.slide.active { opacity: 1; pointer-events: all; }
-.slide-bg { position: absolute; inset: 0; z-index: 0; }
-.bg-dark-cinematic { background: #FFFFFF; }
-.bg-aurora { background: var(--sf-ice); }
-.bg-bold-blue { background: var(--sf-mid); }
-.slide-content { position: relative; z-index: 10; width: 88%; max-width: 1200px; padding: 2.5rem 2rem; }
-h3.label { font-size: clamp(0.65rem, 1vw, 0.8rem); font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sf-blue); margin-bottom: 0.8rem; }
-h3.label.purple { color: var(--sf-mid); }
-h1 { font-size: clamp(2.4rem, 5vw, 4.5rem); font-weight: 900; line-height: 1.05; color: var(--text-dark); letter-spacing: -0.02em; margin-bottom: 0.6rem; }
-h2 { font-size: clamp(1.5rem, 2.8vw, 2.5rem); font-weight: 800; line-height: 1.1; color: var(--text-dark); letter-spacing: -0.01em; margin-bottom: 0.6rem; }
-.slide.dark-slide h1, .slide.dark-slide h2 { color: #FFFFFF; }
-.slide.dark-slide p { color: rgba(255,255,255,0.85); }
-.slide.dark-slide .label { color: rgba(255,255,255,0.7); }
-.highlight { color: var(--sf-blue); }
-.highlight-purple { color: var(--sf-mid); }
-.divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--sf-blue), var(--sf-star)); margin: 0.9rem 0; border-radius: 2px; }
-.divider-purple { width: 60px; height: 3px; background: linear-gradient(90deg, var(--sf-mid), var(--sf-blue)); margin: 0.9rem 0; border-radius: 2px; }
-p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.6; color: var(--text-gray); max-width: 750px; margin-bottom: 0.4rem; }
-.card { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 12px; padding: 1.2rem 1.4rem; height: 100%; box-sizing: border-box; }
-.card.blue-border { border-color: rgba(36,158,220,0.4); }
-.card.purple-border { border-color: rgba(17,86,127,0.4); }
-.card.teal-border { border-color: rgba(113,211,220,0.5); }
-.card.green-border { border-color: rgba(34,197,94,0.35); }
-.card-title { font-size: 0.82rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.45rem; letter-spacing: 0.03em; }
-.card-title.blue { color: var(--sf-blue); }
-.card-title.purple { color: var(--sf-mid); }
-.card-title.teal { color: #0d9488; }
-.card p { font-size: 0.82rem; margin: 0 0 0.3rem 0; max-width: 100%; color: var(--text-gray); }
-.pill { display: inline-block; background: rgba(36,158,220,0.1); border: 1px solid rgba(36,158,220,0.3); border-radius: 999px; padding: 0.25rem 0.75rem; font-size: 0.72rem; font-weight: 600; color: var(--sf-blue); letter-spacing: 0.05em; text-transform: uppercase; margin: 0.15rem; }
-.pill.purple { background: rgba(17,86,127,0.08); border-color: rgba(17,86,127,0.3); color: var(--sf-mid); }
-.pill.teal { background: rgba(113,211,220,0.12); border-color: rgba(113,211,220,0.4); color: #0d9488; }
-.pill.green { background: rgba(34,197,94,0.08); border-color: rgba(34,197,94,0.35); color: #166534; }
-.pill.red { background: rgba(220,38,38,0.07); border-color: rgba(220,38,38,0.3); color: #DC2626; }
-.kpi-item { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.32rem 0; border-bottom: 1px solid rgba(204,204,204,0.3); }
-.kpi-item:last-child { border-bottom: none; }
-.kpi-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sf-blue); flex-shrink: 0; margin-top: 0.35rem; }
-.kpi-dot.purple { background: var(--sf-mid); }
-.kpi-text { font-size: 0.78rem; color: var(--text-gray); line-height: 1.4; }
-.kpi-text strong { color: var(--text-dark); font-weight: 700; }
-.role-badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 1rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
-.role-badge.economic { background: rgba(17,86,127,0.1); border: 1px solid rgba(17,86,127,0.35); color: var(--sf-mid); }
-.role-badge.technical { background: rgba(36,158,220,0.1); border: 1px solid rgba(36,158,220,0.35); color: var(--sf-blue); }
-.role-badge.champion { background: rgba(113,211,220,0.12); border: 1px solid rgba(113,211,220,0.4); color: #0d9488; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: var(--ink); color: var(--text); font-family: var(--font); }
+body { display: grid; grid-template-columns: var(--rail) 1fr; overflow: hidden; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 8px; }
 
-.slide-number { position: absolute; bottom: 1.5rem; right: 1.8rem; font-size: 0.72rem; color: var(--text-light); font-weight: 500; letter-spacing: 0.08em; z-index: 20; }
-.internal-badge { position: absolute; top: 1rem; right: 1.8rem; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); background: rgba(220,38,38,0.06); border: 1px solid rgba(220,38,38,0.2); border-radius: 4px; padding: 0.15rem 0.55rem; z-index: 20; }
-.snowflake-logo { position: absolute; bottom: 1.2rem; right: 5.5rem; z-index: 20; opacity: 0.85; display: flex; align-items: center; height: 32px; }
-.progress-bar-wrap { position: fixed; top: 0; left: 0; width: 100%; height: 3px; z-index: 100; background: rgba(0,0,0,0.06); }
-.progress-bar { height: 100%; background: linear-gradient(90deg, var(--sf-mid), var(--sf-blue)); transition: width 0.5s ease; }
-.controls { position: fixed; bottom: 2.2rem; left: 50%; transform: translateX(-50%); display: flex; gap: 0.8rem; z-index: 100; align-items: center; }
-.controls button { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 999px; padding: 0.5rem 1.3rem; color: var(--text-gray); font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; letter-spacing: 0.04em; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
-.controls button:hover { background: var(--sf-ice); border-color: var(--sf-blue); color: var(--sf-mid); }
-.controls select { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 999px; padding: 0.5rem 1.1rem; color: var(--text-gray); font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; letter-spacing: 0.04em; box-shadow: 0 1px 3px rgba(0,0,0,0.06); outline: none; }
-</style>
-</head>
+/* rail */
+.rail { height: 100vh; overflow-y: auto; padding: 28px 18px 20px; display: flex; flex-direction: column; gap: 14px;
+  background: linear-gradient(180deg, #050C13, #0A1E2C); border-right: 1px solid var(--line); }
+.rail .logo { height: 26px; width: auto; align-self: flex-start; margin-left: 8px; }
+.doc { font-size: 13px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--star); margin: 10px 8px 0; }
+.doc span { display: block; color: var(--text); font-size: 20px; letter-spacing: -.01em; text-transform: none; margin-top: 4px; }
+.internal { align-self: flex-start; margin-left: 8px; font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--amber); border: 1px solid rgba(255,178,91,.4); border-radius: 99px; padding: 4px 10px; }
+.rail nav { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+.rgl { font-size: 10.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 10px 6px; }
+.ri { display: flex; align-items: center; gap: 12px; padding: 9px 10px; border-radius: 10px; color: var(--muted); font-size: 14.5px;
+  border: 1px solid transparent; transition: background .2s, color .2s; }
+.ri .ix { font-size: 12px; font-weight: 800; color: var(--muted); width: 20px; text-align: center; font-variant-numeric: tabular-nums; }
+.ri:hover { background: rgba(255,255,255,.04); color: var(--text); }
+.ri.on { background: var(--ink-3); border-color: var(--line-2); color: var(--text); font-weight: 700; }
+.ri.on .ix { color: var(--star); }
+.ri.ov { color: var(--text); }
+.keys { margin-top: auto; padding: 14px 10px 0; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+kbd { display: inline-block; min-width: 20px; padding: 1px 5px; margin-right: 2px; border: 1px solid var(--line-2); border-bottom-width: 2px;
+  border-radius: 5px; font: 700 11px var(--font); color: var(--text); text-align: center; }
+
+/* page */
+main { height: 100vh; overflow-y: auto; scroll-behavior: smooth;
+  background: radial-gradient(1100px 700px at 90% 0%, rgba(19,74,103,.55) 0%, transparent 60%), var(--ink); }
+.page { display: none; max-width: 1480px; margin: 0 auto; padding: 52px 56px 40px; min-height: 100vh; flex-direction: column; gap: 22px; }
+.page.on { display: flex; animation: in .35s ease; }
+@keyframes in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.label { font-size: 14px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--star); }
+.label .sep { color: var(--muted); margin: 0 4px; }
+h2 { font-size: clamp(34px, 3.4vw, 54px); font-weight: 900; letter-spacing: -.025em; line-height: 1.02; margin-top: 12px; }
+h2 .dim { color: var(--muted); }
+.role { padding: 3px 10px; border-radius: 99px; border: 1px solid; font-size: 11.5px; letter-spacing: .1em; }
+.role.econ { color: var(--star); border-color: rgba(113,211,220,.45); }
+.role.eval { color: var(--blue); border-color: rgba(41,181,232,.45); }
+.role.exp  { color: var(--amber); border-color: rgba(255,178,91,.45); }
+
+.card { background: var(--ink-2); border: 1px solid var(--line); border-radius: 18px; padding: 22px 24px; }
+.card h4, .group h4 { font-size: 12.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--star); margin-bottom: 14px; }
+.card h5 { font-size: 11.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 16px 0 6px;
+  padding-top: 14px; border-top: 1px solid var(--line); }
+.card p { font-size: 15.5px; line-height: 1.55; color: var(--text); }
+.card p.muted, .muted { color: var(--muted); }
+.card p.ctx { color: #D3DEE4; }
+.k { display: block; font-size: 11.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 6px; }
+
+.grid { display: grid; grid-template-columns: 1.05fr 1fr 1.1fr; gap: 18px; align-items: stretch; }
+.col { display: flex; flex-direction: column; gap: 18px; }
+.col > .card:last-child { flex: 1; }
+ul { list-style: none; }
+.dots li, .pains li { position: relative; padding: 9px 0 9px 20px; font-size: 15px; line-height: 1.45; border-bottom: 1px solid var(--line); }
+.dots li:last-child, .pains li:last-child { border-bottom: 0; }
+.dots li::before, .pains li::before { content: ""; position: absolute; left: 2px; top: 17px; width: 7px; height: 7px; border-radius: 50%; background: var(--star); }
+.pains li::before { background: var(--red); }
+.kpis { display: flex; flex-direction: column; gap: 8px; }
+.kpis li { position: relative; }
+.kpi { all: unset; box-sizing: border-box; width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 10px; cursor: pointer;
+  padding: 10px 14px; border-radius: 10px; background: rgba(255,255,255,.03); border: 1px solid var(--line); font-size: 15px; color: var(--text); transition: border-color .15s, background .15s; }
+.kpi:hover, .kpi[aria-expanded="true"] { border-color: var(--blue); background: rgba(41,181,232,.08); }
+.kpi:focus-visible { outline: 2px solid var(--star); outline-offset: 2px; }
+.kpi .i { flex: none; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--muted); color: var(--muted); font: italic 700 11px/16px Georgia, serif; text-align: center; }
+.kpi[aria-expanded="true"] .i { border-color: var(--blue); color: var(--blue); }
+.pop { display: none; position: absolute; z-index: 20; left: 0; right: 0; top: calc(100% + 6px); padding: 14px 16px; border-radius: 12px;
+  background: #102a3b; border: 1px solid var(--blue); box-shadow: 0 12px 32px rgba(0,0,0,.5); }
+.pop.on { display: block; }
+.pop b { display: block; color: var(--star); font-size: 14px; margin-bottom: 6px; }
+.pop p { font-size: 14px; line-height: 1.5; color: var(--text); margin: 0 0 10px; }
+.pop code { display: block; font: 13px/1.4 ui-monospace, Menlo, monospace; color: var(--amber); background: rgba(0,0,0,.25); padding: 7px 10px; border-radius: 8px; }
+.pop .pn { display: block; margin-top: 8px; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+h4 .hint { float: right; font-size: 11px; color: var(--muted); font-weight: 400; letter-spacing: .04em; text-transform: none; }
+@media print { .pop { display: none !important; } }
+.kpis li strong { color: var(--text); font-weight: 800; }
+.wins { display: flex; flex-direction: column; gap: 10px; }
+.win { padding: 14px 16px; border-radius: 12px; background: rgba(41,181,232,.06); border: 1px solid rgba(41,181,232,.22); }
+.win b { display: block; font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); margin-bottom: 5px; }
+.win p { font-size: 14.5px; color: #D3DEE4; }
+.proof, .engage, .signal { padding: 14px 16px; border-radius: 12px; background: rgba(255,178,91,.07); border: 1px solid rgba(255,178,91,.32); }
+.proof .k, .engage .k { color: var(--amber); }
+.proof p { font-size: 15px; font-weight: 700; }
+.proof .tag { display: inline-block; margin-left: 6px; font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--amber); border: 1px solid rgba(255,178,91,.45); border-radius: 99px; padding: 1px 8px; vertical-align: 2px; }
+.engage p { font-size: 15.5px; line-height: 1.55; max-width: 1100px; }
+.signal { margin-top: 14px; background: rgba(111,223,168,.07); border-color: rgba(111,223,168,.32); }
+.signal .k { color: var(--green); }
+.signal p { font-size: 15px; }
+
+/* overview */
+.ovgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+.ovgrid > div { display: flex; flex-direction: column; gap: 14px; }
+.group { padding: 18px 18px 14px; border-radius: 18px; background: var(--ink-2); border: 1px solid var(--line); }
+.group h4 span { color: var(--muted); letter-spacing: .08em; margin-left: 6px; }
+.group.eval h4 { color: var(--blue); } .group.exp h4 { color: var(--amber); } .group.champ h4 { color: var(--green); }
+.who { display: grid; grid-template-columns: auto 1fr auto 18px; align-items: baseline; gap: 10px; padding: 11px 14px; margin-bottom: 6px;
+  border-radius: 10px; border: 1px solid var(--line); background: rgba(255,255,255,.025); transition: border-color .2s, background .2s; }
+.who .n { font-size: 15.5px; font-weight: 800; }
+.who .note { font-size: 13px; color: var(--muted); }
+.who .t { grid-column: 3; font-size: 11.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.who .go { grid-column: 4; color: var(--blue); opacity: .5; transition: transform .2s, opacity .2s; }
+a.who:hover { border-color: var(--blue); background: rgba(41,181,232,.07); }
+a.who:hover .go { opacity: 1; transform: translateX(3px); }
+.who.static { border-style: dashed; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips span { font-size: 13px; padding: 6px 12px; border-radius: 99px; border: 1px solid rgba(111,223,168,.35); color: var(--text); }
+.comps { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin-top: 14px; font-size: 14px; }
+.comps dt { font-weight: 800; color: var(--star); }
+.comps dd { color: var(--muted); }
+
+/* pager */
+.pager { display: flex; justify-content: space-between; margin-top: auto; padding-top: 6px; }
+.pager a { font-size: 15px; font-weight: 700; padding: 11px 18px; border-radius: 99px; border: 1px solid var(--line-2); color: var(--text); }
+.pager a:hover { border-color: var(--blue); color: var(--blue); }
+.pager a:last-child:not(:first-child) { background: rgba(41,181,232,.12); border-color: rgba(41,181,232,.45); }
+
+@media (max-width: 1180px) {
+  .grid { grid-template-columns: 1fr 1fr; } .grid .col:last-child { grid-column: 1 / -1; }
+  .ovgrid { grid-template-columns: 1fr; }
+}
+@media (max-width: 820px) {
+  body { grid-template-columns: 1fr; overflow: auto; } .rail { height: auto; } main { height: auto; }
+  .grid { grid-template-columns: 1fr; } .page { padding: 32px 22px; }
+}
+@media print {
+  body { display: block; overflow: visible; } .rail, .pager { display: none; } main { height: auto; overflow: visible; }
+  .page { display: flex !important; min-height: 0; break-after: page; }
+}
+.card:has(.pop.on) { overflow: visible; position: relative; z-index: 15; }
+.role.tech { color: var(--green); border-color: rgba(111,223,168,.45); }
+.group.tech h4 { color: var(--green); }
+.src { color: var(--muted); font-weight: 400; font-size: 12.5px; }
+</style></head>
 <body>
-<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
-
-<div class="deck" id="deck">
-
-  <!-- SLIDE 01: TITLE -->
-  <div class="slide dark-slide" id="slide-1">
-    <div class="slide-bg" style="background:url(https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1920&q=80) center 40%/cover no-repeat;"></div>
-    <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,rgba(4,33,48,0.88) 0%,rgba(17,86,127,0.80) 50%,rgba(4,33,48,0.92) 100%);"></div>
-    <div class="slide-content" style="text-align:center;display:flex;flex-direction:column;align-items:center;">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="32" style="display:block;opacity:0.95;filter:brightness(0) invert(1);margin-bottom:2.5rem;">
-      <h3 class="label" style="text-align:center;letter-spacing:0.25em;color:rgba(255,255,255,0.7);">SNOWFLAKE &middot; FASHION RETAIL</h3>
-      <h1 style="text-align:center;max-width:900px;color:rgba(113,211,220,1);font-size:clamp(2rem,5vw,4rem);margin-bottom:0.2rem;">IDEAL CUSTOMER</h1>
-      <h1 style="text-align:center;max-width:900px;color:#FFFFFF;font-size:clamp(2.5rem,6vw,5rem);">PROFILE</h1>
-      <div style="width:60px;height:3px;background:linear-gradient(90deg,#249EDC,#71D3DC);margin:1.2rem auto;border-radius:2px;"></div>
-      <p style="text-align:center;max-width:620px;font-size:1.05rem;color:rgba(255,255,255,0.8);">Who buys, who influences, and what moves them in EMEA Fashion Retail</p>
-      <div style="margin-top:1.5rem;display:inline-flex;align-items:center;gap:0.5rem;background:rgba(220,38,38,0.15);border:1px solid rgba(220,38,38,0.4);border-radius:6px;padding:0.35rem 1rem;">
-        <span style="font-size:0.72rem;font-weight:700;color:rgba(255,100,100,0.9);letter-spacing:0.1em;text-transform:uppercase;">Internal Use Only &middot; Not For Customer Distribution</span>
+<aside class="rail">
+  <img class="logo" src="data:image/png;base64,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" alt="Snowflake">
+  <div class="doc">Fashion Retail <span>Ideal Customer Profile</span></div>
+  <span class="internal">Internal only</span>
+  <nav>
+    <a href="#overview" class="ri ov"><span class="ix">&#9673;</span><span class="nm">Overview &amp; influence map</span></a>
+    <div class="rg"><div class="rgl">Economic buyer</div><a href="#commercial" class="ri"><span class="ix">01</span><span class="nm">Commercial Director</span></a></div><div class="rg"><div class="rgl">Business champions</div><a href="#merch" class="ri"><span class="ix">02</span><span class="nm">Merchandising Director</span></a><a href="#buying" class="ri"><span class="ix">03</span><span class="nm">Buying Director</span></a><a href="#supply" class="ri"><span class="ix">04</span><span class="nm">Supply Chain &amp; Sourcing</span></a><a href="#alloc" class="ri"><span class="ix">05</span><span class="nm">Allocation &amp; Replenishment</span></a></div><div class="rg"><div class="rgl">Technical validators</div><a href="#cio" class="ri"><span class="ix">06</span><span class="nm">CIO / CTO</span></a><a href="#data" class="ri"><span class="ix">07</span><span class="nm">Head of Data &amp; Analytics</span></a></div><div class="rg"><div class="rgl">Influencers</div><a href="#cfo" class="ri"><span class="ix">08</span><span class="nm">CFO</span></a><a href="#ecom" class="ri"><span class="ix">09</span><span class="nm">Ecommerce Director</span></a><a href="#sust" class="ri"><span class="ix">10</span><span class="nm">Sustainability Director</span></a></div>
+  </nav>
+  <div class="keys"><kbd>&larr;</kbd><kbd>&rarr;</kbd> move &nbsp; <kbd>0</kbd>&ndash;<kbd>9</kbd> jump</div>
+</aside>
+<main id="main">
+<section class="page" id="overview">
+  <header class="ph">
+    <div class="label">Start here</div>
+    <h2>Who buys, who influences, <span class="dim">and what moves them.</span></h2>
+  </header>
+  <div class="engage"><span class="k">How to approach</span><p>Start with the Commercial Director, who is accountable for margin and markdown, and win the Merchandising Director as champion: the WSSI is where the pain shows. Bring in the CIO / CTO to validate the platform. On larger transformation deals the CIO can hold the budget.</p></div>
+  <div class="ovgrid">
+    <div>
+      <div class="group econ"><h4>Economic buyer <span>owns the decision</span></h4>
+        <a class="who" href="#commercial"><span class="n">Commercial Director</span><span class="note">accountable for margin and markdown</span><span class="t">Primary</span><span class="go">&rarr;</span></a><a class="who" href="#cio"><span class="n">CIO / CTO / Data Director</span><span class="note">economic buyer for transformation</span><span class="t">Larger deals</span><span class="go">&rarr;</span></a>
+      </div>
+      <div class="group eval"><h4>Business champions <span>own the outcome, prove the value</span></h4>
+        <a class="who" href="#merch"><span class="n">Merchandising Director</span><span class="t">Champion</span><span class="go">&rarr;</span></a><a class="who" href="#buying"><span class="n">Buying Director</span><span class="t">Champion</span><span class="go">&rarr;</span></a><a class="who" href="#supply"><span class="n">Supply Chain &amp; Sourcing Director</span><span class="t">Champion</span><span class="go">&rarr;</span></a><a class="who" href="#alloc"><span class="n">Head of Allocation &amp; Replenishment</span><span class="t">Champion</span><span class="go">&rarr;</span></a>
+      </div>
+      <div class="group tech"><h4>Technical validators <span>validate the platform</span></h4>
+        <a class="who" href="#cio"><span class="n">CIO / CTO</span><span class="t">Validator</span><span class="go">&rarr;</span></a><a class="who" href="#data"><span class="n">Head of Data &amp; Analytics</span><span class="t">Validator</span><span class="go">&rarr;</span></a>
+      </div>
+      <div class="group exp"><h4>Influencers <span>shape the case</span></h4>
+        <a class="who" href="#cfo"><span class="n">Chief Financial Officer</span><span class="note">markdown and stock land on the P&amp;L</span><span class="t">Influencer</span><span class="go">&rarr;</span></a><a class="who" href="#ecom"><span class="n">Ecommerce Director</span><span class="note">earliest demand and returns signal</span><span class="t">Influencer</span><span class="go">&rarr;</span></a><a class="who" href="#sust"><span class="n">Sustainability Director</span><span class="note">ESPR, traceability, unsold stock</span><span class="t">Enter later</span><span class="go">&rarr;</span></a>
+      </div>
+      <div class="group champ"><h4>Internal advocates <span>help you navigate</span></h4>
+        <div class="chips"><span>Trend &amp; Range Planning Lead</span><span>Merchandise Planning Manager</span><span>Head of Retail Operations</span><span>Digital Transformation Lead</span><span>Product / Design Director</span></div>
       </div>
     </div>
-    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;filter:brightness(0) invert(1);"></div>
-    <div class="slide-number">01 / 08</div>
-  </div>
-
-  <!-- SLIDE 02: ICP OVERVIEW -->
-  <div class="slide" id="slide-2">
-    <div class="slide-bg bg-aurora"></div>
-    <div class="internal-badge">Internal Only</div>
-    <div class="slide-content" style="padding-top:1.5rem;padding-bottom:1.5rem;">
-      <h3 class="label purple">IDEAL CUSTOMER PROFILE</h3>
-      <h2><span class="highlight-purple">Influence Map</span> &amp; Buying Signals</h2>
-      <div class="divider-purple"></div>
-      <!-- Definition strip -->
-      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:1rem;margin-top:0.5rem;margin-bottom:0.8rem;background:linear-gradient(90deg,rgba(17,86,127,0.06),rgba(36,158,220,0.04));border:1px solid rgba(17,86,127,0.18);border-radius:12px;padding:0.85rem 1.2rem;align-items:start;">
-        <div>
-          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.35rem;">What is Fashion Retail?</div>
-          <p style="font-size:0.8rem;color:var(--text-gray);margin:0;max-width:100%;line-height:1.55;">Brands and retailers that design, buy, and sell apparel, footwear, and accessories across wholesale, owned stores, and e-commerce. Success hinges on committing to inventory 6&ndash;9 months ahead of an uncertain trend, then chasing or marking it down in-season &mdash; making buying decisions, sell-through visibility, and markdown control the central commercial challenges.</p>
-        </div>
-        <div>
-          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.4rem;">Representative Companies</div>
-          <div style="display:flex;flex-direction:column;gap:0.3rem;">
-            <div style="display:flex;align-items:baseline;gap:0.5rem;"><span style="font-size:0.65rem;font-weight:700;color:var(--sf-mid);min-width:6rem;">Athletic</span><span style="font-size:0.72rem;color:var(--text-gray);">Under Armour &middot; Nike &middot; adidas &middot; Puma</span></div>
-            <div style="display:flex;align-items:baseline;gap:0.5rem;"><span style="font-size:0.65rem;font-weight:700;color:var(--sf-mid);min-width:6rem;">Luxury &amp; House of Brands</span><span style="font-size:0.72rem;color:var(--text-gray);">Tapestry (Coach, Kate Spade) &middot; Burberry &middot; LVMH &middot; Kering</span></div>
-            <div style="display:flex;align-items:baseline;gap:0.5rem;"><span style="font-size:0.65rem;font-weight:700;color:var(--sf-mid);min-width:6rem;">Fast Fashion</span><span style="font-size:0.72rem;color:var(--text-gray);">Urban Outfitters &middot; Inditex (Zara) &middot; H&amp;M &middot; Boohoo</span></div>
-            <div style="display:flex;align-items:baseline;gap:0.5rem;"><span style="font-size:0.65rem;font-weight:700;color:var(--sf-mid);min-width:6rem;">Department / High Street</span><span style="font-size:0.72rem;color:var(--text-gray);">River Island &middot; Next &middot; John Lewis &middot; Marks &amp; Spencer</span></div>
-            <div style="display:flex;align-items:baseline;gap:0.5rem;"><span style="font-size:0.65rem;font-weight:700;color:var(--sf-mid);min-width:6rem;">Pure-Play E-com</span><span style="font-size:0.72rem;color:var(--text-gray);">ASOS &middot; Zalando &middot; SHEIN</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:0rem;">
-
-        <!-- COL 1: Influence Map -->
-        <div>
-          <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.5rem;">Influence Map</div>
-          <!-- Economic Buyers -->
-          <div style="background:rgba(17,86,127,0.06);border:1.5px solid rgba(17,86,127,0.25);border-radius:10px;padding:0.65rem 0.8rem;margin-bottom:0.4rem;">
-            <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.4rem;">Economic Buyers &middot; Own the Decision</div>
-            <div style="display:flex;flex-direction:column;gap:0.3rem;">
-              <div style="display:flex;align-items:center;justify-content:space-between;background:#FFFFFF;border-radius:7px;padding:0.4rem 0.65rem;border:1px solid rgba(17,86,127,0.2);">
-                <span style="font-size:0.77rem;font-weight:700;color:var(--sf-mid);">Commercial Director</span>
-                <span style="font-size:0.6rem;color:var(--sf-mid);font-weight:600;">Primary</span>
-              </div>
-              <div style="display:flex;align-items:center;justify-content:space-between;background:#FFFFFF;border-radius:7px;padding:0.4rem 0.65rem;border:1px solid rgba(17,86,127,0.2);">
-                <div>
-                  <span style="font-size:0.77rem;font-weight:700;color:var(--sf-mid);">Merchandising Director</span>
-                  <span style="font-size:0.68rem;color:var(--text-light);margin-left:0.4rem;">owns OTB, intake and the WSSI</span>
-                </div>
-                <span style="font-size:0.6rem;color:var(--sf-mid);font-weight:600;">Primary</span>
-              </div>
-              <div style="display:flex;align-items:center;justify-content:space-between;background:#FFFFFF;border-radius:7px;padding:0.4rem 0.65rem;border:1px solid rgba(17,86,127,0.2);">
-                <span style="font-size:0.77rem;font-weight:700;color:var(--sf-mid);">CIO / CTO</span>
-                <span style="font-size:0.6rem;color:var(--sf-mid);font-weight:600;">Primary</span>
-              </div>
-              <div style="display:flex;align-items:center;justify-content:space-between;background:#FFFFFF;border-radius:7px;padding:0.4rem 0.65rem;border:1px solid rgba(17,86,127,0.2);">
-                <div>
-                  <span style="font-size:0.77rem;font-weight:700;color:var(--sf-mid);">Buying Director</span>
-                  <span style="font-size:0.68rem;color:var(--text-light);margin-left:0.4rem;">peer of Merchandising, owns the range</span>
-                </div>
-                <span style="font-size:0.6rem;color:var(--sf-mid);font-weight:600;">Primary</span>
-              </div>
-              <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(17,86,127,0.04);border-radius:7px;padding:0.4rem 0.65rem;border:1px dashed rgba(17,86,127,0.3);">
-                <div>
-                  <span style="font-size:0.77rem;font-weight:700;color:var(--sf-mid);">CFO</span>
-                  <span style="font-size:0.68rem;color:var(--text-light);margin-left:0.4rem;">markdown and terminal stock hit gross margin directly</span>
-                </div>
-                <span style="font-size:0.6rem;color:var(--sf-mid);font-weight:600;">Sponsor</span>
-              </div>
-            </div>
-          </div>
-          <!-- Technical Evaluators -->
-          <div style="background:rgba(36,158,220,0.05);border:1.5px solid rgba(36,158,220,0.25);border-radius:10px;padding:0.65rem 0.8rem;margin-bottom:0.4rem;">
-            <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.4rem;">Technical Evaluators &middot; Validate the Solution</div>
-            <div style="display:flex;flex-direction:column;gap:0.3rem;">
-              <div style="display:flex;align-items:center;justify-content:space-between;background:#FFFFFF;border-radius:7px;padding:0.4rem 0.65rem;border:1px solid rgba(36,158,220,0.2);">
-                <span style="font-size:0.77rem;font-weight:700;color:var(--sf-blue);">Ecommerce Director</span>
-                <span style="font-size:0.6rem;color:var(--sf-blue);font-weight:600;">Evaluator</span>
-              </div>
-              <div style="display:flex;align-items:center;justify-content:space-between;background:#FFFFFF;border-radius:7px;padding:0.4rem 0.65rem;border:1px solid rgba(36,158,220,0.2);">
-                <span style="font-size:0.77rem;font-weight:700;color:var(--sf-blue);">Head of Data / Analytics</span>
-                <span style="font-size:0.6rem;color:var(--sf-blue);font-weight:600;">Evaluator</span>
-              </div>
-            </div>
-          </div>
-          <!-- Champions -->
-          <div style="background:rgba(113,211,220,0.06);border:1.5px solid rgba(113,211,220,0.35);border-radius:10px;padding:0.65rem 0.8rem;">
-            <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#0d9488;margin-bottom:0.4rem;">Champions &middot; Drive Internal Advocacy</div>
-            <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
-              <span class="pill teal" style="font-size:0.65rem;">Sustainability Director</span>
-              <span class="pill teal" style="font-size:0.65rem;">Trend &amp; Range Planning Lead</span>
-              <span class="pill teal" style="font-size:0.65rem;">Digital Transformation Lead</span>
-              <span class="pill teal" style="font-size:0.65rem;">Allocation &amp; Replenishment Lead</span>
-              <span class="pill teal" style="font-size:0.65rem;">Data &amp; Analytics Lead</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- COL 2: Key Pain Points -->
-        <div>
-          <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.5rem;">Key Pain Points to Address</div>
-          <div style="display:flex;flex-direction:column;gap:0.35rem;">
-            <div style="display:flex;align-items:flex-start;gap:0.5rem;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.18);border-radius:8px;padding:0.55rem 0.7rem;">
-              <div style="width:7px;height:7px;border-radius:50%;background:#DC2626;flex-shrink:0;margin-top:0.28rem;"></div>
-              <p style="font-size:0.77rem;margin:0;max-width:100%;color:var(--text-gray);">OTB committed 6&ndash;9 months ahead of the season, with no live read on how the trend is actually landing</p>
-            </div>
-            <div style="display:flex;align-items:flex-start;gap:0.5rem;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.18);border-radius:8px;padding:0.55rem 0.7rem;">
-              <div style="width:7px;height:7px;border-radius:50%;background:#DC2626;flex-shrink:0;margin-top:0.28rem;"></div>
-              <p style="font-size:0.77rem;margin:0;max-width:100%;color:var(--text-gray);">Sell-through signal reaches buying and planning too late to chase or markdown in the window that matters</p>
-            </div>
-            <div style="display:flex;align-items:flex-start;gap:0.5rem;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.18);border-radius:8px;padding:0.55rem 0.7rem;">
-              <div style="width:7px;height:7px;border-radius:50%;background:#DC2626;flex-shrink:0;margin-top:0.28rem;"></div>
-              <p style="font-size:0.77rem;margin:0;max-width:100%;color:var(--text-gray);">Planning tools, PLM, e-commerce, and store POS sit in silos, so no one sees demand end-to-end</p>
-            </div>
-            <div style="display:flex;align-items:flex-start;gap:0.5rem;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.18);border-radius:8px;padding:0.55rem 0.7rem;">
-              <div style="width:7px;height:7px;border-radius:50%;background:#DC2626;flex-shrink:0;margin-top:0.28rem;"></div>
-              <p style="font-size:0.77rem;margin:0;max-width:100%;color:var(--text-gray);">Terminal stock at season end erodes margin every cycle, with no early warning to act on</p>
-            </div>
-            <div style="display:flex;align-items:flex-start;gap:0.5rem;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.18);border-radius:8px;padding:0.55rem 0.7rem;">
-              <div style="width:7px;height:7px;border-radius:50%;background:#DC2626;flex-shrink:0;margin-top:0.28rem;"></div>
-              <p style="font-size:0.77rem;margin:0;max-width:100%;color:var(--text-gray);">CSRD, ESPR, and Digital Product Passport reporting require traceability data most retailers cannot yet produce</p>
-            </div>
-            <div style="display:flex;align-items:flex-start;gap:0.5rem;background:rgba(36,158,220,0.05);border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.55rem 0.7rem;">
-              <div style="width:7px;height:7px;border-radius:50%;background:var(--sf-blue);flex-shrink:0;margin-top:0.28rem;"></div>
-              <p style="font-size:0.77rem;margin:0;max-width:100%;color:var(--text-gray);"><strong style="color:var(--sf-blue);">Positive signal:</strong> new e-commerce platform migration, DPP/CSRD programme underway, or a recently hired CIO/CTO</p>
-            </div>
-          </div>
-        </div>
-
-      </div>
+    <div>
+      <div class="card"><h4>Pain points to listen for</h4><ul class="pains"><li>OTB committed months ahead of the season, with no live read on how the range is landing</li><li>The WSSI rebuilt by hand every week from planning, e-commerce and store exports</li><li>Sell-through signal reaching buying and merchandising too late to chase or mark down cheaply</li><li>Planning, PLM, merchandising, e-commerce and POS in silos, with a different number in each</li><li>Terminal stock and late, deep markdown eroding margin every season</li><li>Late supplier and freight information moving intake dates and landed cost</li><li>For EU-trading brands, ESPR rules on unsold stock and coming Digital Product Passport requirements</li></ul>
+        <div class="signal"><span class="k">Buying signal</span><p>New e-commerce, ERP or merchandising-system migration; planning tool renewal; new CIO, CTO or Commercial Director; a poor season of markdown or terminal stock; a traceability or ESPR programme</p></div></div>
+      <div class="card"><h4>What is fashion retail?</h4><p>Brands and retailers that design, buy and sell apparel, footwear and accessories through stores, online and wholesale. Stock is committed months ahead of an uncertain trend and sold in a short full-price window, so the central challenges are reading demand early, chasing winners, placing the right sizes in the right stores and controlling markdown.</p>
+        <dl class="comps"><dt>High street &amp; department store</dt><dd>Next &middot; Marks &amp; Spencer &middot; River Island &middot; John Lewis &middot; Frasers Group</dd><dt>Specialty &amp; lifestyle</dt><dd>Urban Outfitters &middot; White Stuff &middot; FatFace &middot; Joules</dd><dt>Athletic &amp; footwear</dt><dd>Under Armour &middot; adidas &middot; Puma &middot; ASICS &middot; JD Sports</dd><dt>Luxury &amp; house of brands</dt><dd>Tapestry &middot; Burberry &middot; Mulberry &middot; Kering</dd><dt>Value &amp; online</dt><dd>Primark &middot; New Look &middot; ASOS &middot; Boohoo &middot; Zalando</dd></dl>
+        <p class="muted" style="font-size:13px;margin-top:10px">Representative target companies, not a customer list. Approved customer proof: Under Armour, Urban Outfitters, Tapestry, River Island, John Lewis Partnership.</p></div>
     </div>
-    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-    <div class="slide-number">02 / 08</div>
   </div>
-
-  <!-- SLIDE 03: COMMERCIAL DIRECTOR -->
-  <div class="slide" id="slide-3">
-    <div class="slide-bg bg-dark-cinematic"></div>
-    <div class="internal-badge">Internal Only</div>
-    <div class="slide-content" style="padding-top:1.5rem;padding-bottom:1.5rem;">
-      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
-        <span class="role-badge economic">Economic Buyer</span>
-        <h3 class="label purple" style="margin:0;">PERSONA 01</h3>
-      </div>
-      <h2>Commercial Director <span class="highlight-purple">/ Chief Commercial Officer</span></h2>
-      <div class="divider-purple"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.9rem;margin-top:0.6rem;">
-
-        <div style="display:flex;flex-direction:column;gap:0.4rem;">
-          <div class="card purple-border" style="padding:0.9rem 1rem;">
-            <div class="card-title purple">Business Context</div>
-            <p style="font-size:0.78rem;">Owns the trading calendar: what gets bought, how deep, and when it gets marked down. Every season is a bet placed 6&ndash;9 months out, with no reliable read on how the range is landing until it's too late to act cheaply. Terminal stock and markdown depth are the two numbers that make or break the year, and both are discovered late.</p>
-          </div>
-          <div class="card purple-border" style="padding:0.9rem 1rem;">
-            <div class="card-title purple">What They Care About</div>
-            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Seeing sell-through by style, size, and store in near-real time, not next Monday's report</div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Reducing terminal stock and markdown depth at season end</div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Chasing winners into supply while there's still season left to sell them</div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Making AI investments pay off, when trend-sensing pilots keep failing</div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Protecting full-price sell-through as the primary lever on gross margin</div></div>
-            </div>
-          </div>
-        </div>
-
-        <div style="display:flex;flex-direction:column;gap:0.4rem;">
-          <div class="card blue-border" style="padding:0.9rem 1rem;">
-            <div class="card-title blue">How They&rsquo;re Measured</div>
-            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Full-Price Sell-Through %</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Gross Margin %</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Markdown as % of Revenue</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Terminal Stock %</strong> at season end</div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Stock Turn</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>OTB Accuracy</strong></div></div>
-            </div>
-          </div>
-          <div class="card teal-border" style="padding:0.9rem 1rem;">
-            <div class="card-title teal">Potential Titles</div>
-            <p style="font-size:0.78rem;">Commercial Director &middot; Chief Commercial Officer &middot; Product Director &middot; Trading Director</p>
-            <div style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid rgba(204,204,204,0.4);">
-              <div style="font-size:0.68rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">Key Collaborators</div>
-              <p style="font-size:0.74rem;color:var(--text-gray);">CFO &middot; CEO &middot; CIO/CTO &middot; Merchandising Director &middot; Buying Director</p>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div class="card" style="padding:0.9rem 1rem;border-color:rgba(36,158,220,0.35);background:linear-gradient(160deg,rgba(36,158,220,0.04),rgba(17,86,127,0.02));height:100%;">
-            <div class="card-title blue">Why Snowflake Wins Here</div>
-            <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.3rem;">
-              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
-                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Unified Sell-Through Foundation</div>
-                <p style="font-size:0.76rem;margin:0;max-width:100%;">POS, e-commerce, planning, and warehouse data in one governed platform. One trading truth across stores, online, and wholesale.</p>
-              </div>
-              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
-                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Early Markdown Warning</div>
-                <p style="font-size:0.76rem;margin:0;max-width:100%;">Cortex AI flags weak sell-through by style and size weeks before the trading meeting, so markdown decisions happen early and shallow instead of late and deep.</p>
-              </div>
-              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
-                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">AI That Works in Production</div>
-                <p style="font-size:0.76rem;margin:0;max-width:100%;">Governed semantic layer means AI reasons on trusted trading data, not raw exports &mdash; alongside your existing planning tools, not instead of them.</p>
-              </div>
-              <div style="background:linear-gradient(90deg,rgba(36,158,220,0.1),rgba(113,211,220,0.06));border:1px solid rgba(36,158,220,0.25);border-radius:8px;padding:0.45rem 0.65rem;">
-                <p style="font-size:0.75rem;font-weight:700;color:var(--sf-mid);margin:0;max-width:100%;">Tapestry: 4B+ rows processed daily to pinpoint markdown candidates at the product level &middot; Forrester TEI 2024: 354% ROI over 3 years</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
+  <nav class="pager"><span></span><a href="#commercial">Start with the Commercial Director &rarr;</a></nav>
+</section>
+<section class="page" id="commercial" data-role="econ">
+  <header class="ph">
+    <div class="label">Persona 01 <span class="sep">&middot;</span> <span class="role econ">Economic Buyer</span></div>
+    <h2>Commercial Director <span class="dim">/ Trading Director / Chief Commercial Officer</span></h2>
+  </header>
+  <div class="grid">
+    <div class="col">
+      <div class="card"><h4>Their world</h4><p class="ctx">Accountable for the trading result. Signs off OTB, markdown strategy and margin across stores, online and wholesale. Every season is a bet placed months out, and the read on how the range is landing arrives in a weekly pack built from exports. Full-price sell-through, markdown and terminal stock make or break the year, and all three are seen late.</p></div>
+      <div class="card"><h4>What they care about</h4><ul class="dots"><li>Seeing how the range is landing by style, size and channel while there is still season left</li><li>Shallower, earlier markdown instead of deep, late clearance</li><li>Less terminal stock at season end</li><li>One trading number for buying, merchandising and finance</li><li>AI that reaches the trading meeting, not another pilot</li></ul></div>
     </div>
-    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-    <div class="slide-number">03 / 08</div>
-  </div>
-
-  <!-- SLIDE 04: MERCHANDISING DIRECTOR -->
-  <div class="slide" id="slide-4">
-    <div class="slide-bg bg-aurora"></div>
-    <div class="internal-badge">Internal Only</div>
-    <div class="slide-content" style="padding-top:1.5rem;padding-bottom:1.5rem;">
-      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
-        <span class="role-badge economic">Economic Buyer</span>
-        <h3 class="label" style="margin:0;">PERSONA 02</h3>
-      </div>
-      <h2>Merchandising Director <span class="highlight">/ Head of Merchandising</span></h2>
-      <div class="divider"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.9rem;margin-top:0.6rem;">
-
-        <div style="display:flex;flex-direction:column;gap:0.4rem;">
-          <div class="card blue-border" style="padding:0.9rem 1rem;">
-            <div class="card-title blue">Business Context</div>
-            <p style="font-size:0.78rem;">Owns the OTB commitment, intake phasing, and the WSSI. Primary challenge: OTB is locked 6&ndash;9 months before the season, based on last year's numbers and a trend forecast, with no live signal to adjust against once the range is in market. The WSSI is rebuilt manually each week from exports across planning, e-commerce, and store systems.</p>
-          </div>
-          <div class="card blue-border" style="padding:0.9rem 1rem;">
-            <div class="card-title blue">What They Care About</div>
-            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">A WSSI that reflects live sell-through, not a hand-built weekly export</div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">One number everyone agrees on, ending buying vs merchandising vs finance reconciliation</div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Faster response to in-season trend shifts, so changes land in days not next month's reforecast</div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Accurate size-curve and store-level allocation for high-volatility styles</div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Less time building the WSSI and trading pack, more time making decisions</div></div>
-            </div>
-          </div>
-        </div>
-
-        <div style="display:flex;flex-direction:column;gap:0.4rem;">
-          <div class="card purple-border" style="padding:0.9rem 1rem;">
-            <div class="card-title purple">How They&rsquo;re Measured</div>
-            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>OTB Accuracy</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Forecast Accuracy</strong> by style/size</div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>WSSI Accuracy</strong> vs actual</div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Stock Turn</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Terminal Stock %</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Allocation Accuracy</strong></div></div>
-            </div>
-          </div>
-          <div class="card teal-border" style="padding:0.9rem 1rem;">
-            <div class="card-title teal">Potential Titles</div>
-            <p style="font-size:0.78rem;">Merchandising Director &middot; Head of Merchandising &middot; Senior Merchandiser &middot; Merchandise Manager</p>
-            <div style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid rgba(204,204,204,0.4);">
-              <div style="font-size:0.68rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">Key Collaborators</div>
-              <p style="font-size:0.74rem;color:var(--text-gray);">Commercial Director &middot; Buying Director &middot; CFO &middot; Ecommerce Director</p>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div class="card" style="padding:0.9rem 1rem;border-color:rgba(36,158,220,0.35);background:linear-gradient(160deg,rgba(36,158,220,0.04),rgba(17,86,127,0.02));height:100%;">
-            <div class="card-title blue">Why Snowflake Wins Here</div>
-            <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.3rem;">
-              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
-                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">The One-Number Solution</div>
-                <p style="font-size:0.76rem;margin:0;max-width:100%;">Governed semantic layer defines OTB, sell-through, intake, and margin metrics once. The trading-meeting data argument disappears before it starts.</p>
-              </div>
-              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
-                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">A Live WSSI</div>
-                <p style="font-size:0.76rem;margin:0;max-width:100%;">Snowflake unifies POS, e-commerce, and planning-tool data into one governed model, so the WSSI is a live view rather than a weekly hand-build. Cortex AI reforecasts OTB against actual sell-through &mdash; a companion to your planning tools, not a replacement.</p>
-              </div>
-              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
-                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Self-Service Trading Analytics</div>
-                <p style="font-size:0.76rem;margin:0;max-width:100%;">Cortex Analyst: &ldquo;Show me the OTB gap for next month by category and region&rdquo;, answered from live data in seconds.</p>
-              </div>
-              <div style="background:linear-gradient(90deg,rgba(36,158,220,0.1),rgba(113,211,220,0.06));border:1px solid rgba(36,158,220,0.25);border-radius:8px;padding:0.45rem 0.65rem;">
-                <p style="font-size:0.75rem;font-weight:700;color:var(--sf-mid);margin:0;max-width:100%;">River Island: unified retail data foundation supporting faster, more accurate trading decisions on Snowflake's Retail Data Cloud</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
+    <div class="col">
+      <div class="card"><h4>How they&rsquo;re measured <span class="hint">tap for definition</span></h4><ul class="kpis"><li><button type="button" class="kpi" aria-expanded="false">Full-price sell-through<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Full-price sell-through</b><p>Share of units bought that sell before any markdown.</p><code>Units sold at full price &divide; units received</code><span class="pn">The primary lever on gross margin</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Gross margin %<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Gross margin %</b><p>Sales minus cost of goods, after markdown, as a share of sales.</p><code>(Net sales &minus; COGS) &divide; net sales</code><span class="pn">Board-level trading number</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Markdown % of sales<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Markdown % of sales</b><p>Value given away in price reductions, relative to sales.</p><code>Markdown &pound; &divide; net sales</code><span class="pn">Deep, late markdown is the cost of a late signal</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Terminal stock %<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Terminal stock %</b><p>Stock left at season end that must be cleared, written down or carried over.</p><code>End-of-season units &divide; units bought</code><span class="pn">Also a waste and ESPR exposure</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Sales vs budget<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Sales vs budget</b><p>Actual trading sales against the agreed budget for the period.</p><code>Actual sales &divide; budgeted sales</code><span class="pn">Weekly trading-meeting headline</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Stock turn<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Stock turn</b><p>How many times stock is sold through and replaced in a year.</p><code>Annual sales at cost &divide; average stock at cost</code><span class="pn">Higher turn frees cash</span></div></li></ul></div>
+      <div class="card"><h4>Find them as</h4><p>Commercial Director &middot; Trading Director &middot; Chief Commercial Officer &middot; Managing Director (smaller brands)</p>
+        <h5>Works with</h5><p class="muted">CEO &middot; CFO &middot; Merchandising Director &middot; Buying Director &middot; CIO / CTO</p></div>
     </div>
-    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-    <div class="slide-number">04 / 08</div>
-  </div>
-
-  <!-- SLIDE 05: CIO / CTO -->
-  <div class="slide" id="slide-5">
-    <div class="slide-bg bg-dark-cinematic"></div>
-    <div class="internal-badge">Internal Only</div>
-    <div class="slide-content" style="padding-top:1.5rem;padding-bottom:1.5rem;">
-      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
-        <span class="role-badge economic">Economic Buyer</span>
-        <h3 class="label purple" style="margin:0;">PERSONA 03</h3>
-      </div>
-      <h2>CIO / CTO <span class="highlight-purple">/ Data Director</span></h2>
-      <div class="divider-purple"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.9rem;margin-top:0.6rem;">
-
-        <div style="display:flex;flex-direction:column;gap:0.4rem;">
-          <div class="card purple-border" style="padding:0.9rem 1rem;">
-            <div class="card-title purple">Business Context</div>
-            <p style="font-size:0.78rem;">Under pressure to deliver AI value from trading, planning, and customer data. Current stack (planning tool + PLM such as Centric or FlexPLM + e-commerce platform + store POS + loyalty) creates silos blocking unified analytics. Previous data lake efforts produced unmanaged repositories with no trusted KPIs. Trend-sensing AI PoCs fail because sell-through data is never unified with buying and planning.</p>
-          </div>
-          <div class="card purple-border" style="padding:0.9rem 1rem;">
-            <div class="card-title purple">What They Care About</div>
-            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Eliminating silos without ripping out existing planning tools or e-commerce platform</div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Enabling trusted, governed AI, not just PoCs that die at pilot</div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Reducing time-to-insight for trading and buying decisions</div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Security, compliance, and data governance at enterprise scale &mdash; including CSRD/ESPR traceability</div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Reducing total cost through fewer platforms and less custom integration</div></div>
-            </div>
-          </div>
-        </div>
-
-        <div style="display:flex;flex-direction:column;gap:0.4rem;">
-          <div class="card blue-border" style="padding:0.9rem 1rem;">
-            <div class="card-title blue">How They&rsquo;re Measured</div>
-            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>AI/ML use cases in production</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Data platform consolidation</strong> &amp; cost reduction</div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Time-to-insight</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Data governance score</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Business unit satisfaction</strong> with self-service analytics</div></div>
-            </div>
-          </div>
-          <div class="card teal-border" style="padding:0.9rem 1rem;">
-            <div class="card-title teal">Potential Titles</div>
-            <p style="font-size:0.78rem;">CIO &middot; CTO &middot; IT Director &middot; Data Director &middot; Head of Enterprise Architecture</p>
-            <div style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid rgba(204,204,204,0.4);">
-              <div style="font-size:0.68rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">Key Collaborators</div>
-              <p style="font-size:0.74rem;color:var(--text-gray);">Commercial Director &middot; Merchandising Director &middot; CFO &middot; Ecommerce Director &middot; Data Engineering Lead</p>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div class="card" style="padding:0.9rem 1rem;border-color:rgba(36,158,220,0.35);background:linear-gradient(160deg,rgba(36,158,220,0.04),rgba(17,86,127,0.02));height:100%;">
-            <div class="card-title blue">Why Snowflake Wins Here</div>
-            <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.3rem;">
-              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
-                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Zero-Copy Integration</div>
-                <p style="font-size:0.76rem;margin:0;max-width:100%;">Planning tools (Blue Yonder / Oracle Retail / Anaplan), PLM (Centric, PTC FlexPLM or similar), e-commerce platform, and store POS appear as live Snowflake tables. No pipelines, existing systems untouched.</p>
-              </div>
-              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
-                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Governed Semantic Layer</div>
-                <p style="font-size:0.76rem;margin:0;max-width:100%;">Sell-through, OTB, markdown depth, terminal stock defined once. Every AI model and BI tool reads from the same governed truth, which is why Snowflake AI reaches production.</p>
-              </div>
-              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
-                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Built-in AI + Governance</div>
-                <p style="font-size:0.76rem;margin:0;max-width:100%;">Cortex AI, Cortex Analyst, RBAC, masking, and lineage are native, so there is no separate AI infrastructure &mdash; and no separate compliance headache for CSRD/ESPR traceability.</p>
-              </div>
-              <div style="background:linear-gradient(90deg,rgba(36,158,220,0.1),rgba(113,211,220,0.06));border:1px solid rgba(36,158,220,0.25);border-radius:8px;padding:0.45rem 0.65rem;">
-                <p style="font-size:0.75rem;font-weight:700;color:var(--sf-mid);margin:0;max-width:100%;">Urban Outfitters: 2&times; more data sources ingested at lower cost, unifying supply chain, product, and customer data on Snowflake</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
+    <div class="col">
+      <div class="card wins"><h4>Why Snowflake wins here</h4><div class="win"><b>One trading view</b><p>POS, e-commerce, wholesale, planning and stock data in one governed platform, so the trading meeting starts from the same numbers.</p></div><div class="win"><b>Earlier markdown decisions</b><p>Sell-through and forecast models built on that data flag weak styles early, so markdown can be earlier and shallower.</p></div><div class="win"><b>Answers in the meeting</b><p>Snowflake Intelligence and Cortex Analyst answer &ldquo;which styles are behind plan this week?&rdquo; from governed data.</p></div><div class="proof"><span class="k">Proof point</span><p>Snowflake customers in fashion and department-store retail include Tapestry, River Island and John Lewis Partnership</p></div></div>
     </div>
-    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-    <div class="slide-number">05 / 08</div>
   </div>
-
-  <!-- SLIDE 06: BUYING DIRECTOR -->
-  <div class="slide" id="slide-6">
-    <div class="slide-bg bg-aurora"></div>
-    <div class="internal-badge">Internal Only</div>
-    <div class="slide-content" style="padding-top:1.5rem;padding-bottom:1.5rem;">
-      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
-        <span class="role-badge economic">Economic Buyer</span>
-        <h3 class="label" style="margin:0;">PERSONA 04</h3>
-      </div>
-      <h2>Buying Director <span class="highlight">/ Head of Buying</span></h2>
-      <div class="divider"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.9rem;margin-top:0.6rem;">
-
-        <div style="display:flex;flex-direction:column;gap:0.4rem;">
-          <div class="card blue-border" style="padding:0.9rem 1rem;">
-            <div class="card-title blue">Business Context</div>
-            <p style="font-size:0.78rem;">Places the actual order: which styles, how deep, in which sizes and colours, from which vendors. Commits real money against a trend forecast made months in advance, then has limited room to chase a winner or cut a loser once the season starts. Vendor lead times and in-season chase capacity are the practical constraint.</p>
-          </div>
-          <div class="card blue-border" style="padding:0.9rem 1rem;">
-            <div class="card-title blue">What They Care About</div>
-            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Buying depth and breadth calibrated to a real trend signal, not last year's plan</div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Faster chase orders on winning styles, within the 2&ndash;3 week window that still matters</div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Vendor performance visibility to know who can actually deliver a chase order on time</div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Avoiding over-commitment on styles that won't sell through at full price</div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Sustainability and compliance data on vendors, increasingly a buying gate not just a checkbox</div></div>
-            </div>
-          </div>
-        </div>
-
-        <div style="display:flex;flex-direction:column;gap:0.4rem;">
-          <div class="card purple-border" style="padding:0.9rem 1rem;">
-            <div class="card-title purple">How They&rsquo;re Measured</div>
-            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Sell-Through %</strong> by style/category</div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Vendor OTIF</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Chase Order Cycle Time</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Gross Margin %</strong> by category</div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Vendor Compliance Rate</strong></div></div>
-            </div>
-          </div>
-          <div class="card teal-border" style="padding:0.9rem 1rem;">
-            <div class="card-title teal">Potential Titles</div>
-            <p style="font-size:0.78rem;">Buying Director &middot; Head of Buying &middot; Buying Manager &middot; Senior Buyer</p>
-            <div style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid rgba(204,204,204,0.4);">
-              <div style="font-size:0.68rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">Key Collaborators</div>
-              <p style="font-size:0.74rem;color:var(--text-gray);">Commercial Director &middot; Merchandising Director &middot; Sustainability Director &middot; Vendor / Sourcing teams</p>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div class="card" style="padding:0.9rem 1rem;border-color:rgba(36,158,220,0.35);background:linear-gradient(160deg,rgba(36,158,220,0.04),rgba(17,86,127,0.02));height:100%;">
-            <div class="card-title blue">Why Snowflake Wins Here</div>
-            <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.3rem;">
-              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
-                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Live Sell-Through Signal</div>
-                <p style="font-size:0.76rem;margin:0;max-width:100%;">Store, e-commerce, and wholesale sell-through unified daily. Buyers see which styles are winning while there's still time to chase them.</p>
-              </div>
-              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
-                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Vendor Performance Scorecards</div>
-                <p style="font-size:0.76rem;margin:0;max-width:100%;">Cortex AI ranks vendor delivery reliability and compliance history, so chase orders go to vendors who can actually deliver.</p>
-              </div>
-              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
-                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Natural-Language Queries</div>
-                <p style="font-size:0.76rem;margin:0;max-width:100%;">Cortex Analyst: &ldquo;Which styles are outperforming plan by more than 20% this week?&rdquo; answered from live data.</p>
-              </div>
-              <div style="background:linear-gradient(90deg,rgba(36,158,220,0.1),rgba(113,211,220,0.06));border:1px solid rgba(36,158,220,0.25);border-radius:8px;padding:0.45rem 0.65rem;">
-                <p style="font-size:0.75rem;font-weight:700;color:var(--sf-mid);margin:0;max-width:100%;">Under Armour: unified demand and supply data supporting faster, more informed buying decisions</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
+  <nav class="pager"><a href="#overview">&larr; Overview</a><a href="#merch">Merchandising Director &rarr;</a></nav>
+</section>
+<section class="page" id="merch" data-role="eval">
+  <header class="ph">
+    <div class="label">Persona 02 <span class="sep">&middot;</span> <span class="role eval">Business Champion</span></div>
+    <h2>Merchandising Director <span class="dim">/ Head of Merchandising</span></h2>
+  </header>
+  <div class="grid">
+    <div class="col">
+      <div class="card"><h4>Their world</h4><p class="ctx">Owns the OTB, depth and size ratios, intake phasing and the WSSI. The OTB is committed months before the season on last year&rsquo;s numbers and a trend view. Each week the WSSI is rebuilt by hand from planning, e-commerce and store exports, so the team spends its time building the numbers rather than acting on them.</p></div>
+      <div class="card"><h4>What they care about</h4><ul class="dots"><li>A WSSI that reflects live sales, stock and intake, not a weekly hand-build</li><li>Reforecasting OTB in-season against actual sell-through</li><li>One number that ends the buying vs merchandising vs finance reconciliation</li><li>Phasing intake to demand so stock lands when it sells</li><li>More time on decisions, less on the trading pack</li></ul></div>
     </div>
-    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-    <div class="slide-number">06 / 08</div>
-  </div>
-
-  <!-- SLIDE 07: ECOMMERCE DIRECTOR -->
-  <div class="slide" id="slide-7">
-    <div class="slide-bg bg-dark-cinematic"></div>
-    <div class="internal-badge">Internal Only</div>
-    <div class="slide-content" style="padding-top:1.5rem;padding-bottom:1.5rem;">
-      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
-        <span class="role-badge technical">Technical Evaluator</span>
-        <h3 class="label purple" style="margin:0;">PERSONA 05</h3>
-      </div>
-      <h2>Ecommerce Director <span class="highlight-purple">/ Digital Director</span></h2>
-      <div class="divider-purple"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.9rem;margin-top:0.6rem;">
-
-        <div style="display:flex;flex-direction:column;gap:0.4rem;">
-          <div class="card purple-border" style="padding:0.9rem 1rem;">
-            <div class="card-title purple">Business Context</div>
-            <p style="font-size:0.78rem;">Owns the online channel P&amp;L and, increasingly, the fastest-growing source of sell-through signal. Site search, browse, and cart behaviour surface trend shifts days or weeks before they show up in store POS, but that data rarely reaches buying and planning fast enough to act on. Personalisation and inventory visibility across channels are constant priorities.</p>
-          </div>
-          <div class="card purple-border" style="padding:0.9rem 1rem;">
-            <div class="card-title purple">What They Care About</div>
-            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Getting online behavioural signal (search, browse, cart) into buying and planning fast enough to matter</div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Unified inventory visibility across stores, warehouse, and online for accurate availability</div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Personalisation that increases conversion without a separate, disconnected customer data stack</div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Migrating to a new e-commerce platform without losing years of behavioural history</div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text">Reducing site search and recommendation latency at peak traffic</div></div>
-            </div>
-          </div>
-        </div>
-
-        <div style="display:flex;flex-direction:column;gap:0.4rem;">
-          <div class="card blue-border" style="padding:0.9rem 1rem;">
-            <div class="card-title blue">How They&rsquo;re Measured</div>
-            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Online Conversion Rate</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Digital Revenue Growth</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Site Availability / Uptime</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Personalisation Lift</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text"><strong>Cross-Channel Inventory Accuracy</strong></div></div>
-            </div>
-          </div>
-          <div class="card teal-border" style="padding:0.9rem 1rem;">
-            <div class="card-title teal">Potential Titles</div>
-            <p style="font-size:0.78rem;">Ecommerce Director &middot; Digital Director &middot; Online Director &middot; Director of Digital Trading</p>
-            <div style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid rgba(204,204,204,0.4);">
-              <div style="font-size:0.68rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">Key Collaborators</div>
-              <p style="font-size:0.74rem;color:var(--text-gray);">CIO/CTO &middot; Commercial Director &middot; Merchandising Director &middot; Head of Marketing</p>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div class="card" style="padding:0.9rem 1rem;border-color:rgba(36,158,220,0.35);background:linear-gradient(160deg,rgba(36,158,220,0.04),rgba(17,86,127,0.02));height:100%;">
-            <div class="card-title blue">Why Snowflake Wins Here</div>
-            <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.3rem;">
-              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
-                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Behavioural Signal, Unified</div>
-                <p style="font-size:0.76rem;margin:0;max-width:100%;">Clickstream, search, and cart data joined with POS and planning data in one governed platform &mdash; the earliest trend signal reaches buying in hours, not weeks.</p>
-              </div>
-              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
-                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Platform-Migration Safe</div>
-                <p style="font-size:0.76rem;margin:0;max-width:100%;">Behavioural history lives in Snowflake, independent of the e-commerce platform, so a platform migration doesn't mean losing years of customer data.</p>
-              </div>
-              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
-                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Governed Personalisation at Scale</div>
-                <p style="font-size:0.76rem;margin:0;max-width:100%;">Cortex AI powers recommendation and personalisation models on governed, first-party data, with RBAC and masking built in.</p>
-              </div>
-              <div style="background:linear-gradient(90deg,rgba(36,158,220,0.1),rgba(113,211,220,0.06));border:1px solid rgba(36,158,220,0.25);border-radius:8px;padding:0.45rem 0.65rem;">
-                <p style="font-size:0.75rem;font-weight:700;color:var(--sf-mid);margin:0;max-width:100%;">River Island: unified digital and store data on Snowflake's Retail Data Cloud to power faster, more accurate customer decisions</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
+    <div class="col">
+      <div class="card"><h4>How they&rsquo;re measured <span class="hint">tap for definition</span></h4><ul class="kpis"><li><button type="button" class="kpi" aria-expanded="false">Sales, stock & intake vs WSSI<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Sales, stock & intake vs WSSI</b><p>Actual weekly sales, stock and intake against the Weekly Sales, Stock and Intake plan.</p><code>Actual &divide; WSSI plan, by week and category</code><span class="pn">The core UK merchandising control</span></div></li><li><button type="button" class="kpi" aria-expanded="false">OTB accuracy<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>OTB accuracy</b><p>How closely the open-to-buy committed matched what the season actually needed.</p><code>1 &minus; |OTB committed &minus; OTB required| &divide; OTB required</code><span class="pn">Measures the bet placed months ahead</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Weeks cover<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Weeks cover</b><p>How many weeks current stock will last at the current rate of sale.</p><code>Stock units &divide; average weekly unit sales</code><span class="pn">Too high means markdown risk; too low means lost sales</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Forecast accuracy (style/size)<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Forecast accuracy (style/size)</b><p>Error between forecast and actual demand at style and size level.</p><code>1 &minus; WMAPE</code><span class="pn">Fashion error runs high at size level</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Markdown % of sales<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Markdown % of sales</b><p>Value given away in price reductions, relative to sales.</p><code>Markdown &pound; &divide; net sales</code><span class="pn">Deep, late markdown is the cost of a late signal</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Stock turn<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Stock turn</b><p>How many times stock is sold through and replaced in a year.</p><code>Annual sales at cost &divide; average stock at cost</code><span class="pn">Higher turn frees cash</span></div></li></ul></div>
+      <div class="card"><h4>Find them as</h4><p>Merchandising Director &middot; Head of Merchandising &middot; Senior Merchandiser &middot; Merchandise Planning Manager</p>
+        <h5>Works with</h5><p class="muted">Commercial Director &middot; Buying Director &middot; Head of Allocation &middot; CFO</p></div>
     </div>
-    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-    <div class="slide-number">07 / 08</div>
-  </div>
-
-  <!-- SLIDE 08: SUSTAINABILITY DIRECTOR -->
-  <div class="slide" id="slide-8">
-    <div class="slide-bg bg-aurora"></div>
-    <div class="internal-badge">Internal Only</div>
-    <div class="slide-content" style="padding-top:1.5rem;padding-bottom:1.5rem;">
-      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
-        <span class="role-badge champion">Expansion Persona</span>
-        <h3 class="label" style="margin:0;">PERSONA 06 &middot; ENTER AFTER THE TRADING DATA FOUNDATION IS ESTABLISHED</h3>
-      </div>
-      <h2>Sustainability Director <span class="highlight">/ Head of ESG &amp; Compliance</span></h2>
-      <div style="background:rgba(36,158,220,0.06);border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.45rem 0.8rem;margin-top:0.4rem;margin-bottom:0.3rem;">
-        <p style="font-size:0.72rem;color:var(--sf-mid);margin:0;"><strong>When to engage:</strong> Sustainability typically sits outside the trading decision chain, but CSRD, ESPR, and Digital Product Passport requirements are turning traceability into a board-level, audited obligation with real deadlines. The right time to open this conversation is <em>after</em> a Commercial Director or CIO/CTO sponsor has established the data foundation &mdash; product, supplier, and material data are then already unified and ready to extend into compliance reporting.</p>
-      </div>
-      <div class="divider"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.9rem;margin-top:0.6rem;">
-
-        <div style="display:flex;flex-direction:column;gap:0.4rem;">
-          <div class="card blue-border" style="padding:0.9rem 1rem;">
-            <div class="card-title blue">Business Context</div>
-            <p style="font-size:0.78rem;">Owns CSRD reporting, ESPR ecodesign compliance, and the coming Digital Product Passport mandate. Central frustration: traceability data (material origin, supplier certifications, carbon footprint) lives in fragmented supplier PDFs and spreadsheets, not systems. Deadlines are fixed by regulation, not by IT capacity.</p>
-          </div>
-          <div class="card blue-border" style="padding:0.9rem 1rem;">
-            <div class="card-title blue">What They Care About</div>
-            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Producing auditable CSRD disclosures without a six-month manual data-gathering exercise every year</div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Building the traceability foundation ESPR and DPP will require, before enforcement dates land</div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Connecting supplier and material data that currently exists only in PDFs and email</div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Giving buying teams supplier compliance data at the point of the buying decision, not after</div></div>
-              <div class="kpi-item"><div class="kpi-dot"></div><div class="kpi-text">Reducing terminal stock, which is itself a sustainability and waste metric increasingly scrutinised</div></div>
-            </div>
-          </div>
-        </div>
-
-        <div style="display:flex;flex-direction:column;gap:0.4rem;">
-          <div class="card purple-border" style="padding:0.9rem 1rem;">
-            <div class="card-title purple">How They&rsquo;re Measured</div>
-            <div style="display:flex;flex-direction:column;gap:0.22rem;margin-top:0.2rem;">
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>CSRD Disclosure Completeness</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Supplier Traceability Coverage</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>ESPR / DPP Readiness</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Terminal Stock / Waste %</strong></div></div>
-              <div class="kpi-item"><div class="kpi-dot purple"></div><div class="kpi-text"><strong>Audit Findings</strong></div></div>
-            </div>
-          </div>
-          <div class="card teal-border" style="padding:0.9rem 1rem;">
-            <div class="card-title teal">Potential Titles</div>
-            <p style="font-size:0.78rem;">Sustainability Director &middot; Head of ESG &amp; Compliance &middot; VP Corporate Responsibility &middot; Head of Traceability</p>
-            <div style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid rgba(204,204,204,0.4);">
-              <div style="font-size:0.68rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">Key Collaborators</div>
-              <p style="font-size:0.74rem;color:var(--text-gray);">Buying Director &middot; CIO/CTO &middot; General Counsel &middot; CFO</p>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div class="card" style="padding:0.9rem 1rem;border-color:rgba(36,158,220,0.35);background:linear-gradient(160deg,rgba(36,158,220,0.04),rgba(17,86,127,0.02));height:100%;">
-            <div class="card-title blue">Why Snowflake Wins Here</div>
-            <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.3rem;">
-              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
-                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">One Traceability Record</div>
-                <p style="font-size:0.76rem;margin:0;max-width:100%;">Product, material, and supplier data already unified for trading purposes extends directly into CSRD, ESPR, and DPP reporting &mdash; no separate compliance data stack.</p>
-              </div>
-              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
-                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Auditable Lineage</div>
-                <p style="font-size:0.76rem;margin:0;max-width:100%;">Built-in lineage and governance mean every disclosure figure traces back to its source, satisfying auditor and regulator scrutiny.</p>
-              </div>
-              <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.5rem 0.65rem;">
-                <div style="font-size:0.68rem;font-weight:700;color:var(--sf-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Supplier Data at the Point of Decision</div>
-                <p style="font-size:0.76rem;margin:0;max-width:100%;">Compliance scorecards surface directly to buyers during the buying process, not as a separate after-the-fact audit.</p>
-              </div>
-              <div style="background:linear-gradient(90deg,rgba(36,158,220,0.1),rgba(113,211,220,0.06));border:1px solid rgba(36,158,220,0.25);border-radius:8px;padding:0.45rem 0.65rem;">
-                <p style="font-size:0.75rem;font-weight:700;color:var(--sf-mid);margin:0;max-width:100%;">A governed data foundation is the fastest path to CSRD and ESPR readiness &mdash; built once, reused across trading and compliance</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
+    <div class="col">
+      <div class="card wins"><h4>Why Snowflake wins here</h4><div class="win"><b>A live WSSI</b><p>Sales, stock, intake and open orders unified daily, so the WSSI is a governed view rather than a weekly spreadsheet.</p></div><div class="win"><b>One definition of each number</b><p>Semantic views define OTB, sell-through, intake and margin once. Every report and AI answer uses the same definitions.</p></div><div class="win"><b>Reforecast against reality</b><p>Forecasting models run on the unified data and feed your planning tool. A companion to Blue Yonder, Oracle Retail or Anaplan, not a replacement.</p></div><div class="proof"><span class="k">Proof point</span><p>Snowflake customers in fashion and department-store retail include Tapestry, River Island and John Lewis Partnership</p></div></div>
     </div>
-    <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-    <div class="slide-number">08 / 08</div>
   </div>
-
-<div class="controls">
-  <button onclick="prevSlide()">&#8592; Prev</button>
-  <select id="slideSelect" onchange="goTo(parseInt(this.value)-1)">
-    <option value="1">01 &middot; Title</option>
-    <option value="2">02 &middot; ICP Overview</option>
-    <option value="3">03 &middot; Commercial Director</option>
-    <option value="4">04 &middot; Merchandising Director</option>
-    <option value="5">05 &middot; CIO / CTO</option>
-    <option value="6">06 &middot; Buying Director</option>
-    <option value="7">07 &middot; Ecommerce Director</option>
-    <option value="8">08 &middot; Sustainability Director</option>
-  </select>
-  <button onclick="nextSlide()">Next &#8594;</button>
-</div>
-<script>
-const TOTAL = 8;
-let current = 0;
-function goTo(index) {
-  document.querySelectorAll('.slide').forEach(function(s) { s.classList.remove('active'); });
-  document.getElementById('slide-' + (index+1)).classList.add('active');
-  document.getElementById('progressBar').style.width = ((index+1)/TOTAL*100) + '%';
-  document.getElementById('slideSelect').value = index + 1;
-  current = index;
-}
-function nextSlide() { if (current < TOTAL - 1) goTo(current + 1); }
-function prevSlide() { if (current > 0) goTo(current - 1); }
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
-  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
-  if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
-});
-goTo(0);
+  <nav class="pager"><a href="#commercial">&larr; Commercial Director</a><a href="#buying">Buying Director &rarr;</a></nav>
+</section>
+<section class="page" id="buying" data-role="eval">
+  <header class="ph">
+    <div class="label">Persona 03 <span class="sep">&middot;</span> <span class="role eval">Business Champion</span></div>
+    <h2>Buying Director <span class="dim">/ Head of Buying</span></h2>
+  </header>
+  <div class="grid">
+    <div class="col">
+      <div class="card"><h4>Their world</h4><p class="ctx">Selects the range and the vendors, negotiates cost price and, with merchandising, commits the buy. Has limited room to chase a winner or cut a loser once the season starts, because vendor lead times and capacity decide what is still possible. Needs to know early which options are working.</p></div>
+      <div class="card"><h4>What they care about</h4><ul class="dots"><li>Seeing winners and losers early enough to chase or cut</li><li>Intake margin protected through cost price and vendor choice</li><li>Knowing which vendors can deliver a repeat order on time</li><li>Range decisions informed by how similar options sold</li><li>Supplier compliance data at the point of buying</li></ul></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4>How they&rsquo;re measured <span class="hint">tap for definition</span></h4><ul class="kpis"><li><button type="button" class="kpi" aria-expanded="false">Range sell-through<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Range sell-through</b><p>Sell-through for the range or category the buyer selected.</p><code>Units sold &divide; units received, by range</code><span class="pn">Shows whether the range landed</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Intake margin<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Intake margin</b><p>Planned margin on goods at the point they are bought, before markdown.</p><code>(Full selling price &minus; cost price) &divide; full selling price</code><span class="pn">Set by buying and cost negotiation</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Best / worst seller ratio<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Best / worst seller ratio</b><p>Share of options that are clear winners against clear losers in a range.</p><code>Options in top band &divide; options in bottom band</code><span class="pn">Guides chase and cut decisions</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Chase lead time<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Chase lead time</b><p>Days from deciding to repeat a winning style to stock landing in the DC.</p><code>DC receipt date &minus; repeat PO date</code><span class="pn">Decides whether a chase is still worth it</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Full-price sell-through<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Full-price sell-through</b><p>Share of units bought that sell before any markdown.</p><code>Units sold at full price &divide; units received</code><span class="pn">The primary lever on gross margin</span></div></li></ul></div>
+      <div class="card"><h4>Find them as</h4><p>Buying Director &middot; Head of Buying &middot; Buying Manager &middot; Senior Buyer</p>
+        <h5>Works with</h5><p class="muted">Merchandising Director &middot; Commercial Director &middot; Supply Chain &amp; Sourcing &middot; Design / Product</p></div>
+    </div>
+    <div class="col">
+      <div class="card wins"><h4>Why Snowflake wins here</h4><div class="win"><b>Early read on the range</b><p>Store, online and wholesale sell-through joined by option, so buyers see what is working while a chase is still worth it.</p></div><div class="win"><b>Vendor performance in view</b><p>Delivery, quality and cost history per vendor, so repeat orders go to vendors who can deliver.</p></div><div class="win"><b>Ask it directly</b><p>Cortex Analyst: &ldquo;Which options are more than 20% ahead of plan, and who supplied them?&rdquo;</p></div><div class="proof"><span class="k">Proof point</span><p>Snowflake customers in fashion and department-store retail include Tapestry, River Island and John Lewis Partnership</p></div></div>
+    </div>
+  </div>
+  <nav class="pager"><a href="#merch">&larr; Merchandising Director</a><a href="#supply">Supply Chain &amp; Sourcing &rarr;</a></nav>
+</section>
+<section class="page" id="supply" data-role="eval">
+  <header class="ph">
+    <div class="label">Persona 04 <span class="sep">&middot;</span> <span class="role eval">Business Champion</span></div>
+    <h2>Supply Chain &amp; Sourcing Director <span class="dim">/ Head of Supply Chain / Sourcing Director</span></h2>
+  </header>
+  <div class="grid">
+    <div class="col">
+      <div class="card"><h4>Their world</h4><p class="ctx">Owns suppliers, inbound flow, DCs and delivery. Product is sourced far from market, so supplier delays, freight disruption and duty changes move intake dates and landed cost. PO, shipment and carrier data arrive as files from many partners, so a late shipment is often found when the DC slot is missed.</p></div>
+      <div class="card"><h4>What they care about</h4><ul class="dots"><li>Seeing late POs and shipments before they miss the launch window</li><li>Landed cost that keeps up with freight and duty changes</li><li>Supplier OTIF and lead-time reliability by vendor and route</li><li>Carrier and 3PL data without manual file handling</li><li>Supplier traceability for compliance</li></ul></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4>How they&rsquo;re measured <span class="hint">tap for definition</span></h4><ul class="kpis"><li><button type="button" class="kpi" aria-expanded="false">Supplier OTIF<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Supplier OTIF</b><p>Share of purchase orders delivered on the agreed date and in the full quantity.</p><code>POs on time and in full &divide; total POs</code><span class="pn">Late intake shortens the full-price window</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Lead time variability<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Lead time variability</b><p>Spread of actual supplier and freight lead times around the plan.</p><code>Std. deviation of actual lead time &divide; planned lead time</code><span class="pn">Drives safety stock and missed launches</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Chase lead time<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Chase lead time</b><p>Days from deciding to repeat a winning style to stock landing in the DC.</p><code>DC receipt date &minus; repeat PO date</code><span class="pn">Decides whether a chase is still worth it</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Landed cost<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Landed cost</b><p>Full cost of a unit delivered to the DC: product, freight, duty and handling.</p><code>Cost price + freight + duty + handling</code><span class="pn">Moves with freight and duty changes</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Delivery performance<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Delivery performance</b><p>Share of customer and store deliveries arriving on the promised day.</p><code>Deliveries on time &divide; total deliveries</code><span class="pn">Last-mile and store replenishment</span></div></li></ul></div>
+      <div class="card"><h4>Find them as</h4><p>Supply Chain Director &middot; Sourcing Director &middot; Head of Logistics &middot; Head of Supplier Management</p>
+        <h5>Works with</h5><p class="muted">Buying Director &middot; Merchandising Director &middot; CFO &middot; 3PL and freight partners</p></div>
+    </div>
+    <div class="col">
+      <div class="card wins"><h4>Why Snowflake wins here</h4><div class="win"><b>Inbound in one view</b><p>PO, booking, shipment and DC receipt data joined, so late intake is visible against the WSSI before it lands late.</p></div><div class="win"><b>Partner data without files</b><p>Snowflake data sharing and connectors bring carrier, 3PL and supplier data in live instead of by email and flat file.</p></div><div class="win"><b>Risk scored early</b><p>Cortex AI reads supplier and shipment signals to flag delays and cost changes before they reach the DC.</p></div><div class="proof"><span class="k">Proof point</span><p>Under Armour: automated 6+ carrier flat-file feeds (FedEx, Canada Post, DHL, LaserShip) and gets real-time last-mile delivery insight through Snowflake data sharing with LaserShip</p></div><div class="proof"><span class="k">Proof point</span><p>Under Armour: 20&ndash;40% reduction in manual effort from its supply chain and marketing dashboards, now used by 200 people</p></div></div>
+    </div>
+  </div>
+  <nav class="pager"><a href="#buying">&larr; Buying Director</a><a href="#alloc">Allocation &amp; Replenishment &rarr;</a></nav>
+</section>
+<section class="page" id="alloc" data-role="eval">
+  <header class="ph">
+    <div class="label">Persona 05 <span class="sep">&middot;</span> <span class="role eval">Business Champion</span></div>
+    <h2>Head of Allocation &amp; Replenishment <span class="dim">/ Allocation &amp; Replenishment Manager</span></h2>
+  </header>
+  <div class="grid">
+    <div class="col">
+      <div class="card"><h4>Their world</h4><p class="ctx">Decides where stock goes: initial allocation by store and size, in-season replenishment and transfers. Size curves and store grades are often last year&rsquo;s, so end sizes pile up in the wrong stores while popular sizes sell out. Every misallocation becomes a transfer or a markdown.</p></div>
+      <div class="card"><h4>What they care about</h4><ul class="dots"><li>Size curves and store grades based on current demand</li><li>Fewer broken size runs in the stores that sell the style</li><li>Replenishment that reacts to this week&rsquo;s sales</li><li>Fewer, cheaper inter-store transfers</li><li>One stock view across stores, DCs and online</li></ul></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4>How they&rsquo;re measured <span class="hint">tap for definition</span></h4><ul class="kpis"><li><button type="button" class="kpi" aria-expanded="false">Allocation accuracy<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Allocation accuracy</b><p>How well initial allocation matched where demand actually landed.</p><code>1 &minus; share of stock later moved or marked down for being in the wrong place</code><span class="pn">Bad allocation becomes markdown</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Availability / lost sales<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Availability / lost sales</b><p>Share of time a size is in stock where customers look for it, and the sales lost when it is not.</p><code>In-stock size-location days &divide; total size-location days</code><span class="pn">Broken size runs kill sell-through</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Size-curve accuracy<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Size-curve accuracy</b><p>Match between bought size ratios and the sizes customers actually buy.</p><code>1 &minus; size-mix error vs actual sales mix</code><span class="pn">Wrong curves leave end sizes for clearance</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Inter-store transfers<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Inter-store transfers</b><p>Stock moved between stores to fix allocation, and its cost.</p><code>Units transferred &divide; units allocated</code><span class="pn">A cost of the first allocation being wrong</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Weeks cover<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Weeks cover</b><p>How many weeks current stock will last at the current rate of sale.</p><code>Stock units &divide; average weekly unit sales</code><span class="pn">Too high means markdown risk; too low means lost sales</span></div></li></ul></div>
+      <div class="card"><h4>Find them as</h4><p>Head of Allocation &amp; Replenishment &middot; Allocation Manager &middot; Head of Stock Management &middot; Senior Allocator</p>
+        <h5>Works with</h5><p class="muted">Merchandising Director &middot; Retail Operations &middot; Ecommerce Director &middot; DC / Logistics</p></div>
+    </div>
+    <div class="col">
+      <div class="card wins"><h4>Why Snowflake wins here</h4><div class="win"><b>Demand-led size curves</b><p>Size and store-level sales history in one place, so curves and grades reflect what customers buy now.</p></div><div class="win"><b>Move before markdown</b><p>Stock, sales and cover by size and location, so transfers and replenishment happen before clearance is needed.</p></div><div class="win"><b>Works with your tools</b><p>Allocation outputs feed your existing allocation or planning tool through connectors.</p></div><div class="proof"><span class="k">Proof point</span><p>Under Armour: 20&ndash;40% reduction in manual effort from its supply chain and marketing dashboards, now used by 200 people</p></div></div>
+    </div>
+  </div>
+  <nav class="pager"><a href="#supply">&larr; Supply Chain &amp; Sourcing</a><a href="#cio">CIO / CTO &rarr;</a></nav>
+</section>
+<section class="page" id="cio" data-role="tech">
+  <header class="ph">
+    <div class="label">Persona 06 <span class="sep">&middot;</span> <span class="role tech">Technical Validator</span></div>
+    <h2>CIO / CTO <span class="dim">/ Data Director</span></h2>
+  </header>
+  <div class="grid">
+    <div class="col">
+      <div class="card"><h4>Their world</h4><p class="ctx">Under pressure to deliver AI value from trading, product and customer data. The stack typically combines a planning tool, PLM such as Centric or PTC FlexPLM, an ERP or merchandising system, an e-commerce platform and store POS, each holding its own copy of the truth. Earlier data lakes produced data no one trusted. Validates the platform, and becomes the economic buyer on larger transformation deals.</p></div>
+      <div class="card"><h4>What they care about</h4><ul class="dots"><li>Joining up trading data without ripping out the planning tool or e-commerce platform</li><li>Governed AI that reaches production</li><li>Fewer platforms and less custom integration</li><li>Security and governance at enterprise scale</li><li>Supporting an e-commerce or ERP migration without losing history</li></ul></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4>How they&rsquo;re measured <span class="hint">tap for definition</span></h4><ul class="kpis"><li><button type="button" class="kpi" aria-expanded="false">Platform TCO<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Platform TCO</b><p>Total cost of the data estate: licences, infrastructure, integration and support.</p><code>Sum of platform, integration and run costs</code><span class="pn">Falls as platforms are retired</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Governed KPI coverage<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Governed KPI coverage</b><p>Share of trading KPIs served from one governed definition rather than local spreadsheets.</p><code>KPIs on governed definitions &divide; KPIs in use</code><span class="pn">Ends the trading-meeting argument</span></div></li><li><button type="button" class="kpi" aria-expanded="false">AI use cases in production<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>AI use cases in production</b><p>AI and ML use cases running in daily decisions, not pilots.</p><code>Count of production use cases</code><span class="pn">Board question for the CIO</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Time to insight<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Time to insight</b><p>Time from a business question to a trusted answer.</p><code>Answer delivered &minus; question raised</code><span class="pn">Weeks of IT requests vs minutes of self-service</span></div></li></ul></div>
+      <div class="card"><h4>Find them as</h4><p>CIO &middot; CTO &middot; IT Director &middot; Data Director &middot; Head of Enterprise Architecture</p>
+        <h5>Works with</h5><p class="muted">Commercial Director &middot; Merchandising Director &middot; CFO &middot; Head of Data &amp; Analytics</p></div>
+    </div>
+    <div class="col">
+      <div class="card wins"><h4>Why Snowflake wins here</h4><div class="win"><b>Integrate without ripping out</b><p>SAP data through SAP Business Data Cloud without copying. Blue Yonder, Oracle Retail, Anaplan, PLM, e-commerce and POS through connectors, Openflow or data sharing.</p></div><div class="win"><b>Governed by default</b><p>Horizon governance, role-based access, masking and lineage built in, so the trading numbers have one owner and one definition.</p></div><div class="win"><b>AI on the same platform</b><p>Cortex AI and Snowflake Intelligence run where the data is governed, with no separate AI stack to secure.</p></div><div class="proof"><span class="k">Proof point</span><p>Urban Outfitters: replaced Netezza and gained 10x data handling capacity, with hours of admin removed and faster ETL to insight</p></div></div>
+    </div>
+  </div>
+  <nav class="pager"><a href="#alloc">&larr; Allocation &amp; Replenishment</a><a href="#data">Head of Data &amp; Analytics &rarr;</a></nav>
+</section>
+<section class="page" id="data" data-role="tech">
+  <header class="ph">
+    <div class="label">Persona 07 <span class="sep">&middot;</span> <span class="role tech">Technical Validator</span></div>
+    <h2>Head of Data &amp; Analytics <span class="dim">/ Head of Data Engineering / BI</span></h2>
+  </header>
+  <div class="grid">
+    <div class="col">
+      <div class="card"><h4>Their world</h4><p class="ctx">Runs the pipelines and reports that feed the trading pack. The team spends much of its week on file loads, fixes and one-off extracts for buying and merchandising, so new work such as size-level forecasting waits. Validates whether the platform will cut that load in practice.</p></div>
+      <div class="card"><h4>What they care about</h4><ul class="dots"><li>Fewer brittle file loads from suppliers, carriers and 3PLs</li><li>One governed model the business can query itself</li><li>Capacity for forecasting and AI work, not report requests</li><li>Reliable daily refresh for the WSSI and trading pack</li><li>Cost that scales with use</li></ul></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4>How they&rsquo;re measured <span class="hint">tap for definition</span></h4><ul class="kpis"><li><button type="button" class="kpi" aria-expanded="false">Pipeline reliability<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Pipeline reliability</b><p>Share of scheduled data loads that arrive complete and on time.</p><code>Successful on-time loads &divide; scheduled loads</code><span class="pn">Late data means a stale WSSI</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Self-service adoption<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Self-service adoption</b><p>Business users answering their own questions from governed data.</p><code>Active self-service users; requests avoided</code><span class="pn">Proxy for business value</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Time to insight<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Time to insight</b><p>Time from a business question to a trusted answer.</p><code>Answer delivered &minus; question raised</code><span class="pn">Weeks of IT requests vs minutes of self-service</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Platform TCO<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Platform TCO</b><p>Total cost of the data estate: licences, infrastructure, integration and support.</p><code>Sum of platform, integration and run costs</code><span class="pn">Falls as platforms are retired</span></div></li></ul></div>
+      <div class="card"><h4>Find them as</h4><p>Head of Data &amp; Analytics &middot; Head of Data Engineering &middot; BI Manager &middot; Data Science Lead</p>
+        <h5>Works with</h5><p class="muted">CIO / CTO &middot; Merchandising &middot; Supply Chain &middot; Finance</p></div>
+    </div>
+    <div class="col">
+      <div class="card wins"><h4>Why Snowflake wins here</h4><div class="win"><b>Less pipeline work</b><p>Openflow, connectors and data sharing replace hand-built loads from partners and source systems.</p></div><div class="win"><b>Self-service on governed data</b><p>Semantic views and Cortex Analyst let merchandisers and buyers ask their own questions.</p></div><div class="win"><b>Room for forecasting</b><p>Snowflake ML and Cortex AI run next to the data, so size-level forecasting does not need a separate platform.</p></div><div class="proof"><span class="k">Proof point</span><p>Urban Outfitters: replaced Netezza and gained 10x data handling capacity, with hours of admin removed and faster ETL to insight</p></div><div class="proof"><span class="k">Proof point</span><p>Under Armour: 20&ndash;40% reduction in manual effort from its supply chain and marketing dashboards, now used by 200 people</p></div></div>
+    </div>
+  </div>
+  <nav class="pager"><a href="#cio">&larr; CIO / CTO</a><a href="#cfo">CFO &rarr;</a></nav>
+</section>
+<section class="page" id="cfo" data-role="exp">
+  <header class="ph">
+    <div class="label">Persona 08 <span class="sep">&middot;</span> <span class="role exp">Influencer</span></div>
+    <h2>Chief Financial Officer <span class="dim">/ Finance Director</span></h2>
+  </header>
+  <div class="grid">
+    <div class="col">
+      <div class="card"><h4>Their world</h4><p class="ctx">Sees the season through margin, stock value and provisions. Markdown, terminal stock and aged stock land on the P&amp;L, and finance often arbitrates between the buying, merchandising and finance versions of the numbers. Wants stock and margin decisions based on figures finance trusts, and a clear return on transformation spend.</p></div>
+      <div class="card"><h4>What they care about</h4><ul class="dots"><li>Gross margin protected from late, deep markdown</li><li>Less cash tied up in stock</li><li>Lower aged and terminal stock provisions</li><li>One trusted number set with trading</li><li>Clear payback on platform spend</li></ul></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4>How they&rsquo;re measured <span class="hint">tap for definition</span></h4><ul class="kpis"><li><button type="button" class="kpi" aria-expanded="false">Gross margin %<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Gross margin %</b><p>Sales minus cost of goods, after markdown, as a share of sales.</p><code>(Net sales &minus; COGS) &divide; net sales</code><span class="pn">Board-level trading number</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Markdown % of sales<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Markdown % of sales</b><p>Value given away in price reductions, relative to sales.</p><code>Markdown &pound; &divide; net sales</code><span class="pn">Deep, late markdown is the cost of a late signal</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Stock value / working capital<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Stock value / working capital</b><p>Cash tied up in stock across DCs, stores and in transit.</p><code>Stock at cost, by location and age</code><span class="pn">CFO-owned target</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Stock provision<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Stock provision</b><p>Value written down for aged or terminal stock.</p><code>Provision &pound; &divide; stock at cost</code><span class="pn">The late cost of over-buying</span></div></li></ul></div>
+      <div class="card"><h4>Find them as</h4><p>CFO &middot; Finance Director &middot; Commercial Finance Director &middot; Head of FP&amp;A</p>
+        <h5>Works with</h5><p class="muted">Commercial Director &middot; CEO &middot; Merchandising Director &middot; CIO / CTO</p></div>
+    </div>
+    <div class="col">
+      <div class="card wins"><h4>Why Snowflake wins here</h4><div class="win"><b>Margin in one view</b><p>Sales, markdown, intake margin and stock value defined once, across channels.</p></div><div class="win"><b>Stock risk early</b><p>Aged and slow stock flagged by style while it can still be sold at a better price.</p></div><div class="win"><b>A case finance can test</b><p>Value measured on the same governed data finance already reports from.</p></div><div class="proof"><span class="k">Proof point</span><p>Under Armour: 20&ndash;40% reduction in manual effort from its supply chain and marketing dashboards, now used by 200 people</p></div></div>
+    </div>
+  </div>
+  <nav class="pager"><a href="#data">&larr; Head of Data &amp; Analytics</a><a href="#ecom">Ecommerce Director &rarr;</a></nav>
+</section>
+<section class="page" id="ecom" data-role="exp">
+  <header class="ph">
+    <div class="label">Persona 09 <span class="sep">&middot;</span> <span class="role exp">Influencer</span></div>
+    <h2>Ecommerce Director <span class="dim">/ Digital Director</span></h2>
+  </header>
+  <div class="grid">
+    <div class="col">
+      <div class="card"><h4>Their world</h4><p class="ctx">Owns the online P&amp;L and, increasingly, the earliest demand signal. Search, browse, basket and returns data show trend and fit issues before they appear in store sales, but rarely reach buying, merchandising and allocation in time. Accurate stock across channels decides what can be sold online.</p></div>
+      <div class="card"><h4>What they care about</h4><ul class="dots"><li>Getting online demand and returns signals to merchandising early</li><li>Accurate stock across stores, DCs and online</li><li>Fewer fit-driven returns</li><li>Keeping customer history through a platform migration</li><li>Fewer lost sales from out-of-stock sizes</li></ul></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4>How they&rsquo;re measured <span class="hint">tap for definition</span></h4><ul class="kpis"><li><button type="button" class="kpi" aria-expanded="false">Online sell-through<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Online sell-through</b><p>Sell-through for the online channel, by style and size.</p><code>Online units sold &divide; online units available</code><span class="pn">Often the earliest demand read</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Returns rate<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Returns rate</b><p>Share of online units sent back, by style, size and reason.</p><code>Units returned &divide; units sold online</code><span class="pn">Fit returns point at size and range issues</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Cross-channel stock accuracy<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Cross-channel stock accuracy</b><p>Match between recorded and actual stock across stores, DCs and online.</p><code>Locations with correct stock &divide; locations counted</code><span class="pn">Needed for click and collect and ship-from-store</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Availability / lost sales<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Availability / lost sales</b><p>Share of time a size is in stock where customers look for it, and the sales lost when it is not.</p><code>In-stock size-location days &divide; total size-location days</code><span class="pn">Broken size runs kill sell-through</span></div></li></ul></div>
+      <div class="card"><h4>Find them as</h4><p>Ecommerce Director &middot; Digital Director &middot; Online Trading Director &middot; Head of Digital Trading</p>
+        <h5>Works with</h5><p class="muted">Commercial Director &middot; Merchandising Director &middot; Head of Allocation &middot; CIO / CTO</p></div>
+    </div>
+    <div class="col">
+      <div class="card wins"><h4>Why Snowflake wins here</h4><div class="win"><b>Online signal joined up</b><p>Clickstream, basket and returns data joined with sales, stock and plans, so the earliest signal reaches merchandising sooner.</p></div><div class="win"><b>One stock view</b><p>Store, DC and in-transit stock in one model to support click and collect and ship-from-store.</p></div><div class="win"><b>History you keep</b><p>Customer and product history held in Snowflake, independent of the e-commerce platform.</p></div><div class="proof"><span class="k">Proof point</span><p>Under Armour: real-time last-mile delivery insight through Snowflake data sharing with LaserShip</p></div></div>
+    </div>
+  </div>
+  <nav class="pager"><a href="#cfo">&larr; CFO</a><a href="#sust">Sustainability Director &rarr;</a></nav>
+</section>
+<section class="page" id="sust" data-role="exp">
+  <header class="ph">
+    <div class="label">Persona 10 <span class="sep">&middot;</span> <span class="role exp">Influencer</span></div>
+    <h2>Sustainability Director <span class="dim">/ Head of ESG &amp; Compliance</span></h2>
+  </header>
+  <div class="engage"><span class="k">When to engage</span><p>Bring in after a Commercial Director or CIO sponsor has the trading data foundation in place. Product, supplier and stock data are then already unified and can extend into traceability and reporting.</p></div><div class="grid">
+    <div class="col">
+      <div class="card"><h4>Their world</h4><p class="ctx">Owns sustainability reporting and product compliance. For brands selling into the EU, the ESPR ban on destroying unsold apparel and footwear now applies to large companies, and Digital Product Passport requirements for textiles are on the way. CSRD scope was narrowed by the 2025 Omnibus, so check which entities are in scope. Traceability data still lives in supplier PDFs and spreadsheets.</p></div>
+      <div class="card"><h4>What they care about</h4><ul class="dots"><li>Traceability for material origin and supplier tiers</li><li>Evidence for how unsold stock is handled</li><li>Less terminal stock, which is also a waste metric</li><li>Supplier compliance data in front of buyers at the point of decision</li><li>Disclosures that stand up to audit</li></ul></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4>How they&rsquo;re measured <span class="hint">tap for definition</span></h4><ul class="kpis"><li><button type="button" class="kpi" aria-expanded="false">Supplier traceability coverage<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Supplier traceability coverage</b><p>Share of products with material origin and supplier tiers recorded.</p><code>Products with traced tiers &divide; total products</code><span class="pn">Foundation for a Digital Product Passport</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Unsold stock disposal<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Unsold stock disposal</b><p>Volume of unsold goods destroyed, donated, recycled or resold.</p><code>Units by disposal route</code><span class="pn">Now regulated for large companies selling into the EU</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Terminal stock %<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Terminal stock %</b><p>Stock left at season end that must be cleared, written down or carried over.</p><code>End-of-season units &divide; units bought</code><span class="pn">Also a waste and ESPR exposure</span></div></li><li><button type="button" class="kpi" aria-expanded="false">Disclosure readiness<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Disclosure readiness</b><p>Share of required sustainability data points sourced from systems, not spreadsheets.</p><code>System-sourced data points &divide; required data points</code><span class="pn">Audit and assurance burden</span></div></li></ul></div>
+      <div class="card"><h4>Find them as</h4><p>Sustainability Director &middot; Head of ESG &amp; Compliance &middot; Head of Corporate Responsibility &middot; Head of Traceability</p>
+        <h5>Works with</h5><p class="muted">Buying Director &middot; Supply Chain &amp; Sourcing &middot; CIO / CTO &middot; General Counsel</p></div>
+    </div>
+    <div class="col">
+      <div class="card wins"><h4>Why Snowflake wins here</h4><div class="win"><b>One product record</b><p>Product, material, supplier and stock data unified for trading extends to traceability without a separate stack.</p></div><div class="win"><b>Lineage for audit</b><p>Horizon lineage traces each reported figure back to its source system.</p></div><div class="win"><b>Compliance at buying time</b><p>Supplier compliance surfaced to buyers while the range is being built.</p></div></div>
+    </div>
+  </div>
+  <nav class="pager"><a href="#ecom">&larr; Ecommerce Director</a><span></span></nav>
+</section>
+</main>
+<script>(function () {
+  var pages = Array.prototype.slice.call(document.querySelectorAll('.page'));
+  var ids = pages.map(function (p) { return p.id; });
+  var links = document.querySelectorAll('.rail a.ri');
+  var main = document.getElementById('main');
+  function show(id) {
+    if (ids.indexOf(id) < 0) id = ids[0];
+    pages.forEach(function (p) { p.classList.toggle('on', p.id === id); });
+    links.forEach(function (a) { a.classList.toggle('on', a.getAttribute('href') === '#' + id); });
+    main.scrollTop = 0;
+    var h = document.querySelector('#' + id + ' h2');
+    document.title = 'Fashion Retail ICP · ' + (h ? h.textContent.split(' / ')[0] : '');
+  }
+  function current() { return ids.indexOf(location.hash.slice(1)) < 0 ? 0 : ids.indexOf(location.hash.slice(1)); }
+  function go(i) { i = Math.max(0, Math.min(ids.length - 1, i)); location.hash = ids[i]; }
+  function closePops(except) {
+    document.querySelectorAll('.kpi[aria-expanded="true"]').forEach(function (b) {
+      if (b !== except) { b.setAttribute('aria-expanded', 'false'); b.nextElementSibling.classList.remove('on'); }
+    });
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('.kpi');
+    closePops(b);
+    if (b) { var open = b.getAttribute('aria-expanded') !== 'true'; b.setAttribute('aria-expanded', open); b.nextElementSibling.classList.toggle('on', open); }
+  });
+  window.addEventListener('hashchange', function () { closePops(); show(location.hash.slice(1)); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { closePops(); return; }
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); go(current() + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(current() - 1); }
+    else if (/^[0-9]$/.test(e.key)) go(+e.key);
+  });
+  show(location.hash.slice(1));
+})();
 </script>
 </body>
 </html>
