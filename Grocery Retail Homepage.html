@@ -23,7 +23,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color: var(--text-dark); min-height: 100vh; }
 .site-header { background: linear-gradient(135deg, var(--sf-deep) 0%, var(--sf-mid) 60%, rgba(36,158,220,0.85) 100%); padding: 2.5rem 3rem 3rem; position: relative; overflow: hidden; }
-.site-header::after { content: ''; position: absolute; inset: 0; background: url(https://images.unsplash.com/photo-1542838132-92c53300491e?w=1920&q=60) center 40%/cover no-repeat; opacity: 0.1; z-index: 0; }
+.site-header::after { content: ''; position: absolute; inset: 0; background: url('assets/film/grocery-hero-bg.webp') right center/cover no-repeat; opacity: 0.28; -webkit-mask-image: linear-gradient(90deg, transparent 30%, #000 85%); mask-image: linear-gradient(90deg, transparent 30%, #000 85%); z-index: 0; }
 .header-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; }
 .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
 .internal-tag { background: rgba(220,38,38,0.2); border: 1px solid rgba(220,38,38,0.4); border-radius: 5px; padding: 0.3rem 0.8rem; font-size: 0.62rem; font-weight: 700; color: rgba(255,120,120,0.9); letter-spacing: 0.1em; text-transform: uppercase; }
@@ -112,6 +112,22 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
 .film-sound[hidden] { display: none; }
 .film-desc { font-size: 0.78rem; color: var(--text-gray); line-height: 1.55; margin-top: 0.7rem; }
 @media (max-width: 600px) { .film-frame { border-radius: 10px; } .film-sound { top: 0.5rem; right: 0.5rem; padding: 0.45rem 0.7rem; } }
+
+.card-preview { display: block; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 1px solid var(--border); background: var(--sf-deep); }
+.card-preview img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.3s; }
+.asset-card:hover .card-preview img { transform: scale(1.03); }
+.asset-card.placeholder .card-preview img { filter: grayscale(0.6); }
+.start-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.6rem; margin-bottom: 0.4rem; }
+.start-strip a { display: flex; flex-direction: column; gap: 0.2rem; background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 0.75rem 0.9rem; text-decoration: none; color: var(--text-dark); transition: border-color .15s, box-shadow .15s; }
+.start-strip a:hover, .start-strip a:focus-visible { border-color: var(--sf-blue); box-shadow: 0 4px 14px rgba(17,86,127,.12); outline: none; }
+.ss-who { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sf-mid); }
+.ss-what { font-size: 0.82rem; font-weight: 600; }
+.ss-go { font-size: 0.72rem; color: var(--text-light); }
+.asset-card:target { box-shadow: 0 0 0 3px var(--sf-blue); }
+html { scroll-behavior: smooth; }
+.asset-card[id] { scroll-margin-top: 1.5rem; }
+@media (max-width: 900px) { .start-strip { grid-template-columns: repeat(2, 1fr); } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 </style>
 </head>
 <body>
@@ -144,7 +160,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
         Grocery operates on a 2&ndash;5% trading margin, and the biggest single drag on that margin is supply chain. Fresh waste driven by demand forecast errors, replenishment calibrated to last week&rsquo;s averages, and OOS events that play out in real time &mdash; none of these can be fixed without unified, AI-ready data across EPOS, cold chain, and suppliers.
       </p>
       <p class="purpose-body">
-        Snowflake solves this by becoming the <strong>intelligence layer on top of every system the customer already has</strong> &mdash; zero-copy, no rip and replace. The primary play is <strong>supply chain: AI demand forecasting, fresh waste reduction, and adaptive supplier collaboration</strong>. The same data foundation also unlocks loyalty personalisation and commercial intelligence, extending the platform value over time.
+        Snowflake <strong>connects to the systems the customer already runs</strong> &mdash; SAP zero-copy through SAP Business Data Cloud, everything else through connectors, Openflow and data sharing &mdash; so replenishment gets better signals without being replaced. The primary play is <strong>supply chain: store-day-SKU demand forecasting, fresh waste reduction and supplier collaboration</strong>. Loyalty and retail media are expansion use cases on the same foundation, once it exists.
       </p>
       <div class="film-block" role="region" aria-labelledby="film-title">
       <p class="section-heading" id="film-title">The Play in 90 Seconds &middot; The Christmas Promo</p>
@@ -165,7 +181,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
 
       <div class="glance-row">
         <span class="glance-label">Target</span>
-        <span class="glance-value">Grocery retailers with <strong>£500M+ turnover</strong>, loyalty programmes, fresh food categories, and digital transformation on the agenda</span>
+        <span class="glance-value">Grocery retailers with <strong>£500M+ turnover</strong>, fresh food categories, and supply chain transformation on the agenda</span>
       </div>
       <div class="glance-row">
         <span class="glance-label">Formats</span>
@@ -173,19 +189,19 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
       </div>
       <div class="glance-row">
         <span class="glance-label">Themes</span>
-        <span class="glance-value">Fresh waste &middot; AI demand forecasting &middot; Loyalty &amp; personalisation &middot; Retail media monetisation &middot; Private label &middot; Omnichannel &middot; Adaptive supply chain</span>
+        <span class="glance-value">Fresh waste &middot; Store-day-SKU forecasting &middot; On-shelf availability &middot; Supplier collaboration &middot; Network cost &middot; Loyalty &amp; retail media (expansion)</span>
       </div>
       <div class="glance-row">
         <span class="glance-label">Buyers</span>
-        <span class="glance-value"><strong>Primary:</strong> CSCO &middot; COO &middot; Head of Supply Chain &middot; Head of Fresh &middot; <strong>Secondary:</strong> CMO &middot; CCO &middot; CIO/CDO</span>
+        <span class="glance-value"><strong>Economic buyer:</strong> CSCO / Supply Chain Director &middot; COO &middot; <strong>Champions:</strong> Head of Fresh &middot; Head of Replenishment &middot; Logistics Director &middot; <strong>Validator:</strong> CIO/CDO</span>
       </div>
       <div class="glance-row">
         <span class="glance-label">Core Pain</span>
-        <span class="glance-value">Fresh waste costing margin. Loyalty data siloed from buying and personalisation. No privacy-safe mechanism for retail media. AI stuck in pilot on unstructured data.</span>
+        <span class="glance-value">Fresh orders set from last week&rsquo;s sales. Waste and empty shelves in the same category. Suppliers planning from late numbers. AI forecasting stuck in pilot.</span>
       </div>
       <div class="glance-row">
         <span class="glance-label">Our Angle</span>
-        <span class="glance-value">Protect &middot; Grow &middot; Monetise the basket. Intelligence layer on top &mdash; no rip and replace. Every margin point, one governed platform.</span>
+        <span class="glance-value">Order for tomorrow&rsquo;s shopper, not last week&rsquo;s. Connect to what they run; one governed foundation from grower to shelf.</span>
       </div>
     </div>
 
@@ -196,7 +212,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
 <div class="narrative-strip">
   <div class="narrative-inner">
     <span class="narrative-pill">Narrative Arc</span>
-    <p><strong>Protect the Basket</strong> (AI demand forecasting, fresh waste reduction, adaptive supply chain) &rarr; <strong>Grow the Basket</strong> (loyalty, personalisation, private label, non-food assortment) &rarr; <strong>Monetise the Basket</strong> (retail media on first-party data). One governed platform. No silos. Every margin point connected.</p>
+    <p><strong>See the demand coming</strong> (store-day-SKU forecasts with weather, events and promotions) &rarr; <strong>Act before waste or a gap</strong> (orders, store moves, markdowns, supplier capacity) &rarr; <strong>Expand on the same data</strong> (loyalty and retail media, later). One governed platform from grower to shelf.</p>
   </div>
 </div>
 
@@ -204,11 +220,19 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
 
 <!-- ── ASSETS ── -->
 <section class="assets-section">
-  <p class="section-heading">Play Assets</p>
+  <p class="section-heading">Where to start</p>
+  <nav class="start-strip" aria-label="Where to start">
+    <a href="#a-sdr"><span class="ss-who">SDR</span><span class="ss-what">Prospecting &amp; first call</span><span class="ss-go">SDR Cheat Sheet &rarr;</span></a>
+    <a href="#a-icp"><span class="ss-who">AE &middot; prep</span><span class="ss-what">Know the buyer</span><span class="ss-go">ICP &rarr;</span></a>
+    <a href="#a-fmd"><span class="ss-who">AE &middot; meeting</span><span class="ss-what">Run the first meeting</span><span class="ss-go">FMD &rarr; One-pager</span></a>
+    <a href="#a-met"><span class="ss-who">AE &amp; SE</span><span class="ss-what">Size the value</span><span class="ss-go">Metrics That Matter &rarr;</span></a>
+    <a href="#a-demo"><span class="ss-who">SE</span><span class="ss-what">Show it</span><span class="ss-go">Demo (coming soon) &rarr;</span></a>
+  </nav>
+  <p class="section-heading" style="margin:1.6rem 0 1.2rem;">Play Assets</p>
   <div class="assets-grid">
 
     <!-- Featured: Why Snowflake for Supply Chain one-pager -->
-    <div class="asset-card onepager-card">
+    <div class="asset-card onepager-card" id="a-one">
       <a class="onepager-preview" href="Grocery%20Retail%20-%20Why%20Snowflake%20for%20Supply%20Chain.html" tabindex="-1" aria-hidden="true">
         <img src="assets/onepagers/grocery-retail.webp" width="360" height="510" alt="" loading="lazy" decoding="async">
       </a>
@@ -244,7 +268,8 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     </div>
 
     <!-- Card 1: FMD -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-fmd">
+      <a class="card-preview" href="Grocery Retail FMD.html?v=2" tabindex="-1" aria-hidden="true"><img src="assets/previews/grocery-fmd.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
         <span class="asset-audience audience-ae">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -254,20 +279,20 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#11567F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
         </div>
         <div class="asset-name">First Meeting Deck</div>
-        <div class="asset-type">23-Slide Presentation &middot; Interactive</div>
-        <p class="asset-desc">The go-to deck for your first meeting with a COO, CMO, or CCO in grocery retail. Covers the grocery margin imperative, six forces, the agentic shift on fresh demand, the four things that make it possible, customer proof (Żabka, Co-op, Sainsbury’s, US Foods), and three on-ramps — one per capability: Demand Intelligence, then Supply Optimisation &amp; Risk, then Visibility &amp; Control Tower. 14-slide spine plus three appendices, including AE customisation prompts.</p>
+        <div class="asset-type">13-Scene Presentation &middot; Interactive</div>
+        <p class="asset-desc">The go-to deck for your first meeting with a CSCO, Supply Chain Director or COO in grocery. Opens on a bank-holiday heatwave, shows how forecast, stock and supplier numbers become one decision, lets you compare responses live, and closes on customer proof (&#379;abka, Sainsbury&rsquo;s, US Foods, S Group) and three on-ramps: Demand Intelligence, Supply Optimisation &amp; Risk, Visibility &amp; Control Tower.</p>
       </div>
       <div class="asset-card-meta">
         <div class="asset-tags">
           <span class="asset-tag">First Meeting</span>
+          <span class="asset-tag">CSCO</span>
+          <span class="asset-tag">Supply Chain Director</span>
           <span class="asset-tag">COO</span>
-          <span class="asset-tag">CMO</span>
-          <span class="asset-tag">CCO</span>
           <span class="asset-tag">CIO / CDO</span>
         </div>
       </div>
       <div class="asset-card-footer">
-        <a href="Grocery Retail FMD.html" class="open-btn">
+        <a href="Grocery Retail FMD.html?v=2" class="open-btn">
           Open Deck
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
@@ -275,7 +300,8 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     </div>
 
     <!-- Card 2: ICP -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-icp">
+      <a class="card-preview" href="Grocery Retail ICP.html?v=2" tabindex="-1" aria-hidden="true"><img src="assets/previews/grocery-icp.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
         <span class="asset-audience audience-ae">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -285,8 +311,8 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#249EDC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </div>
         <div class="asset-name">Ideal Customer Profile</div>
-        <div class="asset-type">8-Slide Reference &middot; Internal Only</div>
-        <p class="asset-desc">Persona guide covering the 6 key buyers and influencers in grocery retail — COO, CMO/Chief Customer Officer, Chief Commercial Officer, CIO/CDO, Head of Fresh/Supply Chain, and Category Director. Each slide shows business context, what they care about, how they're measured, and exactly why Snowflake wins with them across Protect, Grow, and Monetise.</p>
+        <div class="asset-type">10-Page Reference &middot; Internal Only</div>
+        <p class="asset-desc">Persona guide to the nine people who buy and influence grocery supply chain deals: the CSCO / Supply Chain Director, Head of Fresh, Head of Demand Planning, Logistics Director, CIO/CDO, Head of Data Science, CFO, Commercial Director, and the CMO as an expansion buyer. Each page shows their world, how they are measured, and why Snowflake wins with them.</p>
       </div>
       <div class="asset-card-meta">
         <div class="asset-tags">
@@ -297,7 +323,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
         </div>
       </div>
       <div class="asset-card-footer">
-        <a href="Grocery Retail ICP.html" class="open-btn">
+        <a href="Grocery Retail ICP.html?v=2" class="open-btn">
           Open ICP
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
@@ -305,7 +331,8 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     </div>
 
     <!-- Card 3: Metrics -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-met">
+      <a class="card-preview" href="Grocery Retail metrics that matter.html?v=2" tabindex="-1" aria-hidden="true"><img src="assets/previews/grocery-met.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
         <span class="asset-audience audience-all">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
@@ -315,8 +342,8 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d7490" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
         </div>
         <div class="asset-name">Metrics That Matter</div>
-        <div class="asset-type">8-Slide Reference &middot; Business Case</div>
-        <p class="asset-desc">Maps Snowflake capabilities to the KPIs that move boards and CFOs in grocery retail. Covers 24 metrics across five categories: Fresh &amp; Availability, Loyalty &amp; Customer Intelligence, Inventory &amp; Waste, Retail Media &amp; Commercial, and Financial Impact. Use in discovery and business case reviews to connect data investment to margin outcomes.</p>
+        <div class="asset-type">7-Page Reference &middot; Business Case</div>
+        <p class="asset-desc">Ties Snowflake to the KPIs grocery supply chain buyers are measured on: 20 metrics across Availability &amp; Service, Fresh &amp; Waste, Forecast &amp; Replenishment, Inventory &amp; Network, Supplier Collaboration and Financial Impact. Each card has a definition, an indicative benchmark, an illustrative worked example and a question to ask.</p>
       </div>
       <div class="asset-card-meta">
         <div class="asset-tags">
@@ -327,7 +354,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
         </div>
       </div>
       <div class="asset-card-footer">
-        <a href="Grocery Retail metrics that matter.html" class="open-btn blue-btn">
+        <a href="Grocery Retail metrics that matter.html?v=2" class="open-btn blue-btn">
           Open Metrics
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
@@ -335,7 +362,8 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     </div>
 
     <!-- Card 4: SDR Cheat Sheet -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-sdr">
+      <a class="card-preview" href="Grocery Retail SDR Cheat Sheet.html?v=2" tabindex="-1" aria-hidden="true"><img src="assets/previews/grocery-sdr.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
         <span class="asset-audience audience-sdr">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.77-.77a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -346,7 +374,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
         </div>
         <div class="asset-name">SDR Cheat Sheet</div>
         <div class="asset-type">Single-Page Reference &middot; Print-Ready</div>
-        <p class="asset-desc">Quick reference for prospecting and discovery calls in grocery retail. Covers ICP green signals and red flags, trigger events, 30-second pitches by persona (COO, CMO, CCO/retail media, CIO), grocery-specific discovery questions, pain signals to listen for, and objection handling including competitive situations.</p>
+        <p class="asset-desc">Quick reference for prospecting and discovery calls in grocery retail. Covers ICP green signals and red flags, trigger events, 30-second pitches by persona (Supply Chain Director, CIO/CDO, Head of Fresh), grocery-specific discovery questions, pain signals to listen for, objection handling and cleared proof points.</p>
       </div>
       <div class="asset-card-meta">
         <div class="asset-tags">
@@ -358,7 +386,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
         </div>
       </div>
       <div class="asset-card-footer">
-        <a href="Grocery Retail SDR Cheat Sheet.html" class="open-btn teal-btn">
+        <a href="Grocery Retail SDR Cheat Sheet.html?v=2" class="open-btn teal-btn">
           Open Cheat Sheet
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
@@ -366,7 +394,8 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     </div>
 
     <!-- Card 6: Conceptual Demo (placeholder) -->
-    <div class="asset-card placeholder">
+    <div class="asset-card placeholder" id="a-demo">
+      <div class="card-preview" aria-hidden="true"><img src="assets/previews/grocery-demo.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></div>
       <div class="asset-card-top">
         <span class="asset-audience audience-soon">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -377,7 +406,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
         </div>
         <div class="asset-name">Conceptual Demo</div>
         <div class="asset-type">Interactive Demo &middot; Placeholder</div>
-        <p class="asset-desc">An end-to-end conceptual demo showing a grocery retailer on Snowflake — from fragmented fresh and loyalty data to unified platform, AI demand forecasting, Cortex Analyst personalisation queries, and retail media clean room activation. Coming soon.</p>
+        <p class="asset-desc">An end-to-end conceptual demo showing a grocery retailer on Snowflake — from fragmented sales, stock and supplier data to one governed platform, store-day-SKU forecasting, and a planner approving the response to a fresh demand spike. Coming soon.</p>
       </div>
       <div class="asset-card-meta">
         <div class="asset-tags">
