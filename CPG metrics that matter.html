@@ -1,698 +1,381 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Snowflake CPG: Metrics That Matter</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<style>
-:root {
-  --sf-blue: #249EDC; --sf-mid: #11567F; --sf-deep: #042130; --sf-ice: #F6F9FA; --sf-star: #71D3DC; --sf-orange: #FF9F36; --sf-white: #FFFFFF;
-  --text-dark: #111827; --text-gray: #4B5568; --text-light: #6B7280; --border-card: rgba(204,204,204,0.5); --green: #16a34a;
+<style>:root {
+  --ink: #07121C; --ink-2: #0E2231; --ink-3: #132C3E; --line: rgba(220,236,245,.14); --line-2: rgba(220,236,245,.26);
+  --text: #EEF4F7; --muted: #93A7B3; --blue: #29B5E8; --star: #71D3DC; --amber: #FFB25B; --red: #FF7A6B; --green: #6FDFA8;
+  --font: "Lato", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --rail: 272px;
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', sans-serif; background: #FFFFFF; }
-.deck { width: 100vw; height: 100vh; position: relative; }
-.slide { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1); overflow: hidden; }
-.slide.active { opacity: 1; pointer-events: all; }
-.slide-bg { position: absolute; inset: 0; z-index: 0; }
-.bg-white { background: #FFFFFF; }
-.bg-ice { background: var(--sf-ice); }
-.slide-content { position: relative; z-index: 10; width: 88%; max-width: 1200px; padding: 2.2rem 2rem; }
-h3.label { font-size: clamp(0.65rem, 1vw, 0.8rem); font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sf-blue); margin-bottom: 0.7rem; }
-h3.label.purple { color: var(--sf-mid); }
-h3.label.white { color: rgba(255,255,255,0.7); }
-h1 { font-size: clamp(2.4rem, 5vw, 4.5rem); font-weight: 900; line-height: 1.05; color: var(--text-dark); letter-spacing: -0.02em; }
-h2 { font-size: clamp(1.5rem, 2.8vw, 2.5rem); font-weight: 800; line-height: 1.1; color: var(--text-dark); letter-spacing: -0.01em; margin-bottom: 0.5rem; }
-.slide.dark-slide h1, .slide.dark-slide h2 { color: #FFFFFF; }
-.slide.dark-slide p { color: rgba(255,255,255,0.85); }
-.highlight { color: var(--sf-blue); }
-.highlight-purple { color: var(--sf-mid); }
-.highlight-green { color: var(--green); }
-.divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--sf-blue), var(--sf-star)); margin: 0.75rem 0 0.9rem 0; border-radius: 2px; }
-.divider-purple { width: 60px; height: 3px; background: linear-gradient(90deg, var(--sf-mid), var(--sf-blue)); margin: 0.75rem 0 0.9rem 0; border-radius: 2px; }
-p { font-size: clamp(0.88rem, 1.2vw, 1.05rem); font-weight: 300; line-height: 1.6; color: var(--text-gray); max-width: 750px; margin-bottom: 0.4rem; }
-.metric-card { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 12px; padding: 1rem 1.1rem; display: flex; flex-direction: column; }
-.metric-card.blue { border-color: rgba(36,158,220,0.4); }
-.metric-card.purple { border-color: rgba(17,86,127,0.35); }
-.metric-card.green { border-color: rgba(22,163,74,0.35); }
-.metric-card.teal { border-color: rgba(113,211,220,0.45); }
-.metric-name { font-size: 1rem; font-weight: 900; color: var(--sf-mid); letter-spacing: -0.01em; margin-bottom: 0.1rem; }
-.metric-full { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-light); margin-bottom: 0.45rem; }
-.metric-body { font-size: 0.78rem; color: var(--text-gray); line-height: 1.5; margin-bottom: 0.5rem; flex: 1; }
-.metric-snowflake { display: flex; align-items: flex-start; gap: 0.4rem; background: linear-gradient(90deg,rgba(36,158,220,0.07),rgba(113,211,220,0.04)); border: 1px solid rgba(36,158,220,0.2); border-radius: 7px; padding: 0.42rem 0.6rem; margin-top: auto; }
-.metric-snowflake p { font-size: 0.72rem; color: var(--sf-mid); font-weight: 500; margin: 0; max-width: 100%; }
-.metric-snowflake svg { flex-shrink: 0; margin-top: 0.05rem; }
-.benchmark { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.2rem 0.55rem; border-radius: 999px; margin-bottom: 0.4rem; }
-.benchmark.avg { background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.4); color: #92400E; }
-.benchmark.target { background: rgba(22,163,74,0.08); border: 1px solid rgba(22,163,74,0.3); color: var(--green); }
-.pos-card { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 12px; padding: 1.1rem 1.3rem; }
-.pos-card.blue { border-color: rgba(36,158,220,0.4); }
-.pos-card.purple { border-color: rgba(17,86,127,0.35); }
-.pos-card p { font-size: 0.84rem; max-width: 100%; margin: 0; }
-.framework-cell { background: #FFFFFF; border-radius: 12px; padding: 1rem 1.1rem; border: 1.5px solid rgba(204,204,204,0.5); }
-.pill { display: inline-block; background: rgba(36,158,220,0.1); border: 1px solid rgba(36,158,220,0.3); border-radius: 999px; padding: 0.25rem 0.75rem; font-size: 0.72rem; font-weight: 600; color: var(--sf-blue); letter-spacing: 0.05em; text-transform: uppercase; margin: 0.15rem; }
-.pill.purple { background: rgba(17,86,127,0.08); border-color: rgba(17,86,127,0.3); color: var(--sf-mid); }
-.pill.green { background: rgba(22,163,74,0.08); border-color: rgba(22,163,74,0.3); color: var(--green); }
-.proof-bar { background: linear-gradient(90deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05)); border: 1px solid rgba(36,158,220,0.25); border-radius: 10px; padding: 0.65rem 1.2rem; }
-.proof-bar p { font-size: 0.79rem; color: var(--text-gray); margin: 0; max-width: 100%; }
-.slide-number { position: absolute; bottom: 1.5rem; right: 1.8rem; font-size: 0.72rem; color: var(--text-light); font-weight: 500; letter-spacing: 0.08em; z-index: 20; }
-.slide.dark-slide .slide-number { color: rgba(255,255,255,0.4); }
-.snowflake-logo { position: absolute; bottom: 1.2rem; right: 5.5rem; z-index: 20; opacity: 0.85; display: flex; align-items: center; height: 32px; }
-.progress-bar-wrap { position: fixed; top: 0; left: 0; width: 100%; height: 3px; z-index: 100; background: rgba(0,0,0,0.06); }
-.progress-bar { height: 100%; background: linear-gradient(90deg, var(--sf-mid), var(--sf-blue)); transition: width 0.5s ease; }
-.controls { position: fixed; bottom: 2.2rem; left: 50%; transform: translateX(-50%); display: flex; gap: 0.8rem; z-index: 100; align-items: center; }
-.controls button { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 999px; padding: 0.5rem 1.3rem; color: var(--text-gray); font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
-.controls button:hover { background: var(--sf-ice); border-color: var(--sf-blue); color: var(--sf-mid); }
-.controls select { background: #FFFFFF; border: 1px solid var(--border-card); border-radius: 999px; padding: 0.5rem 1.1rem; color: var(--text-gray); font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; outline: none; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
-</style>
-</head>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: var(--ink); color: var(--text); font-family: var(--font); }
+body { display: grid; grid-template-columns: var(--rail) 1fr; overflow: hidden; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 8px; }
+
+/* rail */
+.rail { height: 100vh; overflow-y: auto; padding: 28px 18px 20px; display: flex; flex-direction: column; gap: 14px;
+  background: linear-gradient(180deg, #050C13, #0A1E2C); border-right: 1px solid var(--line); }
+.rail .logo { height: 26px; width: auto; align-self: flex-start; margin-left: 8px; }
+.doc { font-size: 13px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--star); margin: 10px 8px 0; }
+.doc span { display: block; color: var(--text); font-size: 20px; letter-spacing: -.01em; text-transform: none; margin-top: 4px; }
+.internal { align-self: flex-start; margin-left: 8px; font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--amber); border: 1px solid rgba(255,178,91,.4); border-radius: 99px; padding: 4px 10px; }
+.rail nav { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+.rgl { font-size: 10.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 10px 6px; }
+.ri { display: flex; align-items: center; gap: 12px; padding: 9px 10px; border-radius: 10px; color: var(--muted); font-size: 14.5px;
+  border: 1px solid transparent; transition: background .2s, color .2s; }
+.ri .ix { font-size: 12px; font-weight: 800; color: var(--muted); width: 20px; text-align: center; font-variant-numeric: tabular-nums; }
+.ri:hover { background: rgba(255,255,255,.04); color: var(--text); }
+.ri.on { background: var(--ink-3); border-color: var(--line-2); color: var(--text); font-weight: 700; }
+.ri.on .ix { color: var(--star); }
+.ri.ov { color: var(--text); }
+.keys { margin-top: auto; padding: 14px 10px 0; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+kbd { display: inline-block; min-width: 20px; padding: 1px 5px; margin-right: 2px; border: 1px solid var(--line-2); border-bottom-width: 2px;
+  border-radius: 5px; font: 700 11px var(--font); color: var(--text); text-align: center; }
+
+/* page */
+main { height: 100vh; overflow-y: auto; scroll-behavior: smooth;
+  background: radial-gradient(1100px 700px at 90% 0%, rgba(19,74,103,.55) 0%, transparent 60%), var(--ink); }
+.page { display: none; max-width: 1480px; margin: 0 auto; padding: 52px 56px 40px; min-height: 100vh; flex-direction: column; gap: 22px; }
+.page.on { display: flex; animation: in .35s ease; }
+@keyframes in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.label { font-size: 14px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--star); }
+.label .sep { color: var(--muted); margin: 0 4px; }
+h2 { font-size: clamp(34px, 3.4vw, 54px); font-weight: 900; letter-spacing: -.025em; line-height: 1.02; margin-top: 12px; }
+h2 .dim { color: var(--muted); }
+.role { padding: 3px 10px; border-radius: 99px; border: 1px solid; font-size: 11.5px; letter-spacing: .1em; }
+.role.econ { color: var(--star); border-color: rgba(113,211,220,.45); }
+.role.eval { color: var(--blue); border-color: rgba(41,181,232,.45); }
+.role.exp  { color: var(--amber); border-color: rgba(255,178,91,.45); }
+
+.card { background: var(--ink-2); border: 1px solid var(--line); border-radius: 18px; padding: 22px 24px; }
+.card h4, .group h4 { font-size: 12.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--star); margin-bottom: 14px; }
+.card h5 { font-size: 11.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 16px 0 6px;
+  padding-top: 14px; border-top: 1px solid var(--line); }
+.card p { font-size: 15.5px; line-height: 1.55; color: var(--text); }
+.card p.muted, .muted { color: var(--muted); }
+.card p.ctx { color: #D3DEE4; }
+.k { display: block; font-size: 11.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 6px; }
+
+.grid { display: grid; grid-template-columns: 1.05fr 1fr 1.1fr; gap: 18px; align-items: stretch; }
+.col { display: flex; flex-direction: column; gap: 18px; }
+.col > .card:last-child { flex: 1; }
+ul { list-style: none; }
+.dots li, .pains li { position: relative; padding: 9px 0 9px 20px; font-size: 15px; line-height: 1.45; border-bottom: 1px solid var(--line); }
+.dots li:last-child, .pains li:last-child { border-bottom: 0; }
+.dots li::before, .pains li::before { content: ""; position: absolute; left: 2px; top: 17px; width: 7px; height: 7px; border-radius: 50%; background: var(--star); }
+.pains li::before { background: var(--red); }
+.kpis { display: flex; flex-direction: column; gap: 8px; }
+.kpis li { position: relative; }
+.kpi { all: unset; box-sizing: border-box; width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 10px; cursor: pointer;
+  padding: 10px 14px; border-radius: 10px; background: rgba(255,255,255,.03); border: 1px solid var(--line); font-size: 15px; color: var(--text); transition: border-color .15s, background .15s; }
+.kpi:hover, .kpi[aria-expanded="true"] { border-color: var(--blue); background: rgba(41,181,232,.08); }
+.kpi:focus-visible { outline: 2px solid var(--star); outline-offset: 2px; }
+.kpi .i { flex: none; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--muted); color: var(--muted); font: italic 700 11px/16px Georgia, serif; text-align: center; }
+.kpi[aria-expanded="true"] .i { border-color: var(--blue); color: var(--blue); }
+.pop { display: none; position: absolute; z-index: 20; left: 0; right: 0; top: calc(100% + 6px); padding: 14px 16px; border-radius: 12px;
+  background: #102a3b; border: 1px solid var(--blue); box-shadow: 0 12px 32px rgba(0,0,0,.5); }
+.pop.on { display: block; }
+.pop b { display: block; color: var(--star); font-size: 14px; margin-bottom: 6px; }
+.pop p { font-size: 14px; line-height: 1.5; color: var(--text); margin: 0 0 10px; }
+.pop code { display: block; font: 13px/1.4 ui-monospace, Menlo, monospace; color: var(--amber); background: rgba(0,0,0,.25); padding: 7px 10px; border-radius: 8px; }
+.pop .pn { display: block; margin-top: 8px; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+h4 .hint { float: right; font-size: 11px; color: var(--muted); font-weight: 400; letter-spacing: .04em; text-transform: none; }
+@media print { .pop { display: none !important; } }
+.kpis li strong { color: var(--text); font-weight: 800; }
+.wins { display: flex; flex-direction: column; gap: 10px; }
+.win { padding: 14px 16px; border-radius: 12px; background: rgba(41,181,232,.06); border: 1px solid rgba(41,181,232,.22); }
+.win b { display: block; font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); margin-bottom: 5px; }
+.win p { font-size: 14.5px; color: #D3DEE4; }
+.proof, .engage, .signal { padding: 14px 16px; border-radius: 12px; background: rgba(255,178,91,.07); border: 1px solid rgba(255,178,91,.32); }
+.proof .k, .engage .k { color: var(--amber); }
+.proof p { font-size: 15px; font-weight: 700; }
+.proof .tag { display: inline-block; margin-left: 6px; font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--amber); border: 1px solid rgba(255,178,91,.45); border-radius: 99px; padding: 1px 8px; vertical-align: 2px; }
+.engage p { font-size: 15.5px; line-height: 1.55; max-width: 1100px; }
+.signal { margin-top: 14px; background: rgba(111,223,168,.07); border-color: rgba(111,223,168,.32); }
+.signal .k { color: var(--green); }
+.signal p { font-size: 15px; }
+
+/* overview */
+.ovgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+.ovgrid > div { display: flex; flex-direction: column; gap: 14px; }
+.group { padding: 18px 18px 14px; border-radius: 18px; background: var(--ink-2); border: 1px solid var(--line); }
+.group h4 span { color: var(--muted); letter-spacing: .08em; margin-left: 6px; }
+.group.eval h4 { color: var(--blue); } .group.exp h4 { color: var(--amber); } .group.champ h4 { color: var(--green); }
+.who { display: grid; grid-template-columns: auto 1fr auto 18px; align-items: baseline; gap: 10px; padding: 11px 14px; margin-bottom: 6px;
+  border-radius: 10px; border: 1px solid var(--line); background: rgba(255,255,255,.025); transition: border-color .2s, background .2s; }
+.who .n { font-size: 15.5px; font-weight: 800; }
+.who .note { font-size: 13px; color: var(--muted); }
+.who .t { grid-column: 3; font-size: 11.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.who .go { grid-column: 4; color: var(--blue); opacity: .5; transition: transform .2s, opacity .2s; }
+a.who:hover { border-color: var(--blue); background: rgba(41,181,232,.07); }
+a.who:hover .go { opacity: 1; transform: translateX(3px); }
+.who.static { border-style: dashed; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips span { font-size: 13px; padding: 6px 12px; border-radius: 99px; border: 1px solid rgba(111,223,168,.35); color: var(--text); }
+.comps { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin-top: 14px; font-size: 14px; }
+.comps dt { font-weight: 800; color: var(--star); }
+.comps dd { color: var(--muted); }
+
+/* pager */
+.pager { display: flex; justify-content: space-between; margin-top: auto; padding-top: 6px; }
+.pager a { font-size: 15px; font-weight: 700; padding: 11px 18px; border-radius: 99px; border: 1px solid var(--line-2); color: var(--text); }
+.pager a:hover { border-color: var(--blue); color: var(--blue); }
+.pager a:last-child:not(:first-child) { background: rgba(41,181,232,.12); border-color: rgba(41,181,232,.45); }
+
+@media (max-width: 1180px) {
+  .grid { grid-template-columns: 1fr 1fr; } .grid .col:last-child { grid-column: 1 / -1; }
+  .ovgrid { grid-template-columns: 1fr; }
+}
+@media (max-width: 820px) {
+  body { grid-template-columns: 1fr; overflow: auto; } .rail { height: auto; } main { height: auto; }
+  .grid { grid-template-columns: 1fr; } .page { padding: 32px 22px; }
+}
+@media print {
+  body { display: block; overflow: visible; } .rail, .pager { display: none; } main { height: auto; overflow: visible; }
+  .page { display: flex !important; min-height: 0; break-after: page; }
+}
+.card:has(.pop.on) { overflow: visible; position: relative; z-index: 15; }
+.src { color: var(--muted); font-weight: 400; font-size: 12.5px; }
+
+.intro { margin-top: 12px; font-size: 17px; line-height: 1.5; color: #D3DEE4; max-width: 1000px; }
+.hint2 { color: var(--muted); letter-spacing: .04em; text-transform: none; font-weight: 400; font-size: 13px; }
+.mgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.mc { display: flex; flex-direction: column; gap: 10px; position: relative; }
+.mh { position: relative; }
+.kpi.mt { font-size: 18px; font-weight: 900; color: var(--star); padding: 10px 14px; }
+.mf { font-size: 11.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.bms { display: flex; flex-wrap: wrap; gap: 6px; }
+.bm { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 99px; border: 1px solid rgba(255,178,91,.4); color: var(--amber); }
+.bm.tgt { border-color: rgba(111,223,168,.4); color: var(--green); }
+.mc .why { font-size: 14.5px; color: #D3DEE4; flex: 1; }
+.sf, .ask { padding: 11px 13px; border-radius: 10px; }
+.sf { background: rgba(41,181,232,.06); border: 1px solid rgba(41,181,232,.22); }
+.sf .k { color: var(--blue); } .sf p, .ask p { font-size: 13.5px !important; }
+.ask { border: 1px dashed var(--line-2); } .ask .k { color: var(--muted); } .ask p { color: var(--muted) !important; font-style: italic; }
+.fw { grid-template-columns: 26px 1fr 18px; align-items: start; row-gap: 3px; }
+.fw .ix { grid-row: 1 / 3; font-weight: 800; color: var(--star); font-size: 13px; padding-top: 2px; }
+.fw .n { grid-column: 2; } .fw .note { grid-column: 2; } .fw .go { grid-column: 3; grid-row: 1; }
+.dots li b { color: var(--text); }
+.mc:has(.pop.on) { z-index: 15; }
+@media (max-width: 1280px) { .mgrid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 820px) { .mgrid { grid-template-columns: 1fr; } }
+</style></head>
 <body>
-
-<!-- Progress Bar -->
-<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:12.5%"></div></div>
-
-<!-- Controls -->
-<div class="controls">
-  <button onclick="prevSlide()">&#8592; Prev</button>
-  <select id="slideSelect" onchange="goTo(this.value-1)">
-    <option value="1">01 &middot; Title</option>
-    <option value="2">02 &middot; Business Imperative</option>
-    <option value="3">03 &middot; Value Framework</option>
-    <option value="4">04 &middot; Customer Service &amp; Fill</option>
-    <option value="5">05 &middot; Demand Planning &amp; Promotions</option>
-    <option value="6">06 &middot; Inventory &amp; Working Capital</option>
-    <option value="7">07 &middot; Operations &amp; Manufacturing</option>
-    <option value="8">08 &middot; Financial Impact</option>
-  </select>
-  <button onclick="nextSlide()">Next &#8594;</button>
-</div>
-
-<div class="deck">
-
-<!-- ============================================================ SLIDE 01 ============================================================ -->
-<div class="slide dark-slide active" id="slide-1">
-  <div class="slide-bg">
-    <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&q=80" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
-    <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,33,48,0.88) 0%,rgba(17,86,127,0.80) 50%,rgba(4,33,48,0.92) 100%);"></div>
-  </div>
-  <div class="slide-content" style="display:flex;flex-direction:column;justify-content:center;min-height:60vh;">
-    <h3 class="label white">SNOWFLAKE · CONSUMER PACKAGED GOODS</h3>
-    <div style="margin-top:1.2rem;">
-      <h1 style="color:var(--sf-star);font-size:clamp(3rem,7vw,6.5rem);line-height:1;">METRICS</h1>
-      <h1 style="color:#FFFFFF;font-size:clamp(3rem,7vw,6.5rem);line-height:1;">THAT MATTER</h1>
+<aside class="rail">
+  <img class="logo" src="data:image/png;base64,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" alt="Snowflake">
+  <div class="doc">CPG <span>Metrics That Matter</span></div>
+  <span class="internal">Internal only</span>
+  <nav>
+    <a href="#overview" class="ri ov"><span class="ix">&#9673;</span><span class="nm">Overview &amp; framework</span></a>
+    <div class="rg"><div class="rgl">Value categories</div><a href="#service" class="ri"><span class="ix">01</span><span class="nm">Customer Service &amp; Fill</span></a><a href="#demand" class="ri"><span class="ix">02</span><span class="nm">Demand Planning &amp; Promotions</span></a><a href="#inventory" class="ri"><span class="ix">03</span><span class="nm">Inventory &amp; Working Capital</span></a><a href="#operations" class="ri"><span class="ix">04</span><span class="nm">Operations &amp; Manufacturing</span></a><a href="#financial" class="ri"><span class="ix">05</span><span class="nm">Revenue &amp; Financial Impact</span></a></div>
+  </nav>
+  <div class="keys"><kbd>&larr;</kbd><kbd>&rarr;</kbd> move &nbsp; <kbd>0</kbd>&ndash;<kbd>5</kbd> jump</div>
+</aside>
+<main id="main">
+<section class="page" id="overview">
+  <header class="ph"><div class="label">Start here</div>
+  <h2>The metrics that matter <span class="dim">in consumer goods.</span></h2>
+  <p class="intro">Use this to tie Snowflake to the KPIs a CPG buyer is already measured on. Lead with their number, not our feature. Benchmarks are indicative ranges; always ask for the customer&rsquo;s own baseline.</p></header>
+  <div class="ovgrid">
+    <div>
+      <div class="group"><h4>Five value categories <span>one connected platform</span></h4><a class="who fw" href="#service"><span class="ix">01</span><span class="n">Customer Service &amp; Fill</span>
+  <span class="note">Case Fill Rate &middot; OTIF &middot; On-Shelf Availability &middot; Perfect Order Rate &middot; Retailer Scorecard</span><span class="go">&rarr;</span></a><a class="who fw" href="#demand"><span class="ix">02</span><span class="n">Demand Planning &amp; Promotions</span>
+  <span class="note">Forecast Accuracy &middot; Forecast Bias &middot; Promotional Lift Accuracy &middot; Trade Promotion ROI &middot; New Product Forecast Accuracy &middot; Planning Cycle Time</span><span class="go">&rarr;</span></a><a class="who fw" href="#inventory"><span class="ix">03</span><span class="n">Inventory &amp; Working Capital</span>
+  <span class="note">Days of Supply &middot; Inventory Turns &middot; Safety Stock &middot; Excess &amp; Obsolete (E&amp;O) &middot; Cash-to-Cash Cycle &middot; Inventory Carrying Cost</span><span class="go">&rarr;</span></a><a class="who fw" href="#operations"><span class="ix">04</span><span class="n">Operations &amp; Manufacturing</span>
+  <span class="note">OEE &middot; Schedule Adherence &middot; Waste &amp; Loss % &middot; Batch Yield &middot; Capacity Utilisation &middot; Changeover Time</span><span class="go">&rarr;</span></a><a class="who fw" href="#financial"><span class="ix">05</span><span class="n">Revenue &amp; Financial Impact</span>
+  <span class="note">Net Revenue per Case &middot; Trade Spend % Revenue &middot; Gross Margin &middot; SC Cost % Revenue</span><span class="go">&rarr;</span></a></div>
     </div>
-    <div class="divider" style="margin-top:1.4rem;"></div>
-    <p style="color:rgba(255,255,255,0.8);font-size:clamp(0.9rem,1.4vw,1.15rem);font-weight:300;max-width:680px;margin-top:0.5rem;">Connecting Snowflake capabilities to the KPIs that move boards, CFOs, and supply chain leaders in consumer packaged goods</p>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;filter:brightness(0) invert(1);"></div>
-  <div class="slide-number">01 / 08</div>
-</div>
-
-<!-- ============================================================ SLIDE 02 ============================================================ -->
-<div class="slide bg-white" id="slide-2">
-  <div class="slide-content" style="padding-top:1.6rem;padding-bottom:4rem;">
-    <h3 class="label purple">WHY NOW</h3>
-    <h2>The Business Imperative for <span class="highlight-purple">CPG Companies</span></h2>
-    <div class="divider-purple"></div>
-    <div style="display:grid;grid-template-columns:1.15fr 1fr;gap:1.2rem;margin-top:0.6rem;">
-      <!-- Left column -->
-      <div style="display:flex;flex-direction:column;gap:0.9rem;">
-        <div class="pos-card purple" style="padding:0.9rem 1.1rem;">
-          <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-mid);margin-bottom:0.5rem;">The Problem</div>
-          <p style="font-size:0.78rem;margin-bottom:0.6rem;">Today's CPG companies face permanent volatility, from promotional demand spikes and retailer compliance pressure to SKU proliferation and cost inflation, but their data infrastructure is built for stability. ERP, demand planning, TPM, WMS, and retailer data run in silos. Every planning decision starts with reconciliation. Supply chain costs represent <strong>8–15% of revenue</strong> for most CPG companies, yet demand plans and trade promotion plans are built in complete isolation from each other.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.55rem;margin-top:0.2rem;">
-            <div style="background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:0.55rem 0.7rem;">
-              <div style="font-size:0.63rem;font-weight:700;color:#dc2626;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.35rem;">Without Snowflake</div>
-              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✕ 4 systems, 4 truths. Promotional plans never reach supply planning</div>
-              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✕ Retailer chargebacks found when the invoice arrives, not 6 weeks earlier</div>
-              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✕ AI pilots fail. Ungoverned POS and TPM data is the root cause</div>
-              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;">✕ 3-day S&amp;OP pack prep before any decisions are made</div>
-            </div>
-            <div style="background:rgba(36,158,220,0.05);border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.55rem 0.7rem;">
-              <div style="font-size:0.63rem;font-weight:700;color:var(--sf-mid);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.35rem;">With Snowflake</div>
-              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✓ Unified demand platform: one semantic layer, one truth</div>
-              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✓ Proactive fill rate signals 4–6 weeks before retailer compliance failure</div>
-              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;margin-bottom:0.3rem;">✓ AI that reasons on governed demand and promotional data, so it reaches production</div>
-              <div style="font-size:0.71rem;color:var(--text-gray);line-height:1.45;">✓ Self-service S&amp;OP analytics in seconds, so decisions get made in the meeting</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Right column -->
-      <div style="display:flex;flex-direction:column;gap:0.9rem;">
-        <div class="pos-card blue" style="padding:0.9rem 1.1rem;">
-          <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:0.5rem;">The Snowflake Platform for CPG</div>
-          <p style="font-size:0.78rem;margin-bottom:0.7rem;">The AI Data Cloud is the only platform that unifies ERP, demand planning, TPM (Exceedra, Vistex or similar), WMS, and retailer POS data into a governed, AI-ready foundation, without moving data or replacing existing systems. It transforms supply chain planning from reactive reconciliation to proactive, closed-loop intelligence.</p>
-          <div style="margin-bottom:0.7rem;">
-            <span class="pill">Unify &amp; Govern</span>
-            <span class="pill">Reason &amp; Predict</span>
-            <span class="pill">Decide &amp; Execute</span>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;">
-            <div style="background:linear-gradient(135deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05));border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.6rem 0.7rem;text-align:center;">
-              <div style="font-size:1.3rem;font-weight:900;color:var(--sf-mid);line-height:1;">354%</div>
-              <div style="font-size:0.62rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-top:0.2rem;">ROI</div>
-              <div style="font-size:0.6rem;color:var(--text-light);margin-top:0.1rem;">Forrester TEI 2024</div>
-            </div>
-            <div style="background:linear-gradient(135deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05));border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.6rem 0.7rem;text-align:center;">
-              <div style="font-size:1.3rem;font-weight:900;color:var(--sf-mid);line-height:1;">25%+</div>
-              <div style="font-size:0.62rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-top:0.2rem;">Forecast Error Reduction</div>
-              <div style="font-size:0.6rem;color:var(--text-light);margin-top:0.1rem;">Cortex AI demand sensing</div>
-            </div>
-            <div style="background:linear-gradient(135deg,rgba(36,158,220,0.08),rgba(113,211,220,0.05));border:1px solid rgba(36,158,220,0.2);border-radius:8px;padding:0.6rem 0.7rem;text-align:center;">
-              <div style="font-size:1.3rem;font-weight:900;color:var(--sf-mid);line-height:1;">&lt;6mo</div>
-              <div style="font-size:0.62rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.06em;margin-top:0.2rem;">Payback Period</div>
-              <div style="font-size:0.6rem;color:var(--text-light);margin-top:0.1rem;">Forrester TEI 2024</div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div>
+      <div class="card"><h4>Why now</h4><p>Promotions, retailer compliance, SKU proliferation and cost inflation make volatility permanent. ERP, demand planning, TPM, WMS and retailer data still sit apart, so every decision starts with reconciliation, and demand and trade plans are built separately.</p></div>
+      <div class="card"><h4>What changes with Snowflake</h4><ul class="dots">
+        <li><b>Unify &amp; govern.</b> ERP, planning, TPM, WMS, POS and syndicated data in one governed model. SAP zero-copy via SAP Business Data Cloud; other sources through connectors, Openflow and data sharing.</li>
+        <li><b>Reason &amp; predict.</b> Cortex AI and Snowflake ML on governed data, so AI pilots reach production.</li>
+        <li><b>Decide &amp; act.</b> Cortex Analyst and Snowflake Intelligence answer KPI questions in plain English; approved actions write back to planning and ERP through integrations.</li></ul></div>
+      <div class="signal"><span class="k">How to use it</span><p>Pick the two or three metrics this buyer owns, ask for their current value, and size the gap with the worked example on each card.</p></div>
     </div>
   </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">02 / 08</div>
-</div>
-
-<!-- ============================================================ SLIDE 03 ============================================================ -->
-<div class="slide bg-ice" id="slide-3">
-  <div class="slide-content" style="padding-top:1.6rem;padding-bottom:4rem;">
-    <h3 class="label">THE VALUE FRAMEWORK</h3>
-    <h2>Five Value Categories. <span class="highlight">One Connected Platform.</span></h2>
-    <div class="divider"></div>
-    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0.7rem;margin-top:0.6rem;">
-      <div class="framework-cell" style="border-color:rgba(17,86,127,0.4);">
-        <div style="font-size:0.62rem;font-weight:700;color:var(--sf-mid);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">01</div>
-        <div style="font-size:0.85rem;font-weight:800;color:var(--sf-mid);line-height:1.2;margin-bottom:0.45rem;">Customer Service &amp; Fill</div>
-        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">Case Fill Rate · OTIF · OSA · Perfect Order · Retailer SCI Score</div>
-        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:var(--sf-mid);letter-spacing:0.04em;">→ Slide 04</div>
-      </div>
-      <div class="framework-cell" style="border-color:rgba(36,158,220,0.4);">
-        <div style="font-size:0.62rem;font-weight:700;color:var(--sf-blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">02</div>
-        <div style="font-size:0.85rem;font-weight:800;color:var(--sf-blue);line-height:1.2;margin-bottom:0.45rem;">Demand Planning &amp; Promotions</div>
-        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">Forecast Accuracy · Promotional Lift Accuracy · Trade Promo ROI · NPD Forecast · Bias</div>
-        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:var(--sf-blue);letter-spacing:0.04em;">→ Slide 05</div>
-      </div>
-      <div class="framework-cell" style="border-color:rgba(13,148,136,0.4);">
-        <div style="font-size:0.62rem;font-weight:700;color:#0d9488;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">03</div>
-        <div style="font-size:0.85rem;font-weight:800;color:#0d9488;line-height:1.2;margin-bottom:0.45rem;">Inventory &amp; Working Capital</div>
-        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">Days of Supply · Inventory Turns · Safety Stock · E&amp;O · Cash-to-Cash</div>
-        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:#0d9488;letter-spacing:0.04em;">→ Slide 06</div>
-      </div>
-      <div class="framework-cell" style="border-color:rgba(22,163,74,0.35);">
-        <div style="font-size:0.62rem;font-weight:700;color:var(--green);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">04</div>
-        <div style="font-size:0.85rem;font-weight:800;color:var(--green);line-height:1.2;margin-bottom:0.45rem;">Operations &amp; Manufacturing</div>
-        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">OEE · Schedule Adherence · Waste &amp; Loss % · Batch Yield · Capacity Utilisation</div>
-        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:var(--green);letter-spacing:0.04em;">→ Slide 07</div>
-      </div>
-      <div class="framework-cell" style="border-color:rgba(180,83,9,0.35);">
-        <div style="font-size:0.62rem;font-weight:700;color:#B45309;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">05</div>
-        <div style="font-size:0.85rem;font-weight:800;color:#B45309;line-height:1.2;margin-bottom:0.45rem;">Revenue &amp; Financial Impact</div>
-        <div style="font-size:0.66rem;color:var(--text-light);line-height:1.5;">Net Revenue / Case · Trade Spend % Revenue · Gross Margin · COGS · SC Cost % Revenue</div>
-        <div style="margin-top:0.6rem;font-size:0.63rem;font-weight:600;color:#B45309;letter-spacing:0.04em;">→ Slide 08</div>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.7rem;">
-      <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:10px;padding:0.75rem 1rem;">
-        <div style="font-size:0.63rem;font-weight:700;color:var(--sf-blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">Data Foundation</div>
-        <div style="font-size:0.72rem;color:var(--text-gray);line-height:1.5;">Unified ERP · Demand Planning · TPM · WMS · Retailer POS · Syndicated Data (NielsenIQ/Circana) in one semantic layer</div>
-      </div>
-      <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:10px;padding:0.75rem 1rem;">
-        <div style="font-size:0.63rem;font-weight:700;color:var(--sf-blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">AI Intelligence</div>
-        <div style="font-size:0.72rem;color:var(--text-gray);line-height:1.5;">Cortex AI · Cortex Analyst · Snowflake Marketplace (3,600+ live datasets including consumer and retailer data)</div>
-      </div>
-      <div style="background:#FFFFFF;border:1px solid rgba(36,158,220,0.2);border-radius:10px;padding:0.75rem 1rem;">
-        <div style="font-size:0.63rem;font-weight:700;color:var(--sf-blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">Closed-Loop Execution</div>
-        <div style="font-size:0.72rem;color:var(--text-gray);line-height:1.5;">One approval triggers ERP · supply plan · TPM · procurement simultaneously in &lt;2 seconds</div>
-      </div>
-    </div>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">03 / 08</div>
-</div>
-
-<!-- ============================================================ SLIDE 04 ============================================================ -->
-<div class="slide bg-white" id="slide-4">
-  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
-    <h3 class="label purple">CATEGORY 01</h3>
-    <h2>Customer Service &amp; <span class="highlight-purple">Fill Performance</span></h2>
-    <div class="divider-purple"></div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.5rem;">
-
-      <div class="metric-card purple">
-        <div class="metric-name">Case Fill Rate</div>
-        <div class="metric-full">% of Cases Shipped vs Ordered</div>
-        <span class="benchmark avg">Industry avg: 94–96%</span>
-        <span class="benchmark target">Target: 98.5%+</span>
-        <div class="metric-body">The primary customer service KPI for CPG. Every percentage point below target triggers retailer deductions, chargebacks, or loss of shelf space. For CPG companies with Walmart, Amazon, or Kroger as customers, fill rate directly determines profitability. A 1-point improvement on $2B of orders eliminates ~$20M in chargebacks and lost sales.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Snowflake unifies ERP, WMS, and demand plan in real time. Cortex Analyst enables "what is case fill rate for customer X this week?" in seconds, answered from live data, not last night's batch.</p>
-        </div>
-      </div>
-
-      <div class="metric-card purple">
-        <div class="metric-name">OTIF</div>
-        <div class="metric-full">On Time In Full &middot; Retailer Compliance</div>
-        <span class="benchmark avg">Walmart target: 98%+</span>
-        <span class="benchmark target">Penalty per failure: 3% of invoice</span>
-        <div class="metric-body">Retailer compliance performance that directly affects invoice value. Walmart charges a 3% deduction for every OTIF failure; Amazon uses SCI to penalise non-compliant suppliers. For a CPG company with $500M in Walmart sales, every 1% OTIF miss puts ~$5M of orders in scope and around $150K in deductions. Root cause is almost always a demand signal that didn't reach supply planning in time.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Live demand sensing on Snowflake detects fill risk 4–6 weeks before retailer order fulfillment. Cortex AI flags at-risk SKU-location combinations so teams act before the chargeback, not after.</p>
-        </div>
-      </div>
-
-      <div class="metric-card purple">
-        <div class="metric-name">On-Shelf Availability</div>
-        <div class="metric-full">% of Time Product Is Available at Shelf</div>
-        <span class="benchmark avg">Industry avg: 95%</span>
-        <span class="benchmark target">Best-in-class: 98%+</span>
-        <div class="metric-body">The revenue metric retailers care about most. Every point of OOS is a sale lost, whether to a competitor, to private label, or to the retailer's own brand. OSA is driven by case fill rate and DC replenishment, but its root cause is almost always upstream in demand planning accuracy.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Retailer POS and syndicated data (NielsenIQ, Circana) unified with internal supply data on Snowflake. Cortex AI detects OSA deterioration by SKU-store before replenishment orders are placed.</p>
-        </div>
-      </div>
-
-      <div class="metric-card blue">
-        <div class="metric-name">Perfect Order Rate</div>
-        <div class="metric-full">Complete · On Time · Correct · Undamaged</div>
-        <span class="benchmark avg">Industry avg: 85–92%</span>
-        <div class="metric-body">Composite measure of order completeness, delivery timing, documentation accuracy, and product condition. A single failure in any dimension counts as an imperfect order. Drives retailer relationship quality and deduction frequency in complex CPG supply chains.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Unified data layer correlates WMS shipment data, ERP order records, and logistics events to automatically calculate perfect order rate, with no manual cross-system reconciliation.</p>
-        </div>
-      </div>
-
-      <div class="metric-card blue">
-        <div class="metric-name">Retailer SCI Score</div>
-        <div class="metric-full">Amazon Supplier Confirmation Index</div>
-        <span class="benchmark target">Target: 95%+ to avoid velocity restrictions</span>
-        <div class="metric-body">Amazon's measure of supplier reliability: confirmation rate, cancellation rate, and fill rate combined. SCI score below threshold triggers Amazon to reduce purchase order volume from that supplier and route demand to competitors. Recovery from a poor SCI score takes 90+ days. Prevention requires upstream demand signal clarity.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Cortex AI monitors Amazon order confirmation and fill signals in near real-time. Exception alerts surface SKU-level risk to the supply planning team before confirmation windows close.</p>
-        </div>
-      </div>
-
-      <div class="metric-card blue">
-        <div class="metric-name">Forecast Bias</div>
-        <div class="metric-full">Systematic Over or Under-Prediction</div>
-        <span class="benchmark target">Target: ±5% at product family · ±10% at SKU</span>
-        <div class="metric-body">Persistent forecast bias distorts inventory positioning across the entire supply chain. In CPG, over-forecasting drives waste and markdowns; under-forecasting drives OOS and chargebacks. Promotional forecast bias is the most common and most damaging, and post-event demand voids are the direct result.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Cortex AI detects systematic bias by SKU, category, and customer, automatically correcting model inputs faster than any monthly planning cycle can.</p>
-        </div>
-      </div>
-
-    </div>
-    <div class="proof-bar" style="margin-top:0.7rem;">
-      <p>Kraft Heinz: out-of-stocks reduced from 20% to 6% in 4 weeks on Snowflake &nbsp;&middot;&nbsp; Keurig Dr Pepper: $14M in self-service analytics value across SC and commercial teams <span style="font-size:0.65rem;color:#D97706;font-style:italic;">(&#9888; internal use only. Do not share externally)</span></p>
-    </div>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">04 / 08</div>
-</div>
-
-<!-- ============================================================ SLIDE 05 ============================================================ -->
-<div class="slide bg-ice" id="slide-5">
-  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
-    <h3 class="label">CATEGORY 02</h3>
-    <h2>Demand Planning &amp; <span class="highlight">Promotional Intelligence</span></h2>
-    <div class="divider"></div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.5rem;">
-
-      <div class="metric-card blue">
-        <div class="metric-name">Forecast Accuracy (MAPE/WMAPE)</div>
-        <div class="metric-full">Mean Absolute Percentage Error</div>
-        <span class="benchmark avg">SKU level: avg 30–45% MAPE</span>
-        <span class="benchmark target">Target: &lt;15% MAPE</span>
-        <div class="metric-body">The foundation metric for everything downstream. A 10-point MAPE improvement on a CPG company with $1B revenue reduces excess inventory, emergency freight, and lost sales by tens of millions. Most CPG AI demand sensing pilots fail because retailer POS data is fragmented and not unified with internal planning data.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Cortex AI demand models retrain continuously on live signals: order book, POS shipment history, and external market data from Snowflake Marketplace (consumer sentiment, economic indicators). Forecast accuracy compounds over time.</p>
-        </div>
-      </div>
-
-      <div class="metric-card blue">
-        <div class="metric-name">Promotional Lift Accuracy</div>
-        <div class="metric-full">Predicted vs Actual Promotional Uplift</div>
-        <span class="benchmark avg">Industry avg error: 25–40% on incremental volume</span>
-        <span class="benchmark target">Target: &lt;15% error</span>
-        <div class="metric-body">Trade promotions represent 15–25% of CPG revenue. A 10% error in promotional lift forecast creates a wave of either excess inventory or OOS across every promotional cycle, amplified across the full SKU range. Root cause: promotion plans are built in TPM without live supply constraints, and historical lift data is never systematically unified with demand baselines.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Snowflake unifies TPM promotion calendars, retailer POS sell-through, historical base and incremental lift, and supply constraints into one governed platform. Cortex AI builds promotional response models from every historical event, improving lift accuracy with every promotion run.</p>
-        </div>
-      </div>
-
-      <div class="metric-card blue">
-        <div class="metric-name">Trade Promotion ROI</div>
-        <div class="metric-full">Revenue Return on Trade Spend Investment</div>
-        <span class="benchmark avg">50–70% of CPG promotions generate negative ROI (McKinsey)</span>
-        <div class="metric-body">Trade spend is the second largest line item in the P&amp;L after COGS for most CPG companies. The tragedy: most promotions cannot be evaluated post-event because sell-through data from retailers, base volume, and incremental lift are never unified in one system. Decisions are based on intuition, not evidence.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Retailer POS sell-through unified with TPM spend, base volume baselines, and financial actuals on Snowflake. Cortex Analyst enables post-promotion review in seconds: "What was the incremental ROI of our Q2 Walmart promotion on SKU X?", answered from live data.</p>
-        </div>
-      </div>
-
-      <div class="metric-card purple">
-        <div class="metric-name">NPD Launch Forecast</div>
-        <div class="metric-full">Forecast Accuracy for NPD in First 3 Months</div>
-        <span class="benchmark avg">Average NPD fill rate in week 1: &lt;70%</span>
-        <span class="benchmark target">Target: 90%+</span>
-        <div class="metric-body">New product launches are the highest-stakes demand forecasting event in CPG. Getting it wrong in either direction costs: OOS in week 1 loses distribution; overstock creates delistings. Root cause: there's no historical data for genuinely new products, so analogues must be selected, a process that requires unified data across all SKUs, all customers, all categories.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Cortex AI enables analogue-based NPD forecasting: "Which existing SKU most closely matches this new product's launch profile?", answered instantly from unified historical data. Launch fill rate confidence improves materially.</p>
-        </div>
-      </div>
-
-      <div class="metric-card purple">
-        <div class="metric-name">S&amp;OP Cycle Time</div>
-        <div class="metric-full">S&amp;OP Pack Prep to Decision</div>
-        <span class="benchmark avg">Typical prep time: 3–7 days of data assembly</span>
-        <div class="metric-body">In most CPG companies, the S&amp;OP meeting is the most expensive reconciliation exercise in the business. Demand, supply, and finance arrive with different numbers from different systems. The first hour is spent agreeing on the facts, not making decisions. Root cause: no shared data platform where all functions see the same demand signal.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Snowflake's governed semantic layer ensures every function reads from the same defined KPIs. Cortex Analyst generates S&amp;OP pack data on demand. "Show me the demand gap for next quarter by category", answered in seconds.</p>
-        </div>
-      </div>
-
-      <div class="metric-card purple">
-        <div class="metric-name">Decision Cycle Time</div>
-        <div class="metric-full">Demand Signal to Executed Supply Response</div>
-        <span class="benchmark avg">Without Snowflake: 3+ days</span>
-        <span class="benchmark target">With Snowflake: &lt;2 seconds</span>
-        <div class="metric-body">In most CPG companies, a demand signal change takes days to translate into an updated supply plan. Planners cross-check TPM vs ERP vs WMS manually. With closed-loop execution on Snowflake, this becomes automatic and near-instant.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Cortex AI detects demand signal change → AI agent surfaces supply impact recommendation → one approval triggers ERP supply plan update, WMS replenishment trigger, and procurement signal simultaneously. 3 days → &lt;2 seconds.</p>
-        </div>
-      </div>
-
-    </div>
-    <div class="proof-bar" style="margin-top:0.7rem;">
-      <p>Kraft Heinz: demand and supply unified on Snowflake, improving COGS, fill rate, and on-time delivery &nbsp;·&nbsp; Promotional ROI: 50–70% of industry promotions generate negative ROI. Snowflake makes every event measurable</p>
-    </div>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">05 / 08</div>
-</div>
-
-<!-- ============================================================ SLIDE 06 ============================================================ -->
-<div class="slide bg-white" id="slide-6">
-  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
-    <h3 class="label purple">CATEGORY 03</h3>
-    <h2>Inventory &amp; <span class="highlight-purple">Working Capital</span></h2>
-    <div class="divider-purple"></div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.5rem;">
-
-      <div class="metric-card blue">
-        <div class="metric-name">Days of Supply</div>
-        <div class="metric-full">Inventory on Hand ÷ Average Daily Sales</div>
-        <span class="benchmark avg">Food &amp; Bev: 25–45 days · Personal Care: 35–60 days</span>
-        <div class="metric-body">Direct measure of how much capital is locked in inventory. For CPG with seasonal products and promotional cycles, DoS fluctuates dramatically, so the challenge is keeping DoS right-sized despite volatile promotional demand. Every 5-day reduction in DoS on $500M inventory frees ~$7M in working capital.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Cortex AI-driven demand sensing and live TPM signals reduce the uncertainty that forces excess DoS. Governed semantic layer means finance, supply, and operations agree on the same inventory number, with no padding for reconciliation uncertainty.</p>
-        </div>
-      </div>
-
-      <div class="metric-card blue">
-        <div class="metric-name">Inventory Turns</div>
-        <div class="metric-full">COGS ÷ Average Inventory Value</div>
-        <span class="benchmark avg">Food &amp; Bev: 8–15x · Personal Care: 5–10x · Household: 5–8x</span>
-        <div class="metric-body">Higher turns = less capital tied up, less obsolescence risk, lower carrying costs. CPG inventory turns are highly sensitive to promotional forecasting accuracy. A turns improvement of 1x on a $300M inventory base frees ~$30M in working capital, directly improving cash-to-cash cycle.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Unified demand + promotional signals + supply data drives better turns through more accurate inventory positioning by SKU, DC, and customer.</p>
-        </div>
-      </div>
-
-      <div class="metric-card blue">
-        <div class="metric-name">Safety Stock Level</div>
-        <div class="metric-full">Buffer Inventory Held Against Forecast Uncertainty</div>
-        <span class="benchmark avg">Most CPG hold 20–35% more safety stock than demand risk requires</span>
-        <div class="metric-body">Safety stock in CPG is rational insurance against demand and supply variability. The problem is when it's sized to cover data uncertainty rather than genuine business risk. Most CPG companies hold significantly more safety stock than necessary because they don't trust their promotional forecasts or supply signals.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Cortex AI continuous risk scoring enables right-sizing safety stock by actual demand variability, not as a blanket hedge against data lag. Hold less where promotional forecasts are reliable; hold more where NPD uncertainty is genuine.</p>
-        </div>
-      </div>
-
-      <div class="metric-card purple">
-        <div class="metric-name">Excess &amp; Obsolete Inventory</div>
-        <div class="metric-full">E&amp;O as % of Total Inventory Value</div>
-        <span class="benchmark avg">Industry avg: 5–12%</span>
-        <span class="benchmark target">Best-in-class: &lt;2%</span>
-        <div class="metric-body">E&amp;O in CPG is driven by promotional over-forecasting, failed NPD launches, and poor visibility into aging stock near shelf-life expiry. An average $1B CPG company writes off $25–60M annually in E&amp;O. Short-dated stock near expiry is particularly costly, since markdown, donation, or disposal all destroy value.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Cortex AI detects aging inventory and near-expiry risk before write-offs materialise. Unified WMS and demand data identifies inter-DC transfer opportunities to consume at-risk stock before expiry.</p>
-        </div>
-      </div>
-
-      <div class="metric-card purple">
-        <div class="metric-name">Cash-to-Cash Cycle Time</div>
-        <div class="metric-full">DIO + DSO − DPO</div>
-        <span class="benchmark avg">Industry avg: 30–60 days</span>
-        <span class="benchmark target">Target: reduce 10–20%</span>
-        <div class="metric-body">The CFO's primary supply chain metric. Every 10-day improvement on a $2B CPG business frees ~$55M in cash. CPG cash conversion is uniquely affected by promotional timing: large retailer orders at quarter-end, followed by voids, create working capital peaks and troughs that better demand planning can smooth.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Snowflake connects supply chain and financial data in one platform, enabling real-time cash-to-cash tracking and scenario modelling for working capital optimisation decisions.</p>
-        </div>
-      </div>
-
-      <div class="metric-card purple">
-        <div class="metric-name">Inventory Carrying Cost</div>
-        <div class="metric-full">25–35% of Annual Inventory Value</div>
-        <span class="benchmark avg">Carrying cost rate: 25–35%/yr</span>
-        <div class="metric-body">The true cost of holding inventory: capital cost + storage + handling + insurance + write-off risk. A CPG company with $400M in average inventory pays $100–140M per year just to hold it. Even a 10% inventory reduction saves $10–14M annually, before counting the freed working capital.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Better demand/supply matching through unified Snowflake data and Cortex AI directly reduces average inventory held. Forrester TEI 2024 found an average 25% reduction in inventory carrying costs across Snowflake supply chain deployments.</p>
-        </div>
-      </div>
-
-    </div>
-    <div class="proof-bar" style="margin-top:0.7rem;">
-      <p>Kraft Heinz: 70% of retailer data by sales volume ingested into Snowflake &nbsp;·&nbsp; Forrester TEI 2024: average 25% reduction in inventory carrying costs across Snowflake supply chain deployments</p>
-    </div>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">06 / 08</div>
-</div>
-
-<!-- ============================================================ SLIDE 07 ============================================================ -->
-<div class="slide bg-ice" id="slide-7">
-  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
-    <h3 class="label">CATEGORY 04</h3>
-    <h2>Operations &amp; <span class="highlight">Manufacturing Performance</span></h2>
-    <div class="divider"></div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:0.5rem;">
-
-      <div class="metric-card purple">
-        <div class="metric-name">OEE</div>
-        <div class="metric-full">Overall Equipment Effectiveness</div>
-        <span class="benchmark avg">Industry avg: 65%</span>
-        <span class="benchmark target">World-class: 85%+</span>
-        <div class="metric-body">The composite production efficiency metric: Availability × Performance × Quality. In CPG process manufacturing (food, beverage, personal care), OEE loss comes from changeovers between SKUs, cleaning in place (CIP), and unplanned line stoppages from ingredient shortages. Every 1% OEE improvement on a high-volume line adds capacity without capex.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Cortex AI detects OEE degradation patterns in MES and SCADA data before they cause stoppages. Unified ingredient availability and production schedule data reduces changeover frequency by enabling optimised run sequencing.</p>
-        </div>
-      </div>
-
-      <div class="metric-card purple">
-        <div class="metric-name">Schedule Adherence</div>
-        <div class="metric-full">Actual Production vs Plan</div>
-        <span class="benchmark avg">Industry avg: 80–88%</span>
-        <span class="benchmark target">Target: 95%+</span>
-        <div class="metric-body">The direct measure of whether manufacturing is executing to the promotional and replenishment plan. Low schedule adherence drives premium freight, OOS at retail, and retailer chargebacks. Root cause is almost always upstream: stale demand signal causing a plan that couldn't be executed against available ingredients.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Live ingredient availability from Snowflake feeds into production planning, so schedules are built on real data. Cortex AI flags ingredient shortages before the schedule is locked, not after the line stops.</p>
-        </div>
-      </div>
-
-      <div class="metric-card teal">
-        <div class="metric-name">Waste &amp; Loss %</div>
-        <div class="metric-full">Ingredient and Finished Goods Waste as % of Output</div>
-        <span class="benchmark avg">Industry avg: 3–8%</span>
-        <span class="benchmark target">Target: &lt;2%</span>
-        <div class="metric-body">CPG process manufacturing generates significant waste through product changeovers, CIP loss, and shelf-life-driven write-offs. Waste directly impacts COGS and sustainability targets. Root cause analysis requires correlating production data with ingredient batch records and yield models, typically fragmented across QMS, MES, and ERP.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Unified QMS, MES, and ingredient data on Snowflake enables automatic correlation of waste events with ingredient batches, process parameters, and changeover sequences. AI anomaly detection triggers before waste accumulates.</p>
-        </div>
-      </div>
-
-      <div class="metric-card teal">
-        <div class="metric-name">Batch Yield</div>
-        <div class="metric-full">Actual Output vs Theoretical Yield</div>
-        <span class="benchmark target">Target: 98%+ for established products</span>
-        <div class="metric-body">In CPG process manufacturing, batch yield directly drives COGS. A 1% yield improvement on a product with 60% gross margin and $200M revenue is worth ~$1.2M annually. Yield variation is often linked to specific ingredient supplier lots, seasonal raw material quality, or undetected process parameter drift.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Cortex AI connects batch yield records with ingredient lot traceability, supplier data, and environmental parameters. Root cause of yield degradation identified in minutes, before it affects the full production run.</p>
-        </div>
-      </div>
-
-      <div class="metric-card teal">
-        <div class="metric-name">Capacity Utilisation</div>
-        <div class="metric-full">Actual Output vs Rated Capacity</div>
-        <span class="benchmark avg">Target: 75–85% sustainable</span>
-        <div class="metric-body">Running too low wastes capital investment. Running too high creates quality risk and no buffer for demand surges. CPG capacity utilisation is complicated by SKU proliferation and promotional demand spikes. Optimising across 500+ SKUs on 20+ lines requires unified demand forecast and production scheduling data.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Snowflake unifies MES capacity data, production schedules, and demand plans in one query. Cortex AI enables scenario modelling for promotional capacity allocation. "Can we accommodate this promotion if we reschedule line 3?", answered in seconds.</p>
-        </div>
-      </div>
-
-      <div class="metric-card teal">
-        <div class="metric-name">Changeover Frequency</div>
-        <div class="metric-full">Number of Product Changeovers per Day/Week</div>
-        <span class="benchmark avg">Varies by line complexity</span>
-        <div class="metric-body">In CPG process manufacturing, changeovers represent the single largest source of OEE loss, typically 30–40% of all downtime. Reducing changeover frequency through better run sequencing directly improves OEE, yield, and cleaning time. Optimal sequencing requires unified demand forecast + production schedule + product compatibility data.</div>
-        <div class="metric-snowflake">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <p>Unified demand forecast and production compatibility data on Snowflake enables AI-optimised run sequencing, minimising changeovers while meeting fill rate targets. Cortex Analyst: "What's the optimal production sequence for next week's demand?" answered in seconds.</p>
-        </div>
-      </div>
-
-    </div>
-    <div class="proof-bar" style="margin-top:0.7rem;">
-      <p>Kraft Heinz: improved COGS and case fill rate after unifying supply chain data on Snowflake &nbsp;·&nbsp; Forrester TEI 2024: productivity and efficiency gains from unified data are among the top 3 value drivers for SC deployments</p>
-    </div>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">07 / 08</div>
-</div>
-
-<!-- ============================================================ SLIDE 08 ============================================================ -->
-<div class="slide bg-white" id="slide-8">
-  <div class="slide-content" style="padding-top:1.4rem;padding-bottom:4rem;">
-    <h3 class="label purple">CATEGORY 05 · THE CFO VIEW</h3>
-    <h2>Revenue &amp; Financial <span class="highlight-purple">Impact</span></h2>
-    <div class="divider-purple"></div>
-    <div style="display:grid;grid-template-columns:1.1fr 0.9fr;gap:1.2rem;margin-top:0.6rem;">
-      <!-- Left: 2x2 metric grid -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;">
-
-        <div class="metric-card purple">
-          <div class="metric-name">Net Revenue per Case</div>
-          <div class="metric-full">Revenue after Trade Deductions</div>
-          <span class="benchmark avg">Industry: highly variable by category</span>
-          <div class="metric-body">The real revenue metric. Gross revenue minus deductions (OTIF penalties, promotional allowances, off-invoice discounts) = net revenue. Every OTIF improvement and chargeback reduction flows directly to net revenue. Trade spend is the primary lever, but only if promotional ROI is measurable.</div>
-          <div class="metric-snowflake">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <p>Unified TPM, deduction management, and financial data means every trade decision has a real net revenue impact. Cortex Analyst: "What is our net revenue per case for customer X after all deductions?" answered from live data.</p>
-          </div>
-        </div>
-
-        <div class="metric-card purple">
-          <div class="metric-name">Trade Spend as % Revenue</div>
-          <div class="metric-full">Total Trade Investment ÷ Gross Revenue</div>
-          <span class="benchmark avg">CPG average: 15–25% of revenue</span>
-          <div class="metric-body">For many CPG companies, trade spend is the second largest P&amp;L line after COGS. Despite this scale, most companies cannot measure whether individual promotions make money. Snowflake unifies retailer sell-through with TPM spend data, making every promotion measurable and every future investment decision evidence-based.</div>
-          <div class="metric-snowflake">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <p>Cortex Analyst delivers post-promotion analysis in seconds: incremental lift vs. base, net revenue impact, and comparison to similar historical events. Trade decisions become data-driven rather than relationship-driven.</p>
-          </div>
-        </div>
-
-        <div class="metric-card blue">
-          <div class="metric-name">Gross Margin</div>
-          <div class="metric-full">Revenue − COGS ÷ Revenue</div>
-          <span class="benchmark avg">Food &amp; Bev: 35–55% · Personal Care: 55–70%</span>
-          <div class="metric-body">Improved forecast accuracy reduces markdown and clearance spend. Waste reduction directly improves COGS. Fewer OOS events reduce promotional void and revenue leakage. All flow directly to gross margin in CPG.</div>
-          <div class="metric-snowflake">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <p>Snowflake customers report 1–3 point gross margin improvement from combined inventory, waste, and logistics efficiencies.</p>
-          </div>
-        </div>
-
-        <div class="metric-card blue">
-          <div class="metric-name">SC Cost as % Revenue</div>
-          <div class="metric-full">Total SC Cost ÷ Net Revenue</div>
-          <span class="benchmark avg">CPG average: 8–15%</span>
-          <div class="metric-body">The CFO's primary supply chain efficiency KPI. A 1-point improvement on $2B revenue = $20M annual saving. Driven by inventory reduction, logistics efficiency, deduction elimination, and planning cost reduction.</div>
-          <div class="metric-snowflake">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--sf-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <p>Unified data eliminates duplicate reconciliation cost and reduces the expedite premium, typically 10–15% of logistics spend.</p>
-          </div>
-        </div>
-
-      </div>
-      <!-- Right: Forrester ROI + customers -->
-      <div style="display:flex;flex-direction:column;gap:0.75rem;">
-        <div style="background:linear-gradient(135deg,rgba(17,86,127,0.06),rgba(36,158,220,0.04));border:1px solid rgba(17,86,127,0.2);border-radius:12px;padding:1rem 1.1rem;">
-          <div style="font-size:0.63rem;font-weight:700;color:var(--sf-mid);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.6rem;">Forrester Total Economic Impact</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;margin-bottom:0.7rem;">
-            <div style="text-align:center;">
-              <div style="font-size:1.6rem;font-weight:900;color:var(--sf-mid);line-height:1;">354%</div>
-              <div style="font-size:0.6rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;margin-top:0.15rem;">ROI</div>
-            </div>
-            <div style="text-align:center;">
-              <div style="font-size:1.6rem;font-weight:900;color:var(--sf-mid);line-height:1;">&lt;6mo</div>
-              <div style="font-size:0.6rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;margin-top:0.15rem;">Payback</div>
-            </div>
-            <div style="text-align:center;">
-              <div style="font-size:1.6rem;font-weight:900;color:var(--sf-mid);line-height:1;">$17.4M</div>
-              <div style="font-size:0.6rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.05em;margin-top:0.15rem;">NPV</div>
-            </div>
-          </div>
-          <p style="font-size:0.69rem;color:var(--text-light);line-height:1.45;max-width:100%;margin:0;">Based on a composite organisation of Snowflake supply chain customers. Benefits include: productivity gains from unified data, reduction in data management costs, elimination of point solution licensing, and supply chain performance improvements.</p>
-        </div>
-
-        <div style="display:flex;flex-direction:column;gap:0.55rem;">
-          <div class="proof-bar" style="padding:0.6rem 0.85rem;">
-            <div style="font-size:0.67rem;font-weight:700;color:var(--sf-mid);margin-bottom:0.2rem;">Kraft Heinz</div>
-            <p style="font-size:0.69rem;color:var(--text-gray);margin:0;max-width:100%;">Out-of-stocks reduced from 20% to 6% in 4 weeks on Snowflake · 70% of retailer data by sales volume ingested · Improved COGS, fill rate, and on-time delivery</p>
-          </div>
-          <div class="proof-bar" style="padding:0.6rem 0.85rem;">
-            <div style="font-size:0.67rem;font-weight:700;color:var(--sf-mid);margin-bottom:0.2rem;">Keurig Dr Pepper <span style="font-size:0.6rem;font-weight:600;color:#D97706;font-style:italic;">(&#9888; internal use only)</span></div>
-            <p style="font-size:0.69rem;color:var(--text-gray);margin:0;max-width:100%;">$14M in self-service analytics value from unifying SC and commercial data on Snowflake · 30 additional analytics projects completed · Faster decisions across supply chain and commercial teams</p>
-          </div>
-          <div class="proof-bar" style="padding:0.6rem 0.85rem;">
-            <div style="font-size:0.67rem;font-weight:700;color:var(--sf-mid);margin-bottom:0.2rem;">Forrester TEI 2024</div>
-            <p style="font-size:0.69rem;color:var(--text-gray);margin:0;max-width:100%;">354% ROI over 3 years, &lt;6 month payback · $17.4M 3-year net present value · Based on composite Snowflake supply chain customer organisation</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="snowflake-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.85;"></div>
-  <div class="slide-number">08 / 08</div>
-</div>
-
-</div><!-- end deck -->
-
-<script>
-const TOTAL = 8;
-let current = 0;
-function goTo(index) {
-  document.querySelectorAll('.slide').forEach(function(s) { s.classList.remove('active'); });
-  document.getElementById('slide-' + (index+1)).classList.add('active');
-  document.getElementById('progressBar').style.width = ((index+1)/TOTAL*100) + '%';
-  document.getElementById('slideSelect').value = index + 1;
-  current = index;
-}
-function nextSlide() { if (current < TOTAL - 1) goTo(current + 1); }
-function prevSlide() { if (current > 0) goTo(current - 1); }
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
-  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
-  if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
-});
-goTo(0);
+  <nav class="pager"><span></span><a href="#service">Start with service &rarr;</a></nav>
+</section>
+<section class="page" id="service">
+  <header class="ph"><div class="label">Category 01 <span class="sep">·</span> <span class="hint2">tap a metric for its definition</span></div>
+  <h2>Customer Service &amp; Fill</h2><p class="intro">Retailers score you weekly. Misses become fines, deductions and lost shelf space.</p></header>
+  <div class="mgrid"><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Case Fill Rate<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Case Fill Rate</b><p>Share of ordered cases that ship complete, measured at order line.</p><code>cases shipped ÷ cases ordered</code><span class="pn">Measured weekly, by customer</span></div></div>
+  <div class="mf">% of cases shipped vs ordered</div><div class="bms"><span class="bm avg">Typical: 94&ndash;97%</span><span class="bm tgt">Leaders: 98%+</span></div>
+  <p class="why">The headline service KPI in CPG. Every point below target is lost sales plus deduction exposure: on $2B of orders, one point is ~$20M of revenue at risk.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>ERP orders, WMS shipments and the demand plan in one governed model, refreshed through the day rather than overnight.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;What was case fill rate for Walmart this week, and which SKUs drove the gap?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">OTIF<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>OTIF</b><p>Share of orders delivered inside the retailer&rsquo;s window and in full quantity. Retailers define the window and the measure differently.</p><code>orders on time AND in full ÷ total orders</code><span class="pn">Definition varies by retailer</span></div></div>
+  <div class="mf">On time, in full &middot; retailer compliance</div><div class="bms"><span class="bm avg">Walmart target: 98% (on-time and in-full)</span><span class="bm tgt">Fine: 3% of COGS of non-compliant cases</span></div>
+  <p class="why">The KPI retailers fine you on. With $500M of Walmart sales, a 1-point miss puts ~$5M of cases in scope and ~$100&ndash;150K in fines, before deductions and lost shelf. The root cause is usually upstream: a demand change that reached supply too late.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>Order, shipment and carrier events joined by order line. Cortex AI flags at-risk SKU-DC-customer lanes while there is still time to act.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;Which orders shipping next week are at risk of missing OTIF, and why?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">On-Shelf Availability<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>On-Shelf Availability</b><p>Share of store-SKU-days where product is available to buy.</p><code>1 − (store-SKU-days out of stock ÷ total store-SKU-days)</code><span class="pn">Needs retailer POS or audit data</span></div></div>
+  <div class="mf">% of time product is on shelf</div><div class="bms"><span class="bm avg">Typical OOS: 7&ndash;10%</span><span class="bm tgt">Leaders: 97%+ OSA</span></div>
+  <p class="why">The number shoppers feel. An out-of-stock is a sale lost to a competitor or private label. It is driven by fill and DC replenishment, and it is rooted in forecast accuracy.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>Retailer POS shared through Snowflake data sharing, plus syndicated data (NielsenIQ, Circana) joined to internal supply. Detect phantom inventory and store-level gaps early.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;Which top-100 SKUs have falling sales with stock on hand at Tesco stores?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Perfect Order Rate<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Perfect Order Rate</b><p>Share of orders with no failure on any dimension: complete, on time, correct documents, undamaged.</p><code>% complete × % on time × % correct docs × % undamaged</code><span class="pn">Composite; strictest service view</span></div></div>
+  <div class="mf">Complete &middot; on time &middot; correct &middot; undamaged</div><div class="bms"><span class="bm avg">Typical: 80&ndash;90%</span></div>
+  <p class="why">One failure in any dimension makes the order imperfect. A strong predictor of deductions and of how a retailer rates you.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>WMS, ERP, transport and deductions data correlated automatically, so no one rebuilds it in a spreadsheet each month.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;What are the top three reasons for imperfect orders this quarter by customer?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Retailer Scorecard<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Retailer Scorecard</b><p>The retailer&rsquo;s own composite rating of you, typically PO confirmation rate, fill and on-time.</p><code>retailer-defined (confirmation %, fill %, on-time %)</code><span class="pn">Retailer portal; not your definition</span></div></div>
+  <div class="mf">e.g. Amazon vendor confirmation &amp; fill rate</div><div class="bms"><span class="bm avg">Set by each retailer</span></div>
+  <p class="why">A weak scorecard can cut order volumes and shelf space, and recovery takes months. You need to see the retailer&rsquo;s number before they do.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>Ingest scorecard and portal data alongside your own orders. Reconcile your view to theirs and alert on lanes trending below threshold.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;Where does our Amazon confirmation rate differ from our own fill data, and by how much?&rdquo;</p></div></div></div>
+  <div class="proof"><span class="k">Proof point</span><p>Kraft Heinz unified retailer and supply data on Snowflake: 70% of retailer data by sales volume, with out-of-stocks down from 20% to 6% in 4 weeks <span class="src">(VE Business Value Realization deck, internal)</span></p></div>
+  <nav class="pager"><a href="#overview">&larr; Overview</a><a href="#demand">Demand &rarr;</a></nav>
+</section>
+<section class="page" id="demand">
+  <header class="ph"><div class="label">Category 02 <span class="sep">·</span> <span class="hint2">tap a metric for its definition</span></div>
+  <h2>Demand Planning &amp; Promotions</h2><p class="intro">Promotions and new products create most of the forecast error, and most of the cost.</p></header>
+  <div class="mgrid"><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Forecast Accuracy (MAPE)<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Forecast Accuracy (MAPE)</b><p>Average size of forecast error as a share of actual demand. Most CPGs track WMAPE so big SKUs count more.</p><code>WMAPE = Σ|actual − forecast| ÷ Σ actual</code><span class="pn">Lower is better; state the lag and level</span></div></div>
+  <div class="mf">Mean absolute percentage error</div><div class="bms"><span class="bm avg">Typical SKU-week: 30&ndash;50%</span><span class="bm tgt">Target: improve 5&ndash;10 pts</span></div>
+  <p class="why">The root input for inventory, service and cost. Benchmarks only make sense at a stated level and lag (e.g. SKU-DC, 4-week lag).</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>Snowflake ML forecasting and Cortex AI on shipments, orders and POS, with external signals (weather, events) from Snowflake Marketplace.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;Which product families have the worst WMAPE at 4-week lag, and is it getting better?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Forecast Bias<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Forecast Bias</b><p>Whether forecasts lean consistently high or low. Unlike MAPE, errors in opposite directions cancel out.</p><code>Σ(forecast − actual) ÷ Σ actual</code><span class="pn">Positive = over-forecast</span></div></div>
+  <div class="mf">Systematic over- or under-forecasting</div><div class="bms"><span class="bm tgt">Target: within ±5% at family</span></div>
+  <p class="why">Bias does more damage than random error. Over-forecasting drives waste and markdowns; under-forecasting drives out-of-stocks and fines. Promotions are the usual source.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>Bias tracked by SKU, customer and planner override, so you can see where human adjustments add or destroy value (FVA).</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;Which customers have we over-forecast for three months running?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Promotional Lift Accuracy<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Promotional Lift Accuracy</b><p>How close the planned promotional uplift was to what actually sold above baseline.</p><code>|actual lift − planned lift| ÷ actual lift</code><span class="pn">Needs an agreed baseline</span></div></div>
+  <div class="mf">Predicted vs actual incremental volume</div><div class="bms"><span class="bm avg">Typical error: 25&ndash;40%</span></div>
+  <p class="why">A lift error turns into excess stock or out-of-stocks across every SKU in the event. The cause is usually TPM plans built without live supply data or past-event results.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>TPM calendars, POS sell-through, baselines and supply constraints in one model. Every past event becomes training data for the next.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;How did planned vs actual lift compare for our last five Tesco multibuys?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Trade Promotion ROI<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Trade Promotion ROI</b><p>Incremental gross profit generated by a promotion compared with what it cost.</p><code>(incremental volume × unit margin − event cost) ÷ event cost</code><span class="pn">Post-event; needs baseline + sell-through</span></div></div>
+  <div class="mf">Incremental margin per $ of trade spend</div><div class="bms"><span class="bm avg">Many promotions do not break even</span></div>
+  <p class="why">Trade is often the second-largest P&amp;L line after COGS, yet most events are never evaluated because sell-through, baselines and spend sit in separate systems.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>Unify POS, TPM spend, deductions and actuals. Cortex Analyst answers post-event questions in plain English on governed definitions.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;What was the incremental ROI of our Q2 Walmart promotion on SKU X versus the same event last year?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">New Product Forecast Accuracy<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>New Product Forecast Accuracy</b><p>Forecast accuracy for new products in their launch window, usually the first 13 weeks.</p><code>WMAPE over launch weeks 1&ndash;13</code><span class="pn">Compare against analogue SKUs</span></div></div>
+  <div class="mf">Accuracy in the first 13 weeks</div><div class="bms"><span class="bm avg">Often 2&ndash;3× worse than base</span></div>
+  <p class="why">Launches are high stakes in both directions: out-of-stock in week one loses distribution; overstock leads to write-offs and delisting.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>Analogue matching across all SKUs, customers and categories. Cortex AI finds the closest historical launches by profile.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;Which existing launches look most like this new SKU, and how did they sell in weeks 1&ndash;13?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Planning Cycle Time<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Planning Cycle Time</b><p>Elapsed time from period close to an agreed demand and supply plan.</p><code>decision date − data cut-off date</code><span class="pn">Shorter = more time on decisions</span></div></div>
+  <div class="mf">Data refresh to S&amp;OP decision</div><div class="bms"><span class="bm avg">Typical prep: 3&ndash;7 days</span></div>
+  <p class="why">Most of the cycle goes on reconciling numbers, not making decisions. The first hour of S&amp;OP is often spent agreeing on the facts.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>One governed semantic layer so demand, supply and finance read the same KPIs. The pack is generated, not assembled.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;Show the demand vs capacity gap for next quarter by category.&rdquo;</p></div></div></div>
+  <div class="proof"><span class="k">Proof point</span><p>Kraft Heinz unified demand and supply data on Snowflake, improving COGS, case fill rate and on-time delivery</p></div>
+  <nav class="pager"><a href="#service">&larr; Service</a><a href="#inventory">Inventory &rarr;</a></nav>
+</section>
+<section class="page" id="inventory">
+  <header class="ph"><div class="label">Category 03 <span class="sep">·</span> <span class="hint2">tap a metric for its definition</span></div>
+  <h2>Inventory &amp; Working Capital</h2><p class="intro">Inventory is where forecast error turns into cash. Right-size it without hurting service.</p></header>
+  <div class="mgrid"><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Days of Supply<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Days of Supply</b><p>How many days of forward demand current stock would cover.</p><code>on-hand units ÷ average daily forecast demand</code><span class="pn">Forward-looking DoS preferred</span></div></div>
+  <div class="mf">Inventory on hand ÷ average daily demand</div><div class="bms"><span class="bm avg">Food &amp; Bev: 25&ndash;45 days</span><span class="bm avg">Personal care: 35&ndash;60 days</span></div>
+  <p class="why">The working-capital view planners act on. On $1B of annual COGS each day is ~$2.7M, so cutting 5 days frees ~$14M.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>Stock by SKU-DC joined to the forward forecast, with promotions included, so excess and shortage show up early.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;Which SKU-DCs have more than 60 days of supply and no promotion planned?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Inventory Turns<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Inventory Turns</b><p>How many times inventory is sold and replaced in a year.</p><code>annual COGS ÷ average inventory value</code><span class="pn">Higher = less cash tied up</span></div></div>
+  <div class="mf">COGS ÷ average inventory</div><div class="bms"><span class="bm avg">Food &amp; Bev: 8&ndash;15×</span><span class="bm avg">Household: 5&ndash;8×</span></div>
+  <p class="why">The board&rsquo;s view of inventory efficiency. On $1.8B of COGS, moving from 6× to 7× turns frees ~$43M.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>One inventory number that finance, supply and operations agree on, with drill-down to SKU, DC and customer.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;How have turns trended by category over the last eight quarters?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Safety Stock<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Safety Stock</b><p>Inventory held to protect a target service level against forecast error and lead-time variability.</p><code>z × √(LT × σ²demand + d² × σ²LT)</code><span class="pn">z = service level factor</span></div></div>
+  <div class="mf">Buffer against demand and supply variability</div><div class="bms"><span class="bm avg">Often sized to data lag, not risk</span></div>
+  <p class="why">Safety stock is right to hold. The problem is when it covers stale or untrusted data rather than real variability.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>Recalculate buffers from actual error and lead-time variability by SKU-DC. Hold less where forecasts are reliable and more where risk is real.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;Where is safety stock above what our actual forecast error requires?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Excess &amp; Obsolete (E&amp;O)<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Excess &amp; Obsolete (E&amp;O)</b><p>Stock unlikely to sell before its shelf life or relevance ends, as a share of total inventory value.</p><code>excess + obsolete value ÷ total inventory value</code><span class="pn">Short-dated stock counts</span></div></div>
+  <div class="mf">At-risk stock as % of inventory</div><div class="bms"><span class="bm avg">Typical: 3&ndash;8%</span><span class="bm tgt">Leaders: &lt;2%</span></div>
+  <p class="why">Driven by over-forecast promotions, failed launches and poor visibility of shelf life. On $300M of inventory, every point of E&amp;O is $3M written off or marked down.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>Expiry dates from the WMS joined to forward demand, so you find transfer or sell-through options before write-off.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;Which lots expire within 60 days with less than 50% forecast cover?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Cash-to-Cash Cycle<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Cash-to-Cash Cycle</b><p>Days between paying suppliers and collecting cash from customers.</p><code>days inventory + days receivable − days payable</code><span class="pn">Shorter = less cash tied up</span></div></div>
+  <div class="mf">DIO + DSO − DPO</div><div class="bms"><span class="bm avg">Typical: 30&ndash;60 days</span><span class="bm tgt">Target: cut 10&ndash;20%</span></div>
+  <p class="why">The CFO&rsquo;s working-capital metric. On $2B of revenue every day is ~$5.5M, so 10 days frees ~$55M. Quarter-end loading and post-promotion dips create the peaks.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>Supply chain and finance data in one platform, so working-capital scenarios can be modelled by customer, category and plant.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;Model cash-to-cash if we cut finished-goods days by 5 in Europe.&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Inventory Carrying Cost<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Inventory Carrying Cost</b><p>Annual cost of capital, storage, handling, insurance and write-off risk on inventory.</p><code>average inventory × carrying rate</code><span class="pn">Rate varies by company</span></div></div>
+  <div class="mf">Cost of holding inventory for a year</div><div class="bms"><span class="bm avg">Rule of thumb: 20&ndash;30% of value</span></div>
+  <p class="why">On $400M of average inventory at 25%, holding stock costs $100M a year. A 10% reduction saves ~$10M, before counting the cash released.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>Lower average inventory through better demand and supply matching, with savings tracked against a baseline.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;What is our carrying cost by DC, and which DCs are above plan?&rdquo;</p></div></div></div>
+  <div class="proof"><span class="k">Proof point</span><p>Kraft Heinz brings 70% of retailer data by sales volume into Snowflake, giving one view of demand and stock across its supply chain</p></div>
+  <nav class="pager"><a href="#demand">&larr; Demand</a><a href="#operations">Operations &rarr;</a></nav>
+</section>
+<section class="page" id="operations">
+  <header class="ph"><div class="label">Category 04 <span class="sep">·</span> <span class="hint2">tap a metric for its definition</span></div>
+  <h2>Operations &amp; Manufacturing</h2><p class="intro">Plants can only hit plan if the plan reflects real demand and real ingredient availability.</p></header>
+  <div class="mgrid"><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">OEE<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>OEE</b><p>How much of a line&rsquo;s planned time produces good product at rated speed.</p><code>availability × performance × quality</code><span class="pn">Per line, per shift</span></div></div>
+  <div class="mf">Overall equipment effectiveness</div><div class="bms"><span class="bm avg">Typical: 55&ndash;65%</span><span class="bm tgt">World class: 85%</span></div>
+  <p class="why">Each OEE point adds capacity without capex. In CPG, the big losses are changeovers, cleaning-in-place and stoppages from missing ingredients.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>MES and SCADA data alongside schedules and ingredient availability. Cortex AI spots the patterns that come before downtime.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;Which lines lost the most OEE to changeovers last month?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Schedule Adherence<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Schedule Adherence</b><p>Share of planned production completed as scheduled: right product, right quantity, right slot.</p><code>Σ min(actual, plan) ÷ Σ plan</code><span class="pn">By line, by week</span></div></div>
+  <div class="mf">Actual production vs plan</div><div class="bms"><span class="bm avg">Typical: 80&ndash;90%</span><span class="bm tgt">Target: 95%+</span></div>
+  <p class="why">Low adherence causes premium freight, out-of-stocks and fines. The cause is usually a plan built on a stale demand signal or unavailable ingredients.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>Live ingredient stock and inbound supply feed the schedule, flagging shortages before the plan locks.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;Which scheduled runs next week have an ingredient shortfall?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Waste &amp; Loss %<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Waste &amp; Loss %</b><p>Ingredients, packaging and finished goods lost in production, as a share of input or output.</p><code>waste quantity ÷ total input quantity</code><span class="pn">Feeds COGS and sustainability goals</span></div></div>
+  <div class="mf">Material and finished-goods waste as % of output</div><div class="bms"><span class="bm avg">Typical: 3&ndash;8%</span><span class="bm tgt">Target: &lt;2%</span></div>
+  <p class="why">Hits COGS and sustainability targets together. Finding the cause means linking QMS, MES and ERP batch records.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>Waste events linked automatically to batches, process settings and changeover order, with anomaly alerts.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;Which ingredient lots are linked to the highest waste this quarter?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Batch Yield<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Batch Yield</b><p>Good output from a batch compared with what the recipe should produce.</p><code>actual good output ÷ theoretical output</code><span class="pn">By product and plant</span></div></div>
+  <div class="mf">Actual output vs theoretical</div><div class="bms"><span class="bm tgt">Target: 98%+ for established products</span></div>
+  <p class="why">Yield drives material cost. On $80M of material cost, one yield point is worth ~$0.8M a year. Drift often traces to supplier lots or process settings.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>Batch records joined to ingredient lot traceability and supplier data, so root cause takes minutes instead of weeks.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;Which supplier lots correlate with yield below 97%?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Capacity Utilisation<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Capacity Utilisation</b><p>Share of available capacity actually used.</p><code>actual output ÷ available capacity</code><span class="pn">Too high = no buffer</span></div></div>
+  <div class="mf">Output vs available capacity</div><div class="bms"><span class="bm tgt">Sustainable: 75&ndash;85%</span></div>
+  <p class="why">Too low wastes capital; too high leaves no room for promotional spikes. SKU proliferation makes it harder to balance.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>Capacity, schedules and demand plans in one query, so you can test promotion and allocation scenarios.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;Can we take an extra 20% on this promotion if we move it to line 3?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Changeover Time<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Changeover Time</b><p>Time from last good unit of one product to first good unit of the next, and how often it happens.</p><code>Σ changeover minutes ÷ planned production minutes</code><span class="pn">Track count and duration</span></div></div>
+  <div class="mf">Time lost switching products</div><div class="bms"><span class="bm avg">Often the largest planned loss</span></div>
+  <p class="why">In multi-SKU process plants, changeovers and cleaning are often the biggest planned OEE loss. Better run sequencing reduces both.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>Demand, compatibility and changeover matrices together enable sequencing that meets service with fewer changeovers.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;What sequence for next week minimises changeovers while meeting the fill target?&rdquo;</p></div></div></div>
+  <div class="proof"><span class="k">Proof point</span><p>Kraft Heinz uses Snowflake as the single source of truth across SAP, transportation, warehouse and yard data</p></div>
+  <nav class="pager"><a href="#inventory">&larr; Inventory</a><a href="#financial">Financial &rarr;</a></nav>
+</section>
+<section class="page" id="financial">
+  <header class="ph"><div class="label">Category 05 <span class="sep">·</span> <span class="hint2">tap a metric for its definition</span></div>
+  <h2>Revenue &amp; Financial Impact</h2><p class="intro">The CFO view: where supply chain and trade decisions reach the P&L.</p></header>
+  <div class="mgrid"><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Net Revenue per Case<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Net Revenue per Case</b><p>Revenue per case after promotional allowances, off-invoice discounts, fines and deductions.</p><code>(gross revenue − trade − deductions) ÷ cases</code><span class="pn">By customer and SKU</span></div></div>
+  <div class="mf">Revenue after trade and deductions</div><div class="bms"><span class="bm avg">Varies by category</span></div>
+  <p class="why">The real price you get paid. Every avoided fine and every better promotion shows up here.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>TPM, deductions and finance data together, so every trade decision shows its effect on net revenue.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;What is net revenue per case for each top-10 customer after all deductions?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Trade Spend % Revenue<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Trade Spend % Revenue</b><p>Total trade investment (promotions, allowances, slotting) as a share of gross revenue.</p><code>total trade spend ÷ gross revenue</code><span class="pn">Definition of trade varies</span></div></div>
+  <div class="mf">Trade investment ÷ gross revenue</div><div class="bms"><span class="bm avg">CPG typical: ~20% of gross</span></div>
+  <p class="why">Often the second-largest P&amp;L line after COGS, and the least measured. Making events measurable lets you move money to what works.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>Post-event analysis on demand: incremental lift vs base, net revenue effect, and comparison with similar events.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;Which customers have the highest trade rate with falling volume?&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">Gross Margin<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>Gross Margin</b><p>Share of revenue left after cost of goods sold.</p><code>(net revenue − COGS) ÷ net revenue</code><span class="pn">Use net revenue</span></div></div>
+  <div class="mf">(Revenue − COGS) ÷ revenue</div><div class="bms"><span class="bm avg">Food &amp; Bev: 30&ndash;45%</span><span class="bm avg">Personal care: 50&ndash;65%</span></div>
+  <p class="why">Forecast accuracy, waste, yield and fewer out-of-stocks all show up here. It is how supply chain work reaches the CFO.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>Margin bridges by SKU and customer built on the same governed data the supply chain uses.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;Bridge gross margin this quarter vs last by price, mix, cost and waste.&rdquo;</p></div></div><div class="card mc"><div class="mh"><button type="button" class="kpi mt" aria-expanded="false">SC Cost % Revenue<span class="i" aria-hidden="true">i</span></button><div class="pop" role="tooltip"><b>SC Cost % Revenue</b><p>Plan, source, make, deliver and return costs as a share of revenue.</p><code>total supply chain cost ÷ net revenue</code><span class="pn">Agree the cost scope first</span></div></div>
+  <div class="mf">Total supply chain cost ÷ net revenue</div><div class="bms"><span class="bm avg">CPG typical: 8&ndash;15%</span></div>
+  <p class="why">The CFO&rsquo;s supply chain efficiency KPI. On $2B of revenue, one point is $20M a year. Expedites, reconciliation and excess stock are the drivers.</p>
+  <div class="sf"><span class="k">With Snowflake</span><p>One cost model across freight, warehousing and planning, with expedites and premium freight tracked to cause.</p></div>
+  <div class="ask"><span class="k">Ask it</span><p>&ldquo;How much premium freight did we spend last quarter, and on which root causes?&rdquo;</p></div></div></div>
+  <div class="proof"><span class="k">Proof point</span><p>Kraft Heinz saved millions of dollars by sharing Nielsen data through Snowflake instead of moving copies <span class="src">(VE Business Value Realization deck, internal)</span></p></div>
+  <nav class="pager"><a href="#operations">&larr; Operations</a><span></span></nav>
+</section></main>
+<script>(function () {
+  var pages = Array.prototype.slice.call(document.querySelectorAll('.page'));
+  var ids = pages.map(function (p) { return p.id; });
+  var links = document.querySelectorAll('.rail a.ri');
+  var main = document.getElementById('main');
+  function show(id) {
+    if (ids.indexOf(id) < 0) id = ids[0];
+    pages.forEach(function (p) { p.classList.toggle('on', p.id === id); });
+    links.forEach(function (a) { a.classList.toggle('on', a.getAttribute('href') === '#' + id); });
+    main.scrollTop = 0;
+    var h = document.querySelector('#' + id + ' h2');
+    document.title = 'CPG Metrics · ' + (h ? h.textContent.split(' / ')[0] : '');
+  }
+  function current() { return ids.indexOf(location.hash.slice(1)) < 0 ? 0 : ids.indexOf(location.hash.slice(1)); }
+  function go(i) { i = Math.max(0, Math.min(ids.length - 1, i)); location.hash = ids[i]; }
+  function closePops(except) {
+    document.querySelectorAll('.kpi[aria-expanded="true"]').forEach(function (b) {
+      if (b !== except) { b.setAttribute('aria-expanded', 'false'); b.nextElementSibling.classList.remove('on'); }
+    });
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('.kpi');
+    closePops(b);
+    if (b) { var open = b.getAttribute('aria-expanded') !== 'true'; b.setAttribute('aria-expanded', open); b.nextElementSibling.classList.toggle('on', open); }
+  });
+  window.addEventListener('hashchange', function () { closePops(); show(location.hash.slice(1)); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { closePops(); return; }
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); go(current() + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(current() - 1); }
+    else if (/^[0-5]$/.test(e.key)) go(+e.key);
+  });
+  show(location.hash.slice(1));
+})();
 </script>
-</body>
-</html>
+</body></html>
