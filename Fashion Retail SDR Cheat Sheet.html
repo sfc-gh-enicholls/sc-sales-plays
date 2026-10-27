@@ -1,344 +1,240 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="snowflake-source" content="cortex-agent-authored" />
-  <title>SDR Cheat Sheet: Fashion Retail</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-  <script type="application/json" id="snowflake-report-metadata">
-  {
-    "generated": "2026-07-30",
-    "intent": "Fashion Retail Signal to Shelf SDR Cheat Sheet, internal Snowflake quick reference for prospecting and discovery calls",
-    "sections": [
-      { "id": "icp-scan", "title": "ICP Quick Scan", "producerNotes": "Static content, no data queries required." },
-      { "id": "pitch", "title": "30-Second Pitch", "producerNotes": "Static content, no data queries required." },
-      { "id": "discovery", "title": "Discovery Questions", "producerNotes": "Static content, no data queries required." },
-      { "id": "pain-objections", "title": "Pain Signals & Objection Handling", "producerNotes": "Static content, no data queries required." },
-      { "id": "proof", "title": "Proof Points", "producerNotes": "Static content, no data queries required." }
-    ]
-  }
-  </script>
-  <style>
-    :root {
-      --sf-blue: #249EDC;
-      --sf-mid: #11567F;
-      --sf-deep: #042130;
-      --sf-ice: #F6F9FA;
-      --sf-star: #71D3DC;
-      --sf-white: #FFFFFF;
-      --text-dark: #111827;
-      --text-gray: #4B5568;
-      --text-light: #6B7280;
-      --border: rgba(204,204,204,0.5);
-      --green: #16a34a;
-      --red: #DC2626;
-      --amber: #D97706;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color: var(--text-dark); }
-    body { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
-    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.2rem; padding-bottom: 0.9rem; border-bottom: 2px solid var(--sf-mid); }
-    .page-header-left { display: flex; align-items: center; gap: 1rem; }
-    .page-title { font-size: 1.4rem; font-weight: 900; color: var(--sf-mid); letter-spacing: -0.01em; }
-    .page-subtitle { font-size: 0.75rem; color: var(--text-light); font-weight: 500; margin-top: 0.1rem; }
-    .internal-tag { background: rgba(220,38,38,0.08); border: 1px solid rgba(220,38,38,0.25); border-radius: 5px; padding: 0.25rem 0.7rem; font-size: 0.62rem; font-weight: 700; color: var(--red); letter-spacing: 0.08em; text-transform: uppercase; }
-    .section-label { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 0.4rem; }
-    .label-blue { color: var(--sf-blue); }
-    .label-purple { color: var(--sf-mid); }
-    .label-green { color: var(--green); }
-    .label-red { color: var(--red); }
-    .label-amber { color: var(--amber); }
-    .label-teal { color: #0d9488; }
-    .block { background: #FFFFFF; border-radius: 10px; padding: 0.75rem 0.9rem; border: 1px solid var(--border); }
-    .block.blue-top { border-top: 3px solid var(--sf-blue); }
-    .block.purple-top { border-top: 3px solid var(--sf-mid); }
-    .block.green-top { border-top: 3px solid var(--green); }
-    .block.red-top { border-top: 3px solid var(--red); }
-    .block.amber-top { border-top: 3px solid var(--amber); }
-    .block.teal-top { border-top: 3px solid #0d9488; }
-    .block-title { font-size: 0.72rem; font-weight: 800; color: var(--text-dark); margin-bottom: 0.45rem; letter-spacing: 0.01em; }
-    .row { display: grid; gap: 0.8rem; margin-bottom: 0.8rem; }
-    .cols-3 { grid-template-columns: 1fr 1fr 1fr; }
-    .cols-2 { grid-template-columns: 1fr 1fr; }
-    .cols-2-1 { grid-template-columns: 2fr 1fr; }
-    .cols-1-2 { grid-template-columns: 1fr 2fr; }
-    .cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
-    .signal-item { display: flex; align-items: flex-start; gap: 0.4rem; padding: 0.28rem 0; border-bottom: 1px solid rgba(204,204,204,0.25); font-size: 0.74rem; color: var(--text-gray); line-height: 1.4; }
-    .signal-item:last-child { border-bottom: none; padding-bottom: 0; }
-    .signal-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 0.3rem; }
-    .dot-green { background: var(--green); }
-    .dot-red { background: var(--red); }
-    .dot-blue { background: var(--sf-blue); }
-    .dot-amber { background: var(--amber); }
-    .obj-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem 0.8rem; align-items: start; padding: 0.35rem 0; border-bottom: 1px solid rgba(204,204,204,0.25); }
-    .obj-row:last-child { border-bottom: none; }
-    .obj-q { font-size: 0.72rem; color: var(--text-dark); font-weight: 600; font-style: italic; }
-    .obj-a { font-size: 0.72rem; color: var(--text-gray); }
-    .obj-a strong { color: var(--sf-mid); font-weight: 700; }
-    .pitch-box { background: linear-gradient(135deg, rgba(17,86,127,0.06), rgba(36,158,220,0.04)); border: 1.5px solid rgba(17,86,127,0.25); border-radius: 10px; padding: 0.8rem 1rem; }
-    .pitch-text { font-size: 0.8rem; color: var(--text-gray); line-height: 1.65; }
-    .pitch-text strong { color: var(--sf-mid); }
-    .dq-item { padding: 0.3rem 0; border-bottom: 1px solid rgba(204,204,204,0.25); font-size: 0.72rem; color: var(--text-gray); line-height: 1.45; }
-    .dq-item:last-child { border-bottom: none; }
-    .dq-item em { color: var(--sf-blue); font-style: italic; font-size: 0.7rem; }
-    .proof-row { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.32rem 0; border-bottom: 1px solid rgba(204,204,204,0.25); font-size: 0.72rem; color: var(--text-gray); line-height: 1.4; }
-    .proof-row:last-child { border-bottom: none; }
-    .proof-tag { font-size: 0.6rem; font-weight: 700; background: rgba(17,86,127,0.08); border: 1px solid rgba(17,86,127,0.2); border-radius: 3px; padding: 0.1rem 0.35rem; color: var(--sf-mid); white-space: nowrap; flex-shrink: 0; margin-top: 0.1rem; }
-    .ns-item { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.28rem 0; border-bottom: 1px solid rgba(204,204,204,0.25); font-size: 0.73rem; color: var(--text-gray); line-height: 1.4; }
-    .ns-item:last-child { border-bottom: none; }
-    .ns-num { font-size: 0.8rem; font-weight: 900; color: var(--sf-blue); flex-shrink: 0; min-width: 1rem; }
-    .pain-quote { background: rgba(220,38,38,0.04); border-left: 3px solid rgba(220,38,38,0.4); border-radius: 0 6px 6px 0; padding: 0.3rem 0.55rem; font-size: 0.71rem; color: var(--text-dark); font-style: italic; margin-bottom: 0.3rem; line-height: 1.4; }
-    .pain-quote:last-child { margin-bottom: 0; }
-    .page-footer { margin-top: 1.2rem; padding-top: 0.7rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-    .page-footer p { font-size: 0.62rem; color: var(--text-light); }
-    @media print { body { padding: 0.5rem 1rem; background: white; max-width: 100%; } .block { break-inside: avoid; } }
-  </style>
-</head>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Snowflake Fashion Retail: SDR Cheat Sheet</title>
+<style>:root {
+  --ink: #07121C; --ink-2: #0E2231; --ink-3: #132C3E; --line: rgba(220,236,245,.14); --line-2: rgba(220,236,245,.26);
+  --text: #EEF4F7; --muted: #93A7B3; --blue: #29B5E8; --star: #71D3DC; --amber: #FFB25B; --red: #FF7A6B; --green: #6FDFA8;
+  --font: "Lato", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --rail: 272px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: var(--ink); color: var(--text); font-family: var(--font); }
+body { display: grid; grid-template-columns: var(--rail) 1fr; overflow: hidden; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 8px; }
+
+/* rail */
+.rail { height: 100vh; overflow-y: auto; padding: 28px 18px 20px; display: flex; flex-direction: column; gap: 14px;
+  background: linear-gradient(180deg, #050C13, #0A1E2C); border-right: 1px solid var(--line); }
+.rail .logo { height: 26px; width: auto; align-self: flex-start; margin-left: 8px; }
+.doc { font-size: 13px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--star); margin: 10px 8px 0; }
+.doc span { display: block; color: var(--text); font-size: 20px; letter-spacing: -.01em; text-transform: none; margin-top: 4px; }
+.internal { align-self: flex-start; margin-left: 8px; font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--amber); border: 1px solid rgba(255,178,91,.4); border-radius: 99px; padding: 4px 10px; }
+.rail nav { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+.rgl { font-size: 10.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 10px 6px; }
+.ri { display: flex; align-items: center; gap: 12px; padding: 9px 10px; border-radius: 10px; color: var(--muted); font-size: 14.5px;
+  border: 1px solid transparent; transition: background .2s, color .2s; }
+.ri .ix { font-size: 12px; font-weight: 800; color: var(--muted); width: 20px; text-align: center; font-variant-numeric: tabular-nums; }
+.ri:hover { background: rgba(255,255,255,.04); color: var(--text); }
+.ri.on { background: var(--ink-3); border-color: var(--line-2); color: var(--text); font-weight: 700; }
+.ri.on .ix { color: var(--star); }
+.ri.ov { color: var(--text); }
+.keys { margin-top: auto; padding: 14px 10px 0; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+kbd { display: inline-block; min-width: 20px; padding: 1px 5px; margin-right: 2px; border: 1px solid var(--line-2); border-bottom-width: 2px;
+  border-radius: 5px; font: 700 11px var(--font); color: var(--text); text-align: center; }
+
+/* page */
+main { height: 100vh; overflow-y: auto; scroll-behavior: smooth;
+  background: radial-gradient(1100px 700px at 90% 0%, rgba(19,74,103,.55) 0%, transparent 60%), var(--ink); }
+.page { display: none; max-width: 1480px; margin: 0 auto; padding: 52px 56px 40px; min-height: 100vh; flex-direction: column; gap: 22px; }
+.page.on { display: flex; animation: in .35s ease; }
+@keyframes in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.label { font-size: 14px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--star); }
+.label .sep { color: var(--muted); margin: 0 4px; }
+h2 { font-size: clamp(34px, 3.4vw, 54px); font-weight: 900; letter-spacing: -.025em; line-height: 1.02; margin-top: 12px; }
+h2 .dim { color: var(--muted); }
+.role { padding: 3px 10px; border-radius: 99px; border: 1px solid; font-size: 11.5px; letter-spacing: .1em; }
+.role.econ { color: var(--star); border-color: rgba(113,211,220,.45); }
+.role.eval { color: var(--blue); border-color: rgba(41,181,232,.45); }
+.role.exp  { color: var(--amber); border-color: rgba(255,178,91,.45); }
+
+.card { background: var(--ink-2); border: 1px solid var(--line); border-radius: 18px; padding: 22px 24px; }
+.card h4, .group h4 { font-size: 12.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--star); margin-bottom: 14px; }
+.card h5 { font-size: 11.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 16px 0 6px;
+  padding-top: 14px; border-top: 1px solid var(--line); }
+.card p { font-size: 15.5px; line-height: 1.55; color: var(--text); }
+.card p.muted, .muted { color: var(--muted); }
+.card p.ctx { color: #D3DEE4; }
+.k { display: block; font-size: 11.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 6px; }
+
+.grid { display: grid; grid-template-columns: 1.05fr 1fr 1.1fr; gap: 18px; align-items: stretch; }
+.col { display: flex; flex-direction: column; gap: 18px; }
+.col > .card:last-child { flex: 1; }
+ul { list-style: none; }
+.dots li, .pains li { position: relative; padding: 9px 0 9px 20px; font-size: 15px; line-height: 1.45; border-bottom: 1px solid var(--line); }
+.dots li:last-child, .pains li:last-child { border-bottom: 0; }
+.dots li::before, .pains li::before { content: ""; position: absolute; left: 2px; top: 17px; width: 7px; height: 7px; border-radius: 50%; background: var(--star); }
+.pains li::before { background: var(--red); }
+.kpis { display: flex; flex-direction: column; gap: 8px; }
+.kpis li { position: relative; }
+.kpi { all: unset; box-sizing: border-box; width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 10px; cursor: pointer;
+  padding: 10px 14px; border-radius: 10px; background: rgba(255,255,255,.03); border: 1px solid var(--line); font-size: 15px; color: var(--text); transition: border-color .15s, background .15s; }
+.kpi:hover, .kpi[aria-expanded="true"] { border-color: var(--blue); background: rgba(41,181,232,.08); }
+.kpi:focus-visible { outline: 2px solid var(--star); outline-offset: 2px; }
+.kpi .i { flex: none; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--muted); color: var(--muted); font: italic 700 11px/16px Georgia, serif; text-align: center; }
+.kpi[aria-expanded="true"] .i { border-color: var(--blue); color: var(--blue); }
+.pop { display: none; position: absolute; z-index: 20; left: 0; right: 0; top: calc(100% + 6px); padding: 14px 16px; border-radius: 12px;
+  background: #102a3b; border: 1px solid var(--blue); box-shadow: 0 12px 32px rgba(0,0,0,.5); }
+.pop.on { display: block; }
+.pop b { display: block; color: var(--star); font-size: 14px; margin-bottom: 6px; }
+.pop p { font-size: 14px; line-height: 1.5; color: var(--text); margin: 0 0 10px; }
+.pop code { display: block; font: 13px/1.4 ui-monospace, Menlo, monospace; color: var(--amber); background: rgba(0,0,0,.25); padding: 7px 10px; border-radius: 8px; }
+.pop .pn { display: block; margin-top: 8px; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+h4 .hint { float: right; font-size: 11px; color: var(--muted); font-weight: 400; letter-spacing: .04em; text-transform: none; }
+@media print { .pop { display: none !important; } }
+.kpis li strong { color: var(--text); font-weight: 800; }
+.wins { display: flex; flex-direction: column; gap: 10px; }
+.win { padding: 14px 16px; border-radius: 12px; background: rgba(41,181,232,.06); border: 1px solid rgba(41,181,232,.22); }
+.win b { display: block; font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); margin-bottom: 5px; }
+.win p { font-size: 14.5px; color: #D3DEE4; }
+.proof, .engage, .signal { padding: 14px 16px; border-radius: 12px; background: rgba(255,178,91,.07); border: 1px solid rgba(255,178,91,.32); }
+.proof .k, .engage .k { color: var(--amber); }
+.proof p { font-size: 15px; font-weight: 700; }
+.proof .tag { display: inline-block; margin-left: 6px; font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--amber); border: 1px solid rgba(255,178,91,.45); border-radius: 99px; padding: 1px 8px; vertical-align: 2px; }
+.engage p { font-size: 15.5px; line-height: 1.55; max-width: 1100px; }
+.signal { margin-top: 14px; background: rgba(111,223,168,.07); border-color: rgba(111,223,168,.32); }
+.signal .k { color: var(--green); }
+.signal p { font-size: 15px; }
+
+/* overview */
+.ovgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+.ovgrid > div { display: flex; flex-direction: column; gap: 14px; }
+.group { padding: 18px 18px 14px; border-radius: 18px; background: var(--ink-2); border: 1px solid var(--line); }
+.group h4 span { color: var(--muted); letter-spacing: .08em; margin-left: 6px; }
+.group.eval h4 { color: var(--blue); } .group.exp h4 { color: var(--amber); } .group.champ h4 { color: var(--green); }
+.who { display: grid; grid-template-columns: auto 1fr auto 18px; align-items: baseline; gap: 10px; padding: 11px 14px; margin-bottom: 6px;
+  border-radius: 10px; border: 1px solid var(--line); background: rgba(255,255,255,.025); transition: border-color .2s, background .2s; }
+.who .n { font-size: 15.5px; font-weight: 800; }
+.who .note { font-size: 13px; color: var(--muted); }
+.who .t { grid-column: 3; font-size: 11.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.who .go { grid-column: 4; color: var(--blue); opacity: .5; transition: transform .2s, opacity .2s; }
+a.who:hover { border-color: var(--blue); background: rgba(41,181,232,.07); }
+a.who:hover .go { opacity: 1; transform: translateX(3px); }
+.who.static { border-style: dashed; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips span { font-size: 13px; padding: 6px 12px; border-radius: 99px; border: 1px solid rgba(111,223,168,.35); color: var(--text); }
+.comps { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin-top: 14px; font-size: 14px; }
+.comps dt { font-weight: 800; color: var(--star); }
+.comps dd { color: var(--muted); }
+
+/* pager */
+.pager { display: flex; justify-content: space-between; margin-top: auto; padding-top: 6px; }
+.pager a { font-size: 15px; font-weight: 700; padding: 11px 18px; border-radius: 99px; border: 1px solid var(--line-2); color: var(--text); }
+.pager a:hover { border-color: var(--blue); color: var(--blue); }
+.pager a:last-child:not(:first-child) { background: rgba(41,181,232,.12); border-color: rgba(41,181,232,.45); }
+
+@media (max-width: 1180px) {
+  .grid { grid-template-columns: 1fr 1fr; } .grid .col:last-child { grid-column: 1 / -1; }
+  .ovgrid { grid-template-columns: 1fr; }
+}
+@media (max-width: 820px) {
+  body { grid-template-columns: 1fr; overflow: auto; } .rail { height: auto; } main { height: auto; }
+  .grid { grid-template-columns: 1fr; } .page { padding: 32px 22px; }
+}
+@media print {
+  body { display: block; overflow: visible; } .rail, .pager { display: none; } main { height: auto; overflow: visible; }
+  .page { display: flex !important; min-height: 0; break-after: page; }
+}
+.card:has(.pop.on) { overflow: visible; position: relative; z-index: 15; }
+.src { color: var(--muted); font-weight: 400; font-size: 12.5px; }
+
+.intro { margin-top: 12px; font-size: 17px; line-height: 1.5; color: #D3DEE4; max-width: 1000px; }
+.hint2 { color: var(--muted); letter-spacing: .04em; text-transform: none; font-weight: 400; font-size: 13px; }
+.mgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.mc { display: flex; flex-direction: column; gap: 10px; position: relative; }
+.mh { position: relative; }
+.kpi.mt { font-size: 18px; font-weight: 900; color: var(--star); padding: 10px 14px; }
+.mf { font-size: 11.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.bms { display: flex; flex-wrap: wrap; gap: 6px; }
+.bm { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 99px; border: 1px solid rgba(255,178,91,.4); color: var(--amber); }
+.bm.tgt { border-color: rgba(111,223,168,.4); color: var(--green); }
+.mc .why { font-size: 14.5px; color: #D3DEE4; flex: 1; }
+.sf, .ask { padding: 11px 13px; border-radius: 10px; }
+.sf { background: rgba(41,181,232,.06); border: 1px solid rgba(41,181,232,.22); }
+.sf .k { color: var(--blue); } .sf p, .ask p { font-size: 13.5px !important; }
+.ask { border: 1px dashed var(--line-2); } .ask .k { color: var(--muted); } .ask p { color: var(--muted) !important; font-style: italic; }
+.fw { grid-template-columns: 26px 1fr 18px; align-items: start; row-gap: 3px; }
+.fw .ix { grid-row: 1 / 3; font-weight: 800; color: var(--star); font-size: 13px; padding-top: 2px; }
+.fw .n { grid-column: 2; } .fw .note { grid-column: 2; } .fw .go { grid-column: 3; grid-row: 1; }
+.dots li b { color: var(--text); }
+.mc:has(.pop.on) { z-index: 15; }
+@media (max-width: 1280px) { .mgrid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 820px) { .mgrid { grid-template-columns: 1fr; } }
+
+.sdr3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 18px; }
+.sdr2 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 18px; }
+.sdr2.po, .sdr2.pf { grid-template-columns: 1fr 1fr; }
+.objs { display: grid; gap: 10px; } .ob { padding: 14px 16px; } .ob .q { font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.tag { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 2px 9px; border-radius: 99px; margin: 0 0 8px; border: 1px solid var(--line-2); color: var(--muted); }
+h4 .tag { margin: 0 0 0 8px; vertical-align: middle; }
+.tag.g { color: var(--green); border-color: rgba(111,223,168,.4); } .tag.r { color: #FF8A8A; border-color: rgba(255,138,138,.4); }
+.tag.a { color: var(--amber); border-color: rgba(255,178,91,.4); } .tag.b { color: var(--blue); border-color: rgba(41,181,232,.4); }
+.dq .op { font-weight: 700; color: var(--text); font-style: italic; } .pc p, .dq li { color: #D3DEE4; }
+.src { display: block; margin-top: 10px; font-size: 12px; color: var(--muted); } .signal a { color: var(--blue); }
+@media (max-width: 1280px) { .sdr3, .sdr2 { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 820px) { .sdr3, .sdr2, .sdr2.po, .sdr2.pf { grid-template-columns: 1fr; } }
+</style></head>
 <body>
-
-  <!-- HEADER -->
-  <header class="page-header">
-    <div class="page-header-left">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="28" style="display:block;opacity:0.9;" alt="Snowflake">
-      <div>
-        <div class="page-title">SDR Cheat Sheet: Fashion Retail</div>
-        <div class="page-subtitle">Signal to Shelf Play · Quick Reference for Prospecting &amp; Discovery Calls</div>
-      </div>
-    </div>
-    <div class="internal-tag">Internal Use Only</div>
-  </header>
-
-  <!-- ROW 1: ICP QUICK SCAN -->
-  <div id="icp-scan" class="row cols-3">
-
-    <!-- Green Signals -->
-    <div class="block green-top">
-      <div class="section-label label-green">ICP Quick Scan</div>
-      <div class="block-title">Green Signals &middot; Call These</div>
-      <div class="signal-item"><span class="signal-dot dot-green"></span><span>&pound;300M+ revenue (ideal: &pound;1B+)</span></div>
-      <div class="signal-item"><span class="signal-dot dot-green"></span><span>Owned stores + e-commerce + wholesale, i.e. multi-channel trading complexity</span></div>
-      <div class="signal-item"><span class="signal-dot dot-green"></span><span>SAP, Oracle Retail, or a legacy merchandising ERP in place</span></div>
-      <div class="signal-item"><span class="signal-dot dot-green"></span><span>Has a planning tool (Blue Yonder, Oracle Retail, Anaplan) but it&rsquo;s not connected to POS/e-commerce data</span></div>
-      <div class="signal-item"><span class="signal-dot dot-green"></span><span>Active digital / AI transformation initiative</span></div>
-      <div class="signal-item"><span class="signal-dot dot-green"></span><span>Seasonal, trend-driven product range (2+ seasons/year, or fast-fashion cadence)</span></div>
-      <div class="signal-item"><span class="signal-dot dot-green"></span><span>EMEA footprint subject to CSRD, ESPR, or upcoming Digital Product Passport requirements</span></div>
-      <div class="signal-item"><span class="signal-dot dot-green"></span><span>Sub-industry: Athletic/Sportswear, Luxury, Fast Fashion, Department/High Street, Pure-Play E-com</span></div>
-    </div>
-
-    <!-- Red Flags -->
-    <div class="block red-top">
-      <div class="section-label label-red">ICP Quick Scan</div>
-      <div class="block-title">Red Flags &middot; Deprioritise</div>
-      <div class="signal-item"><span class="signal-dot dot-red"></span><span>Revenue &lt;&pound;100M with a single, static, non-seasonal product line</span></div>
-      <div class="signal-item"><span class="signal-dot dot-red"></span><span>No buying/planning function, purely reorder-driven basics business</span></div>
-      <div class="signal-item"><span class="signal-dot dot-red"></span><span>Franchise-only model with no direct inventory or trading ownership</span></div>
-      <div class="signal-item"><span class="signal-dot dot-red"></span><span>No cloud infrastructure or IT modernisation plans</span></div>
-      <div class="signal-item"><span class="signal-dot dot-red"></span><span>Pure wholesale/B2B distribution with no consumer-facing retail or e-commerce</span></div>
-    </div>
-
-    <!-- Trigger Events -->
-    <div class="block amber-top">
-      <div class="section-label label-amber">ICP Quick Scan</div>
-      <div class="block-title">Trigger Events &middot; Reach Out Now</div>
-      <div class="signal-item"><span class="signal-dot dot-amber"></span><span>New CIO, CTO, or Data Director hired</span></div>
-      <div class="signal-item"><span class="signal-dot dot-amber"></span><span>New e-commerce platform migration announced or underway</span></div>
-      <div class="signal-item"><span class="signal-dot dot-amber"></span><span>Earnings call mentions markdown pressure, terminal stock, or margin compression</span></div>
-      <div class="signal-item"><span class="signal-dot dot-amber"></span><span>New Commercial Director or Merchandising Director appointed</span></div>
-      <div class="signal-item"><span class="signal-dot dot-amber"></span><span>CSRD reporting deadline approaching, or ESPR/DPP programme kicking off</span></div>
-      <div class="signal-item"><span class="signal-dot dot-amber"></span><span>AI / trend-sensing programme publicly announced</span></div>
-      <div class="signal-item"><span class="signal-dot dot-amber"></span><span>Store estate restructuring or channel-mix shift announced, forcing a re-look at inventory allocation</span></div>
-      <div class="signal-item"><span class="signal-dot dot-amber"></span><span>New seasonal collection launch under a compressed buying window, a trend-sensing stress test</span></div>
-    </div>
-
-  </div>
-
-  <!-- QUALIFICATION NOTE -->
-  <div style="background:rgba(17,86,127,0.06);border:1.5px solid rgba(17,86,127,0.3);border-radius:10px;padding:0.65rem 1rem;margin-bottom:0.8rem;display:flex;align-items:flex-start;gap:0.6rem;">
-    <span style="font-size:0.7rem;color:var(--sf-mid);font-weight:700;white-space:nowrap;">&#9650; Entry point:</span>
-    <p style="font-size:0.72rem;color:var(--sf-mid);margin:0;line-height:1.5;">Target <strong>Commercial Director, CIO/CTO, Merchandising Director, or Buying Director</strong> as the primary sponsor depending on where the pain is owned. The &ldquo;bring capability to the data&rdquo; platform pitch resonates at C-suite level, while <strong>Merchandising Director and Buying Director</strong> often supply the operational urgency and numbers that move the deal. Use Ecommerce Director primarily for qualification and discovery.</p>
-  </div>
-  <div id="pitch" class="row cols-3">
-
-    <!-- Commercial Director pitch -->
-    <div>
-      <div class="section-label label-purple" style="margin-bottom:0.35rem;">The 30-Second Pitch</div>
-      <div class="pitch-box">
-        <div class="block-title" style="margin-bottom:0.4rem;">For Commercial Director / Chief Commercial Officer</div>
-        <p class="pitch-text"><strong>You shouldn&rsquo;t find out a style is dying on the shelf the same week you're forced into a deep markdown.</strong> Snowflake connects your store, e-commerce, and planning data on one governed platform, so AI flags weak sell-through weeks before the trading meeting. <strong>Tapestry did this and processes 4B+ rows daily to pinpoint markdown candidates at the product level.</strong></p>
-      </div>
-    </div>
-
-    <!-- CIO / CTO pitch -->
-    <div>
-      <div class="section-label label-blue" style="margin-bottom:0.35rem;">The 30-Second Pitch</div>
-      <div class="pitch-box">
-        <div class="block-title" style="margin-bottom:0.4rem;">For CIO / CTO / VP Data</div>
-        <p class="pitch-text"><strong>Most fashion trend-sensing pilots fail in production, not because the algorithm is wrong, but because the data is fragmented and ungoverned.</strong> Snowflake connects your planning tool, PLM, e-commerce, and store POS into a single governed semantic layer. Sell-through, OTB, markdown depth, all <strong>defined once, trusted everywhere.</strong> That&rsquo;s what makes AI actually reach production.</p>
-      </div>
-    </div>
-
-    <!-- Merchandising Director pitch -->
-    <div>
-      <div class="section-label label-teal" style="margin-bottom:0.35rem;">The 30-Second Pitch</div>
-      <div class="pitch-box">
-        <div class="block-title" style="margin-bottom:0.4rem;">For Merchandising Director <span style="font-size:0.62rem;font-weight:500;color:var(--text-light);">(primary sponsor when trading pain is owned in merchandising)</span></div>
-        <p class="pitch-text"><strong>Your merchandisers rebuild the WSSI by hand every week, and by the time it's ready the sell-through it describes is already stale.</strong> Snowflake connects your planning tool and POS so the WSSI is a live view and Cortex AI reforecasts OTB against actual sell-through. One trading view everyone trusts. <strong>WSSI and trading pack prep drops from days to seconds of self-service.</strong> <em style="font-size:0.75rem;color:var(--text-light);">Use this to build the case to your Commercial Director.</em></p>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- ROW 3: DISCOVERY QUESTIONS -->
-  <div id="discovery" class="row cols-5" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr;">
-
-    <!-- Commercial Director -->
-    <div class="block purple-top">
-      <div class="section-label label-purple">Discovery Questions</div>
-      <div class="block-title">Commercial Director</div>
-      <div class="dq-item"><em>Opener:</em> "You want to markdown early and shallow instead of late and deep. What&rsquo;s stopping you today: the data, the tooling, or the timing?"</div>
-      <div class="dq-item">"How many systems does your team reconcile before making a markdown or chase decision today?"</div>
-      <div class="dq-item">"How would you describe your confidence in the AI/trend-sensing investments you've made so far?"</div>
-    </div>
-
-    <!-- Merchandising Director -->
-    <div class="block blue-top">
-      <div class="section-label label-blue">Discovery Questions</div>
-      <div class="block-title">Merchandising Director</div>
-      <div class="dq-item"><em>Opener:</em> "How long does it take your team to build the WSSI each week, and how much of that is manual export and reconciliation?"</div>
-      <div class="dq-item">"When sell-through shifts mid-season, how quickly does that update reach buying and the trading meeting?"</div>
-      <div class="dq-item">"How accurate is your in-season reforecast today, and what does closing that gap mean for terminal stock?"</div>
-    </div>
-
-    <!-- CIO / CTO -->
-    <div class="block teal-top">
-      <div class="section-label label-teal">Discovery Questions</div>
-      <div class="block-title">CIO / CTO / VP Data</div>
-      <div class="dq-item"><em>Opener:</em> "You want a semantic layer for AI to work on. Where does your trading data live today, and is it connected?"</div>
-      <div class="dq-item">"If your Commercial Director asks a sell-through question, how long before they get a trusted answer from your data team?"</div>
-      <div class="dq-item">"Do your buying, planning, and finance teams work from the same definition of 'sell-through' and 'markdown depth', or do they argue about numbers in the trading meeting?"</div>
-    </div>
-
-    <!-- Buying Director -->
-    <div class="block amber-top">
-      <div class="section-label label-amber">Discovery Questions</div>
-      <div class="block-title">Buying Director</div>
-      <div class="dq-item"><em>Opener:</em> "When a style is outperforming plan, how long does it take to place a chase order with a vendor who can actually deliver?"</div>
-      <div class="dq-item">"How many of your vendors can you see real-time performance data for today: OTIF, quality, compliance?"</div>
-      <div class="dq-item">"What&rsquo;s your vendor analytics stack, and can you combine it with sustainability and compliance data?"</div>
-    </div>
-
-    <!-- Ecommerce Director -->
-    <div class="block teal-top">
-      <div class="section-label label-teal">Discovery Questions</div>
-      <div class="block-title">Ecommerce Director</div>
-      <div class="dq-item"><em>Opener:</em> "Your site search and browse data probably shows a trend shift before store POS does. How fast does that signal reach buying today?"</div>
-      <div class="dq-item">"If you migrated e-commerce platforms tomorrow, would you lose years of customer behavioural history, or does it live independently?"</div>
-      <div class="dq-item">"Can you see cross-channel inventory (store, warehouse, online) in one place, or do you find out about a stock-out after the customer does?"</div>
-    </div>
-
-  </div>
-
-  <!-- ROW 4: PAIN SIGNALS + OBJECTION HANDLING -->
-  <div id="pain-objections" class="row cols-2">
-
-    <!-- Pain Signals -->
-    <div class="block red-top">
-      <div class="section-label label-red">Pain Signals</div>
-      <div class="block-title">If You Hear This, Lean In</div>
-      <div class="pain-quote">"Our merchandisers spend half the week building the WSSI instead of trading off it."</div>
-      <div class="pain-quote">"Our OTB is locked six months out and we have zero live signal to reforecast against."</div>
-      <div class="pain-quote">"Our trading meeting starts with 30 minutes of arguing about whose sell-through numbers are right."</div>
-      <div class="pain-quote">"We always find out a style is dying on the shelf right before we're forced into a deep markdown."</div>
-      <div class="pain-quote">"We've tried AI for trend-sensing but it never makes it to production."</div>
-      <div class="pain-quote">"Our merchandisers spend most of their time in Excel, not in our planning tool."</div>
-      <div class="pain-quote">"Terminal stock eats our margin every season and we never see it coming early enough to act."</div>
-      <div class="pain-quote">"We have great site behavioural data, we just can't connect it to our buying and planning."</div>
-      <div class="pain-quote">"CSRD and the coming Digital Product Passport mandate are a data problem we're not ready for."</div>
-    </div>
-
-    <!-- Objection Handling -->
-    <div class="block purple-top">
-      <div class="section-label label-purple">Objection Handling</div>
-      <div class="block-title">Common Objections &amp; Responses</div>
-
-      <div class="obj-row">
-        <div class="obj-q">"We're already committed to [Blue Yonder / Oracle Retail / Anaplan] for planning."</div>
-        <div class="obj-a">Snowflake <strong>connects to</strong> your planning tool, not replaces it. Your planner keeps running your plan. Snowflake connects it to POS, e-commerce, and PLM data the planning tool can&rsquo;t reach on its own.</div>
-      </div>
-
-      <div class="obj-row">
-        <div class="obj-q">"IT won't support another platform to integrate and maintain."</div>
-        <div class="obj-a"><strong>Zero-copy means no new pipelines</strong> for IT to build or maintain. Your systems stay exactly where they are.</div>
-      </div>
-
-      <div class="obj-row">
-        <div class="obj-q">"We already have a data warehouse / data lake."</div>
-        <div class="obj-a">Snowflake likely works alongside it. The question is whether your buying, planning, and e-commerce data <strong>actually trust</strong> what's in it.</div>
-      </div>
-
-      <div class="obj-row">
-        <div class="obj-q">"We're not ready for AI yet."</div>
-        <div class="obj-a">That's exactly why we start with the <strong>data foundation</strong>. Most aren't. The fragmentation between planning and store/e-commerce systems is the reason trend-sensing AI hasn't worked yet.</div>
-      </div>
-
-      <div class="obj-row">
-        <div class="obj-q">"Budget is tight, this isn't a priority right now."</div>
-        <div class="obj-a">Forrester found <strong>&lt;6 month payback</strong>. Terminal stock and markdown depth alone erode gross margin every season. Even a few points of full-price sell-through recovered is tens of millions.</div>
-      </div>
-
-      <div class="obj-row">
-        <div class="obj-q">"We're evaluating alternatives that do everything in one platform."</div>
-        <div class="obj-a">A closed platform reaches a ceiling. It can&rsquo;t ingest your POS, e-commerce, or partner signals. Snowflake <strong>connects, extends, then lets you rationalise</strong> what you no longer need, on your timetable.</div>
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- ROW 5: PROOF POINTS -->
-  <div id="proof" class="row cols-3">
-
-    <div class="block blue-top">
-      <div class="section-label label-blue">Proof Points</div>
-      <div class="block-title">Luxury &amp; House of Brands</div>
-      <div class="proof-row">
-        <span class="proof-tag">Tapestry</span>
-        <span>4B+ rows processed daily from 100+ sources spanning supply chain, product, and customer data. Product-level analytics pinpoint markdown candidates and surface multi-channel customers.</span>
-      </div>
-    </div>
-
-    <div class="block purple-top">
-      <div class="section-label label-purple">Proof Points</div>
-      <div class="block-title">Athletic &amp; Fast Fashion</div>
-      <div class="proof-row">
-        <span class="proof-tag">Under Armour / Urban Outfitters</span>
-        <span>Unified demand and supply chain data supporting faster, more informed buying and planning decisions. Under Armour improved data-driven decision speed; Urban Outfitters doubled data sources ingested at lower cost.</span>
-      </div>
-    </div>
-
-    <div class="block green-top">
-      <div class="section-label label-green">Proof Points</div>
-      <div class="block-title">ROI Benchmark</div>
-      <div class="proof-row">
-        <span class="proof-tag">Forrester TEI 2024</span>
-        <span><strong style="color:var(--green);">354% ROI</strong> over 3 years. &lt;6 month average payback. $17.4M 3-year NPV on a composite Snowflake supply chain deployment.</span>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- INTERNAL ONLY REFERENCE -->
-  <div style="margin-top:0.6rem;background:rgba(217,119,6,0.05);border:1px solid rgba(217,119,6,0.2);border-radius:8px;padding:0.45rem 0.8rem;display:flex;align-items:flex-start;gap:0.5rem;">
-    <span style="font-size:0.6rem;font-weight:700;color:#D97706;white-space:nowrap;text-transform:uppercase;letter-spacing:0.06em;">&#9888; Internal ref only</span>
-    <p style="font-size:0.68rem;color:var(--text-light);margin:0;line-height:1.4;">River Island: unified retail data foundation on Snowflake's Retail Data Cloud supporting faster, more accurate trading decisions. <strong>Public case study &mdash; safe to share externally, but confirm current messaging with AE before customer use.</strong></p>
-  </div>
-
-  <!-- FOOTER -->
-  <footer class="page-footer">
-    <p>Snowflake Fashion Retail SDR Cheat Sheet · Internal Use Only &middot; Not For Customer Distribution</p>
-    <p>© 2026 Snowflake Inc. All Rights Reserved</p>
-  </footer>
-
-</body>
-</html>
+<aside class="rail">
+  <img class="logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAtAAAACoCAYAAADJudkZAABlMklEQVR42u2dd5gsVdH/PxP2XnLOoCACIogowUAUDAQJghLMoIgCiun1VTCL4TWLCmZAMZCDCAhIEiUaUAFBCUrOOd27O3N+f1TVb8423T09M90zs3fr+zz93L27M92nT6jzrToVaiEEZilqetnP1hEh+nlUbapFbQFo43A4HA6Hw+EYCzRn4TvXlaC2cohyE5gaYpsa2pZ2RpviNjscDofD4XA4RojaLLNA1+lYc5cAVgFWBJYB7gDuB25OENsqSWvS0rwSsBywurbzTm3THdHna7hF2uFwOBwOh2NkmC0WaCOqbWAd4ABgJ2CtxOcmgQuB3wDf1/9XRaJjMr8d8CZt0zKJzz0GnAacoO0Kie86HA6Hw+FwOIZJLGeBBdr8m2vA54APAotGfw8Jkm34B3AQcEkFJNoI8PLAd4C9En/PatOZSv5vo3rruMPhcDgcDodjFhJoI6AN4FfAG/T/U0pi6ynfMd/oJvC0EtZjSiSsRp7XBU4Bnh+1qZFCmoM+19p7M7Ab8HfcEu1wOBwOh8PhBLpkGMH8HvCeHJJKBpFuAE8Br0VcOwYlrEbYl9D7vQhxE2kWbNOUfvYGYGvgXtwn2uFwOBwOh2PoBHNBRUOJ5Rsj8lyUqNr3W8DCwNHAknRcQQZBG/hiRJ4nerhnU7/zPOBwn74Oh8PhcDgcTqDLglllFwU+qj/3Q3wbSlhXR1w5wgB9ZtbrDYD99Od+gjgn9Lt7AZvqz3Wfyg6Hw+FwOBxOoAd9rwC8FNgwIsP9wHI0vx2Yi1ilawP09RsjEtyvNdtcNg6IFAaHw+FwOBwOhxPogbEng1cWtCIm6yKuE/0S1ilgDrBFCaTXvvsyxJ+6hVuhHQ6Hw+FwOJxAl0Aw16cc66wR8HUGbM8ywAtK6Hv77krACj6NHQ6Hw+FwOJxADwpLNzdR0v2MQK+SIMS9EuiFgaX7vEfyfm3E+rxCCfdzOBwOh8PhcMxyAm1olHy/qRKIeFl5Ay2gccKnscPhcDgcDocT6HFFbUzukSTSDofD4XA4HA4n0A6Hw+FwOBwOhxNoh8PhcDgcDofDCbTD4XA4HA6Hw+EE2uFwOBwOh8PhcDiBdjgcDofD4XA4BkFzyM+r0ansF6LfBTq5mx3joVjVmZ7hw3JPt717HA6Hw+FwOIEeHnFu5RBl+0wbT802SuJc0zHKIsoNHR8n0g6Hw+FwOJxAV4RGRJybwNZICepFlIg9AfwTuDoi1w3cIj1M1OhYmEEqLm4KLK//bwH3A38FbvcxcjgcDofD4QS6OpjVeRngA8AuwIYpn3sK+DPwXeBUYD4d/2y3dFZLnG2MAvBy4D3AtsBqKZ+/A/gD8FUdL3Pz8BMDh8PhcDgcswZVBhE2lfzuAFwOfFLJcxspiR1fCwNbAMcBFwHb0/G3bVB+9T5HxxWjBawJ/BS4FHibkudWyjitCuyln/s4HXcbHx+Hw+FwOBxOoEsgZ1PAvsBZwNp0/GrrSq7jy4hcC7GCng38Ang+HeuoE+nyxtyszksAn0BcM94WjYMpLslxauvfJ4DPA0cBC9HxnXY4HA5HPmqRHE5eg8jRusptl8fVjZn3r6NSAm3kbAvgxxEpa+Q8r6Z/j/1q3wRcBnwOWC4i0p56r38B0KBj2TdL8mFKpFvRZ+pdBDSRgvSJ6LsOh8PhSJedTTpZp9oZV+iDoMUxLK3oPg3v9lIQB87H/et73ixH2T7QJhwWBr5PJ6tGo8fJik7UJRHXj72BLwLH6u/dP7p3zdks/C8FPo241hgRbvQ4Rka0p4CPAmcAV+CBhQ6Hw5Hcz1pMTwG6KBIXtKjule2IAN+jV7yfFtlzAdYD1gEeRwLz7yh4D0d+/7aAZYENlJPcDPwjItHev7NYKy77fgHYA1g/QXb71fpaiAvI0cC5wJa4f3Q/ffgsJEjzj0qeTag3++xDs3o0ESu0CxKHw+Ho7IW1yKDwIuBQ4FfIyeqtSnL/gmSg+ivwN+AG4BvIqWA3K6fJ3GWRGJZrkSD88/Tn90f38H2yvz0uIAa8vwEXAqcBfwdOB56Nn4rPajRLnmzm47xPSWQqdjsAyQ6xFfAz4P+Afye0fMd0xaiF+CgfqMJ72ej3jRKf82okwPB2J9IOh8MNF/9/P9oF+DCSFnThLt8LiIXzg8DqiJtdXl0EO108Qj8bG6yWBL6FpIn9se+RfY/h9qr0QOekIOi4LgnsiGQR831vFhOtshCAFYDNIvJbVjvNDaEJvAPx3/0ksHgkGGa7Jpj0c94Vca34upLnqUg4lKmhzwFe5WPgcDh8T6WlBPg0xFK5lZJny2bU7iJP5wG7AzuR7QJpcv6lSp6n6Fi942JYH0OCvj1Opfd9rQYcpL+bjPq3rv29NfAa3ArtBLqkSYcStbkVaoXmkrAcEmB4CXLEQiRs6rNwwcd98wLg1yrAX0gnALOKvN9T+vwNnEA7HI5ZDCO12yCpW3dlenCgZTOqF5DlAC/Rf0POfvu8lN+ZHK4jBq11XTb3jLZymZfk7J1txELtfesEujSsQrVHGUmyuCFyxHIWkgLPguVmSwSy9cV8YEU6RU52Zri+4i5AHA7HbCbPLWAT4BSk2u4U/aena5Nv8LA9tptRZBFgaR+enjkGyKnBCmT7kNeRE3CHE+jS8PQQJ3nsrrAD4uR/OOLc32J2+CQ9qv8eiASk/A/iUtGKhPcwMMeXk8PhmKWEyyyWvwCWouNu2A/MJeCGAvt0KHg/R3/j0A3uV+4EutTJdgvD9bWK/aPnAgcjx2fvp+NKUluAx2574LdIIMkqiNVjmDlA7Tk3uLB2OByzlEAH5PRvHTqpQbMQV+ONU9zZNYFk6DiJ6Zk8HOM59o5Ziip8Yh8ArkHS2A3TuT5Odr4yEoFchaIwbgv385EmXKtoTLsR+Rbii26bg8PhcMwGWK2DTZDsU3muF7Y/5cXpBJWl+wGP4NkdHI5ZQaDN6vkU4gP2AgbLA90vqYzT3s0Gv9xYKA8bltbnn0huTCfQDodjNsH8Yz9Ax5UjS07b/vQf4CrgSeAhpDBHA8n0cBUSw9Jy8uxwzB4CTbTYj0HSvyzNaEpezqaAtjLTBfZDoJvAV+gEbvpxo8PhmA2w07dnAbuRfeJqe+C9wNeQoif3Fri3GyMcjjEXAGUTqgbiB/1pvf+ka9ELJCaVPJ+LZEFxge9wOGYTzDC0OZLtIs1YZDLxdiS93VeVPDcQX+em/mz/WsYOl6UOxywj0DGJPkKvOXTcDBwzHwEJfpkArgfeScfq7IqSw+GYbQT6dSr78ioGfhW4TvdDCwycpBNIGAcUuhx1OGYpgTayXAPeixQ7sWdNuXCY0bCiKU3gd0gVJivf7QqSw+GYTbBUdeuQ7qZoLh2PIunt/ETW4RhfZTgr3/dQCTSRgKghrhzbI5k5mvq7KR+vGbdRoOP3IPBRJO/2bbjrhsPhmH2o6z63PFIVF7LdN85DslMFJ88Ox9igQSd+LCTWZ/y3oRNoEg05D0nz8z/APXSCFz3gbLwRVzIECX55CRI0aNZoJ88Oh2O2wcjy6kja1DT/Z9sDrxnCfutwOIorvxYAbBx0LrAQndoh9rda3rqtekFbue0GMA/4uhKwH9JJe9dyEjZ2MD9nm2i/B7ZF8pzeRKc0uFtTHA7HbCbQKyAGoVYKgbb/35j4v8PhGA3i6tWvAT6FuKPej6SUvB8x+H4a2I4uaYKHVXTDhEsDuBV4N3A08Fl9CftM3YXMyGEKTxPJV/p5JC1hnNPbTw4cDodDrFZZRgjbrG+NfudwOEYDszqvB3wR2DX6292I0bAJvEovgDOAjwP/IMVddZhHSmbVNCJ9uTL8tyJloM2q2XJBMzLibEL/CeBLyGnBTyLy3MZPCxwOh8P2qMW6/P0R3ZydQDsco4Mps9sClyp5fgT4pP7uxcCL9N9tgcP07zsjJ/A7kWKJHoVPVogIWR34OeIf/SkkQM0a6ERtOGjTsTrXgJOAlwKHAvdFv/fxcDgcjnSinIVJpDqvw+EYDczyvCFwMrAkcDGwFXLCfqEquQ/ovxcqH91KyfNSwHHAFiSqa48yqCEOUHtcGf8miLtAiF7atfbqBL/5OTeQErI7AnsA1+InAg6HwzEoek6N5XA4Suc6E8CPlAz/BHHR+HvOdyb0769E3I0Xjf79/wHDzTF4udg/+hZgX33BzwNbR59x/+hy+9z8nO8A/g8J7JwfCXz3c3Y4HA6HwzFTYYkq3gxsCvwLeD9iPFwLeAWd3OwByRJ3MxL429DPvVe/+wLg7cCRdt/mmLxkbA2tAX9Ayp7ui5jSV08QP0f/xNkm1dPA94Ev0/HRMz9ntzg7HA6Hw+GYqTDX0wbwRv3dV5AYrxrwcsQqncTTwOHAIYiR8UmkIOAJykmP0s/Uxi0vZTtBko9C/Fa+CDzG9BQkjt4UFOvXBnAasBnwQSXP7uc82CJNuxwL/jg7HI7xXkuzZa1avuJGtJ+7zBTuszJiaX4YOJdOCt5J5TzzgIuA85HAwYWQYnF70Ul8cQGSlWwTOgbd2rgmdo8zQjyCpBF5KXAK05Ngu6W0O+LMJ/8Adgd2A/6K+zn3KxQaiI9UWhUju6zkeXMEgqOu7avr8xsD3MfetRnNF+uDZtQPtQVsjOvR+NVTxpfEPKiPqJ3NaCy8UEf2PI77qdZj/zYjYhJfRfu8kXOPxohkxCj6fyJjLYVIZlmf1kpaG4YFuY+tT80AGfOnUY1z1t6YXFNVK08o4Z0D/BlxWW0k5HwLeD3iF70pEkzYQjJv2Pp9QPlTANaw7zcLNqJBx4oZN6xqi3DsH/1PfcnXIAGHL4k+Myz/6HpJAzosJcSE84PAFxCXjScZjp9zLZofMekwBWgmnSQ0IgEVmF7ByITzQtFG8LRqt1Mp/VG1spLs23bi90XHLL5HK2N+ZT2/xsxzBUoq5qFLf6XNg2G+v43nVMoYujI8vT/SZE239WD9OJUjX1F52s0C9kjOfRbEsUuTI91kT9pnan1yjLS1MbWArg971zqwJbCxksSLkdPlOtXts0mZWWScstZUo8u+MgjfWk7/fVjbN5HShsV1z140as+90c9TSLKLGrBavPF3s8K0Uh4WEpOyUWDD6RexfzSICf484EDER2XVBGGsUpN5fIB3gE5Ko4UrXFDthPb5IyQg89ZorKokcXnzJikoG2NMtGqR8GlFAmN1Vd5eCCyri3NF/dn8rR4CbgPuBK4GztbFOFXxe1t710fyq6+gm/dvkOOpLGGaNmZ1YE3VyNcBltHfraDtvk8//5Bq5lcjR1zthFAcZyJdSyiT1valdHw3RY7/VkRSH7Wj77XopD76J3AFEgTdzlC8qiCFiyBuWGsgwS+/ReJHagm5M1uJsylCWyIZhpZGgoMOV1mcRabs93OB/YDnpRhPTFHeKEEAksaWJYFv6zxppjwvqJz4sa6pKgnPMMhcLSFHJpDCFRsDa6v8WC7RDzU18twD3I7UiLhW98peOYatjTWBg4DnaHuuAb6jz1lQSLTt5esB30Xixgx3AR9A/HbLnFNxaetYZibHeVlgeaYbDWuqcN6BVPz7C/AnHZNWhQaImK+mGTHnAGdpfz4v4ilnJvifYXn7fbOL8GkhieJ30A1lMxUqj+hkvxLxDflXRMirImftxKQ5Asnp9xEl0wslrG1VEOh/DbgxPYAUjXlRpDWWqWi0IqXoIlUwLk+QmdYQFnRLNbodlWyuq+OzMJIa5mqkfOaNBa1BoxJM1lfbIicfuwMr6bt1w8ujnx9SYnOMLtSnE88pkzzvjWSxWST62/uBjyEBFPUEEaxH7zoXOcbaEthTBcViBZ//mMqEE1QmXBC9W5VyYZD+ijfkdXScdwA2VxLdi0L+uG5aJ+pYn8P0oN2yNgSTzasBv9SxMnxUyeH/RO83W8mzzetvAAcnxvKVwLt0I0+SKVsfz0JcBjfpcY9IYi6SAaAbDtTP/X4GkuiYOKOKyqv12lGV74V6uN98tRb+Tq9zdazivb2dIwNfBpyuZN3wBr1eo+t0JisqJlOngA10T1kt8T4rA8crUb2wpPetM90TYWWVl9siGdOW63Gcg+6N1yIV/y5WTknJ+8bTeo+FmH4aHmO9RLu+rEanRqTEmQJ8w///XAjPuOr6by2EcGAI4V8hH/eHEH4UQnhudI9Gyn3LvprRzxuGEE6J2jQVQmiHctDW654QwpJR3/TaXuuTo/S+k6E8xPf6VwjhTVEbG322t5erHv28eAjh/SGEG7q0+d4QwhEhhOVS7jGqqxa1Y6kQwvtCCH/JmBPztd+n9Golrin9eyvx3etCCO/U+yefOUj/10IIa4UQHtTnzNPnz4/asFU0J+JnrhRC+GAI4ZqMd52MrqnE/7Pm8dUhhP8JIayQMU/GYYwJIbwihHBiCOGBlHeYShnn+LL3T5M1fw8hfCyEsFqJcrEWXaekjLO1401j1N+juOy9P5Iyh+fp736d6M/kWjoz0b9Z11RB+Zx3WZtuSsiFIvvJfhn7STuaw1tWuC/H91wnhPANfY8kWgXW0vyM/rxD982XJp5bS1kbc0IIV+j3no7uH497t7Vhf1utwJ57rH52Yojzuxnxnru0HfMT7bP/X1DC2Cdl5pYhhGNCCLf1Mc6xTE1iXgjhyhDC20MIi5UgN63Nz9P7X6P8xObNXtqWx0IIrwwhvCqEcLu+w1mJ926GEC7V+2xm98964PIhhDMSG8lkBkEwPBJCOEwbaJ3eGMJmGBPpXUMIV5VMpG1BHzngYNr3dii5bXaPh0IIhyb6vz6EjSrujz2UOMVCZqrLvLkphLD1EBWvIkrA7kp0kySy3eeYtSPhYbg2hPDmksiVrYF3ZwhT6+8fRJuMCf33hhBuTQjAXt+1HV1JQnmLKlSNMRjj+NmvVCEZUuZrP+Mcv3+sNN0dQvh0CGGJDOWlnzm6ZgjhCX1OOzF2QTe2ubOUPNvmuEwI4XHtn1bKWnwshLB2Yl5Y/74whPBkSv9WCZMNe6UYiMaRQCeJ85Hap2WupamU9zouhLBJSjsaEblrZfRHSw1+y3dRUsaZQDci8nxHYu4kiWxbDVmLl2D4I4Tw6hDCbyuQmWnjdbXuG82EYtuPLFg8MuhtFf1+n+h5RtjfGP3ue9GzX6Ay954QwrJ2/3qGz9apSATiZOTXadGxdjUik3YLWAL4hLoMvIXpqdOqig6P/aPremxj6dnuYXqWiX7dRmpImpPvDOi+YQGRZ+tRRWOAIxULkLD3O0r9NeN0f1R4RFVLuIRsrO91ApJ20HyjmtH4p82bKfVVO51OmcxR5Pm2d1kGKS1/MvD8hI9Xk/5T8Vh/xX22nj7rNOC5Cfebft2bVqUTyJh29LZZdET6UnU1+I4eV7cit6Je3zX2JW5GbWqpf+631KXo5dE6GGZAbRzAuQpwrB4N7xC1M/DMTCO9PqMW9Z3dd0XgM+q2tFfUz40+3wNdM4ukuA7YMe1qwGszfHMXdNj7vk5dxpKuctZfi6lrGSl74Jp04lSGNU8tNuS5Q37uIC5uc3XP/wtwgPZpUvYPspZsr4jX6F7KMQ5XP9sW0zNsrJLDN+rqfrfuDOjjLLeNlrpFnqnv2m3PDHQKpPUrM1dX98Nzge2i8ShrnOsJLmllt78FXKIuIu2Mva0bP2woJzpL/39g9Pu/q4vXlyNu8iukcMrX1W3I5t9+KnPPUVfcOhCSgqUNfEl9ACfppJ0p0tFGiNbTDeq8iBS1qTaNTFwWfFI7fmMk68RkNBHaPXa+Cd9DkUChQf2IbMJ8SP1yevWBjRWGphLxVwDvpFM5p+q0dHFGltWAb6rf3vZRnzUKzhvz41pS58xykdIy7M1gfV0cb07Mp7IzvNSZHlm+K/BHYBemB8sOMseyfj+lY/QJnTsvYXrKo7IU3VriPVsqCy5C/LHjlEbDIM82X/dCglZiBb9O+emU4ve35zwHOE43ouUHVBYfzBlr22h2HVDhn6mwMd0jZz7bnHgwQxG9kU6xhTBEOVRHgo/HedxMXr5YZchhSOaCKuRIUmbWIsPRwcCliE9zHBzW7dlzMpTPmaAYTqlh83w1luTJEDNU/FENgL3ERMS+zvuqzHx7isysItYsaWh6mXLJb0YKcS9y0975x8oF90CKqrRU8fswEh/0aNRnRyBxJJ/XPt9eiXcLCdb8/3OnnlgUW6om2Y81rBax9TYSjHQR8AO1Qk1RfW7CVtSOO/RdNlfraINnZlXII6mm8f1QCXmjBKFm5PAvStRa0cJod/neVPRutwLvQIJhLh4ScY4DRRYC3gdchkT6LhL1fa+Lykj0Gki+78Dw8tnWI43+IiRgaJKOtbyIMpPV560u42rPmFIr5alKLtv0b4nuhrnA93TTmxsJo1pBQdRKXKFgH5t8maNr6UhVzqse63okcw5TArsy03OjF1mzNpbJq0gfxAaGtm5Ef9SNoVcSbfLj30jgTdrpmo3nzvqubWZPfmgb7+cgAWyk9K8RgOvVAhUXkLK+ukFJQ02td22mp+mKr1Bw7WR9t63PqCNZXc6J2jlOiC2Sb1WjyUsT+3ptwLVUxDhlsnEKCfw9U/egyR72n5mmVJrl+bUqwxbrQiRbKl9vVeNfL0XSjCPNQbLHHKWGrV5kZihhnGMDTF3H+CI6J8P1HmRmXeXlF/Tn7yEWZZvXc5juZTERzeU3AT/V330dCXI03vD/G2HWoINLsA7FeX4bwP5IAuv/VQ2iVZCg9IuklfYqJBL4zXSsyI0MQhATcJDyje9meg7gQWEE6RTVnv8TDVwr47J3eUwnwYuAo6O/VZ2WrpGwbF2si2s1yknabuOxL51jqaqtAzZHn4u4kCwXCZ4im0BcxKIWCfX4nZLjGjKEowmUb6lGPFWyomlr7fnAeyh2HBavj3bCOhBXu2oXJNTxKdUBiJvMohWSaBvfxZFo9E9ExKXZw3vHbkfJK1Zcu20MtUhhWhs5Dt2jR2NFfCR5Jtkp2NpIJoQdZqClrYx5/hayT/dsfzufjrtbsh8nVZm9WxXNejR+yatWUIZmfbeuG/h8tXLdy/hlUKlFxOyzwM/ouGt0O1luJ/axvLUUG7i67bfNaC1/EznBDGptXZBgBiYjz4t2UYpNKb8OcWO6h+InKdb/q6jV931M9yCg4DjXCoxzUUNMPdo3zNC1ZY+GJpObn0dcNJZE0vseg7gvzo8If0vX/ypq/P0Fks3lJMQVb5q8iP31VlOrRVEto6g1wHxLvwy8TRtxUrSpVpUnNj6GD0jKp1NV83g9knYl7T0nEb/UryO5XePKSWXBCNIFavX8MHKssEbG5/+FWNGPpJNKr+oiNskUZxvq2L0uWqhlzRWbg0siqeK+y/T0MVUKpx8gqemmuizIZIrEexEL/A2qpN2G5HFdRd9jQzq5hNdM0YizhMTX9N7HUk2qpSIWybjsu+Ee4KbE59amkxMzaeGrZYyzbQg7q3B6Q0TQy1pj9UjumH/9VBcrWex+FL/3v5Ej/YdV0Nr9F9OxXp/pqf66PcesSYvrhjgX8YUv6s5l8+FYNUo0cizVb1YL0mxw4zBFZq4aTLpZMI9O9Gey7/6GnF4eqgaLVVMU+zYS+7NEl837ftL9UOuIG8m1apD4A+OXXi3eB76L5FaOU8rmzdOkYeVOxPL/ANML0CykCt+6wLNTlNlGF47RUqVpPmIZX1CURpOVO6kRYJEu8tv2sH+qfL25h/lkn1tJ+c+mBfbEEK2XuE2PaxvuVYXmaTVMTeg4r0Wnfkcv+0ZLyey5amw7LuojCrQzIKcndyJutG9X3vVbxK/+UV3LL1fj5lz9zveRuLp5yX2qFkIwwb2tauVV+CbGmxPa4E+oZZqCnTAo4g2qpp30fN1kn6OL+moVZtcnJtUw2rQCktNxQ51g9+tA36mC9cEhKB1p7VpRCf57dNMPFVkNjXgcg7inVDkn7P32VYLRTVDEQvxKVWQuoOOvmIflEX/B96ogrOUIQevbR1XbvpFix282Tz8HfJL+/Wvj7z2la+E05Fj5biXRIVpDKyFuApsi5eE3jchEtzZMRQrMe0pcaya75qg827ygchSfxl2uwvkS4L8801fWMFcND89Xxe81FC/s1I5I35uRANwiJDouknIhEgORnE82RvN1Hv2dcnOOjyPs/V6KuMikHefbmFwKbBXNt7xiKiAnp8smCLSdJrxZld7keLcjgryDyopG4pl1xNf64ZRnFn3f/dSalpzjIZpf2+hc7mcOmBz+JnKMXoRUxfvDjUgA16lq/Lkz57srIieC26qR60U9KP7294eUpKW1y8ZuOyVhWf0RB+Pe1kV+/VxJ2YQa38qezzsreV64IHm+TveZW3rYQ+P3PUP7vReZiRLm3yFFu25CXGifzlhXKyGBidvq+23K9EqEjQJ71DxVlC/oYV7H62trNUBswvR84YYHdB/4mlq909dnlKZkn0QqpCrQiu4/P4TwrRDCykPMH100tV69YKqpWk6e5UYP92iGYqnKhpGWLs57eGAI4eaUVEtVwNLY/LLiuWDp/ZbQVHLtLu81FaXbe3NKzthmNNa1qA+bKeO6dQjhwpS0Y2n98JEe+sHG7HMDjFO8Ln8QQti4j759QQjhJ1HO1VbBMT+wxDzJNhYnFsy3PhW998+jXNlpa3RCr6y1uIrm074lkTorr8/bmv5rix76wObVgVHqvKz3+vgsyQlt/fbtnDVgv/tgwVRxRWTzWzPmmY37PZpnvVvb632+b5Vp7OzzBxdMvRr3+V9DCHtHKdSS952Irqw9dLsQwm962H9aXVKmGV7TpT9GncbO5txbNBVjt3ebjPIcr9HjWNuetUgI4fcFZGYs01qaV3vnKDVqWprbZpc5vrnWhHgyhSfmjfP9IYSNepRvyfS+q4UQdgshvE3l6ds0je3qKbnhn3G/eLA+OQQCnbYQ7gwhfCCR769qYW8bbdrVy0D0ml+4SE7ltKsWhqtYvCqEcHFFhWm6zYnzovetVbjRvrLAfLc2nRltgrU+5kkj0b8fjkjmVAap+mMPfTAIgY4F4jkRkUvOyXqi8EQtZc7a9zaN8oXm5dI18vdYCGGDEki0ffewghuBteuPIYSXp7x3PaXQRpowTr7/UiGEL0f9WkRBuyva/OoFZc9KUQGYdsYmc4PK1qplyKhzP9dCCIuGEP6Tsa6tfx4LITyrR/kSK8Z2Tei/7+hCoO/Vca1Hild81Qac61URaPvsjlEO+27r2ObxuxKKR1KG9LKWrHbCNQX3ovYMJ9DWbwcUVAysHX/S/PC9kmf77K8yaghkKSiX6R5KzjjXCoxzLOs2CCGcVPC97W//0pzvvRoJ6gX6qes+Hwcr3MjwUkvFQXwr6/HQH9UkH/suV9WWrADCXiJEg/o+vk2Px25Rn6P/qN/kp9VHtGjalXZOm8KQxmJ99a08JzrirHosksfOj0RHgFW+987k+7bbe5+t7gl3Mz1XZbuPuWb9+HU9ZruDjq93SByBrpJzvFx2n9eRMt/bRX6Y9cScbEdtC5FbVjLYtY74hG+vx1/1nKNpS+u4mPpXNgfwX7RjvO3UPSzvKDBOlfhZdYO4jGem3mt3mSPJPjBfvYeRstrb6LF1nj+//W0lJONPo0Af2Pq4W48w0+aJuf6sgQTdVJ0BKW1ch+m+EdSF5lmkR+nbej1fj+V7cZfIyqJR1JWuPeD3hw3zeS4yJ219NNU1c7OES0ktRYYUXUsmL89GstZ8O2pL6OLiNFPdkKaQYNIjozmS5bYxqX18vrpD3Nyjm46N88HA3vrsiS4uG/ORtG9b63PjcWoVkJshZV+xwMJ/IDExb1HZVs95F/vb2jpH5/Qod9pMT9BgAY72c73IPh+TlBuGLPhqCfJmycFPoZOqJFBdSq9BhItF9/8aSXGyhW5Uz1HfnrWQgLvLkXRKrTF8j9jnaEklHZfq5K1HC2aYKbACEnhAhZu9zfetcuZ7iPzp3qVCo4ygxnhOn4f44Z/D9Eh2EybfHUI/2HWgEr5kjupekVS4PoLkKJ+fI1CtX7dSv8dWH3OuHikd348MAbWcjeAJYE9dp5MJ4jxIn8bpJn+vsuEsOkEwWX6mLZUVH6JYoKe939EZfWsEeo5uSsOW6SEa36r3FJurebmfrU2/oLzg5wUVNre+Tfd8wyYrv4bksr+F6anmwgBrKc7w9DiSGeXAlHFfEGAy4AAkD7HJsDyf5wnE7/h1SNxMP+R5E6T2R7e0eHUkSH4nJCHE/AR/G0QRbCX4xi90b7yyyzvZ3vF6YJ8+9w5LEWwZOOzndtFOtBf/N+L8HYY8MZNp0nZDcnB+hd7zDw6LPC+lm+I2dPKEJq8pJEDxJCRfc552N+x3iCflW9T6dhgSANZiuLmYSWy0p0SLqoq5Ztk+lumyoEHyRd7Rhfz0AwuYvA0JMPoIcgL0NBK891Ul0LWK1mJcJOiD+p6xMBwUrWhTOAoJoKznWKBsrn2CTnqqWh+C8FOqyGYJUpvXjyNBfyfRyfnZKrl/bYzv02ed2kUJq0fvsG6BzcD68hI6Vu5WhpK8Z7S2qyKzccGaCSToLk6xWeVzLXvATon5FPeV5c8/r8R5viDC5tHudNIs1rsQq4+pDLMc+mUHf8enO99TpbzGcAvdVMl/Jnim5ZmcNWPW/QuVPD5OvrU2S0Ga0H1mkZw1asrTjWoMOI/pJwtlK8K2Vv+DpO77bRcSbXLzC0gGl35I9EBkKs4telKFm3aRttigLKIL8k9IHulhlAUvSp6XRiJVLTXWHNJzfBoRWEI3z1fRqe44qoUaW9k2RyKRj2W6xX8YFqMsC9K1SI5pKhKM9l5LIKmTsshPUxWj0yoU0q1o/X0NycCyHnJ68b9IlHGo6Nk2zkeolalJ+cfJtmabyJFuTNKz1tYLkKPEXtwN7LubqhUiy5Jiz31MycG5dCLnq9qE44jxPZETqyxlzObZYohbCXR34zC5/dsupHY5Oqnd6hWtq6BK6aeQQlG3qAXp43TyfVchV2ysd0NOBdOUBBvf3yLuNQ1mX4XGXsZxMSSjT95Jjs3tz6hFcqJi7hAiI9TRSAalFjPfCl1XGXQgHctz3tqP3TZ2QSzPvWYwMrL9djrFcLLSYTaQzCmvVUXdMntUuX6sPfcj1vU/0D1jynKIJR2GyF/qUUfZkc29TE+3MwoN2Dbf1ZE0V3+g4wpRdVnwvE16cSVVW1DMLSP5vddEC2CYiH131wR+otrrqxmun3OWYLT5dxid4/QqCfQKdNKtZb3zI6oFV3kiE+dTfVpJx50VK4lG3C9HjkSrLMQTl359L5286nkFLt4eCctawfG0uTM3h6hZX+8fWVEmhzC/W5FV7u10Usq1czY2y1PfLaWTjdnROeTY+npvqrUCL4SUy/2sKkKLAxsjxQt+WZHMq0Wya/cCcvgoFgyrZdX73HtUmW/nzClLOfrZaC0No19t/zxGlbWZmp4xrux4mJLnVhcl1xSInyOnLY/3QZ7jQkufyXlebHDYLUGeh4Gk8eH6HLlp/GZvxCVlaFboZCXCO3Wji4/jRjm5rA1mLf0VUr5zGGXBk0JlCcRtYyt6qxRn318UsfC/mu45FstURmr6vEWQo7YrkTzLE4zGzznNqmAC8Xh6O4rqF3kW6GTbhiUsatHVrnhtBcTnuTUEQhGidzqEbPcMW0/b6BovYrG0+26OBA9myQQTxt+iePL9shWlBmL9fAfifw3pfssm+z6W8Zm0vr0O8bfOKu0N4kb2nAo2F5NvH9ONdh7PLFO9Cx2LZr3kudxGTm22zhh/m+N/QvL8B5xAZ/Wlnf6+P8e4YHP5eiQvdBVH+UXJ1ZeQQkmjNPgNSp6/QKdKal5lS9snf4GctD1Nf7nz65GhYtUceRCX0L5yBDIzHue71PDRypGJ1t6PDlvjTC6ME1UYNqJBDiOeaGYl3VsF4aeZ7tNXr7B/TFs7i47bRrPP+yyuJPpVVOsTXU+M3R6I9e9LdAoCjMLPObk4Ap1AiIMZXgnbe5Cjr6zFGBA/9xckSEjVykTVm7sJyxOUcA3LemOC8ELEnSlLSTIZtEsXS0wSHyD7pCAubftpyvdn76UPmkjxqM/kzHX7/TZI5oG84B4jjJMqt0mZ00ZwFqPjI1yWJdoI7LJ0SsTPYXqZ6gk6wVGrUK4rh82PN0YGgSycrmS+6QQ609iCkrPVMoiVyad5Op6PMJqy47GcPBgpesEMIdG2LqaALyKVLmMDShrM6m5FW9p9kue4WufBdPd7Pg45tRkFeU7KzUsiudnO4Vg7INnEimY/K41Axx33ZSWrt9KxYo5yctajTXdx7cg/IQFwcZXDWsnPtIDB0ylW0azI/cwn+tWU785hgRbm57wxkgLoBCWDo/RzjoWfzbOgGvhrkaOiqgmk3ftBppeSTSMFc1S4wZADEyp8d9vs/o/hH2WbsP5aDjm29ryqwIZo6+n55Pv32u8+MqQ5VkSBORxJ2VTPIf1zkSp3dGmvKQMnI0e6eWT7LZRbXbUREdgVM8i5/X8p/VxZiruRgTmRwpWlYMxXMjBTSNYoSJ0Rlb3pntrzBKQ626iU0bgttyoRrTP+ilFcFv0LyIncVJf92IJyj1XyXBtgHtt63QM5jUqTmUbOH9b9rzYGa8bk5jeQZBdpJw62ny2qcmZoxDSrscerBeQHKoBM8I6yM410TSH5/46lk3syJodlkWdLVbcl5bhd2H0Xo+MTXZY7R9w3K+smfQmSj3fUfs4wPcVXQwXwtsjx1fwhETpzH7iPTvncrL5sa98dEY3bKINYyyKwf0SOsodNJoy4/knJY5pgtr5dCwkKyUvnZvN4JzplbmspsqyGnB6dxej9JY08TqoRIIvM2zvvqRtCXlYSG9e7kDSg5PTrhoiPYBlyshZt7u/sopjY2n4n4iLQLkEOGWF6ORKAm2Zxsn44F8mROw5kYFyJXVAjy2YJspWcu4/QCXIddV+afPgB4lJSZ3z9oWvRmoktz80ChqZvICcD9QENAPa9Xch20TV58j0kJqc+BuNsbXoS8RfPMirUIoV+UarNOpRJoGPt7i7kaG4bFUKxJXiUbh3NiBRup0TxR0xPY1IboE/iVHVlkefk/RdBjl1fVcL9G9Fi+xByTHxwRCxG6eccE5mmLsp36Zz6fUTqhzWfbP5e3EUY2TgdiASdbcr0fJUzjUybsDwtY4MchhC0NG6nJ9qU7PNVET9octaxCfU3ZXwu9r0+cszGoa6y5a8Zm75tlCvoOqHLXLOxPIHpBXmSZHcOEtVe5t6xpRKvPFJu77OuKs1lzD97v92j/SDrc8ePaM7PFNSjtZTlT2wy/AQk3e04+B3bGn8Cyf8+7AI+vfZvGzmBO4TuubWNg/0f8GEGd/EzObM6Eg+RpSQ1kEQSVaZRHYRDnKAGmEaGoaCt7/iKYaz5egFB30AKbGyHVN27numVZ8IIJ2U96tj9dEM6kE4QS62Pe5rP82/ozec5Wb2syHNid45+SbT1weaqSHwdsUCPg59zbPl+AvHB3hiJ1o8DKUYxh04oIHBtnLZBcmUfqRaaeKybjNayXxTmx/b3HA1+GMoviD9ylnBrI1bN5buMS6CT9i9rE6oD/0Qss6MIdsrb9J9WK0/WHDSfw926KBLx5vI74L+kZ7GJrdpzS+gL28wPpphfsb33AZQToG6B2Xtk7GWxEeiMDIXNMX2v36qL/AD4DuOVycRI1C/ppHQbJ1eOWjT3f6pkeJL8gj8xeT6E7tUXe5G9myDpJtP4ka2PE5meDao2Jpdl5fhRYuzT1v1Ww9jn6gUmZ6wpHYscmX0GcdwfB//omMwvgxy5Hx8J9VoPfWGktlef58B0q2QRARO7c5xKf+4cdo/3Ii4RL2e8/JxNyTkFqTR5KFLdr8yiHf0I3BqSGvEyuh/71aM1cID28wWIf+pz6FQwsjnQZPzIdOy6MkoCbXLiejpR5FntWK7LmkcV3MV0DLJKN/+soKwb9voAiU/I2vStvS9ETpKmyHfjqOu9Ts0YX5NJz1VZA4PHc6ytyn8RRd3ecVt9p0GUe2v3TojvdZqrj73/aYwu2G0mwPrl2XT8YmsZa+ly4BrGK5OJzaP71CgyTopSnGbzaMQAackD8sqix+S57Bz9O2aMX4g403FR+8KYXTU1iNzXxVCwA8XToVZGoJOaiaVi+qyStWMjojRO/tF7qrZXo9ixTkyez6Q3tw0jJzcheSnPZ/rxcZHnLooEAfVCou27+6pVIHbjGDVxNm3xKiRA8PVqdayqglE/AndSCX0oOLeIhN82SET0FYiP/FuQDANWgdLGvzlmxO1RFTyjItD2zHvpZEHJ2nRWLiCPXpix4dsm9CTiejZuMMJ3p8qLtE3f5NmLkOqK0L2wCkiaq7SgV0tnCZ3S3v3OAWvHPhT3abZ1vxCSQosB5JT11W5k+2ia/D1hwGfNBgIN4oazQsbcsf4+NUG0xgU2tucxPVh6HPo1IJks3tZlbw/R9z6j5Lksd9latEZfnEPeQfI9/4HxrNZpfXGzKnJpHMvebR2dz5Wi2ccLWCTpv3VSHK3E8RXRZwbxQR50oljU9ZvU0nUY+cFDcWLxMyhueY6PWr4GfFKtaoeplvcrJeTtLiQqtkSfqJvbeXQvXxl0McSlPxsjntyW+vB2pBz1kXSijIeZV7lIW+uINflLSqQn6W49bkaacBtxM9hZr8eVTF+MWNzvj963kZgzo8Ik/adAKhMP6lqB7oVPstZrQ9dqlsWsoUrtdYyP+0aSIE8ibme75ciYphLof3aZm7ZB/kMVu814pp+lybTX6ty9j96P460vF1UC3Qs5tba8SeXkw30+PyB+8q/N2Mfsva9Gcth68GB3xet55FsmJ5EA4FEp390UUpAA6QeRtIplBKoOQp6tj36qPCmvCnFcffAAxJ970IDBNJn5HCRFYdqajav0njbGCmdN+3LthKKSfI85wEZ03PcqmbPNPhdcrKVeiASD7YPkj14rIcRG0cGWe/QjaoG4IYM0mHV6GdWu+yHPX0VKL8cbxFlIsM5pPZLoJZR8vZ5O0GY74/mWjmyhEfY1PLOa3g+UlN4T/X4cfQ/NSvkJFbjvjt6l1mV+1Zh+6lJXBehNen1JifSpuj5uT6y5NqM5Bl2QjrAXRdwR8sbrelWmx3EOWnt+Ryc/dZYysVYPBHW+GgI2y9lIlwV2RWIRGj0qtnG1xFUKyLa056+E+C7/qI/n2+d31TXXztlETweeYrR5bGcKgV6f9NNas+jejQSnM4bKiL3DHdrOZUfYlno0J49BUs91I8/W50aeJyi3XHY9ItDLZ8iZ+ORv1xk0f7PiR5pImfIzqzQYDXK8HAeItZDy0C9XQmn5SEdlcTONY3E6OQFrOQL9CMRto2he5pAgz7EftqWmuRCJEH+KYkdKtjEthhz5rJgx0e1eL0GiaUcVKJj0c/6Njv8HlDw3E0RhHDcOm5vvQazldnIy1cP6aUZjMqX3XAaxKv5MLWBnIW5FK0efMcuOHy33h+XVypCHP80A4nITEhiT95mNeyTlv4wUhzS5HYC96P2o2+TqBBK03Y8SaN/ZPzJ01Hp4vu05eW4o5qJ17JgSvnGch5t0UUYfZzyD9JJc5uoRGgssM8SSqry9lU6qx7y18LAacL4fKYhVtH+lSE7Uuuzr436FAnN6hQIGsZERaBKD0UCOrf8XiYA8numJw8MIFlRQS0maoI7LwO5EJ6NCEcWhDnwlIs9JJ3/TgM5HjhkfLriobfGsqgQsjRzb/1/PEJzkC4z5dWpN2lmFV6NHEjoOmwfAQcgpyoNML0ZTdN7WEmS6RScn9w66Hq5CXJ62TgjKmZDFY9wsDqvkEGj7zDUj3EyL4mEksDYPaxTcCExe3KYKLSnr0Ej1ZkgWk15Or2xub6IGh37ySZthZSNVuHvZh8yStB6dbDj1FOsTiBvcuOSxHXcZWFPSlycjbxzzdZTM8DMK8txCXEFPVU4x1WV92Hq9FfhhtDZCBWMMYlAs0o+NGXDVCsyFJas24tVLHKCYVP0VqWi0G3LsMwqCYMdRz0VcI7LefR3kOLhIX5jF9edIzfU08hwL8gnEEv1uivvh2OfWydj82wntalTC4mEk0GEjpDz5OOQIH2QDaSD+alshrjf1SPi1etyE7X4xEW+pYrQP4nt9ERIAOida4DO92uEoLE7dyOm4K2/zkcCdPKJf70ERMJJ7Iul+oGY4WIROBcde271fl/ZMdtm0jDgc1KessFR8eUfRp9Obe8lsVkYXKdBPN8yQd/rPCJTmGnKKtDTigrkNxVxBTbl7IWJ9rip+zPriWQUV8QVlXi8fcaZK3rlewUDFk+A0JLjwPWoNGIXfZ7PLxJnq4d3qiJ/vd5me5oWcjaShBPPqHqwhWUFPtvk16TjRD2sx2Ng9hrg7vBjxwZ4XKRIz1dITV326VhW/VyJpxowM29j1erxWj7TmdjTftkBcdf5Cp8Rx0VMQ3/TFn6/WRTjOX0DeeaGE8txNyQfx/buL7LK3qDLX6EEmtVWWZuWmtnXxpMr8pzJkpJH8HVWOFSW6liN8j5x13EBSrJ5ctfVpAV1XWbh7hpCvUfCLoOT5ZOU7vaSjtb3+3cD76W61rnKMFxSYUfN+/X+jqnlRr3AS2yR4HAmI6yfiu6x3XLjE+z1N79HjbbLTdvW7aBcewaIwq/5vI01/HCpSlYVY+btAN/iXqcJ0G8/M89zqcYOuR4LVLNPrIz6r5wDPr1iALkhYqMBG8fgMeZf5JW7+pug/pop72n1Ndq2NnLgUccUw0ruXkoW0dGcmBy5GAhT/lkH8jYwvhpxUFsnXb0TllcCa5JfuPl1JtOd+Lg8zRSYNmyQ+pnPzdMTy3OrRCBK7uX4VKbM9yj3AXA9n6jUZ7eFnVj0n6hUtNAuoWh6p434DEvRWJWnPwpSSn6wNaqJHTXEpxP+4XWCSm1/URvr+RQu75AUGWhWzm4ascVu7F0PStf2W8SncUoX2ai4pVwDvQ/wu90aqx8WabSNBpts9rL1GRKRfg6Rh2r8PITwbcW+OcLQ1sewMeZdmF0Hf6nEjMNlxIukFWGrRHNu1oBxpI+5G+2W0JZZtR+nP3yvQxndSrDKiraudVGbn5X4+fkR7zUxFrYc5NROMIMPss2frfNuiC/HNS6hgJHoCCTx/PtVk1ioyzuZ6OFOvCX2H7yBBxHUqjMcqc5OuR4J5DvAOJEXYqikCdpi4T60RWZvsvWoBmig4udqI7+/VSHaFrBRJRp5XQgIEFqLYUaUR8wdTJn2Inndn4vPDJpnbqTXoaODzSCBE/N4LApGOFcLHVVAer+O/iW7mL0KO7RoJpc3WQ5EiPib4l0bSAC6B5BZfUPqyTNi6vSeSKaOSLWVtaot0+cz8aK4UdeOoI1lIrgU2TNmQ7ec9kTz+j5J9qmYy57VIvuB2DoG+Dgngq6sF6BYkCDIp+4zsro6k/Dw+R5baZ+OsSmnW5zriT34x45n7e1wxWaCv1hqywaZfLD6k59j82y6af3lFUmrRPK7nzPElkRPJrXTPKTMIdl6Bv1+IWNUbzMzTmyeQk7czGEIAcRkEOj6CAMk48Dk6aXFGVVjFLCyn0Ukl104I3BqSGeHPiDW1m+9SbIW1fM1nphAd+/+KyNHOxgXJs1ly55Ndktf+fzHiM9UYAYGoR/37LiQDx9eQQIgnEsJipiO2/pkC9QiSYcWqyK2PnDDsrYR6hcT3awXGPvYj/6oqXJ93Ep07Lt2Ux2cjVv1xJNdGVhemEzCc1c6n+lAy6rohHq8EOiuYcGUlASeSXdbeZPi+dGIh6hnPPBrxgZ6jhotfIYWK2hlKag2xap8crZWQIW92ViUzr3T3yXTiMnzddJ8ntS7EyubN6jNEsX5el7VUlbGl3uVvjyAV/l6b83mzlr4ISVTwuoSsGETWQMePPWTMgyngYKRI3oKAyvnHoMcyRt5awLpIDfWzlDyP8mjfJsgUneO8Ws7EOhixVDcLCF3beOYiRVp2iMhkI7rHyqoFvYSORbJbm+1zn1RLTpoGFQcJXcto/MqTY7+SEuhLVKmIC80sKMeocZ5nI8SmbF2rxGE7JHn7/kgA4uNMD0BsFViPRqQPA7ZntEVyxnmjvFUtZ3mfecEMeJ/l6G6B/nvGxlekn05QhTzNH9hkyxsSG2lyTgZVEndMWN+SJOFutZ7F1t9jIktayDDgvJLssuxxoOgeOYq5kexf9dFXsxnW3zd26bc1RrjX9DLfNxwBge5Gnp/UNbYzkl6ynrMX2CnMLmpIKeOE2fri0Zy/W3XRjfV5c5kZ6eySV3OY+2V9gO9Zpy+DZGP4MxJgEhdYGZXlxwjtsar1ZU1Ym+B/Um3vXooFxRkhWkQtHjvqpDcH/NUQP+FN6a2y4YRaa75C/hGKWak/E41DGJHwjYn0i5Hjk5P159YYzIWqhLVl1KgxPdPGf5AKazuqMP8YUl65HlnF2gWEXUACsVbC03Gl4SG16uRhszFuv43nRmQHORth+Vufc7QO3IzEK5AiA23tvhJxtWtnEGgQK3GWbLTv/QZxLWtEit+/9fm1HBlcQ06ysk7SApL9Y7sE8SYylNSQU7l/4rmf+yFXf+3yuaURK/S4uktZgZ+1x6Q9JrMfV27xO+23fdQ4lndCYjUCPoyc+pQVVHh7jjHP1sta0d7WmoHXFEM8ear3sdhMOAWdDFchOZEXYXplulHBqgnehPj2FfU5vhSpHPhAFw0xSaIXRtw0vg+8GvggcBlihS+Sliy21n4cKQPd6EKKbXM6CfGvniA7H/UwibS1YXdVXL6mykR8GrGgwcavFc1/y9RxM/BlJXJ7IQGJjQLzy+bWqrq2ZrKPb1WWpqeiTT9kkII1EAtvawz7z9qzdYIEpn3u1i7WwTwCbTmh0+S9EfRlmX5cnLRMWentrHloGTJ+mNiMDT+IiEGWkvB6lRVJZdF+3lNlbTtnHzuJYqd9jmciywJtsmpZOoVvxk2O23i/kCFUn+uBPD+BWJ7Pi/aEB3SuP5CjkMb76Q+RokWDnETaM25WI2Gagmn3fkVkEHOURKBjS2NbO/n3yLH1mkyvqDYqtCIt9J/I8fftGQI9i5D+EYlKv59iPnS2QTWRPI7nIllH0jaCrE3Onn0o8EWK++7Z/d+DlFEfhwqA8cnEIqpBX4ZksZhDcX/gmYw4V7RVJ3wcOUrfQi0Kt9P9pMOOqnfTzavlxGAaYUPnVtr6tk1/dVVka2O26ds6XQjYPEMW2/y5Xze+fmUiSBzI/aS7UZhP81t55hG9fX4XxCUtTabZMy5SY0p8D/vbhUi+81rOWC2vZCMm6bVoX9k9g+CFyNJ3YuK5juL4N9nZn6zPX15wPx0Vj9lC952pERJoWyPzlCifQ8ctw/b665ETl3j9ZSnYTd07njPAHmBtuotO8oEso8NmzKyCK3HWkMaoJl63BhrRWwPxabsw0oraTM+NO4oJ24oI5HHAq1Sj7uUoz9w+jEQXdeeoRf0Tk6ci5Nn67lA6luei7Y0X3n7AB1TjjavfjXJSW5+sBnwbyau8PdMt7gu6VTVEwtwUo2NU0J9DviXayMvqEclyK/R03JBYg2kEdGfyU0iNikDXkNSIm2bIC1M2r9RNr5+g3Jhc/jKDXNo824BOsHMjRUlPm38x2f1JYu3Hyk4r+nvI2YfekTAgmPx+sV55BP7EHCXBkb9/gpzm3JIhk+KMLYtQYWW3ARTFmip6o5STRnCf1LbE5DnJM07VPbvRZQ+wE6BjkOQFRXlblkHmyhzC3kJOeXZOjPs4Ik5eMRUpKLVhjn+9y9+sU5dE3Av+BLyd6ZbTUVnF4qqHDcQHe3ckzdGd9OcHZ/7KlyJHmvcVvE9cra6IMhGTSCPPRnz7CRSqA4er9nhK1Ce9Vs0re4LHmSU2RwLrjlfisCC7dWTNVSMU/0Usy2cUUJoC4hrkeCZpukjXaCNHtu2FWDfHyQ3GCP8+CRKTNvbX0Tnl6vdZIEHHae4NcWnvOCd07B+9QQ5pqgN3IDEfaQTdNrWTkdSDabEdJmM3QFJDknjf3eikAc0KMjxj2JvnAiSbLG3q9Tnkqo1kldp5ABJXJYd5IXIyPiriZ/u5+TyfS3ZaRuNOhyP5irM+R7SPb4W4ibYHnOdF1slbkSDCNuOdwaiNnIq8H0kE8TKGXO26njNoRub2Bi5HUmotGwnEUbtrWBvuURK6lWp1g6ZQM4f9y1RwF/WJ7kVgJcnzIGQ3vt/fkWOjHZHAIyPzo3briPtvT1VQvoD4q80m14QQza+nkCIS93WxmtWQTC7jHAE/in6s69q/jHQLs6WEWlb7eVyUNRvrZ5FdhS9Ea/eEDGLaq6y8ADmmz/N/fGtC9qN918xop93nKLJzx8ZjdVyOwmC/2yeS33ZC98aM/crk3m2qnLvv5mA4KYdc2bgeEM3hcSBXJhffR8VFM7qQ5zjbxnnRnp63Z9cRK7T5SOdl5mgBb0biuvrxh7bx+7Oul7T9xNbvyxBj3LgGr9u8+zYSOPwtVUYupnPSNZR2Z+UiNHeNs5C0QOsyHn7OcYaPKdXIXqYk9MloAgxKNGJ3jl0iK9egwjnp89yr20a3NhtZPVv75YN00vPB6N06rA1L6vtfphaNNrMrVZvNr/voBFi1cgTFopHQdQtbp2/MZavWRb69S+fcOAQTGjk8ELGM55XEvlI3PAaUEUYsfp7YTJNtWo3phSHWonMsnpX3+QGkelqtwHsfQ3ZKPZNRO9Ep1hK0Pc8iP/fzr5DqrJ7usf99CcRq+ljG+Ng+tTX5uYyHrYy2kTis14+In1g/PIUY3M6hWDrcEH3/rYj7TB4XMP7xWVW8e83M0Y72nHPIz4oTkFS6MH4B7HZS/01VmiaQxBGTdAr4fXFY87OesUi2QHL67kAn9+0o/ZxDgiD+DvFzPgBJG9ag/MpTSXeOoj7RdNE603yeQ4mL2cjo06qZvRg4IhIubUbrDxqXel8TOfr9BKMruDPKTauGuCF0sygsjFQnxAn0tP4LSDGbO0i3rJoxYE2keuSoDQDWnrWQI8es9pg8OJ5imXyK4mQkF2xWTugGnVzLIAGvC2coHqbMXUIn3qSVozDWkOqtv8tRGE2x3Df63W7Rppm2fp6gY6V39L+W6ojr47k542Nr7nPIEf8o5ZEp0EEJ01IjMDBYvz2BuD/luW1k7dd2ir4rkpYz76TROM6RSLGVXi3RtoZ+mjBqpe3P2yAW73Eybpnh9HWI5X6STvrfCTpxaLELytAItAnA5yN+tKvRSQk3Sk0zdtf4J/AWtUpczHT3gCqOt2MSHbtz9BPMk+a2UVW74z67A3gvYpE+K+qzUftHm5Y+hRQNeS+zy8Jqm9FDdAINs8ZjLt2Lbcw22Hq6F8n3ntV/tl4/rGugrJyqg2z6h5MdjGWk2qr4UcJGYNaYG5BTnzRjg/XJroi1flHdQLNIku0J36aYe1EcbJiVicfu8yYlREsglsW0zd7e6WrEXW1BqXw6SmU+6NzMI1dtJW8fZbRFnmzf35VO/Yn6kPssIBbd3em4YfTqQmJK4z+At0WkMC/YdmlVhpent1M1kzeXIm65eUbHgKShXZHxSA1pbV0BsT6bnExy2LrKjvVTOG6lBNpSwP1cB2ZK/z9K4myL9mHVejcHfhEtlmFYU23DvRQ5zryf3nyiY7eNQxLkueoFHhPpK5Gjtz2Ba+icKIzarcOE8jeRohKzxZ3DyNTaSpDzjsoeUaII7gedtvF/l2zLapwO6ntKDEdx/GwWkv9BYhSyyIdtcr9E0k6V4eIVz63jMjYWI6BLI/EkWyMZYLIyX9SQzA2XFpyX9g5nI8FqWScG5kqyFbAt2ZZF+/8JURt9bQxudLkESVGbtTdYP39K58goFFLbf1ehc7rKkI0vdmJ6DmJ5nkP//tdmqLPT2G6uHOa2cqzKlV6CCu37X85ZLzbGKyHFvBhB/ybbU9N3PQZxL07LXBTXCBjKflmPOjUgR2cbUax6XpWWpZhE/QxxaP80Yq1rlGSV6UdLvFQ13qI+0SH67iFIxcbGkNuedH85ESk3fUj0HqMMvjHLRxP4+pAtSfXoGnZGGXvv9SIhSoZAmIxIhJOEZ5LNO5CCA3mbfkstZz8dwYbb1DF8LXLakhU4a+26X60/ZY63ranTkYwLeTmhP6gbebdnH43ku20U+KxZjJ7STTBrc7N3PoSOm0tWYOJjSOD4sPeDBRU2J7+cMieT49NQArcmw7VEm5I1FzmhWZViaWOrblMZcVcNpHz3j+ie3m4KOYk/nN7Swpo1+Qw1qjW6yMydkNoWbUaTda0ecYIjELfiPPkZgH8htRYq3y/rkfCZqwR6VE7jSaL3ByR919sR140q/Jz70RKNRJtP9FQ0cPHVSiHP/aSqq0IxeVLb85KIeIzSP9o24K2RdETDEIjxCYblzR5WfmoTuIsgASF02YD+k1ivjmdu6l8hP07BNorX65xvD6FPzWoyhaRbOlYtVVkWI5t/hyPVB8ssSW1r6iHERQ/S3ThqSDqwl5PuamHk6X7ER5seZLK9y8+RdF9ZKe1qiLvNNqRnfLLnnY1kFPB1UZ6hqIG4+v06Zy3ZvHwWcgKwfLTXVb1PtJFTpF8ipxTjkMWpXdL6tJOUgxAX1TwSbUr5AYg/cC9GT+NRH9F7ZCmzDf37B/WzU0M2PNSjvfkbSDB41olHbBT5FkMq2FaPNvPnqNAaRYq62NXgP0hhkFciASdV+zn3Q6IvQ/yeHqTjCpG8GinkeWoM3iHZ1+9WQXQho/WPtna9qQChLIPYtBHr7zcRv8z9dEOweVblZmCC8d3AOnR3KTjb9/bczauGnKZ8nPwTDFN436Uk2gR0s6I5VtMNaFslJUvnKIdGnm9G/IrLJM8kNr6ToueFHEtO1joFcQW5t0frm737HeSntOvWBuu/E6L38pOZcvExNbTkxRa0kOI7ZyC+qVMVGiAsZmZhVdx2Z7Q+2FUgPnF8C3BTARJt7o876veK9If12yXIKVLeqbj1+1eQ1LNhCPtj/G5zkaDJD3ZREuydfkEnHWPlxtY468FaDDkJNR1rbAOJZP2qWj5+Qifd0aizRqSRaCv7vaVqwvchx4l2PYJYqndX8jyq/JR5CzUm0pfoJv923cBH6R+9WolafRaJCoj1/XLV3t+BHJtdgRxdLxaNV5kbQiPS6ndUgZRVdtbIxtM6PjhJyJ3PDd0MfkN+MI9tCO9Cjv9t46+XtBlbgKxZlA7UNi2VoyiZ3J3UufhoRaTQ1vP5yDFn1jNqXebkk4gbRj8FHezzR0f93k8b/qtKCXju57LnSB059f1YF0XOyN1LVXZuU4EBwuSvZW36HeIKtaCR56QifTuS//ypnDGoRWviKCQBRNF+McPDx1QWNHKeYXvmoar4li0zk+NtfGkNNR4d0MXQYX+7TuXt0BTqmEBvMMQHt5metuwUJHXe/wJ3R4umSuJciwhNIxq4Wg9C5jokUn1DxE/7JYgVf1Mk4PHUHi1J9Yw2VU2k7b1/hvjAf57pR6zDUGCs31eMyHutorkHcsyzuCpqVoJ9ZcRH9XJVJmB6xcR+xiMe01ZE3o5Ta0oWQTdS8Huyg64c0wmo9e3tpKc+i4X0FJKD/A+IS1Y72nx6HedaNM4hmks/R/z2Fib/lMGU8i/Q/ei2jA1qSi01vSqqtulehuSn7kfJNnlzmZKuXtsQl+5+CnffqFIhPUKVlLyiIEa81kAC6g5FrIZTTK/Q24/MjE+e91JZuBmjzaQzLCWmCVyFZOaokW3ctH1hRd1TlqKYW0vs0rW/Ku/dDKhTSBKCy5CECjGPG4Sr1BJ7ZBtJVXexKmV5WUBMJj2mffUoQwwojh/04JAWZrL89usQv8Srme7nHCp85ybT/ZRb0cDFVcC6bSbm8nAXktnieiXV/04IlyKbWiOakMk2NajWNzc+CXgESaK+EXJUVmM4LjR274eixV3280wQrQQ8NxrrekS4WkgKnGOQU4a3KNGOx8M+34jmQI3pAYnNlDF9kW78P9R75sUb2D2/hRdQ6cVyczdSzW5+Yl4lYZbotYHTVHncNDHOzWh+5I1ziMZ5KaS07BWqXLfI9+m3bEcnI5mGqg4ytv74NdOLTxVdPzUlVoOUE7Z1+IMe72P9OJ9O6XBfF9XMEdsT3oakP8wrDmIkbiJSAneO9tg0mVlLrKV6isxsI/74v1ZyuCr5vtbDMvYMA+aucBLimpanVNvfXojEWcwtaAw0g8HFKrPyUuvGqWfXRIKRT0FO4ZMxRGl7Yy1lzBspXGxjNTyeCjy7wHibweJtyieHkeFs2sQ3/JdqAwhjl4G7kaPzrXQghkHS6tFCn0JynW6MWIq3RwLYnhdN3iJFF9oRuaknLgoMZC1SGFqID+5mUXs2RlJJtRKWUCoeo6YqAXsjgZxXDEG5sXvOS5mbZeMhJDViyLB82LhupgLpL4hf6iuQ4yubQ63os4HpAYn295WQaOlT1dr5hujztS5Wul8jR1h1/Ji66PxtIC4KBxWQKXEho7cirjIn6Xgtp2M4xfRg07RxBngB8BkV4t+i40/f6DLOTZ1f70hsClUqGnXg7/RmATY5d4P2b9HvZd0Llf03Uvy00dpwHeIi5+uiWhJdQ/KR740EjeYpd/Ge91KVXVchJ0JrpMjMkFhL7YTMtKp+F9KpVpu3/wWGFDg2ZHnWRArFHN1FibFTgp3ouAY2enjG95DsK92qKMbVnndT8n0mckKwcmLvayfGOmTIz8WU8/xa98jXRZ9tdFGWGkhFwtMoVgGyVDQjYX1jReQ5Js6TanX4KhJlDtUWFCFBzkGCtvbXAVs/8dl5anU8G3Fcf5Li6ep6bX98JL+LWjpfgUQ0x3gQ+C1y5HoO049n2hUJzvjI5HfABUiGlk8qoY/JStnK3E0VWpZsQc5DjiY/oHOyntEWW/xr6SJ9HxJ4eTXiJvBXJCDqHuQIqYZEiK8DbEInMPdZKSSv28b1KFKswNEfif6xKslfi2RQvcvGPxc5DXs9EgtwlRLiPyPZHoJaPyeQIh/rKVl4oRoDapEC3ugyzmZhugqJlXiU4bnpWDt/ihyRFl07dbUEPkp/RSOS6/BRxPL+0R7e21zNFlQf2HGCEZSrlSCdqvM+r+8bkaKziV4P6r76D5WZN+jeGiKD03P1sy/Sf5/dg8y0v9+BFDTZh/ErQd3vOrH9/iBgXSRGLKs/jER/SBXknxXkL3a/Q4FlkYD6vMrAtcT3dtTrDlXKr1WZeZPutU9EhrFF9FoOcX3dXHnYhj2MdzvilIcqpxxEHg0wQiHU9FoohHBpCKEdQpgKgyN5n7NCCC8JIaBXQ59LhVcj+vm5IYQfhhDmRW2a0quV8s5/DSG8IuU+ZVx1/XeVEMLJiefmtemSEMK2I+hDe8byIYQvhRCeiNraCuWgrffaMNFHVND39RDCs0MIN+qzJ7u0rRWNS1bbJ/Xv7ZS/T+X8LWvN7NNDP9hnPhc9L9n+EEL4e8V92+2yebRwCOG/ibaFRNsPHXDtNfXfD6X0Q7f+n8oZw0m9ssa5yDPm689XqQwY9pjYs1YOIdyrbWoXWKNPhBBWT4zloG1YM4TwZNQ33eTDQ/qdUc7jeF7umyFDbB7cq7Km7Pba8/fLeH47mpNblrSWttH+DwU4QjtjD7O+mYxk5tQAMtO++2AIYeMQwvZd+iOEEF7TpT9snFbLea7d/1j97MQQ1utKIYTbusgyW8vzQgib9TDvatGa/npJMtPGf34I4Wm95nf5bNHxngohHDRqOVBnerT/9yknkDAOILgW2EM1lCsZTlo605xaejxwiD77XXQqBsW+xXEAUOyver4e7ZaZa9KsTGupRXn36PgqZLTJ/rYFUvXoWNVGh5FyLXYduU/7cjM9MmmUNJY2X86g+rK8dt9bdV7eFh395KXNiv3Up5ie6s/cXhrR+mmlzLNagVOMBlI06BjyA+Ec3edUA8kfui8SFFunk/c0y7qZHOd2ZN0xn71mNM5TTK+aWi8wxhMqW3YB7mT4xZXMjeMuPW3rFgxolp3TEVe/MuITzIp0s657urTBZPAF+h0Pqh3+WroQKWRxI9NrIOSd/DYS68T4RjOSmY1ojIvKzBC16xYkEPjPiIvdgnoScDeSmeMJ8jPoBOU5v9AT7SLW+BDtdR9G8j7Po3sGsTSZGY9zQ+XdXL0mmF4MbyqSR932SBvvh5D4kiNGIDszjy9rSF7NywYwh5sAbOpLfkKPsE+KFlSVaeniZwTEd+tyxIdomUT76l0mg/XJ0UiKtzLK/9rkWFr75AWRC0Ez57ikGZHKBuLucRkSdLRkQmGpkkjbM/6G+D/tpEdycaqh0IdwqKlQ+ALD8WOzsfyrzs/zKO7jXU+QqDyh0iz4LlPRe3+aTjCZ+3cOPmfrqoy8Sjf+iYIyqF5g/GLFqdvmFI/xkWpQuIvR+fHa3D0+Iv9Zbbc2/jjx3bL2n5/QvRy3te+EktswGxBKWktN3U83p5MuskgmlqSBgZwxLiIzp6J7/kYNOpcUUJCr6LthpRY1t4Y/qCGwRnZRtjgN3EcpXpgsNuJ8Tfd3y2hUpFpxPWec09xc6wXHOzYUXo3Ehx3PCHyeswSYTfKnkWjG++mt8EecAgokJ+EmSogep/ry23GuwraSorORUp/rUzwoMLmY7TtHKQEf1K/KJv0XEZ+fSd3Qexkvm8hLIT7JVyBW8hCNQVUENFkt8kzEB/QDiHW6SW+BhrHl7hOIP+iwCIVt2HciQWMHRNZAe4f2EISibUxPAu9U8tyvVX9chH1R8jboZ4qOc1PXySuUBManYFVnvIgDc29GTj0OQnyph1m2Pq1fUOXx5py2mMy7GrH+lpkf3vrmIiTvcJZVzdpwF3JqBzPH+lyjWrJfK/D3sgwrZgG8Vw0oH0f82OPMGaHitWTreR6Sw/h1iGV2TjQnQkmypcjYDdMP3/aKX9E9M4etpVfTMSrWeujnJhL/tBVy4l1jepq5YayDmFfW1PCwLeJLPxqf5xwCbYTiRiTq1TSPWAPIKldt5vdLkAqC71ShPIy0dLHrxbORaNJLkCDBdjQZan32zxQSOLcfg5WYtkm8PhLk0G8FtFrinZ+HBAucT6e0aXuAdy46sc0aPomUHt4I+C7To3/z5k1cteoQJHPBsK2usdXr+8CLlcDeyXT3lBblZUcIPDPn8PmIe85R9JZWLGstZD13gvHAVAEryFMlP88q4L0LOe69OhrjMjf/OLWSrdUnVfjbaVyD0VfPC9H6/UVCoU2ukZquDypQzi0t3ZE5JN7myylI9pwGM6eo0Dw1TFWFbhbXp5AA5zJJnMnFLyLW6LOZXlSjbHkZn37WkaD6LZCsEe2E0WVel33vMZXvRYj2PJ1vWZ9tl9y3Rfu/oX1/EtlW2Lgi8pw+xiJ2j3mbcsJLM2RmKFkutZnu1nGpGrkOQjwbGoxJYbp6BqG4HIn2PCHamLPKVTeQ/Mf7IBHdFzDdB3kYfs6LIpGnVwDviSZVGZVyTFjvjxRE6LfAh/X1PsBCDJ7bt8b0lGvbat9/Xwl/P1b3fhaz9dHtSJaKlyGW6VqXedNEIoW3p1OtcRTHMbGP672IC8WmSqRvYrovnpVm7kULT/pDx76BVyOly19NxxWmnzVj8+iRDAuhPfeKEcubOI/vTaTnbY3TpZU9ztb3v0byl74TidGI/e+Svs+9jrHNkybilvQjJB3lQXROaarOqd5Lu9GNeH4KqW9Fa/uMiki/WZdPQuIRknIgzgn/yzEixrbm7u1CsJ5GsvRUddpwY8p4xkaOB5C0f5T4/Dil3DWIO9J2arFMyv2pHud7vJZCwmB0rsrKHYA/Mf3U2e5/ja675Pva5x6hU6chdJmT9yGxU1nuC3Xk9ASGdyISIln2DuTUNo1QWp88oHOwH6Uzzl70G+V3eyJpN+sDjnOyrVOJ59VVNr8TOTk8N8H5xgNdoj4JIWylUZm3hBAe0OvBEMJdmkFib42qZ0gRkbVE9OxuIYS/JKI0i0SU94P1+3xHi3CdCCFcWGKmk2QUq733PZrFYOGovY0hj8vWIYTDE/PmAW3bKSGEN4YQ5lSU5WSQd2hG/186hPAmbe/9XSKRk1cWHtaMNK+P5lFtwHUTZ1W4OYoSb0VR1PNCCBuV8KyyIsp3SMzdOGL/zyGEJfSztVBtdp65KkNOVbmWN7atKNNG1ji3Qgg3hBA+GUJ40ZAz5gwyHj9OZBKJo+93qVi223i8IWdOHDYGmTeSsqIeQlg02n8mo0wt1u5DKpJx9vw5IYQzUsbO5ub7K5axyTW6dQjhiBDC3V1kZZG1ZHvZt5WH0EVe2u++k9IfNp//p2B/2L1elzIn7V5XhhAWT2SwGPa6fZbusWntCypny1g3yf7aIYRwVM6+mDbORcb8Ed0f35DYi+tjKDuphRC6WUxjC92S0e+fSByzNsh2ai9L44+tEy9GfIB3S9GWqtD6akgE7HH07moQl9u8Fsm1WEWeyji5uGnjn2d6oFDV1ZrS5s1S0d+fSBxpjmM0fZqmu5QeG26GVK/bgE7hnTzcjwRdXov4eZ6plray143144aIK8hG0d9u0xOU3zIewYnW1ncCX2J67vM/IFkzbqx4btRSrJ0rqTXtJYhv/3p6/NkNt6sl6Fq1wl1GpxLiMNbcoP1QQ7IVfZtOCXvUevVpJNq9PgS50daTxE8mZMZRerLYrniP6bfN66mMfUHi70cBB1KsTHK/Yxd0X/kB4ppkeAqJQfpCtM9UvTfH83wJtVhurid6L1b+0A0Pq4Xzb0ju6PPpuFHUyQ+es/dcBPgm4q5lmA98RedW0f6w/j1Y99HFE3Jqf5Xpo9rDTJavjfhFbxz97Ungs/rOZZ0cpcnMZZCgvi3p5PFevMf7/htx0/iLnnTdMkReOViH5BBoCmwANaovhEJi018ZSbNygC6UwGC+yUWPGOpIuctvD0Cgn4P4hg/rmMeI9K8Rl4Q/6/+bQxqzUc+bMgRGVjuXUOGxGLAKnQIDJuBvU2XhAb3aQ3h/E5QLqbL3LCV2VymRrzF+5GNlxF1sVZ2fV9JxhQhDGuN6ipBeWMd3Fb0mkBK2iyCp3B5BAqhu1g3+wR7m/zjOc3v3dZX0PITEktw3RIJgz7FKdA0lUX9Naee49d2iSErS7ZHA+ZOQAM2q2x3fe2NV/h7VfvvPCPosbd7XVUleWvfAhfT/qyIuMHcqwb1FZeV9Kd8venQfv+8G2idt7Y+b+ugP+/yqKqdWUgX5b0OWU93WzEKq9G+kfXpFhUaINIXJeMVyOrar6/9XUgWvFbX3CZ2bD+g+eZ/O2W4yeUYS6DQNj4o12nhyGEGeg/j8HEKnStGwqlEZgT4ICXbpl0CvQSfinSG1257/NPBD1UjvSFFMqt5khjlvqiRaFlja6zskA3KrFqh5Sui4IKtNo7LoJAN0+/luXLp2ps3vtLU57LGYifmd6zmGgmHIuywSN8q+rEXEt5+ArybP9G8e1VweNzlVtB3DaN+g4xy3ter6IKWj1ywQYciLzybtdsjRy+YRCSkjQHBQIjiqe/QyKa2/FkKOovZAgva+r1r/MBzzZyJhTnsHy8gRB0R2UxLs32FFDcfBcjA988m4oZXR1vYIx3gqGs9alzU7qjGu6t3jzdDm0rDHImv+jrMMaWf03bDaHVJk0qhPP2KZU8v5N1SwluKiIGX0RyvlXuN0utQe4fgXGedu4xRGJGuGTqCHSZxbSMq3jyPH0fGG28DRqwZtk3RlJO3c24HP0KkCNk7ZAWYC2RhnxWBcCfNMamuYhWthXN55Js3fcWnzOM/XUcnL9pjea0Ed/3HfF0tHfYzaEh+dLg8chvgtxeS5MWZtnklIHk9vhPhGn4IEv5hbQtO7yuFwOBwOh2O8CXTs+9JEIlsvQyrTLcn0XMOO8oi0HTHuhgRufUMVlynvb4fD4XA4HI7xJNBphUDORdLxPJeOO4ETuerG3nyfFwY+iES7769/d4u/w+FwOBwOxxgR6NiVYF3gaCXP2zC9THTNh2ioY7GqKjCXAa9iOGXBHQ6Hw+FwOJxAF3heC3HPOBTxc96HjjW6jls9h42kf/TLkBymxyFJ2odRFtzhcDgcDofDCXTiOUaQraLfH5AqScvQcddw4jweRNr8o/dCErJ/FqkM5llQHA6Hw+FwOIEewjOMkLWQSjnnAr9EMj/Efs7uIjB+86KFVI/6lBLpfelYqX3MHA6Hw+FwOIGu6P4tpJzjd4GLEN/auNS0k7DxRNKtYx3gKOACYLNI+fHxczgcDofD4QS6JJjleVfgcqQM9kI8s9KUY2YQaTtF2EZJ9KcoXnHI4XA4HA6Hwwl0AfLcAt4GnAysjvs5LwhzxcZ1DuIX/VMkQ0fdSbTD4XA4HA4n0IPdswVspwTL/u/uGgsGLIBwEngr8CU6wYUOh8PhcDgcTqD7QEBcNb6q/2/jWRsWNNQQy3ML+BCS9s7H2eFwOBwOhxPoPtBUAv1WYAMkf/CoSJW5jCzoaI/oPWP/589EbXE4HA6Hw+FwAt0jaZ0A9h4heTVCOVtcRuKS3GFE8+cViJ+7Z+VwOBwOh8PhBLoH1JRALQtsTeeYf1iwdGtGKE8Hbo3+tqDB3uk04EE6lv5hWoFtzOci6QmrUMocDofD4XA4FmgCDbAyw3fbiCvk/QPYHXgdcOcISOWwYO/0OcQH+Xg66QGHaY1u6b/rOYF2OBwOh8PhBLo/rKL/DoPAxZUM7wM+ArwEOFXfbWIWjOFSwL8Rt5ntgUvpuK8Mg0jb/ef6cnI4HA6Hw+EEuj/crv9W6QvbppP1oQ38CHgx8DXgacR1ZFTBdcOGua3MAc4BtgLei7ivxES6akz5cnI4HA6Hw+EEujcYWX2wQuIa+znXgd8BmwP7A3fQ8bluzbJxtCqBVujkCMQS/1XgcToluatwZbF735KYBw6Hw+FwOBxOoAviPuCakgmbEWfzc74O2BN4NXAFHUvrbLeCxn10D/C/wBZINcjYP7pdwRy6KCLzDofD4XA4HE6gC5LcBuJCYYStDDJl92gg1u1DgJcCJzKaoLlxR2ylbwB/A94A7BIpG2X1mbnJ/AO4tsQxdzgcDofD4ZgVBJqIkP0YsUQ3BiBp7YgImp/zpsD/Ub1bwoKAuP9qwBlIesH/RbKTNEogvGbx/iJi/fcMHA6Hw+FwOJxA90HaGog/8iF03Cp6IdFJC+olSGDc/sDNiJ/zsALjFhQibacD8xC/6JcB3wWe0n7uRxGZRLKcnAqcRMeq7XA4HA6Hw+EEukdYMNtPgCOVZBkpDgWIs/nw/gvYR8mzpWar90HIHZ1xsb69DXgfUkHwHHrzj27rGEwAfwUOcOLscDgcDofDCfTgaOu9DwI+SceabBbpVuKaisjd48DngU2An0a/Lzv4bTYiad2/Eskd/UYk8DNWUqbouIG0onGrI6cA5wOvQYIV3ffZ4XA4HA6HE+gSiFpbidXnESvyhUrAmkrU4qsJPAT8AMnn/EngMTp+zm7hLF/BaUXjfxySDvBjiOW/qVc9MUYN4J/AwcCOwP10XEAcDofD4XA4ZgWaFd8/KMG6BNgW8b3dAtgAqaAHUnjlKuAy4Ab9XSMieY5qibT196PAl4HvA6/UMdpI/z4Pcde4HjgXeEJ/75Znh8PhcDgcTqArImlm6bxcryy4xXk0MP/oOvAIcIpeeeM0Wyo9OhwOh8PhcAydQBuJNuKFEi8jX0bc3OI8WiSDOJOZOerRWPo4ORwOh8PhcAI9JLQyiJu7AYwXkZ4qOHYOh8PhcDgcsw5e+MLhcDgcDofD4XAC7XA4HA6Hw+FwOIF2OBwOh8PhcDicQDscDofD4XA4HE6gHQ6Hw+FwOBwOJ9AOh8PhcDgcDodjQSfQYcz6q+ZTzuFwOBwOh8MJ9Di/12RJ96spGX94wPtMImWxyyD3DaSk9v0VKQsOh8PhcDgcjllEoM3Se19JxLKm17/6JKv2+QeA60sgvFZ45h59RyfQDofD4XA4HE6gB4KRyZ9H5HeQewUlqv8cgEA3gKeAPzF49cW23uMf2q6GE2iHw+FwOBwOJ9BlEOjfA3dFpLNfsloDTgAe1T7rh6waiT9Zf+73PjZuNeBXPoUdDofD4XA4nECXgTZilb0X+J6+Z2sA8vw4cPiAbZrSe50NXKRt6ofUt/S7VwOn6j3bPpUdDofD4XA4nECXQaLrwLeAK4EJegsqNNeNOvA54N8DkF6DuZO8D3hESX6rj3eaBA4C5tMJcHQ4HA6Hw+FwOIEeCEYqHwPeCNygJHqqAAk2a3ED+DHwVaBZAlE1i/Y1wL7A0/qMqS73Dkqaze1jP+BS/a5bnx0Oh8PhcDicQJcGs9jeDGwD/E6JsBHRNmIBntJ/jYw2lbB+HHgXHReQUFKbGoj7xQ7atiYdS3Jb22NEP+jfJhB/7t2Bn+l3Wj6FHQ6Hw+FwOIaLWgiz4vQ/dr3YDzgA2Cjjsy3gN8D/AZfTCf4ru6PMfWNZ4EPA/sByGZ+9F8ko8m3gv/Tu+uFwOBwOh8PhcAI9EIleCHgx8DJgTWBVxMf5H0jmjltTvlMFYiK8vLZpY2ADfe4N2qY/0CmY4uTZ4XA4HA6Hwwn0UNFE3CN6IdyVjgHFsoSYv7MHDDocDofD4XA4gR7+e6dcIeUadpssv3OM4MTZ4XA4HA6HY3zw/wDceGEKAMFrrQAAAABJRU5ErkJggg==" alt="Snowflake">
+  <div class="doc">Fashion Retail <span>SDR Cheat Sheet</span></div>
+  <span class="internal">Internal only</span>
+  <nav>
+    <a href="#overview" class="ri ov"><span class="ix">&#9673;</span><span class="nm">Who to call</span></a>
+    <div class="rg"><div class="rgl">On the call</div><a href="#pitch" class="ri"><span class="ix">01</span><span class="nm">30-second pitch</span></a><a href="#discovery" class="ri"><span class="ix">02</span><span class="nm">Discovery questions</span></a><a href="#signals" class="ri"><span class="ix">03</span><span class="nm">Pain &amp; objections</span></a><a href="#proof" class="ri"><span class="ix">04</span><span class="nm">Proof points</span></a></div>
+  </nav>
+  <div class="keys"><kbd>&larr;</kbd><kbd>&rarr;</kbd> move &nbsp; <kbd>0</kbd>&ndash;<kbd>4</kbd> jump</div>
+</aside>
+<main id="main"><section class="page" id="overview"><header class="ph"><div class="label">Start here</div><h2>SDR cheat sheet <span class="dim">for fashion retail.</span></h2><p class="intro">A quick reference for prospecting and discovery calls. Qualify the account, find the trigger, then open with the buyer&rsquo;s own problem.</p></header>
+<div class="sdr3"><div class="card"><h4>Green signals <span class="tag g">call these</span></h4><ul class="dots"><li>Revenue &pound;300M+ (ideal &pound;1B+)</li><li>Owned stores, ecommerce and wholesale: multi-channel trading complexity</li><li>SAP, Oracle Retail or a legacy merchandising ERP in place</li><li>A planning tool (Blue Yonder, Oracle Retail, Anaplan) not connected to POS or ecommerce data</li><li>Seasonal, trend-driven range: two or more seasons a year, or a fast-fashion cadence</li><li>EMEA footprint in scope for CSRD, ESPR or the Digital Product Passport</li><li>Athletic and sportswear, luxury, fast fashion, department store and high street, pure-play ecommerce</li></ul></div><div class="card"><h4>Red flags <span class="tag r">deprioritise</span></h4><ul class="dots"><li>Under &pound;100M revenue with a single, static, non-seasonal range</li><li>No buying or planning function: a purely reorder-driven basics business</li><li>Franchise-only model with no direct inventory or trading ownership</li><li>Pure wholesale or B2B distribution with no consumer-facing channel</li><li>No cloud or IT modernisation plans</li></ul></div><div class="card"><h4>Trigger events <span class="tag a">reach out now</span></h4><ul class="dots"><li>New Commercial Director or Merchandising Director appointed</li><li>New CIO, CTO or Chief Data Officer hired</li><li>Ecommerce re-platform announced or under way</li><li>Earnings call cites markdown pressure, terminal stock or margin compression</li><li>CSRD reporting deadline near, or an ESPR or Digital Product Passport programme starting</li><li>AI or trend-sensing programme announced</li><li>Store estate restructuring or a channel-mix shift that forces a re-look at allocation</li><li>A compressed buying window for a new collection: a live trend-sensing stress test</li></ul></div></div>
+<div class="sdr2">
+<div class="card"><h4>Economic buyer</h4><p><b>Commercial Director / Chief Commercial Officer</b> owns full-price sell-through and markdown. For platform-led deals, the <b>CIO / CTO / Chief Data Officer</b> holds the budget. The platform message (bring AI to governed, connected data) lands here.</p></div>
+<div class="card"><h4>Business champions</h4><p><b>Merchandising Director</b> and <b>Buying Director</b>. They rebuild the WSSI and place the chase orders, so they feel the pain weekly and carry the case to the buyer. Arm them with the numbers.</p></div>
+<div class="card"><h4>Influencers</h4><p><b>CFO</b> (markdown and working capital), <b>Sourcing Director</b> (supplier performance and compliance) and <b>Head of Sustainability</b> (CSRD and DPP). Use the <b>Ecommerce Director</b> for qualification and discovery: their site data shows the trend first.</p></div>
+</div><nav class="pager"><span></span><a href="#pitch">30-second pitch &rarr;</a></nav></section><section class="page" id="pitch"><header class="ph"><div class="label">Open the call</div><h2>The 30-second pitch.</h2><p class="intro">Lead with their problem, prove it with a customer, and close on the outcome. Pick the version for the person on the line.</p></header><div class="sdr3"><div class="card pc"><span class="tag b">Economic buyer</span><h4>Commercial Director / CCO</h4><p>You shouldn&rsquo;t find out a style is dying the same week you&rsquo;re forced into a deep markdown. Snowflake connects store, ecommerce and planning data on one governed platform, so AI flags weak sell-through weeks before the trading meeting. Under Armour runs one version of the numbers for 200 report users this way.</p></div><div class="card pc"><span class="tag b">Economic buyer</span><h4>CIO / CTO / Chief Data Officer</h4><p>Most trend-sensing pilots stall before production. Not because the model is wrong, but because the data is fragmented and ungoverned. Snowflake brings planning, PLM, ecommerce and POS data into one governed semantic layer: sell-through, OTB and markdown depth defined once and trusted everywhere. Urban Outfitters replaced Netezza and gained 10x data capacity.</p></div><div class="card pc"><span class="tag g">Business champion</span><h4>Merchandising Director</h4><p>Your team rebuilds the WSSI by hand every week, and by the time it&rsquo;s ready the sell-through it shows is stale. Snowflake connects planning and POS so the WSSI is a live view and Cortex AI reforecasts OTB against actual sales. Under Armour cut manual reporting effort by 20&ndash;40%. Use it to build the case with your Commercial Director.</p></div></div><nav class="pager"><a href="#overview">&larr; Who to call</a><a href="#discovery">Discovery questions &rarr;</a></nav></section>
+<section class="page" id="discovery"><header class="ph"><div class="label">Qualify</div><h2>Discovery questions.</h2><p class="intro">Start with the opener, then use the follow-ups to size the pain. Listen for numbers you can put in the business case.</p></header><div class="sdr3 dq"><div class="card"><span class="tag b">Economic buyer</span><h4>Commercial Director / CCO</h4><p class="op">&ldquo;You want to mark down early and shallow, not late and deep. What stops you today: the data, the tooling or the timing?&rdquo;</p><ul class="dots"><li>&ldquo;How many systems does your team reconcile before a markdown or chase decision?&rdquo;</li><li>&ldquo;How confident are you in the AI or trend-sensing investments you&rsquo;ve made so far?&rdquo;</li></ul></div><div class="card"><span class="tag b">Economic buyer</span><h4>CIO / CTO / Chief Data Officer</h4><p class="op">&ldquo;Of the AI pilots you&rsquo;ve run in buying and merchandising, how many have reached production?&rdquo;</p><ul class="dots"><li>&ldquo;When the Commercial Director asks a sell-through question, how long until they get a trusted answer?&rdquo;</li><li>&ldquo;Do buying, planning and finance use the same definition of sell-through and markdown depth, or do they argue about numbers in the trading meeting?&rdquo;</li></ul></div><div class="card"><span class="tag g">Business champion</span><h4>Merchandising Director</h4><p class="op">&ldquo;How long does your team spend building the WSSI each week, and how much of that is export and reconciliation?&rdquo;</p><ul class="dots"><li>&ldquo;When sell-through shifts mid-season, how quickly does it reach buying and the trading meeting?&rdquo;</li><li>&ldquo;How accurate is your in-season reforecast, and what would closing that gap mean for terminal stock?&rdquo;</li></ul></div><div class="card"><span class="tag g">Business champion</span><h4>Buying Director</h4><p class="op">&ldquo;When a style beats plan, how long does it take to place a chase order with a supplier who can deliver?&rdquo;</p><ul class="dots"><li>&ldquo;For how many suppliers can you see live OTIF, quality and compliance data today?&rdquo;</li><li>&ldquo;Can you combine supplier performance with sustainability and compliance data in one view?&rdquo;</li></ul></div><div class="card"><span class="tag a">Qualify</span><h4>Ecommerce Director</h4><p class="op">&ldquo;Your search and browse data probably shows a trend before store POS does. How fast does that signal reach buying?&rdquo;</p><ul class="dots"><li>&ldquo;If you re-platformed ecommerce tomorrow, would years of customer behaviour history move with you?&rdquo;</li><li>&ldquo;Can you see store, warehouse and online stock in one place, or do you find a stock-out after the customer does?&rdquo;</li></ul></div></div><nav class="pager"><a href="#pitch">&larr; 30-second pitch</a><a href="#signals">Pain &amp; objections &rarr;</a></nav></section>
+<section class="page" id="signals"><header class="ph"><div class="label">Handle the conversation</div><h2>Pain signals and objections.</h2><p class="intro">If you hear a pain signal, ask for the number behind it. If you hear an objection, acknowledge it, answer briefly and return to their problem.</p></header>
+<div class="sdr2 po"><div class="card"><h4>If you hear this, lean in</h4><ul class="dots"><li>&ldquo;Our merchandisers spend half the week building the WSSI instead of trading off it.&rdquo;</li><li>&ldquo;Our OTB is locked six months out, with no live signal to reforecast against.&rdquo;</li><li>&ldquo;The trading meeting starts with 30 minutes of arguing about whose sell-through is right.&rdquo;</li><li>&ldquo;We find out a style is dying right before we&rsquo;re forced into a deep markdown.&rdquo;</li><li>&ldquo;We&rsquo;ve tried AI for trend-sensing, but it never reaches production.&rdquo;</li><li>&ldquo;Terminal stock eats our margin every season and we never see it early enough.&rdquo;</li><li>&ldquo;We have great site behaviour data; we just can&rsquo;t connect it to buying and planning.&rdquo;</li><li>&ldquo;CSRD and the Digital Product Passport are a data problem we&rsquo;re not ready for.&rdquo;</li></ul></div>
+<div class="objs"><div class="card ob"><p class="q">&ldquo;We&rsquo;re committed to Blue Yonder / Oracle Retail / Anaplan.&rdquo;</p><p>Snowflake works with your planning tool, not instead of it. The planner keeps running the plan; Snowflake feeds it POS, ecommerce and PLM data it can&rsquo;t reach on its own.</p></div><div class="card ob"><p class="q">&ldquo;IT won&rsquo;t support another platform.&rdquo;</p><p>For SAP, SAP Business Data Cloud gives zero-copy access, so no new extract pipelines. Planning, POS, ecommerce and supplier sources land through managed connectors, Openflow and data sharing, all on one governed platform IT already knows how to run.</p></div><div class="card ob"><p class="q">&ldquo;We already have a data warehouse or lake.&rdquo;</p><p>Snowflake can sit alongside it. The real question is whether buying, planning and ecommerce data are connected and trusted there today.</p></div><div class="card ob"><p class="q">&ldquo;We&rsquo;re not ready for AI yet.&rdquo;</p><p>Most aren&rsquo;t, which is why we start with the data foundation. The gap between planning and store or ecommerce data is usually why trend-sensing AI hasn&rsquo;t worked yet.</p></div><div class="card ob"><p class="q">&ldquo;Budget is tight; this isn&rsquo;t a priority.&rdquo;</p><p>Size one number they already track: last season&rsquo;s markdown spend, or the value of stock sold below full price. Then ask what one point of full-price sell-through is worth. On &pound;400M of markdown-exposed sales at a 30% discount, it is about &pound;1.2M.</p></div><div class="card ob"><p class="q">&ldquo;We&rsquo;re looking at a single all-in-one platform.&rdquo;</p><p>A closed platform hits a ceiling when it can&rsquo;t take in POS, ecommerce or partner signals. Snowflake connects and extends what you have, then lets you retire what you no longer need, on your timeline.</p></div></div></div><nav class="pager"><a href="#discovery">&larr; Discovery questions</a><a href="#proof">Proof points &rarr;</a></nav></section>
+<section class="page" id="proof"><header class="ph"><div class="label">Back it up</div><h2>Proof points.</h2><p class="intro">Match the customer to the prospect&rsquo;s sub-industry. Use named references only where cleared.</p></header>
+<div class="sdr2 pf"><div class="card"><span class="tag b">Athletic &middot; Sportswear</span><h4>Under Armour</h4><p>One version of the numbers for 200 report users. Manual reporting effort down 20&ndash;40%.</p></div><div class="card"><span class="tag b">Fast fashion &middot; Lifestyle</span><h4>Urban Outfitters</h4><p>Replaced Netezza with Snowflake and gained 10x data capacity for buying and planning analytics.</p></div><div class="card"><span class="tag b">Athletic &middot; Logistics</span><h4>Under Armour</h4><p>6+ carrier feeds (FedEx, Canada Post, DHL, LaserShip) in one view. LaserShip shares data live through Snowflake.</p></div><div class="card"><span class="tag b">High street &middot; Department &middot; Luxury</span><h4>River Island &middot; John Lewis &middot; Tapestry</h4><p>Run their retail data on Snowflake. Name only: no figures.</p></div></div>
+<div class="signal"><span class="k">Rules of use</span><p>Cite Under Armour and Urban Outfitters with the figures above only. River Island, John Lewis and Tapestry are name only. Don&rsquo;t quote analyst ROI studies on calls; size value from the prospect&rsquo;s own metrics instead (see <a href="Fashion%20Retail%20metrics%20that%20matter.html">Fashion Retail Metrics That Matter</a>).</p></div><nav class="pager"><a href="#signals">&larr; Pain &amp; objections</a><span></span></nav></section></main>
+<script>(function () {
+  var pages = Array.prototype.slice.call(document.querySelectorAll('.page'));
+  var ids = pages.map(function (p) { return p.id; });
+  var links = document.querySelectorAll('.rail a.ri');
+  var main = document.getElementById('main');
+  function show(id) {
+    if (ids.indexOf(id) < 0) id = ids[0];
+    pages.forEach(function (p) { p.classList.toggle('on', p.id === id); });
+    links.forEach(function (a) { a.classList.toggle('on', a.getAttribute('href') === '#' + id); });
+    main.scrollTop = 0;
+    var h = document.querySelector('#' + id + ' h2');
+    document.title = 'Fashion Retail SDR · ' + (h ? h.textContent.split(' / ')[0] : '');
+  }
+  function current() { return ids.indexOf(location.hash.slice(1)) < 0 ? 0 : ids.indexOf(location.hash.slice(1)); }
+  function go(i) { i = Math.max(0, Math.min(ids.length - 1, i)); location.hash = ids[i]; }
+  function closePops(except) {
+    document.querySelectorAll('.kpi[aria-expanded="true"]').forEach(function (b) {
+      if (b !== except) { b.setAttribute('aria-expanded', 'false'); b.nextElementSibling.classList.remove('on'); }
+    });
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('.kpi');
+    closePops(b);
+    if (b) { var open = b.getAttribute('aria-expanded') !== 'true'; b.setAttribute('aria-expanded', open); b.nextElementSibling.classList.toggle('on', open); }
+  });
+  window.addEventListener('hashchange', function () { closePops(); show(location.hash.slice(1)); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { closePops(); return; }
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); go(current() + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(current() - 1); }
+    else if (/^[0-4]$/.test(e.key)) go(+e.key);
+  });
+  show(location.hash.slice(1));
+})();
+</script>
+</body></html>
