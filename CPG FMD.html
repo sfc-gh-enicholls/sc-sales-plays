@@ -523,7 +523,7 @@ body.idle .hud, body.idle .menu-btn { opacity: 0; }
 </section>
 
 </div></div>
-<div class="hud" id="hud">→ / Space next · ← back · R replay · A reveal all · M slide menu</div>
+<div class="hud" id="hud">→ / Space / click next · ← back · R replay · A reveal all · M slide menu</div>
 <button class="menu-btn" id="menu-btn" type="button" aria-haspopup="dialog" aria-controls="menu" aria-label="All slides">☰ Slides</button>
 <div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Jump to slide" hidden><div class="menu-in"><div class="menu-h">Jump to slide <span>Esc to close</span></div><ol id="menu-list"></ol></div></div>
 
@@ -654,6 +654,14 @@ body.idle .hud, body.idle .menu-btn { opacity: 0; }
   stage.addEventListener('click', function (e) {
     var b = e.target.closest('.opt');
     if (b) choose(b.getAttribute('aria-pressed') === 'true' ? null : b.dataset.opt);
+  });
+
+  document.addEventListener('click', function (e) {
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if (!menu.hidden) return;
+    if (e.target.closest('a, button, input, select, textarea, label, [role="button"], .opt, .menu, [data-noadvance]')) return;
+    if (window.getSelection && String(window.getSelection())) return;
+    next();
   });
 
   document.addEventListener('keydown', function (e) {
