@@ -138,6 +138,7 @@ a.who:hover .go { opacity: 1; transform: translateX(3px); }
   .page { display: flex !important; min-height: 0; break-after: page; }
 }
 .card:has(.pop.on) { overflow: visible; position: relative; z-index: 15; }
+.src { color: var(--muted); font-weight: 400; font-size: 12.5px; }
 </style></head>
 <body>
 <aside class="rail">
@@ -146,7 +147,7 @@ a.who:hover .go { opacity: 1; transform: translateX(3px); }
   <span class="internal">Internal only</span>
   <nav>
     <a href="#overview" class="ri ov"><span class="ix">&#9673;</span><span class="nm">Overview &amp; influence map</span></a>
-    <div class="rg"><div class="rgl">Economic buyers</div><a href="#csco" class="ri"><span class="ix">01</span><span class="nm">CSCO</span></a><a href="#demand" class="ri"><span class="ix">02</span><span class="nm">Demand Planning</span></a><a href="#cio" class="ri"><span class="ix">03</span><span class="nm">CIO / CDO</span></a><a href="#cpo" class="ri"><span class="ix">04</span><span class="nm">CPO</span></a></div><div class="rg"><div class="rgl">Technical evaluators</div><a href="#sop" class="ri"><span class="ix">05</span><span class="nm">S&amp;OP</span></a><a href="#supply" class="ri"><span class="ix">06</span><span class="nm">Supply Planning</span></a></div><div class="rg"><div class="rgl">Expansion</div><a href="#rgm" class="ri"><span class="ix">07</span><span class="nm">RGM</span></a></div>
+    <div class="rg"><div class="rgl">Economic buyers</div><a href="#csco" class="ri"><span class="ix">01</span><span class="nm">CSCO</span></a><a href="#demand" class="ri"><span class="ix">02</span><span class="nm">Demand Planning</span></a><a href="#cio" class="ri"><span class="ix">03</span><span class="nm">CIO / CDO</span></a><a href="#cpo" class="ri"><span class="ix">04</span><span class="nm">CPO</span></a></div><div class="rg"><div class="rgl">Business champions</div><a href="#sop" class="ri"><span class="ix">05</span><span class="nm">S&amp;OP</span></a><a href="#supply" class="ri"><span class="ix">06</span><span class="nm">Supply Planning</span></a></div><div class="rg"><div class="rgl">Expansion</div><a href="#rgm" class="ri"><span class="ix">07</span><span class="nm">RGM</span></a></div>
   </nav>
   <div class="keys"><kbd>&larr;</kbd><kbd>&rarr;</kbd> move &nbsp; <kbd>0</kbd>&ndash;<kbd>7</kbd> jump</div>
 </aside>
@@ -165,14 +166,14 @@ a.who:hover .go { opacity: 1; transform: translateX(3px); }
         <a class="who" href="#cpo"><span class="n">CPO / VP Procurement</span><span class="t">Secondary</span><span class="go">&rarr;</span></a>
         <div class="who static"><span class="n">CFO</span><span class="note">COGS + trade spend are the two largest P&amp;L lines</span><span class="t">Sponsor</span></div>
       </div>
-      <div class="group eval"><h4>Technical evaluators <span>validate the solution</span></h4>
-        <a class="who" href="#sop"><span class="n">Head of S&amp;OP / IBP Lead</span><span class="t">Evaluator</span><span class="go">&rarr;</span></a>
-        <a class="who" href="#supply"><span class="n">Head of Supply Planning</span><span class="t">Evaluator</span><span class="go">&rarr;</span></a>
+      <div class="group eval"><h4>Business champions <span>run the process, prove the value</span></h4>
+        <a class="who" href="#sop"><span class="n">Head of S&amp;OP / IBP Lead</span><span class="t">Champion</span><span class="go">&rarr;</span></a>
+        <a class="who" href="#supply"><span class="n">Head of Supply Planning</span><span class="t">Champion</span><span class="go">&rarr;</span></a>
       </div>
       <div class="group exp"><h4>Expansion <span>after the SC data foundation is in</span></h4>
         <a class="who" href="#rgm"><span class="n">Head of Revenue Growth Management</span><span class="t">Expansion</span><span class="go">&rarr;</span></a>
       </div>
-      <div class="group champ"><h4>Champions <span>drive internal advocacy</span></h4>
+      <div class="group champ"><h4>Internal advocates <span>help you navigate</span></h4>
         <div class="chips"><span>Demand Planning Process Lead</span><span>Data &amp; Analytics Lead</span><span>Digital Transformation Lead</span><span>Category Planning Lead</span><span>Trade Effectiveness Lead</span></div>
       </div>
     </div>
@@ -202,7 +203,7 @@ a.who:hover .go { opacity: 1; transform: translateX(3px); }
         <h5>Works with</h5><p class="muted">CFO &middot; CEO &middot; CIO &middot; VP Demand Planning &middot; VP Procurement</p></div>
     </div>
     <div class="col">
-      <div class="card wins"><h4>Why Snowflake wins here</h4><div class="win"><b>Unified Demand Foundation</b><p>ERP + demand planning + TPM + WMS + retailer POS in one governed platform. One demand truth for commercial, supply, and finance.</p></div><div class="win"><b>Proactive Retail Intelligence</b><p>Cortex AI scores fill rate risk by SKU/customer/DC 4&ndash;6 weeks ahead. Early warning before chargebacks, not after invoice deductions.</p></div><div class="win"><b>AI That Works in Production</b><p>Demand sensing pilots usually stall because retailer POS never meets internal planning data. A governed semantic layer gives AI trusted, joined-up demand data to reason on, not raw exports.</p></div><div class="proof"><span class="k">Proof point</span><p>Kraft Heinz: out-of-stocks reduced from 20% to 6% in 4 weeks</p></div></div>
+      <div class="card wins"><h4>Why Snowflake wins here</h4><div class="win"><b>Unified Demand Foundation</b><p>ERP + demand planning + TPM + WMS + retailer POS in one governed platform. One demand truth for commercial, supply, and finance.</p></div><div class="win"><b>Proactive Retail Intelligence</b><p>Cortex AI scores fill rate risk by SKU/customer/DC 4&ndash;6 weeks ahead. Early warning before chargebacks, not after invoice deductions.</p></div><div class="win"><b>AI That Works in Production</b><p>Demand sensing pilots usually stall because retailer POS never meets internal planning data. A governed semantic layer gives AI trusted, joined-up demand data to reason on, not raw exports.</p></div><div class="proof"><span class="k">Proof point</span><p>Kraft Heinz: out-of-stocks reduced from 20% to 6% in 4 weeks <span class="src">(VE Business Value Realization deck, internal)</span></p></div></div>
     </div>
   </div>
   <nav class="pager"><a href="#overview">&larr; Overview</a><a href="#demand">Demand Planning &rarr;</a></nav>
@@ -275,7 +276,7 @@ a.who:hover .go { opacity: 1; transform: translateX(3px); }
 </section>
 <section class="page" id="sop" data-role="eval">
   <header class="ph">
-    <div class="label">Persona 05 <span class="sep">·</span> <span class="role eval">Technical Evaluator</span></div>
+    <div class="label">Persona 05 <span class="sep">·</span> <span class="role eval">Business Champion</span></div>
     <h2>Head of S&amp;OP <span class="dim">/ IBP Programme Lead</span></h2>
   </header>
   
@@ -297,7 +298,7 @@ a.who:hover .go { opacity: 1; transform: translateX(3px); }
 </section>
 <section class="page" id="supply" data-role="eval">
   <header class="ph">
-    <div class="label">Persona 06 <span class="sep">·</span> <span class="role eval">Technical Evaluator</span></div>
+    <div class="label">Persona 06 <span class="sep">·</span> <span class="role eval">Business Champion</span></div>
     <h2>Head of Supply Planning <span class="dim">/ VP Supply Planning</span></h2>
   </header>
   
@@ -312,7 +313,7 @@ a.who:hover .go { opacity: 1; transform: translateX(3px); }
         <h5>Works with</h5><p class="muted">VP Demand Planning &middot; CSCO &middot; Head of S&amp;OP &middot; CPO</p></div>
     </div>
     <div class="col">
-      <div class="card wins"><h4>Why Snowflake wins here</h4><div class="win"><b>Live Demand + Promotional View</b><p>Demand plan and TPM promotional calendar unified in one Snowflake query. Supply planning starts from the full picture. No reconciliation before the conversation.</p></div><div class="win"><b>AI Exception Management</b><p>Cortex AI generates fill rate risk alerts ranked by customer impact. Planners manage by exception not spreadsheet.</p></div><div class="win"><b>Natural-Language Queries</b><p>Cortex Analyst: &ldquo;What is the days-of-supply risk for my top 10 SKUs at Walmart for next 4 weeks?&rdquo; answered from live data.</p></div><div class="proof"><span class="k">Proof point</span><p>Kraft Heinz: out-of-stocks reduced from 20% to 6% in 4 weeks &middot; Fill rate and on-time delivery improved after unifying SC data on Snowflake</p></div></div>
+      <div class="card wins"><h4>Why Snowflake wins here</h4><div class="win"><b>Live Demand + Promotional View</b><p>Demand plan and TPM promotional calendar unified in one Snowflake query. Supply planning starts from the full picture. No reconciliation before the conversation.</p></div><div class="win"><b>AI Exception Management</b><p>Cortex AI generates fill rate risk alerts ranked by customer impact. Planners manage by exception not spreadsheet.</p></div><div class="win"><b>Natural-Language Queries</b><p>Cortex Analyst: &ldquo;What is the days-of-supply risk for my top 10 SKUs at Walmart for next 4 weeks?&rdquo; answered from live data.</p></div><div class="proof"><span class="k">Proof point</span><p>Kraft Heinz: out-of-stocks reduced from 20% to 6% in 4 weeks <span class="src">(VE Business Value Realization deck, internal)</span> &middot; Fill rate and on-time delivery improved after unifying SC data on Snowflake</p></div></div>
     </div>
   </div>
   <nav class="pager"><a href="#sop">&larr; S&amp;OP</a><a href="#rgm">RGM &rarr;</a></nav>
