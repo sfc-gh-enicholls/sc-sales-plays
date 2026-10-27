@@ -36,10 +36,6 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
 .purpose-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 2rem; align-items: start; }
 .purpose-body { font-size: 0.92rem; color: var(--text-gray); line-height: 1.7; margin-bottom: 1rem; }
 .purpose-body strong { color: var(--text-dark); font-weight: 700; }
-.stat-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
-.stat-pill { display: flex; align-items: center; gap: 0.4rem; background: #FFFFFF; border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 0.9rem; }
-.stat-num { font-size: 1.2rem; font-weight: 900; color: var(--sf-blue); line-height: 1; }
-.stat-desc { font-size: 0.68rem; color: var(--text-gray); line-height: 1.3; max-width: 120px; }
 .glance-box { background: linear-gradient(160deg, rgba(17,86,127,0.07), rgba(36,158,220,0.04)); border: 1.5px solid rgba(17,86,127,0.2); border-radius: 14px; padding: 1.4rem 1.6rem; }
 .glance-title { font-size: 0.75rem; font-weight: 800; color: var(--sf-mid); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1rem; }
 .glance-row { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.45rem 0; border-bottom: 1px solid rgba(204,204,204,0.3); }
@@ -99,6 +95,33 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
 .open-btn.outline-btn:hover { background: var(--sf-mid); color: var(--sf-white); }
 @media (max-width: 900px) { .onepager-preview { flex-basis: 11rem; } .onepager-preview img { max-width: 8rem; } }
 @media (max-width: 600px) { .onepager-card { flex-direction: column; } .onepager-preview { flex-basis: auto; border-right: none; border-bottom: 1px solid var(--border); padding: 1.2rem; } .onepager-preview img { max-width: 7rem; } .onepager-actions .open-btn { flex-basis: 100%; } }
+
+.card-preview { display: block; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 1px solid var(--border); background: var(--sf-deep); }
+.card-preview img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.3s; }
+.asset-card:hover .card-preview img { transform: scale(1.03); }
+.asset-card.placeholder .card-preview img { filter: grayscale(0.6); }
+.start-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.6rem; margin-bottom: 0.4rem; }
+.start-strip a { display: flex; flex-direction: column; gap: 0.2rem; background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 0.75rem 0.9rem; text-decoration: none; color: var(--text-dark); transition: border-color .15s, box-shadow .15s; }
+.start-strip a:hover, .start-strip a:focus-visible { border-color: var(--sf-blue); box-shadow: 0 4px 14px rgba(17,86,127,.12); outline: none; }
+.ss-who { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sf-mid); }
+.ss-what { font-size: 0.82rem; font-weight: 600; }
+.ss-go { font-size: 0.72rem; color: var(--text-light); }
+.asset-card:target { box-shadow: 0 0 0 3px var(--sf-blue); }
+html { scroll-behavior: smooth; }
+.asset-card[id] { scroll-margin-top: 1.5rem; }
+@media (max-width: 900px) { .start-strip { grid-template-columns: repeat(2, 1fr); } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+/* Film: the narrated 90-second "The Cold Store" film, muted autoplay loop */
+.film-block { margin-top: 1.6rem; }
+@media (min-width: 901px) { .glance-box { position: sticky; top: 1.5rem; } }
+.film-frame { position: relative; border-radius: 14px; overflow: hidden; background: var(--sf-deep); border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(4,33,48,0.18); aspect-ratio: 16 / 9; }
+.film-video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.film-sound { position: absolute; top: 0.9rem; right: 0.9rem; display: inline-flex; align-items: center; gap: 0.45rem; font: 600 0.75rem/1 'Inter', sans-serif; color: var(--sf-white); background: rgba(4,33,48,0.78); border: 1px solid rgba(113,211,220,0.45); border-radius: 999px; padding: 0.55rem 0.9rem; cursor: pointer; }
+.film-sound:hover { background: var(--sf-mid); }
+.film-sound:focus-visible { outline: 2px solid var(--sf-star); outline-offset: 2px; }
+.film-sound[hidden] { display: none; }
+.film-desc { font-size: 0.78rem; color: var(--text-gray); line-height: 1.55; margin-top: 0.7rem; }
+@media (max-width: 600px) { .film-frame { border-radius: 10px; } .film-sound { top: 0.5rem; right: 0.5rem; padding: 0.45rem 0.7rem; } }
 </style>
 </head>
 <body>
@@ -111,7 +134,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
       <span class="internal-tag">Internal Use Only</span>
     </div>
     <h1 class="play-title">From Compliance <span>to Confidence</span></h1>
-    <p class="play-subtitle">Help pharmaceutical leaders unify supply chain, manufacturing, and compliance data on a single governed platform so one set of batch records can serve five markets, three regulatory regimes, and every cold chain or demand decision with confidence.</p>
+    <p class="play-subtitle">See the excursion before the batch is lost. Help pharmaceutical leaders connect cold chain, quality, manufacturing and supply data on one governed platform, so excursions, release risk and near-expiry stock surface while there is still time to act, across five markets and three regulatory regimes.</p>
   </div>
 </header>
 
@@ -126,21 +149,18 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
         Pharmaceutical companies across Germany, France, the UK, Italy and Spain face compounding pressures: the European Union Falsified Medicines Directive in some markets, Italy's Bollino farmaceutico by derogation, separate UK workflows under MHRA, cold chain complexity, clinical and commercial demand uncertainty, and EU GMP Annex 11 data-integrity expectations against ALCOA+. Every one is a data problem.
       </p>
       <p class="purpose-body">
-        Snowflake solves this by <strong>connecting to</strong> every system the customer already has and governing the record set they need across quality, manufacturing, serialisation, distribution, and planning. Zero-copy where data is already shareable; governed ingestion for event streams and operational feeds where it is not. One GxP-compatible platform for <strong>Compliance</strong> (batch genealogy, pack-status evidence, audit trails), <strong>Intelligence</strong> (cold chain AI, demand sensing), and <strong>Confidence</strong> (unified QMS + MES + ERP + LIMS). Connect, extend, rationalise, on your timetable.
+        Snowflake solves this by <strong>connecting to</strong> every system the customer already has and governing the record set they need across quality, manufacturing, serialisation, distribution, and planning. Zero-copy where data is already shareable; governed ingestion for event streams and operational feeds where it is not. One governed platform for <strong>Compliance</strong> (batch genealogy, pack-status evidence, audit trails), <strong>Intelligence</strong> (cold chain AI, demand sensing), and <strong>Confidence</strong> (unified QMS + MES + ERP + LIMS). No rip and replace. Governed data, and AI that reaches production instead of stalling in pilots.
       </p>
-      <div class="stat-row">
-        <div class="stat-pill">
-          <span class="stat-num">72h→4h</span>
-          <span class="stat-desc">Recall trace time &middot; Roche on Snowflake</span>
-        </div>
-        <div class="stat-pill">
-          <span class="stat-num">28%</span>
-          <span class="stat-desc">Forecast MAPE improvement &middot; Sanofi on Snowflake</span>
-        </div>
-        <div class="stat-pill">
-          <span class="stat-num">$40M+</span>
-          <span class="stat-desc">Regulatory risk reduction &middot; Roche on Snowflake</span>
-        </div>
+      <div class="film-block" role="region" aria-labelledby="film-title">
+      <p class="section-heading" id="film-title">The Play in 90 Seconds &middot; The Cold Store</p>
+      <div class="film-frame">
+        <video class="film-video" src="assets/film/pharma-cold-store.mp4" poster="assets/film/pharma-cold-store-poster.webp" width="1280" height="720" muted loop playsinline controls preload="metadata" aria-describedby="film-desc"></video>
+        <button type="button" class="film-sound" aria-label="Play from the start with voiceover">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>
+          Watch with voiceover
+        </button>
+      </div>
+      <p class="film-desc" id="film-desc">A cold store holding a biologic batch is drifting toward its limit. Veloria Bio catches the excursion before the threshold, traces the batch genealogy, follows the suspect packs across three regulatory regimes, sees the shortage signal and the upstream API risk, and stays inspection-ready. A person makes every call. Illustrative scenario.</p>
       </div>
       <div style="margin-top:0.8rem;background:rgba(17,86,127,0.04);border:1px solid rgba(17,86,127,0.12);border-radius:6px;padding:0.4rem 0.7rem;">
         <p style="font-size:0.66rem;color:var(--text-light);margin:0;line-height:1.45;"><strong style="color:var(--sf-mid);">Five markets, three regimes, one record set.</strong> Germany, France and Spain require the <strong>European Union Falsified Medicines Directive</strong> with EMVO upload and national verification. Italy stays on <strong>Bollino farmaceutico</strong> by derogation, not by omission. The UK sits outside that regime entirely, with MHRA oversight and Yellow Card escalation. That fragmentation is exactly why batch genealogy and pack-status evidence belong on a governed data platform, not in spreadsheets.</p>
@@ -165,11 +185,11 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
       </div>
       <div class="glance-row">
         <span class="glance-label">Buyers</span>
-        <span class="glance-value"><strong>Primary:</strong> CSCO, CIO/CDO, VP Manufacturing Ops &middot; <strong>Champion:</strong> Head of Quality, Head of Serialisation, Supply Chain Transformation Lead</span>
+        <span class="glance-value"><strong>Economic:</strong> CSCO &nbsp;&middot;&nbsp; <strong>Champions:</strong> VP Technical Operations, Head of Quality / QA &amp; Regulatory, Head of Supply Planning / S&amp;OP, Head of Distribution / Cold Chain &amp; Serialisation &nbsp;&middot;&nbsp; <strong>Validators:</strong> CIO/CDO, Head of Data Science &nbsp;&middot;&nbsp; <strong>Influencers:</strong> CFO, CPO</span>
       </div>
       <div class="glance-row">
         <span class="glance-label">Core Pain</span>
-        <span class="glance-value">QMS, MES, LIMS, ERP in silos. Five-market pack-status workflows managed with spreadsheets. Cold chain IoT data never integrated with batch quality records. Recall tracing takes 72+ hours.</span>
+        <span class="glance-value">QMS, MES, LIMS, ERP in silos. Five-market pack-status workflows managed with spreadsheets. Cold chain data never joined to batch quality records, so excursions are found after the batch is lost and trace requests start with manual reconciliation.</span>
       </div>
       <div class="glance-row">
         <span class="glance-label">Our Angle</span>
@@ -184,11 +204,19 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
 
 <!-- ── ASSETS ── -->
 <section class="assets-section">
-  <p class="section-heading">Play Assets</p>
+  <p class="section-heading">Where to start</p>
+  <nav class="start-strip" aria-label="Where to start">
+    <a href="#a-sdr"><span class="ss-who">SDR</span><span class="ss-what">Prospecting &amp; first call</span><span class="ss-go">SDR Cheat Sheet &rarr;</span></a>
+    <a href="#a-icp"><span class="ss-who">AE &middot; prep</span><span class="ss-what">Know the buyer</span><span class="ss-go">ICP &rarr;</span></a>
+    <a href="#a-fmd"><span class="ss-who">AE &middot; meeting</span><span class="ss-what">Run the first meeting</span><span class="ss-go">FMD &rarr; One-pager</span></a>
+    <a href="#a-met"><span class="ss-who">AE &amp; SE</span><span class="ss-what">Size the value</span><span class="ss-go">Metrics That Matter &rarr;</span></a>
+    <a href="#a-demo"><span class="ss-who">SE</span><span class="ss-what">Show it</span><span class="ss-go">Demo Script &rarr;</span></a>
+  </nav>
+  <div class="section-heading" style="margin:1.6rem 0 1.2rem;">Play Assets</div>
   <div class="assets-grid">
 
     <!-- Featured: Why Snowflake for Supply Chain one-pager -->
-    <div class="asset-card onepager-card">
+    <div class="asset-card onepager-card" id="a-one">
       <a class="onepager-preview" href="Pharma%20-%20Why%20Snowflake%20for%20Supply%20Chain.html" tabindex="-1" aria-hidden="true">
         <img src="assets/onepagers/pharma.webp" width="360" height="510" alt="" loading="lazy" decoding="async">
       </a>
@@ -224,7 +252,8 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     </div>
 
     <!-- Card 1: First Meeting Deck -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-fmd">
+      <a class="card-preview" href="Pharmaceutical FMD.html?v=20261027" tabindex="-1" aria-hidden="true"><img src="assets/previews/pharma-fmd.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
         <span class="asset-audience audience-ae">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -234,20 +263,20 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#11567F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
         </div>
         <div class="asset-name">First Meeting Deck</div>
-        <div class="asset-type">14-Slide Presentation · Interactive</div>
-        <p class="asset-desc">The go-to deck for your first meeting with a CSCO, VP Manufacturing Operations, or CIO. Opens with the five-markets, three-regimes EMEA mandate, diagnoses the data-fragmentation root cause, shows where cold chain and batch intelligence change the operating model, answers the four objections, and closes with Connect/Extend/Rationalise entry, customer proof, and three on-ramps &mdash; one per capability: Visibility &amp; Control Tower, then Supply Optimisation &amp; Risk, then Demand Intelligence. 14-slide spine plus three appendices.</p>
+        <div class="asset-type">13-Scene Presentation · Interactive</div>
+        <p class="asset-desc">The go-to deck for your first meeting with a CSCO, VP Technical Operations, or Head of Quality. Built around one storyline: see the cold chain temperature excursion before the batch is lost. Covers why the product is colder and the rules tighter, the cost of every system having its own number, the trade-offs, customer proof in life sciences, and three on-ramps: Visibility &amp; Control Tower, then Supply Optimisation &amp; Risk, then Demand Intelligence.</p>
       </div>
       <div class="asset-card-meta">
         <div class="asset-tags">
           <span class="asset-tag">First Meeting</span>
           <span class="asset-tag">CSCO</span>
-          <span class="asset-tag">VP Manufacturing Ops</span>
-          <span class="asset-tag">CIO / CDO</span>
-          <span class="asset-tag">Narrated</span>
+          <span class="asset-tag">VP Technical Ops</span>
+          <span class="asset-tag">Head of Quality</span>
+          <span class="asset-tag">Cold Chain</span>
         </div>
       </div>
       <div class="asset-card-footer">
-        <a href="Pharmaceutical FMD.html?v=20261027 class="open-btn">
+        <a href="Pharmaceutical FMD.html?v=20261027" class="open-btn">
           Open Deck
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
@@ -255,7 +284,8 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     </div>
 
     <!-- Card 2: Ideal Customer Profile -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-icp">
+      <a class="card-preview" href="Pharmaceutical ICP.html?v=20261027" tabindex="-1" aria-hidden="true"><img src="assets/previews/pharma-icp.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
         <span class="asset-audience audience-ae">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -265,8 +295,8 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#249EDC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </div>
         <div class="asset-name">Ideal Customer Profile</div>
-        <div class="asset-type">9-Slide Reference · Internal Only</div>
-        <p class="asset-desc">Detailed persona guide covering key buyers and influencers: CSCO, VP Manufacturing Operations, CIO/CDO, Head of Quality &amp; Regulatory, Head of S&amp;OP, Head of Serialisation &amp; Supply Compliance, and VP Commercial Operations. Each slide shows business context, what they care about, how they are measured, and why Snowflake wins with them.</p>
+        <div class="asset-type">10-Page Reference · Internal Only</div>
+        <p class="asset-desc">Detailed persona guide covering 9 buyers and influencers: CSCO, VP Technical Operations, Head of Quality, Head of Supply Planning, Head of Distribution, CIO/CTO, Head of Data Science, CFO and CPO. Each slide shows business context, what they care about, how they are measured, and why Snowflake wins with them.</p>
       </div>
       <div class="asset-card-meta">
         <div class="asset-tags">
@@ -277,7 +307,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
         </div>
       </div>
       <div class="asset-card-footer">
-        <a href="Pharmaceutical ICP.html" class="open-btn">
+        <a href="Pharmaceutical ICP.html?v=20261027" class="open-btn">
           Open ICP
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
@@ -285,7 +315,8 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     </div>
 
     <!-- Card 3: Metrics That Matter -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-met">
+      <a class="card-preview" href="Pharmaceutical metrics that matter.html?v=20261027" tabindex="-1" aria-hidden="true"><img src="assets/previews/pharma-met.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
         <span class="asset-audience audience-all">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
@@ -295,8 +326,8 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d7490" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
         </div>
         <div class="asset-name">Metrics That Matter</div>
-        <div class="asset-type">8-Slide Reference · Business Case</div>
-        <p class="asset-desc">Maps Snowflake capabilities to the KPIs that move boards and CFOs in pharma. Covers 28 metrics across five categories: Quality &amp; Compliance, Cold Chain &amp; Serialisation, Inventory &amp; Working Capital, Manufacturing Excellence, and Financial Impact. Use in discovery and business case reviews.</p>
+        <div class="asset-type">7-Page Reference · Business Case</div>
+        <p class="asset-desc">Maps Snowflake capabilities to the KPIs that move boards and CFOs in pharma. Covers 25 metrics across six categories: Quality &amp; Batch Release, Cold Chain &amp; Delivery, Serialisation &amp; Traceability, Inventory &amp; Working Capital, Planning &amp; Supply, and Financial Impact. Use in discovery and business case reviews.</p>
       </div>
       <div class="asset-card-meta">
         <div class="asset-tags">
@@ -307,7 +338,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
         </div>
       </div>
       <div class="asset-card-footer">
-        <a href="Pharmaceutical metrics that matter.html" class="open-btn blue-btn">
+        <a href="Pharmaceutical metrics that matter.html?v=20261027" class="open-btn blue-btn">
           Open Metrics
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
@@ -315,7 +346,8 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     </div>
 
     <!-- Card 4: SDR Cheat Sheet -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-sdr">
+      <a class="card-preview" href="Pharmaceutical SDR Cheat Sheet.html?v=20261027" tabindex="-1" aria-hidden="true"><img src="assets/previews/pharma-sdr.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
         <span class="asset-audience audience-sdr">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.77-.77a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -326,7 +358,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
         </div>
         <div class="asset-name">SDR Cheat Sheet</div>
         <div class="asset-type">Single-Page Reference · Print-Ready</div>
-        <p class="asset-desc">Quick reference for prospecting and discovery calls. Covers ICP green signals and red flags, trigger events, 30-second pitches by persona (CSCO, CIO, VP Manufacturing Ops), discovery questions, pain signals to listen for, and objection handling including competitive situations (Veeva Vault, SAP, Kinaxis or similar).</p>
+        <p class="asset-desc">Quick reference for prospecting and discovery calls. Covers ICP green signals and red flags, trigger events, 30-second pitches by persona, discovery questions for each buyer, pain signals to listen for, objection handling, and approved customer proof.</p>
       </div>
       <div class="asset-card-meta">
         <div class="asset-tags">
@@ -338,7 +370,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
         </div>
       </div>
       <div class="asset-card-footer">
-        <a href="Pharmaceutical SDR Cheat Sheet.html" class="open-btn teal-btn">
+        <a href="Pharmaceutical SDR Cheat Sheet.html?v=20261027" class="open-btn teal-btn">
           Open Cheat Sheet
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
@@ -346,7 +378,8 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     </div>
 
     <!-- Card 5: Demo Script -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-demo">
+      <a class="card-preview" href="Pharmaceutical Demo Script.html" tabindex="-1" aria-hidden="true"><img src="assets/previews/pharma-demo.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
         <span class="asset-audience audience-all">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
@@ -415,5 +448,31 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
   </div>
 </footer>
 
+<script>
+/* Film: autoplay muted while on screen; respect reduced motion; one tap restarts with voiceover */
+(function () {
+  var v = document.querySelector('.film-video');
+  var btn = document.querySelector('.film-sound');
+  if (!v || !btn) return;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var userPaused = false;
+  v.addEventListener('pause', function () { if (!v.ended && document.visibilityState === 'visible' && v.dataset.auto !== '1') userPaused = true; v.dataset.auto = ''; });
+  v.addEventListener('play', function () { userPaused = false; });
+  v.addEventListener('volumechange', function () { btn.hidden = !v.muted; });
+  if (!reduce && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { if (!userPaused) v.play().catch(function () {}); }
+        else if (!v.paused) { v.dataset.auto = '1'; v.pause(); }
+      });
+    }, { threshold: 0.35 }).observe(v);
+  }
+  btn.addEventListener('click', function () {
+    v.muted = false; v.loop = false; v.currentTime = 0;
+    v.play().catch(function () {});
+  });
+  v.addEventListener('ended', function () { v.loop = true; });
+})();
+</script>
 </body>
 </html>
