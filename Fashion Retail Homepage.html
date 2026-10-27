@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="snowflake-source" content="cortex-agent-authored">
-<title>Fashion Retail — Signal to Shelf</title>
+<title>Snowflake Fashion Retail: Signal to Shelf Sales Play</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
@@ -23,8 +22,24 @@
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color: var(--text-dark); min-height: 100vh; }
-.site-header { background: linear-gradient(135deg, var(--sf-deep) 0%, var(--sf-mid) 60%, rgba(36,158,220,0.85) 100%); padding: 2.5rem 3rem 3rem; position: relative; overflow: hidden; }
-.site-header::after { content: ''; position: absolute; inset: 0; background: url(https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=60) center 40%/cover no-repeat; opacity: 0.1; z-index: 0; }
+
+/* Header */
+.site-header {
+  background: linear-gradient(135deg, var(--sf-deep) 0%, var(--sf-mid) 60%, rgba(36,158,220,0.85) 100%);
+  padding: 2.5rem 3rem 3rem;
+  position: relative;
+  overflow: hidden;
+}
+.site-header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('assets/film/fashion-hero-bg.webp') right center/cover no-repeat;
+  opacity: 0.28;
+  -webkit-mask-image: linear-gradient(90deg, transparent 30%, #000 85%);
+  mask-image: linear-gradient(90deg, transparent 30%, #000 85%);
+  z-index: 0;
+}
 .header-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; }
 .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
 .internal-tag { background: rgba(220,38,38,0.2); border: 1px solid rgba(220,38,38,0.4); border-radius: 5px; padding: 0.3rem 0.8rem; font-size: 0.62rem; font-weight: 700; color: rgba(255,120,120,0.9); letter-spacing: 0.1em; text-transform: uppercase; }
@@ -32,11 +47,17 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
 .play-title { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; color: #FFFFFF; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
 .play-title span { color: var(--sf-star); }
 .play-subtitle { font-size: 1rem; color: rgba(255,255,255,0.7); font-weight: 300; max-width: 650px; line-height: 1.6; }
+
+/* Purpose section */
 .purpose-section { max-width: 1200px; margin: 0 auto; padding: 2.5rem 3rem; }
 .section-heading { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sf-mid); margin-bottom: 0.6rem; }
 .purpose-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 2rem; align-items: start; }
 .purpose-body { font-size: 0.92rem; color: var(--text-gray); line-height: 1.7; margin-bottom: 1rem; }
 .purpose-body strong { color: var(--text-dark); font-weight: 700; }
+
+/* Stat pills */
+
+/* Play at a glance */
 .glance-box { background: linear-gradient(160deg, rgba(17,86,127,0.07), rgba(36,158,220,0.04)); border: 1.5px solid rgba(17,86,127,0.2); border-radius: 14px; padding: 1.4rem 1.6rem; }
 .glance-title { font-size: 0.75rem; font-weight: 800; color: var(--sf-mid); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1rem; }
 .glance-row { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.45rem 0; border-bottom: 1px solid rgba(204,204,204,0.3); }
@@ -44,8 +65,12 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
 .glance-label { font-size: 0.65rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.08em; width: 5.8rem; min-width: 5.8rem; flex-shrink: 0; margin-top: 0.05rem; }
 .glance-value { font-size: 0.78rem; color: var(--text-gray); line-height: 1.45; }
 .glance-value strong { color: var(--text-dark); }
+
+/* Assets section */
 .assets-section { max-width: 1200px; margin: 0 auto; padding: 0 3rem 3rem; }
 .assets-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+
+/* Asset card */
 .asset-card { background: #FFFFFF; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: box-shadow 0.2s, transform 0.2s; }
 .asset-card:hover { box-shadow: 0 8px 30px rgba(17,86,127,0.12); transform: translateY(-2px); }
 .asset-card.placeholder { opacity: 0.7; }
@@ -59,7 +84,6 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
 .icon-purple { background: linear-gradient(135deg, rgba(17,86,127,0.15), rgba(36,158,220,0.08)); }
 .icon-blue { background: linear-gradient(135deg, rgba(36,158,220,0.15), rgba(113,211,220,0.08)); }
 .icon-teal { background: linear-gradient(135deg, rgba(113,211,220,0.2), rgba(36,158,220,0.08)); }
-.icon-green { background: linear-gradient(135deg, rgba(22,163,74,0.14), rgba(113,211,220,0.08)); }
 .icon-gray { background: rgba(107,114,128,0.08); }
 .asset-name { font-size: 1rem; font-weight: 800; color: var(--text-dark); letter-spacing: -0.01em; margin-bottom: 0.3rem; line-height: 1.2; }
 .asset-type { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-light); margin-bottom: 0.7rem; }
@@ -74,15 +98,18 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
 .open-btn.blue-btn:hover { background: var(--sf-mid); }
 .open-btn.teal-btn { background: #0d9488; }
 .open-btn.teal-btn:hover { background: var(--sf-mid); }
-.open-btn.green-btn { background: #16a34a; }
-.open-btn.green-btn:hover { background: var(--sf-mid); }
 .open-btn.gray-btn { background: var(--text-light); cursor: default; }
 .open-btn.gray-btn:hover { background: var(--text-light); }
 .open-btn svg { flex-shrink: 0; }
+
+/* Divider */
 .section-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); max-width: 1200px; margin: 0 auto 2.5rem; }
+
+/* Footer */
 .site-footer { background: var(--sf-deep); padding: 1.5rem 3rem; }
 .site-footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
 .site-footer p { font-size: 0.68rem; color: rgba(255,255,255,0.35); }
+
 @media (max-width: 900px) { .assets-grid { grid-template-columns: 1fr 1fr; } .purpose-grid { grid-template-columns: 1fr; } }
 @media (max-width: 600px) { .assets-grid { grid-template-columns: 1fr; } .purpose-section, .assets-section { padding-left: 1.5rem; padding-right: 1.5rem; } .site-header { padding: 2rem 1.5rem; } }
 /* Featured one-pager card: Why Snowflake for Supply Chain */
@@ -97,7 +124,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
 .open-btn.outline-btn:hover { background: var(--sf-mid); color: var(--sf-white); }
 @media (max-width: 900px) { .onepager-preview { flex-basis: 11rem; } .onepager-preview img { max-width: 8rem; } }
 @media (max-width: 600px) { .onepager-card { flex-direction: column; } .onepager-preview { flex-basis: auto; border-right: none; border-bottom: 1px solid var(--border); padding: 1.2rem; } .onepager-preview img { max-width: 7rem; } .onepager-actions .open-btn { flex-basis: 100%; } }
-/* Film: the narrated 90-second "Signal to Shelf" film, muted autoplay loop */
+/* Film: the narrated 90-second "Every tier, every part" film, muted autoplay loop */
 .film-block { margin-top: 1.6rem; }
 @media (min-width: 901px) { .glance-box { position: sticky; top: 1.5rem; } }
 .film-frame { position: relative; border-radius: 14px; overflow: hidden; background: var(--sf-deep); border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(4,33,48,0.18); aspect-ratio: 16 / 9; }
@@ -108,35 +135,48 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
 .film-sound[hidden] { display: none; }
 .film-desc { font-size: 0.78rem; color: var(--text-gray); line-height: 1.55; margin-top: 0.7rem; }
 @media (max-width: 600px) { .film-frame { border-radius: 10px; } .film-sound { top: 0.5rem; right: 0.5rem; padding: 0.45rem 0.7rem; } }
+
+.card-preview { display: block; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 1px solid var(--border); background: var(--sf-deep); }
+.card-preview img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.3s; }
+.asset-card:hover .card-preview img { transform: scale(1.03); }
+.asset-card.placeholder .card-preview img { filter: grayscale(0.6); }
+.start-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.6rem; margin-bottom: 0.4rem; }
+.start-strip a { display: flex; flex-direction: column; gap: 0.2rem; background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 0.75rem 0.9rem; text-decoration: none; color: var(--text-dark); transition: border-color .15s, box-shadow .15s; }
+.start-strip a:hover, .start-strip a:focus-visible { border-color: var(--sf-blue); box-shadow: 0 4px 14px rgba(17,86,127,.12); outline: none; }
+.ss-who { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sf-mid); }
+.ss-what { font-size: 0.82rem; font-weight: 600; }
+.ss-go { font-size: 0.72rem; color: var(--text-light); }
+.asset-card:target { box-shadow: 0 0 0 3px var(--sf-blue); }
+html { scroll-behavior: smooth; }
+.asset-card[id] { scroll-margin-top: 1.5rem; }
+@media (max-width: 900px) { .start-strip { grid-template-columns: repeat(2, 1fr); } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+.asset-card[hidden] { display: none; }
 </style>
 </head>
 <body>
 
-<!-- ── HEADER ── -->
-<header class="site-header">
+<!-- HEADER -->
+<div class="site-header">
   <div class="header-inner">
     <div class="header-top">
-      <div class="play-label">Sales Play · Fashion Retail · EMEA</div>
-      <span class="internal-tag">Internal Use Only</span>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="30" style="display:block;opacity:0.95;filter:brightness(0) invert(1);">
+      <div class="internal-tag">Internal Only &mdash; Do Not Share</div>
     </div>
+    <div class="play-label">Sales Play &middot; Fashion Retail &middot; EMEA</div>
     <h1 class="play-title">Signal <span>to Shelf</span></h1>
-    <p class="play-subtitle">Help EMEA fashion retail leaders connect every consumer signal to every shelf decision &mdash; in-store, online, or anywhere in between &mdash; on one trusted data platform, so what you design, make, stock and fulfil is driven by real demand, not guesswork.</p>
+    <p class="play-subtitle">Trends now move faster than the buy. Help EMEA fashion retail leaders connect demand signals, merchandise plans and inventory on one governed platform, so buying, allocation and markdown decisions follow real demand and full-price sell-through is protected before the season turns.</p>
   </div>
-</header>
+</div>
 
-<!-- ── PURPOSE ── -->
-<section class="purpose-section">
-  <p class="section-heading">About This Play</p>
+<!-- PURPOSE -->
+<div class="purpose-section">
+  <div class="section-heading">About this Play</div>
   <div class="purpose-grid">
-
-    <!-- Left: description + stats -->
     <div>
-      <p class="purpose-body">
-        EMEA fashion retailers &mdash; luxury, sportswear, high street, department stores, fast fashion, footwear &mdash; face six compounding forces: trend windows closing before weekly reports arrive, omnichannel inventory blind spots, AI personalisation stuck at pilot, a 30&ndash;40% markdown rate driven by disconnected buying data, nearshoring decisions made without cost or carbon data, and now mandatory <strong>CSRD reporting</strong>, <strong>ESPR circularity obligations</strong>, and <strong>Digital Product Passport</strong> traceability requirements. Every one is a data problem.
-      </p>
-      <p class="purpose-body">
-        Snowflake solves this by becoming the <strong>intelligence layer on top of every system the customer already has</strong> &mdash; zero-copy, no rip and replace. One governed platform for <strong>Signal</strong> (consumer &amp; demand intelligence), <strong>Shelf</strong> (assortment, fulfilment, personalisation), and <strong>Proof</strong> (DPP, CSRD, traceability). Turn demand signals into sell-through &mdash; and proof.
-      </p>
+      <p class="purpose-body">Fashion retail covers luxury, sportswear, high street, department stores, fast fashion, footwear and outdoor. These retailers plan the season in one place (MFP, WSSI, open-to-buy), sell it in another (POS, ecommerce, loyalty) and source it in a third (PLM, supplier portals, Blue Yonder or SAP). <strong>Every system has its own number.</strong> Trend signals arrive in weekly reports after the window has closed, stock sits in the wrong stores and channels, markdowns land late and deep, and DPP and CSRD reporting depend on supplier data nobody has joined up.</p>
+      <p class="purpose-body">This play positions Snowflake as the <strong>intelligence layer that connects every system the customer already runs</strong>, through connectors, Openflow and data sharing with suppliers and logistics partners (and SAP Business Data Cloud where SAP is the core). One governed platform for <strong>Signal</strong> (demand), <strong>Shelf</strong> (buying, allocation and markdown) and <strong>Proof</strong> (traceability and compliance). No rip and replace, and AI that reaches production instead of stalling in pilots.</p>
+      <p class="purpose-body" style="color:var(--text-light);font-size:0.85rem;">These materials give you the narrative, personas, and proof points. You still need to do your own discovery and tailor the story to each customer's specific pain, systems landscape, and transformation stage.</p>
       <div class="film-block" role="region" aria-labelledby="film-title">
       <p class="section-heading" id="film-title">The Play in 90 Seconds &middot; Signal to Shelf</p>
       <div class="film-frame">
@@ -149,63 +189,63 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
       <p class="film-desc" id="film-desc">Flare jeans are selling out in three cities while skinny stalls. The planning team sees the signal, changes the plan once, marks down early and shallow, and signs off commercial and compliance together. A person makes the call. Illustrative scenario.</p>
       </div>
     </div>
-
-    <!-- Right: Play at a Glance -->
-    <div class="glance-box">
-      <div class="glance-title">Play at a Glance</div>
-
-      <div class="glance-row">
-        <span class="glance-label">Target</span>
-        <span class="glance-value">EMEA fashion retailers <strong>£500M+ revenue</strong> with multi-channel operations, buying complexity, and DPP / CSRD obligations</span>
-      </div>
-      <div class="glance-row">
-        <span class="glance-label">Sub-verticals</span>
-        <span class="glance-value">Luxury · Sportswear · High Street · Department Store · Fast Fashion · Footwear · Outdoor &amp; Lifestyle</span>
-      </div>
-      <div class="glance-row">
-        <span class="glance-label">Themes</span>
-        <span class="glance-value">AI demand sensing · Personalisation · Hyperlocalisation · Omnichannel inventory · Assortment &amp; markdown AI · Digital Product Passport · CSRD &amp; ESPR · Supply resilience</span>
-      </div>
-      <div class="glance-row">
-        <span class="glance-label">Buyers</span>
-        <span class="glance-value"><strong>Primary:</strong> Commercial Director, Merchandising Director, Buying Director, CIO/CTO &middot; <strong>Champion:</strong> Ecommerce Director, Sustainability Director</span>
-      </div>
-      <div class="glance-row">
-        <span class="glance-label">Core Pain</span>
-        <span class="glance-value">POS, loyalty, MFP, e-commerce, and ESG data in silos. AI personalisation pilots fail on ungoverned customer data. DPP / CSRD / ESPR compliance requiring traceability infrastructure that doesn&rsquo;t yet exist. Markdown rate driven by late signals.</span>
-      </div>
-      <div class="glance-row">
-        <span class="glance-label">Our Angle</span>
-        <span class="glance-value">Signal · Shelf · Proof on the same governed platform. Intelligence layer on top &mdash; no rip and replace. Turn demand signals into sell-through. And prove it.</span>
+    <div>
+      <div class="glance-box">
+        <div class="glance-title">Play at a Glance</div>
+        <div class="glance-row">
+          <div class="glance-label">Target</div>
+          <div class="glance-value">EMEA fashion retailers with &pound;500M+ revenue, multi-channel operations, seasonal buying complexity and DPP / CSRD obligations</div>
+        </div>
+        <div class="glance-row">
+          <div class="glance-label">Sub-verticals</div>
+          <div class="glance-value">Luxury &middot; Sportswear &middot; High Street &middot; Department Store &middot; Fast Fashion &middot; Footwear &middot; Outdoor &amp; Lifestyle (examples, not exhaustive)</div>
+        </div>
+        <div class="glance-row">
+          <div class="glance-label">Buyers</div>
+          <div class="glance-value"><strong>Economic:</strong> Commercial Director / CCO (CIO/CTO on larger platform deals) &nbsp;&middot;&nbsp; <strong>Champions:</strong> Merchandising Director, Buying Director, Supply Chain &amp; Sourcing, Allocation &amp; Replenishment &nbsp;&middot;&nbsp; <strong>Influencers:</strong> CFO, Ecommerce Director, Sustainability</div>
+        </div>
+        <div class="glance-row">
+          <div class="glance-label">Core pain</div>
+          <div class="glance-value">Plan, sell and source data in separate systems. Trends spotted after the window closes. Stock in the wrong place, markdowns late and deep. DPP / CSRD traceability that depends on supplier data nobody has joined up.</div>
+        </div>
+        <div class="glance-row">
+          <div class="glance-label">Our angle</div>
+          <div class="glance-value">Signal &middot; Shelf &middot; Proof on one governed platform. Intelligence layer on top of the systems they already run. Merchandisers and planners make better calls on the WSSI. No rip and replace.</div>
+        </div>
+        <div class="glance-row">
+          <div class="glance-label">Readiness</div>
+          <div class="glance-value">Multi-channel, MFP or WSSI in place, a funded data/AI or replatforming initiative. Single-channel or spreadsheet-only planning &rarr; likely too early.</div>
+        </div>
       </div>
     </div>
-
   </div>
-</section>
+</div>
 
 <div class="section-divider"></div>
 
-<!-- ── ASSETS ── -->
-<section class="assets-section">
-  <p class="section-heading">Play Assets</p>
+<!-- ASSETS -->
+<div class="assets-section">
+  <p class="section-heading">Where to start</p>
+  <nav class="start-strip" aria-label="Where to start">
+    <a href="#a-sdr"><span class="ss-who">SDR</span><span class="ss-what">Prospecting &amp; first call</span><span class="ss-go">SDR Cheat Sheet &rarr;</span></a>
+    <a href="#a-icp"><span class="ss-who">AE &middot; prep</span><span class="ss-what">Know the buyer</span><span class="ss-go">ICP &rarr;</span></a>
+    <a href="#a-fmd"><span class="ss-who">AE &middot; meeting</span><span class="ss-what">Run the first meeting</span><span class="ss-go">FMD &rarr; One-pager</span></a>
+    <a href="#a-met"><span class="ss-who">AE &amp; SE</span><span class="ss-what">Size the value</span><span class="ss-go">Metrics That Matter &rarr;</span></a>
+    <a href="#a-app"><span class="ss-who">SE</span><span class="ss-what">Show it</span><span class="ss-go">Live Demo &rarr;</span></a>
+  </nav>
+  <div class="section-heading" style="margin:1.6rem 0 1.2rem;">Play Assets</div>
   <div class="assets-grid">
-
-    <!-- Featured: Why Snowflake for Supply Chain one-pager -->
-    <div class="asset-card onepager-card">
-      <a class="onepager-preview" href="Fashion%20Retail%20-%20Why%20Snowflake%20for%20Supply%20Chain.html" tabindex="-1" aria-hidden="true">
+<!-- Featured: Why Snowflake for Supply Chain one-pager -->
+    <div class="asset-card onepager-card" id="a-one">
+      <a class="onepager-preview" href="Fashion%20Retail%20-%20Why%20Snowflake%20for%20Supply%20Chain.html" target="_blank" tabindex="-1" aria-hidden="true">
         <img src="assets/onepagers/fashion-retail.webp" width="360" height="510" alt="" loading="lazy" decoding="async">
       </a>
       <div class="onepager-body">
         <div class="asset-card-top">
-          <span class="asset-audience audience-all">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-            Customer-Facing
-          </span>
+          <div class="asset-audience audience-all">Customer-Facing</div>
           <div class="asset-name">Why Snowflake for Supply Chain</div>
           <div class="asset-type">One-Pager &middot; Web &amp; Print-Ready PDF</div>
           <p class="asset-desc">A one-page leave-behind for fashion merchandising and supply chain leaders, headlined <strong>&ldquo;Win the season. Protect full-price margin.&rdquo;</strong> It shows how connecting merchandise plans, local demand and inventory on Snowflake supports three decisions &mdash; connect plan to trade, allocate locally and move stock before markdown &mdash; with Coach as customer proof. Share it before a first meeting or as the follow-up.</p>
-        </div>
-        <div class="asset-card-meta">
           <div class="asset-tags">
             <span class="asset-tag">Leave-Behind</span>
             <span class="asset-tag">First Meeting</span>
@@ -213,8 +253,9 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
             <span class="asset-tag">Proof: Coach</span>
           </div>
         </div>
+        <div class="asset-card-meta"></div>
         <div class="asset-card-footer onepager-actions">
-          <a href="Fashion%20Retail%20-%20Why%20Snowflake%20for%20Supply%20Chain.html" class="open-btn">
+          <a href="Fashion%20Retail%20-%20Why%20Snowflake%20for%20Supply%20Chain.html" target="_blank" class="open-btn">
             Open One-Pager
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </a>
@@ -225,200 +266,106 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
         </div>
       </div>
     </div>
-
-    <!-- Card 1: First Meeting Deck — LIVE -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-fmd">
+      <a class="card-preview" href="Fashion Retail FMD.html?v=3" target="_blank" tabindex="-1" aria-hidden="true"><img src="assets/previews/fashion-fmd.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
-        <span class="asset-audience audience-ae">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          For Account Executives
-        </span>
-        <div class="asset-icon icon-purple">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#11567F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        </div>
+        <div class="asset-audience audience-ae">For Account Executives</div>
+        <div class="asset-icon icon-purple"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#11567F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
         <div class="asset-name">First Meeting Deck</div>
-        <div class="asset-type">23-Slide Presentation · Interactive</div>
-        <p class="asset-desc">The go-to deck for your first meeting with a Commercial Director, Merchandising Director, or CTO. Covers the six EMEA fashion forces, the agentic shift, the four things that make it possible, customer proof, and three on-ramps &mdash; one per capability: Demand Intelligence, then Supply Optimisation &amp; Risk, then Visibility &amp; Control Tower. 14-slide spine plus three appendices, including a complete AE customisation guide.</p>
+        <div class="asset-type">13-Scene Presentation &middot; Interactive</div>
+        <p class="asset-desc">The go-to deck for a first meeting with a Commercial Director, Merchandising Director or CIO/CTO. Covers why trends now move faster than the buy, the cost of every system having its own number, why Snowflake for fashion retail, comparing trade-offs before deciding, customer proof led by Under Armour and Urban Outfitters, and where to start with one decision.</p>
+        <div class="asset-tags"><span class="asset-tag">First Meeting</span><span class="asset-tag">Commercial Director</span><span class="asset-tag">Merchandising Director</span><span class="asset-tag">CIO / CTO</span><span class="asset-tag">Narrated</span></div>
       </div>
-      <div class="asset-card-meta">
-        <div class="asset-tags">
-          <span class="asset-tag">First Meeting</span>
-          <span class="asset-tag">Commercial Director</span>
-          <span class="asset-tag">Merchandising Director</span>
-          <span class="asset-tag">CIO / CTO</span>
-          <span class="asset-tag">Narrated</span>
-        </div>
-      </div>
+      <div class="asset-card-meta"></div>
       <div class="asset-card-footer">
-        <a href="Fashion Retail FMD.html?v=2" class="open-btn">
-          Open Deck
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </a>
+        <a href="Fashion Retail FMD.html?v=3" target="_blank" class="open-btn ">Open Deck</a>
       </div>
     </div>
-
-    <!-- Card 2: Ideal Customer Profile -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-icp">
+      <a class="card-preview" href="Fashion Retail ICP.html?v=2" target="_blank" tabindex="-1" aria-hidden="true"><img src="assets/previews/fashion-icp.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
-        <span class="asset-audience audience-ae">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          For Account Executives
-        </span>
-        <div class="asset-icon icon-blue">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#249EDC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </div>
+        <div class="asset-audience audience-ae">For Account Executives</div>
+        <div class="asset-icon icon-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#249EDC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
         <div class="asset-name">Ideal Customer Profile</div>
-        <div class="asset-type">8-Slide Reference · Internal Only</div>
-        <p class="asset-desc">Detailed persona guide covering key buyers and influencers &mdash; Commercial Director, Merchandising Director, CIO/CTO, Buying Director, Ecommerce Director, and Sustainability Director. Each persona shows business context, what they care about, how they&rsquo;re measured, and exactly why Snowflake wins with them.</p>
+        <div class="asset-type">10-Persona Reference &middot; Internal Only</div>
+        <p class="asset-desc">Who buys, who champions and who signs off. Ten personas from the Commercial Director (economic buyer) through Merchandising, Buying, Supply Chain &amp; Sourcing and Allocation &amp; Replenishment, to the CIO/CTO, Head of Data, CFO, Ecommerce and Sustainability. Each shows what they own, how they are measured, with KPI pop-outs, and why Snowflake wins with them.</p>
+        <div class="asset-tags"><span class="asset-tag">Qualification</span><span class="asset-tag">Persona Research</span><span class="asset-tag">Discovery Prep</span><span class="asset-tag">Internal Only</span></div>
       </div>
-      <div class="asset-card-meta">
-        <div class="asset-tags">
-          <span class="asset-tag">Qualification</span>
-          <span class="asset-tag">Persona Research</span>
-          <span class="asset-tag">Discovery Prep</span>
-          <span class="asset-tag">Internal Only</span>
-        </div>
-      </div>
+      <div class="asset-card-meta"></div>
       <div class="asset-card-footer">
-        <a href="Fashion Retail ICP.html?v=2" class="open-btn">
-          Open ICP
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </a>
+        <a href="Fashion Retail ICP.html?v=2" target="_blank" class="open-btn ">Open ICP</a>
       </div>
     </div>
-
-    <!-- Card 3: Metrics That Matter -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-met">
+      <a class="card-preview" href="Fashion Retail metrics that matter.html?v=2" target="_blank" tabindex="-1" aria-hidden="true"><img src="assets/previews/fashion-met.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
-        <span class="asset-audience audience-all">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          For AEs &amp; SEs
-        </span>
-        <div class="asset-icon icon-teal">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d7490" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        </div>
+        <div class="asset-audience audience-all">For AEs &amp; SEs</div>
+        <div class="asset-icon icon-teal"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d7490" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
         <div class="asset-name">Metrics That Matter</div>
-        <div class="asset-type">8-Slide Reference · Business Case</div>
-        <p class="asset-desc">Maps Snowflake capabilities to the KPIs that move boards and CFOs in fashion retail. Covers key metrics across five categories: Demand &amp; Sell-Through, Buying &amp; Assortment, Inventory &amp; Working Capital, Customer &amp; Personalisation, and Sustainability &amp; Compliance. Use in discovery and business case reviews.</p>
+        <div class="asset-type">27 KPIs &middot; Business Case</div>
+        <p class="asset-desc">The KPIs that move boards and CFOs in fashion retail, across six categories: Demand &amp; Sell-Through, Buying &amp; Merchandising, Allocation &amp; Inventory, Sourcing &amp; Supply, Customer &amp; Returns, and Financial Impact. Each KPI has an owner, a definition and a worked example in GBP, including WSSI build time. Use in discovery and business case reviews.</p>
+        <div class="asset-tags"><span class="asset-tag">Business Case</span><span class="asset-tag">CFO Conversation</span><span class="asset-tag">Discovery</span><span class="asset-tag">KPIs</span></div>
       </div>
-      <div class="asset-card-meta">
-        <div class="asset-tags">
-          <span class="asset-tag">Business Case</span>
-          <span class="asset-tag">CFO Conversation</span>
-          <span class="asset-tag">Discovery</span>
-          <span class="asset-tag">KPIs</span>
-        </div>
-      </div>
+      <div class="asset-card-meta"></div>
       <div class="asset-card-footer">
-        <a href="Fashion Retail metrics that matter.html?v=2" class="open-btn blue-btn">
-          Open Metrics
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </a>
+        <a href="Fashion Retail metrics that matter.html?v=2" target="_blank" class="open-btn blue-btn">Open Metrics</a>
       </div>
     </div>
-
-    <!-- Card 4: SDR Cheat Sheet -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-sdr">
+      <a class="card-preview" href="Fashion Retail SDR Cheat Sheet.html?v=2" target="_blank" tabindex="-1" aria-hidden="true"><img src="assets/previews/fashion-sdr.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
-        <span class="asset-audience audience-sdr">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.77-.77a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          For SDRs
-        </span>
-        <div class="asset-icon icon-purple">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#11567F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-        </div>
+        <div class="asset-audience audience-sdr">For SDRs</div>
+        <div class="asset-icon icon-teal"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#11567F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
         <div class="asset-name">SDR Cheat Sheet</div>
-        <div class="asset-type">Single-Page Reference · Print-Ready</div>
-        <p class="asset-desc">Quick reference for prospecting and discovery calls. Covers ICP green signals and red flags, trigger events (DPP mandate, CSRD reporting, new e-commerce platform), 30-second pitches by persona, discovery questions for each buyer, pain signals to listen for, and objection handling.</p>
+        <div class="asset-type">Single-Page Reference &middot; Print-Ready</div>
+        <p class="asset-desc">Quick reference for prospecting and discovery calls. Covers ICP green signals and red flags, trigger events, 30-second pitches by persona, discovery questions for each buyer, pain signals to listen for, objection handling, and approved customer proof.</p>
+        <div class="asset-tags"><span class="asset-tag">Prospecting</span><span class="asset-tag">Cold Outreach</span><span class="asset-tag">Discovery</span><span class="asset-tag">Objections</span><span class="asset-tag">Internal Only</span></div>
       </div>
-      <div class="asset-card-meta">
-        <div class="asset-tags">
-          <span class="asset-tag">Prospecting</span>
-          <span class="asset-tag">Cold Outreach</span>
-          <span class="asset-tag">Discovery</span>
-          <span class="asset-tag">Objections</span>
-          <span class="asset-tag">Internal Only</span>
-        </div>
-      </div>
+      <div class="asset-card-meta"></div>
       <div class="asset-card-footer">
-        <a href="Fashion Retail SDR Cheat Sheet.html?v=2" class="open-btn teal-btn">
-          Open Cheat Sheet
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </a>
+        <a href="Fashion Retail SDR Cheat Sheet.html?v=2" target="_blank" class="open-btn teal-btn">Open Cheat Sheet</a>
       </div>
     </div>
-
-    <!-- Card 5: Demo Script -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-demo" hidden>
+      <a class="card-preview" href="Fashion Retail Demo Script.html" target="_blank" tabindex="-1" aria-hidden="true"><img src="assets/previews/fashion-demo.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
-        <span class="asset-audience audience-all">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          For AEs &amp; SEs
-        </span>
-        <div class="asset-icon icon-purple">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#11567F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        </div>
+        <div class="asset-audience audience-all">For AEs &amp; SEs</div>
+        <div class="asset-icon icon-purple"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#11567F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
         <div class="asset-name">Demo Script</div>
-        <div class="asset-type">Interactive HTML · Step-by-Step Guide</div>
-        <p class="asset-desc">Scene-by-scene script for running the Signal to Shelf demo. One trend event &mdash; skinny jeans losing share to flare &mdash; followed through MFP, assortment, OTB, forecast, markdown, replenishment and the supplier chase across four planning personas, then forward into pre-season. Includes the supplier compliance gate (CSDDD / ESPR &amp; Digital Product Passport) as a live constraint on the chase, Cortex Analyst queries, and the Snowflake features behind every scene. Use alongside the First Meeting Deck for in-person or virtual demos.</p>
+        <div class="asset-type">Interactive HTML &middot; Step-by-Step Guide</div>
+        <p class="asset-desc">Scene-by-scene script for running the Signal to Shelf demo: one trend event, skinny jeans losing share to flare, followed through planning, markdown, replenishment and the supplier chase.</p>
+        <div class="asset-tags"><span class="asset-tag">Demo</span><span class="asset-tag">SE</span><span class="asset-tag">Script</span></div>
       </div>
-      <div class="asset-card-meta">
-        <div class="asset-tags">
-          <span class="asset-tag">Demo</span>
-          <span class="asset-tag">SE</span>
-          <span class="asset-tag">Live Demo</span>
-          <span class="asset-tag">Script</span>
-        </div>
-      </div>
+      <div class="asset-card-meta"></div>
       <div class="asset-card-footer">
-        <a href="Fashion Retail Demo Script.html" class="open-btn">
-          Open Script
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </a>
+        <a href="Fashion Retail Demo Script.html" target="_blank" class="open-btn ">Open Script</a>
       </div>
     </div>
-
-    <!-- Card 6: Conceptual Demo — PLACEHOLDER -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-app">
+      <a class="card-preview" href="https://sfc-gh-enicholls.github.io/calla-fashion-planning/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><img src="assets/previews/fashion-app.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
-        <span class="asset-audience audience-all">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          For AEs &amp; SEs
-        </span>
-        <div class="asset-icon icon-green">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-        </div>
+        <div class="asset-audience audience-all">For AEs &amp; SEs</div>
+        <div class="asset-icon icon-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
         <div class="asset-name">Conceptual Demo &mdash; Calla</div>
-        <div class="asset-type">Hosted Demo App &middot; Access Code Required</div>
-        <p class="asset-desc">The hosted Calla app: a fictional fashion retailer running the season on Snowflake. Walk the trading decision end to end: the planning homepage and proposal queue, a live <strong>WSSI</strong>, shifting the assortment, funding the chase, why early markdown beats late, stopping what can still be stopped, capacity and compliance as one decision, and how this season teaches next season. Ask Emily Nicholls for the access code.</p>
+        <div class="asset-type">Interactive Demo &middot; Live App &middot; Access Code Required</div>
+        <p class="asset-desc">The hosted Calla app: a fictional fashion retailer running the season on Snowflake. Walk the trading decision end to end: the planning homepage and proposal queue, a live <strong>WSSI</strong>, shifting the assortment, funding the chase, why early markdown beats late, stopping what can still be stopped, and capacity and compliance as one decision. Runs on synthetic data.</p>
+        <div class="asset-tags"><span class="asset-tag">Demo</span><span class="asset-tag">Live App</span><span class="asset-tag">WSSI</span><span class="asset-tag">End-to-End</span></div>
       </div>
-      <div class="asset-card-meta">
-        <div class="asset-tags">
-          <span class="asset-tag">Demo</span>
-          <span class="asset-tag">Live App</span>
-          <span class="asset-tag">Interactive</span>
-          <span class="asset-tag">WSSI</span>
-          <span class="asset-tag">End-to-End</span>
-        </div>
-      </div>
+      <div class="asset-card-meta"></div>
       <div class="asset-card-footer">
-        <a href="https://sfc-gh-enicholls.github.io/calla-fashion-planning/" class="open-btn green-btn">
-          Open Demo App
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </a>
+        <a href="https://sfc-gh-enicholls.github.io/calla-fashion-planning/" target="_blank" rel="noopener" class="open-btn green-btn">Open Demo</a>
       </div>
     </div>
-
   </div>
-</section>
+</div>
 
-<!-- ── FOOTER ── -->
-<footer class="site-footer">
+<!-- FOOTER -->
+<div class="site-footer">
   <div class="site-footer-inner">
-    <p>Fashion Retail Signal to Shelf Play · Internal Use Only · &copy; 2026 Snowflake Inc. All Rights Reserved</p>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Snowflake_Logo.svg" height="20" style="display:block;opacity:0.4;filter:brightness(0) invert(1);">
+    <p>Fashion Retail &mdash; Signal to Shelf Play &nbsp;&middot;&nbsp; Internal Use Only &nbsp;&middot;&nbsp; &copy; 2026 Snowflake Inc. All Rights Reserved</p>
   </div>
-</footer>
-
+</div>
 <script>
 /* Film: autoplay muted while on screen; respect reduced motion; one tap restarts with voiceover */
 (function () {
