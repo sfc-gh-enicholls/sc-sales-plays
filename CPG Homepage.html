@@ -104,6 +104,18 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
 .film-sound[hidden] { display: none; }
 .film-desc { font-size: 0.78rem; color: var(--text-gray); line-height: 1.55; margin-top: 0.7rem; }
 @media (max-width: 600px) { .film-frame { border-radius: 10px; } .film-sound { top: 0.5rem; right: 0.5rem; padding: 0.45rem 0.7rem; } }
+
+.start-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.6rem; margin-bottom: 0.4rem; }
+.start-strip a { display: flex; flex-direction: column; gap: 0.2rem; background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 0.75rem 0.9rem; text-decoration: none; color: var(--text-dark); transition: border-color .15s, box-shadow .15s; }
+.start-strip a:hover, .start-strip a:focus-visible { border-color: var(--sf-blue); box-shadow: 0 4px 14px rgba(17,86,127,.12); outline: none; }
+.ss-who { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sf-mid); }
+.ss-what { font-size: 0.82rem; font-weight: 600; }
+.ss-go { font-size: 0.72rem; color: var(--text-light); }
+.asset-card:target { box-shadow: 0 0 0 3px var(--sf-blue); }
+html { scroll-behavior: smooth; }
+.asset-card[id], .onepager-card { scroll-margin-top: 1.5rem; }
+@media (max-width: 900px) { .start-strip { grid-template-columns: repeat(2, 1fr); } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 </style>
 </head>
 <body>
@@ -128,13 +140,13 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     <!-- Left: description + film -->
     <div>
       <p class="purpose-body">
-        EMEA CPG companies across food &amp; beverage, personal care, household products, confectionery and beverages face compounding pressures: demand volatility, promotional chaos, AI stuck in pilot, retailer compliance, working capital constraints, and now mandatory <strong>CSRD sustainability reporting</strong> and <strong>Digital Product Passport</strong> traceability requirements. Every one is a data problem.
+        EMEA CPG leaders in food &amp; beverage, personal care, household and pet care are being squeezed from every side: volatile demand, promotions planned without supply, retailer service penalties, tight working capital and AI that stalls in pilot. On top sit new traceability duties under <strong>CSRD</strong>, <strong>EUDR</strong> and the <strong>Digital Product Passport</strong>. Each one is a data problem: the answer sits across ERP, planning, TPM and retailer data that don&rsquo;t talk to each other.
       </p>
       <p class="purpose-body">
-        Snowflake solves this by <strong>connecting to</strong> every system the customer already has. Zero-copy, no rip and replace. One governed platform for <strong>Forecast</strong> (demand planning), <strong>Foresight</strong> (AI &amp; scenario modelling), and <strong>Proof</strong> (governance, compliance, ESG). Connect, extend, rationalise, on your timetable. Stop reacting to disruption and reporting deadlines. Predict them.
+        Snowflake <strong>connects to</strong> what the customer already runs, with no rip and replace: SAP data zero-copy via Business Data Cloud, everything else through connectors, Openflow and data sharing. One governed platform carries three jobs: <strong>Forecast</strong> (see true demand), <strong>Foresight</strong> (AI and scenarios that act before the disruption) and <strong>Proof</strong> (governed, auditable numbers for retailers, finance and regulators).
       </p>
       <div style="margin-top:0.8rem;background:rgba(17,86,127,0.04);border:1px solid rgba(17,86,127,0.12);border-radius:6px;padding:0.4rem 0.7rem;">
-        <p style="font-size:0.66rem;color:var(--text-light);margin:0;line-height:1.45;"><strong style="color:var(--sf-mid);">CSRD</strong> (Corporate Sustainability Reporting Directive) is EU legislation requiring large companies to report ESG impacts including Scope 3 emissions and supply chain traceability. Mandatory for large EMEA companies from 2025.</p>
+        <p style="font-size:0.66rem;color:var(--text-light);margin:0;line-height:1.45;"><strong style="color:var(--sf-mid);">Acronyms.</strong> CSRD: EU sustainability reporting, including Scope 3 and supply-chain impacts. EUDR: EU deforestation rules for cocoa, coffee, palm oil, soy and more. DPP: product-level traceability data. Scope and dates are still moving under the EU Omnibus, so check the current position before quoting a deadline.</p>
       </div>
       <div class="film-block" role="region" aria-labelledby="film-title">
       <p class="section-heading" id="film-title">The Play in 90 Seconds &middot; Can We Say Yes?</p>
@@ -152,31 +164,14 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     <!-- Right: Play at a Glance -->
     <div class="glance-box">
       <div class="glance-title">Play at a Glance</div>
-
-      <div class="glance-row">
-        <span class="glance-label">Target</span>
-        <span class="glance-value">EMEA CPG companies <strong>$500M+ revenue</strong> with multi-category portfolios, retailer complexity, and sustainability reporting obligations</span>
-      </div>
-      <div class="glance-row">
-        <span class="glance-label">Sub-verticals</span>
-        <span class="glance-value">Food &amp; Beverage · Personal Care · Household Products · Confectionery · Beverages · Pet Care</span>
-      </div>
-      <div class="glance-row">
-        <span class="glance-label">Themes</span>
-        <span class="glance-value">Cost &amp; margin · Supply resilience · AI demand forecasting · CSRD &amp; compliance · Digital Product Passport · Omni-channel</span>
-      </div>
-      <div class="glance-row">
-        <span class="glance-label">Buyers</span>
-        <span class="glance-value"><strong>Primary:</strong> CSCO, CIO/CDO, CPO &middot; <strong>Champion:</strong> VP Demand Planning, Head of S&amp;OP, Head of Supply Planning</span>
-      </div>
-      <div class="glance-row">
-        <span class="glance-label">Core Pain</span>
-        <span class="glance-value">ERP, demand planning, TPM, WMS in silos. Trade promotions built without supply input. AI pilots fail on ungoverned data. CSRD / EUDR / DPP compliance requiring traceability infrastructure that doesn&rsquo;t yet exist.</span>
-      </div>
-      <div class="glance-row">
-        <span class="glance-label">Our Angle</span>
-        <span class="glance-value">Forecast &middot; Foresight &middot; Proof on the same governed platform. Connect, extend, rationalise, on your timetable. Stop reacting to disruption and reporting deadlines. Predict them.</span>
-      </div>
+      <div class="glance-row"><span class="glance-label">Target</span><span class="glance-value">EMEA CPG, <strong>$500M+ revenue</strong>, multi-category, selling through demanding retailers</span></div>
+      <div class="glance-row"><span class="glance-label">Sub-verticals</span><span class="glance-value">Food &amp; Beverage · Confectionery · Personal Care · Household · Pet Care</span></div>
+      <div class="glance-row"><span class="glance-label">Economic buyer</span><span class="glance-value">CSCO · CIO / CDO</span></div>
+      <div class="glance-row"><span class="glance-label">Champions</span><span class="glance-value">VP Demand Planning / Head of S&amp;OP · Head of Supply Planning</span></div>
+      <div class="glance-row"><span class="glance-label">Influencers</span><span class="glance-value">CPO · Head of Revenue Growth Management</span></div>
+      <div class="glance-row"><span class="glance-label">Core pain</span><span class="glance-value">ERP, planning, TPM and WMS in silos. Promotions built without supply input. AI pilots fail on ungoverned data. Traceability for CSRD / EUDR / DPP not yet in place.</span></div>
+      <div class="glance-row"><span class="glance-label">Our angle</span><span class="glance-value">Forecast · Foresight · Proof on one governed platform. Connect first, extend, then rationalise, on the customer&rsquo;s timetable.</span></div>
+      <div class="glance-row"><span class="glance-label">Proof</span><span class="glance-value">Kraft Heinz · Nestl&eacute; · PepsiCo</span></div>
     </div>
 
   </div>
@@ -185,12 +180,20 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
 <div class="section-divider"></div>
 
 <!-- ── ASSETS ── -->
-<section class="assets-section">
-  <p class="section-heading">Play Assets</p>
+<section class="assets-section" id="assets">
+  <p class="section-heading">Where to start</p>
+  <nav class="start-strip" aria-label="Where to start">
+    <a href="#a-sdr"><span class="ss-who">SDR</span><span class="ss-what">Prospecting &amp; first call</span><span class="ss-go">SDR Cheat Sheet &rarr;</span></a>
+    <a href="#a-icp"><span class="ss-who">AE &middot; prep</span><span class="ss-what">Know the buyer</span><span class="ss-go">ICP &rarr;</span></a>
+    <a href="#a-fmd"><span class="ss-who">AE &middot; meeting</span><span class="ss-what">Run the first meeting</span><span class="ss-go">FMD &rarr; One-pager</span></a>
+    <a href="#a-met"><span class="ss-who">AE &amp; SE</span><span class="ss-what">Size the value</span><span class="ss-go">Metrics That Matter &rarr;</span></a>
+    <a href="#a-demo"><span class="ss-who">SE</span><span class="ss-what">Show it</span><span class="ss-go">Demo Script &rarr;</span></a>
+  </nav>
+  <p class="section-heading" style="margin-top:1.6rem">Play Assets</p>
   <div class="assets-grid">
 
     <!-- Featured: Why Snowflake for Supply Chain one-pager -->
-    <div class="asset-card onepager-card">
+    <div class="asset-card onepager-card" id="a-one">
       <a class="onepager-preview" href="CPG%20-%20Why%20Snowflake%20for%20Supply%20Chain.html" tabindex="-1" aria-hidden="true">
         <img src="assets/onepagers/cpg.webp" width="360" height="510" alt="" loading="lazy" decoding="async">
       </a>
@@ -226,7 +229,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     </div>
 
     <!-- Card 1: First Meeting Deck -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-fmd">
       <div class="asset-card-top">
         <span class="asset-audience audience-ae">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -256,7 +259,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     </div>
 
     <!-- Card 2: Ideal Customer Profile -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-icp">
       <div class="asset-card-top">
         <span class="asset-audience audience-ae">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -266,8 +269,8 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#249EDC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </div>
         <div class="asset-name">Ideal Customer Profile</div>
-        <div class="asset-type">9-Slide Reference · Internal Only</div>
-        <p class="asset-desc">Detailed persona guide covering key buyers and influencers: CSCO, VP Demand Planning, CIO/CDO, CPO, Head of Supply Planning, Head of S&amp;OP/IBP, and Head of Revenue Growth Management. Each slide shows business context, what they care about, how they're measured, and exactly why Snowflake wins with them.</p>
+        <div class="asset-type">8-Page Reference · Internal Only</div>
+        <p class="asset-desc">Who buys, who champions and who influences: CSCO and CIO/CDO as economic buyers; Demand Planning, S&amp;OP and Supply Planning heads as champions; CPO and Revenue Growth Management as influencers. Each page covers what they own, how they&rsquo;re measured, the pain to listen for and why Snowflake wins, with metric pop-outs.</p>
       </div>
       <div class="asset-card-meta">
         <div class="asset-tags">
@@ -286,7 +289,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     </div>
 
     <!-- Card 3: Metrics That Matter -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-met">
       <div class="asset-card-top">
         <span class="asset-audience audience-all">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
@@ -296,8 +299,8 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d7490" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
         </div>
         <div class="asset-name">Metrics That Matter</div>
-        <div class="asset-type">8-Slide Reference · Business Case</div>
-        <p class="asset-desc">Maps Snowflake capabilities to the KPIs that move boards and CFOs in CPG. Covers 24 metrics across five categories: Customer Service &amp; Fill, Demand Planning &amp; Promotions, Inventory &amp; Working Capital, Operations &amp; Manufacturing, and Revenue &amp; Financial Impact. Use in discovery and business case reviews.</p>
+        <div class="asset-type">6-Page Reference · Business Case</div>
+        <p class="asset-desc">Maps Snowflake capabilities to the KPIs that move boards and CFOs in CPG. Covers 27 metrics, each with a definition and the Snowflake lever, across five categories: Customer Service &amp; Fill, Demand Planning &amp; Promotions, Inventory &amp; Working Capital, Operations &amp; Manufacturing, and Revenue &amp; Financial Impact. Use in discovery and business case reviews.</p>
       </div>
       <div class="asset-card-meta">
         <div class="asset-tags">
@@ -308,7 +311,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
         </div>
       </div>
       <div class="asset-card-footer">
-        <a href="CPG metrics that matter.html?v=20261027a" class="open-btn blue-btn">
+        <a href="CPG metrics that matter.html?v=20261027a" class="open-btn">
           Open Metrics
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
@@ -316,7 +319,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     </div>
 
     <!-- Card 4: SDR Cheat Sheet -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-sdr">
       <div class="asset-card-top">
         <span class="asset-audience audience-sdr">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.77-.77a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -326,8 +329,8 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#11567F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
         </div>
         <div class="asset-name">SDR Cheat Sheet</div>
-        <div class="asset-type">Single-Page Reference · Print-Ready</div>
-        <p class="asset-desc">Quick reference for prospecting and discovery calls. Covers ICP green signals and red flags, trigger events, 30-second pitches by persona, discovery questions for each buyer, pain signals to listen for, and objection handling including competitive situations.</p>
+        <div class="asset-type">5-Page Interactive Guide · Internal Only</div>
+        <p class="asset-desc">Everything for the first call: who to call (green signals, red flags, triggers), 30-second pitches by role, discovery questions per persona, pain to listen for with objection handling, and the proof points you&rsquo;re cleared to use.</p>
       </div>
       <div class="asset-card-meta">
         <div class="asset-tags">
@@ -335,11 +338,10 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
           <span class="asset-tag">Cold Outreach</span>
           <span class="asset-tag">Discovery</span>
           <span class="asset-tag">Objections</span>
-          <span class="asset-tag">Internal Only</span>
         </div>
       </div>
       <div class="asset-card-footer">
-        <a href="CPG SDR Cheat Sheet.html?v=20261027a" class="open-btn teal-btn">
+        <a href="CPG SDR Cheat Sheet.html?v=20261027a" class="open-btn">
           Open Cheat Sheet
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
@@ -347,7 +349,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
     </div>
 
     <!-- Card 5: Demo Script -->
-    <div class="asset-card">
+    <div class="asset-card" id="a-demo">
       <div class="asset-card-top">
         <span class="asset-audience audience-all">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
@@ -357,7 +359,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d7490" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         </div>
         <div class="asset-name">Demo Script</div>
-        <div class="asset-type">Interactive HTML · Step-by-Step Guide</div>
+        <div class="asset-type">Conceptual Demo Flow · Step-by-Step</div>
         <p class="asset-desc">Step-by-step script for running the CPG supply chain demo. Covers discovery framing, platform walkthrough, Cortex Analyst queries, and closing the narrative. Use alongside the First Meeting Deck for in-person or virtual demos.</p>
       </div>
       <div class="asset-card-meta">
@@ -369,7 +371,7 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
         </div>
       </div>
       <div class="asset-card-footer">
-        <a href="CPG Demo Script.html" class="open-btn blue-btn">
+        <a href="CPG Demo Script.html" class="open-btn">
           Open Script
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
