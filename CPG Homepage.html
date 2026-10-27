@@ -48,6 +48,9 @@ html, body { font-family: 'Inter', sans-serif; background: var(--sf-ice); color:
 .asset-card { background: #FFFFFF; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: box-shadow 0.2s, transform 0.2s; }
 .asset-card:hover { box-shadow: 0 8px 30px rgba(17,86,127,0.12); transform: translateY(-2px); }
 .asset-card.placeholder { opacity: 0.7; }
+.card-preview { display: block; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 1px solid var(--border); background: var(--sf-deep); }
+.card-preview img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.3s; }
+.asset-card:hover .card-preview img { transform: scale(1.03); }
 .asset-card-top { padding: 1.4rem 1.5rem 0; }
 .asset-audience { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.22rem 0.65rem; border-radius: 999px; margin-bottom: 0.9rem; }
 .audience-ae { background: rgba(17,86,127,0.08); border: 1px solid rgba(17,86,127,0.25); color: var(--sf-mid); }
@@ -230,6 +233,7 @@ html { scroll-behavior: smooth; }
 
     <!-- Card 1: First Meeting Deck -->
     <div class="asset-card" id="a-fmd">
+      <a class="card-preview" href="CPG FMD.html?v=20261027b" tabindex="-1" aria-hidden="true"><img src="assets/previews/cpg-fmd.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
         <span class="asset-audience audience-ae">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -260,6 +264,7 @@ html { scroll-behavior: smooth; }
 
     <!-- Card 2: Ideal Customer Profile -->
     <div class="asset-card" id="a-icp">
+      <a class="card-preview" href="CPG ICP.html?v=20261027e" tabindex="-1" aria-hidden="true"><img src="assets/previews/cpg-icp.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
         <span class="asset-audience audience-ae">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -290,6 +295,7 @@ html { scroll-behavior: smooth; }
 
     <!-- Card 3: Metrics That Matter -->
     <div class="asset-card" id="a-met">
+      <a class="card-preview" href="CPG metrics that matter.html?v=20261027a" tabindex="-1" aria-hidden="true"><img src="assets/previews/cpg-met.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
         <span class="asset-audience audience-all">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
@@ -320,6 +326,7 @@ html { scroll-behavior: smooth; }
 
     <!-- Card 4: SDR Cheat Sheet -->
     <div class="asset-card" id="a-sdr">
+      <a class="card-preview" href="CPG SDR Cheat Sheet.html?v=20261027a" tabindex="-1" aria-hidden="true"><img src="assets/previews/cpg-sdr.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
         <span class="asset-audience audience-sdr">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.77-.77a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -350,6 +357,7 @@ html { scroll-behavior: smooth; }
 
     <!-- Card 5: Demo Script -->
     <div class="asset-card" id="a-demo">
+      <a class="card-preview" href="CPG Demo Script.html" tabindex="-1" aria-hidden="true"><img src="assets/previews/cpg-demo.webp" width="720" height="405" alt="" loading="lazy" decoding="async"></a>
       <div class="asset-card-top">
         <span class="asset-audience audience-all">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
