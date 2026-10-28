@@ -71,9 +71,19 @@ h2 {font-size:var(--body);margin:0;}
 .process h3 {font-size:var(--title);line-height:1.2;margin:0 0 8px;}
 .process p {font-size:var(--body);margin:0;color:var(--muted);}
 .feedback {font-size:var(--small);color:var(--muted);border-bottom:1px solid var(--rule);padding-bottom:16px;margin:0;}
-.capabilities {display:grid;grid-template-columns:1fr 3fr;gap:24px;align-items:center;}
-.capabilities h2 {color:var(--accent);font-size:var(--small);}
-.capabilities p {font-size:var(--body);font-weight:700;margin:0;}
+.how {display:block;margin-top:8px;padding-top:8px;border-top:1px dashed var(--rule);font-size:var(--small);color:var(--ink);}
+.how b,.sf-tag {color:var(--accent);font-weight:700;}
+.sf-tag {font-size:var(--small);letter-spacing:.06em;text-transform:uppercase;font-weight:400;margin-left:8px;white-space:nowrap;}
+.orchestrate .sf-tag,.orchestrate .how b {color:var(--star);}
+.orchestrate .how {color:var(--band-ink);border-top-color:rgba(240,248,252,.35);}
+.why {display:grid;grid-template-columns:1fr 3fr;gap:24px;align-items:start;}
+.why > h2 {color:var(--accent);font-size:var(--small);}
+.why > h2 span {display:block;font-size:var(--body);text-transform:none;letter-spacing:0;color:var(--ink);margin-top:4px;}
+.layers {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;}
+.layer {background:var(--tint);padding:12px 16px;border-left:3px solid var(--blue);}
+.layer h3 {font-size:var(--body);margin:0 0 4px;}
+.layer h3 i {font-style:normal;color:var(--accent);margin-right:6px;}
+.layer p {font-size:var(--small);margin:0;color:var(--muted);}
 .outcomes {border-top:1px solid var(--rule);padding-top:16px;display:grid;grid-template-columns:1fr 3fr;gap:24px;align-items:baseline;}
 .outcomes h2 {font-size:var(--small);color:var(--accent);}
 .outcomes p {margin:0;font-size:var(--small);}
@@ -87,7 +97,7 @@ summary {cursor:pointer;font-weight:700;}
 @media(min-width:1200px) {.slide {min-height:810px;}}
 @media(max-width:800px) {
   .slide {padding:24px;} .processes {grid-template-columns:repeat(2,minmax(0,1fr));}
-  .capabilities,.outcomes {grid-template-columns:1fr;gap:8px;}
+  .why,.outcomes {grid-template-columns:1fr;gap:8px;} .layers {grid-template-columns:1fr;}
   .notes {padding:0 24px 24px;} .row-title {flex-wrap:wrap;gap:8px;}
 }
 @media(max-width:450px) {
@@ -122,20 +132,28 @@ summary {cursor:pointer;font-weight:700;}
       <div class="row-title"><h2 id="orchestrate-title">Orchestrate</h2><span class="level">LEVEL 0 / CROSS-FUNCTIONAL</span></div>
       <p class="examples">Strategy &amp; performance · Network &amp; risk · Business planning · Segmentation &amp; circularity</p>
       <p class="support">Supporting enablers: business rules, data &amp; technology, people, contracts, compliance and ESG</p>
+      <p class="support how"><b>How Snowflake helps:</b> one governed copy of plan, performance and risk data, shared with partners, so strategy and execution work from the same facts.<span class="sf-tag">Layer 1 · 2</span></p>
     </section>
     <section class="plan" aria-labelledby="plan-title">
       <div class="row-title"><h2 id="plan-title">Plan</h2><span class="level">LEVEL 1 / ACROSS THE CHAIN</span></div>
       <p>Demand forecasts · Constrained supply scenarios · Inventory &amp; capacity trade-offs</p>
+      <span class="how"><b>How Snowflake helps:</b> forecasts built with Snowflake ML on the full demand history, and scenario applications that compare service, inventory and cost in one place.<span class="sf-tag">Layer 2 · 3</span></span>
     </section>
     <div class="processes" aria-label="Five further Level 1 process areas; these panels are not a fixed sequential workflow">
-      <section class="process"><h2>Order</h2><h3>Promise &amp; <br>allocation</h3><p>Compare availability and priorities before committing.</p></section>
-      <section class="process"><h2>Source</h2><h3>Supplier choice &amp; <br>inbound risk</h3><p>Connect cost, quality and delivery evidence.</p></section>
-      <section class="process"><h2>Transform</h2><h3>Yield, quality &amp; <br>asset health</h3><p>Identify losses and anticipate operating risks.</p></section>
-      <section class="process"><h2>Fulfill</h2><h3>Delivery risk &amp; <br>cost-to-serve</h3><p>Prioritise exceptions against customer commitments.</p></section>
-      <section class="process"><h2>Return</h2><h3>Disposition &amp; <br>value recovery</h3><p>Compare repair, reuse and recovery options.</p></section>
+      <section class="process"><h2>Order</h2><h3>Promise &amp; <br>allocation</h3><p>Compare availability and priorities before committing.</p><span class="how"><b>How:</b> live stock, orders and allocation rules joined in one promise application.<span class="sf-tag">Layer 3</span></span></section>
+      <section class="process"><h2>Source</h2><h3>Supplier choice &amp; <br>inbound risk</h3><p>Connect cost, quality and delivery evidence.</p><span class="how"><b>How:</b> supplier data shared securely, read-only; Cortex AI reads contracts and audits.<span class="sf-tag">Layer 1 · 2</span></span></section>
+      <section class="process"><h2>Transform</h2><h3>Yield, quality &amp; <br>asset health</h3><p>Identify losses and anticipate operating risks.</p><span class="how"><b>How:</b> plant and sensor data at scale, with ML models for yield and failure risk.<span class="sf-tag">Layer 1 · 2</span></span></section>
+      <section class="process"><h2>Fulfill</h2><h3>Delivery risk &amp; <br>cost-to-serve</h3><p>Prioritise exceptions against customer commitments.</p><span class="how"><b>How:</b> carrier and order data shared with logistics partners; an exception workbench ranks by impact.<span class="sf-tag">Layer 1 · 3</span></span></section>
+      <section class="process"><h2>Return</h2><h3>Disposition &amp; <br>value recovery</h3><p>Compare repair, reuse and recovery options.</p><span class="how"><b>How:</b> return reasons classified with Cortex AI, fed back into the next plan.<span class="sf-tag">Layer 2 · 3</span></span></section>
     </div>
     <p class="feedback">Feedback across the chain: return and delivery evidence informs sourcing, production and the next plan.</p>
-    <section class="capabilities" aria-labelledby="capabilities-title"><h2 id="capabilities-title">Shared Snowflake capabilities</h2><p>Data &amp; analytics · Forecasting &amp; AI · Custom models &amp; applications · Collaboration</p></section>
+    <section class="why" aria-labelledby="why-title"><h2 id="why-title">Why Snowflake<span>One platform under every SCOR process</span></h2>
+      <div class="layers">
+        <div class="layer"><h3><i>1</i>Governed data &amp; collaboration</h3><p>Connect ERP, plant, supplier and customer data once. Share selected datasets with partners, without copies.</p></div>
+        <div class="layer"><h3><i>2</i>AI &amp; analytical intelligence</h3><p>Forecast with Snowflake ML; use Cortex AI on records and documents, next to the governed data.</p></div>
+        <div class="layer"><h3><i>3</i>Decision &amp; planning applications</h3><p>Build scenario and exception applications that compare service, inventory and cost.</p></div>
+      </div>
+    </section>
     <section class="outcomes" aria-labelledby="outcomes-title"><h2 id="outcomes-title">Measure supply-chain outcomes</h2><p>Reliability · Responsiveness · Agility · Cost · Profitability · Asset management · Environmental · Social</p></section>
   </div>
   <footer>
@@ -146,8 +164,10 @@ summary {cursor:pointer;font-weight:700;}
 </article>
 <section class="notes" id="reference-notes" aria-label="Supporting reference and speaker notes">
 <details><summary>Speaker notes, detailed mapping and sources</summary>
+<h3>What is SCOR?</h3>
+<p>SCOR stands for <strong>Supply Chain Operations Reference</strong>. It is the industry-standard framework for describing, measuring and improving a supply chain, first published in 1996 and now maintained by ASCM (the Association for Supply Chain Management) as the SCOR Digital Standard. It defines seven processes (Orchestrate, Plan, Order, Source, Transform, Fulfill, Return), with performance metrics, practices and skills for each, so companies can compare and improve supply chains in a common language.</p>
 <h3>Talk track</h3>
-<p>SCOR gives us a common language for the supply chain. Snowflake can connect the evidence and run the analytics, models and applications that support decisions across it: what to promise, where to source, how to balance supply, which exceptions to address and how to recover value. We can enter through a particular business decision or through shared data needs. The detailed map distinguishes platform configuration, applications we build and actions we integrate with execution. Success is measured in supply-chain outcomes, not in how many boxes we colour in.</p>
+<p>SCOR gives us a common language for the supply chain. Snowflake can connect the evidence and run the analytics, models and applications that support decisions across it: what to promise, where to source, how to balance supply, which exceptions to address and how to recover value. We can enter through a particular business decision or through shared data needs. Why Snowflake? Every process runs on the same three layers: governed data that is connected once and shared with partners without copies; AI and analytics that run next to that data; and decision applications built on top. Each panel's "How Snowflake helps" line, with its layer tag, shows which layers do the work there. The detailed map distinguishes platform configuration, applications we build and actions we integrate with execution. Success is measured in supply-chain outcomes, not in how many boxes we colour in.</p>
 <h3>What this slide means</h3>
 <p>Orchestrate is Level 0. Plan, Order, Source, Transform, Fulfill and Return are Level 1. Plan spans the page to communicate its cross-process scope; it is not a higher hierarchy level. The aligned operational panels are not a mandatory sequence. Proposed applications use verified platform building blocks, but are not claims of turnkey SCOR functionality.</p>
 <p><a href="SCOR%20-%20Snowflake%20field%20guide.html">Open the detailed 35-category mapping</a> (interactive field guide).</p>
